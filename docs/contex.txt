@@ -1,0 +1,21 @@
+I am building a complete AI Tools Directory website. I will send you the full plan and technical specifications in 4 parts (Messages 1 through 4).
+
+IMPORTANT RULES:
+- Do NOT start building anything until I send all 4 parts and say "START"
+- After each part, just reply "Part X received. Ready for Part X+1."
+- Read and remember everything across all 4 parts
+- When I say "START", begin from Part 1 and execute everything in order
+- Ask for credentials ONLY when you actually need them during execution
+- Write 100% complete code — no placeholders, no TODOs
+
+I will now send Part 1.I am building a complete AI Tools Directory website. I will send you the full plan and technical specifications in 4 parts (Messages 1 through 4).
+
+IMPORTANT RULES:
+- Do NOT start building anything until I send all 4 parts and say "START"
+- After each part, just reply "Part X received. Ready for Part X+1."
+- Read and remember everything across all 4 parts
+- When I say "START", begin from Part 1 and execute everything in order
+- Ask for credentials ONLY when you actually need them during execution
+- Write 100% complete code — no placeholders, no TODOs
+
+I will now send Part 1.

@@ -1,0 +1,3 @@
+# Pages _redirects cannot proxy to a different zone (workers.dev is another zone),
+# so all worker routes are proxied by functions/[[path]].js instead:
+#   /api/*  /og/*  /sitemap.xml  /rss.xml  /robots.txt  /telegram-webhook

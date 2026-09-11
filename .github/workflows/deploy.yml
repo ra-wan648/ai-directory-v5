@@ -1,0 +1,60 @@
+name: Deploy
+
+# Push to main -> deploy the worker, then publish the Pages site.
+# Requires repository secrets: CF_API_TOKEN and CF_ACCOUNT_ID
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  worker:
+    name: Deploy worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy worker (D1 binding comes from wrangler.toml)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: deploy
+
+      - name: Smoke test
+        run: |
+          sleep 5
+          code=$(curl -s -o /tmp/stats.json -w '%{http_code}' \
+            https://ai-directory-v5-worker.radwanislam648.workers.dev/api/stats)
+          echo "GET /api/stats -> $code"
+          cat /tmp/stats.json
+          test "$code" = "200"
+
+  pages:
+    name: Publish site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: worker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy public --project-name=ai-directory-v5-radwan648 --branch=main

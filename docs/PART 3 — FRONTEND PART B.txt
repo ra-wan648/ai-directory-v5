@@ -1,0 +1,272 @@
+PART 3 — FRONTEND PART B
+
+Build these files. Same design system as Part 2.
+All pages fetch from Worker API. Vanilla JS only.
+
+═══════════════════════════
+PAGE: tool.html
+═══════════════════════════
+
+URL: tool.html?slug=chatgpt
+On load: read ?slug param, fetch /api/tools/{slug}
+
+<head>:
+  Dynamic <title>: {tool.name} - AI Tools Directory
+  <meta name="description" content="{tool.description[:155]}">
+  <meta property="og:image" content="/og/tool/{slug}">
+  JSON-LD SoftwareApplication schema:
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareApplication",
+    "name": tool.name,
+    "description": tool.description,
+    "applicationCategory": tool.category,
+    "offers": {"@type":"Offer","price": tool.pricing=="free"?"0":"varies"},
+    "url": tool.url
+  }
+
+Layout:
+  Navbar (same as index)
+  Breadcrumb: Home > {category} > {tool.name}
+
+  Header block:
+    [favicon 48px] [h1: tool.name] [PRICING BADGE] [Visit {name} ↗]
+    Category: {icon} {category}
+    Tags: pill chips for each tag (comma split)
+
+  Description: full prose paragraph
+
+  Two column grid (60/40):
+    Left — Pros / Cons table:
+      | ✅ Pros | ❌ Cons |
+      If reviews exist: parse from first review content
+      If no reviews: show 3 generic pros/cons based on category
+    Right — Quick Facts:
+      | Pricing    | {badge}      |
+      | Category   | {category}   |
+      | Added      | {created_at} |
+      | Views      | {views}      |
+      | Visit      | {url link}   |
+
+  Related Tools section:
+    H2: "Similar {category} Tools"
+    6 cards — same tool card component as index
+    Fetch from related[] in API response
+
+  Reviews section (if reviews exist):
+    H2: "Reviews & Tutorials"
+    List: [title] [category badge] [date] [Read More →]
+    Each links to post.html?slug={blog.slug}
+
+═══════════════════════════
+PAGE: prompts.html
+═══════════════════════════
+
+<title>: AI Prompt Library - Free Prompts for Midjourney, ChatGPT, Claude
+
+Header:
+  H1: "🎨 AI Prompt Library"
+  Subtitle: "Ready-to-use prompts for Midjourney, DALL·E, ChatGPT, Claude"
+  Search input: [Search prompts...] → client-side filter
+
+Filter pills:
+  [All][🖼️ Image][✍️ Text][💻 Code][🎬 Video]
+  Active: --accent bg
+
+On load: fetch /api/prompts (all) → store in memory
+Filter by category + search query client-side
+
+2-column grid, gap 1px
+
+Prompt Card (min-height 180px):
+  Top: [category eyebrow 11px --text-3 uppercase]
+  [Title 15px 600, 2 lines max]
+  [Description 2 lines --text-2 12px]
+  Compatible tools row: small badges
+    "MJ" "DALL-E" "SD" "GPT" "Claude" "Gemini"
+    Only show badges matching compatible_tools field
+  Bottom row:
+    [COPY button] → copies prompt_text to clipboard
+                 → POST /api/prompts/copy/{id}
+                 → button shows "✅ Copied!" for 2s
+    [TRY IT →] → tool.html?slug={first compatible tool}
+
+═══════════════════════════
+PAGE: blog.html
+═══════════════════════════
+
+<title>: AI Blog - Reviews, Tutorials & News
+
+Tab bar: [📰 All][🔍 Reviews][📚 Tutorials][📣 News]
+Active tab → fetch /api/blogs?category={tab_value}
+  category values: all(no filter), review, tutorial, news
+
+3-column grid, gap 1px, paginated 12 per page
+
+Blog Card:
+  [Category eyebrow — colored by type]
+    review→purple, tutorial→green, news→blue
+  [Title 15px 600, 2 lines]
+  [meta: {date} · {read_time} min read]
+  Hover: same card hover as tool cards
+  Click → post.html?slug={slug}
+
+Pagination: [← Prev] [Page N of M] [Next →]
+
+═══════════════════════════
+PAGE: post.html
+═══════════════════════════
+
+URL: post.html?slug=how-to-use-claude
+On load: fetch /api/blogs/{slug}
+
+<head>:
+  <title>: {blog.title}
+  <meta name="description": {blog.meta_description}>
+  JSON-LD FAQ schema (from faq_schema array):
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity": faq_schema.map(item=>({
+      "@type":"Question",
+      "name": item.q,
+      "acceptedAnswer":{"@type":"Answer","text":item.a}
+    }))
+  }
+
+Layout:
+  Breadcrumb: Home > Blog > {title}
+
+  Article header:
+    [category badge] [title h1] [date] [{read_time} min read]
+    [focus_keyword tag]
+
+  Article body:
+    Render blog.content as innerHTML directly
+    Wrap in <article class="prose"> for typography styles
+
+  FAQ Section (if faq_schema exists):
+    H2: "Frequently Asked Questions"
+    Accordion items:
+      [▶ Question text] → click → expand answer
+      CSS transition height for smooth open/close
+
+  Related Tools sidebar (if tool_slug exists):
+    "🔧 Tools Mentioned"
+    Fetch /api/tools/{tool_slug}
+    Show tool card (compact version)
+
+═══════════════════════════
+PAGE: submit.html
+═══════════════════════════
+
+<title>: Submit Your AI Tool - AI Tools Directory
+
+H1: "Submit Your AI Tool"
+Subtitle: "We review and add tools within 24 hours"
+
+All divs (NO <form> tag):
+  [Tool Name *] — text input
+  [Website URL *] — url input
+  [Category *] — select dropdown (all 12 categories)
+  [Short Description *] — textarea, maxlength=150, char counter
+  [Pricing] — 3 radio buttons styled as pill toggles:
+    (○) Free  (○) Freemium  (○) Paid
+  [Your Email] — email input (optional)
+
+[Submit Tool] button:
+  Validate: name, url, category, desc required
+  If invalid: show inline error messages
+  POST /api/submit-tool with JSON body
+  Loading state: button shows spinner + "Submitting..."
+  Success: replace form with:
+    "✅ Tool Submitted!
+     We'll review it within 24 hours.
+     [← Back to Directory]"
+  Error: show "❌ Failed. Please try again."
+
+═══════════════════════════
+PAGE: compare.html
+═══════════════════════════
+
+URL: compare.html?t1=chatgpt&t2=claude
+On load: read t1, t2 from URL params
+Fetch /api/compare/{t1}/{t2}
+If either not found: show error + search link
+
+<title>: {tool1.name} vs {tool2.name} - Compare AI Tools
+
+Header: "{tool1.name} vs {tool2.name}"
+
+Side by side layout (50/50):
+  Left column: Tool 1 header (favicon, name, pricing badge)
+  Right column: Tool 2 header (favicon, name, pricing badge)
+
+Comparison table:
+  | Feature     | {Tool 1}        | {Tool 2}        |
+  |-------------|-----------------|-----------------|
+  | Pricing     | badge           | badge           |
+  | Category    | text            | text            |
+  | Tags        | pills           | pills           |
+  | Description | 3 lines         | 3 lines         |
+  | Views       | number          | number          |
+  | Link        | [Visit ↗]      | [Visit ↗]      |
+
+Below table:
+  [View Full {tool1.name} Details]
+  [View Full {tool2.name} Details]
+
+═══════════════════════════
+PAGE: 404.html
+═══════════════════════════
+
+Centered layout, full viewport height:
+  Large emoji: "🤖"
+  H1: "Page Not Found"
+  P: "The tool or page you're looking for doesn't exist."
+  Two buttons:
+    [← Back to Directory] → index.html
+    [Search Tools ⌘K] → triggers search modal
+
+═══════════════════════════
+FILE: robots.txt
+═══════════════════════════
+
+User-agent: *
+Allow: /
+Disallow: /api/internal/
+Sitemap: https://YOURDOMAIN.pages.dev/sitemap.xml
+
+═══════════════════════════
+JS: js/blog.js
+═══════════════════════════
+
+For blog.html:
+  activeTab = 'all'
+  setupTabs(): click handlers → update activeTab → fetchBlogs()
+  fetchBlogs(page=1):
+    GET /api/blogs?category={activeTab}&page={page}&limit=12
+    renderBlogCards(blogs)
+    renderPagination(total, page)
+  renderBlogCard(blog):
+    Calculate read time: Math.ceil(wordCount/200)
+    Format date: new Date(blog.published_at).toLocaleDateString()
+    Return card HTML
+
+For post.html:
+  On load: slug = new URLSearchParams(location.search).get('slug')
+  fetchPost(slug): GET /api/blogs/{slug}
+  renderPost(blog):
+    Set document.title = blog.title
+    Set meta description
+    Inject JSON-LD FAQ schema into <head>
+    render content via innerHTML
+    if faq_schema: renderFAQ(JSON.parse(blog.faq_schema))
+    if tool_slug: fetchRelatedTool(blog.tool_slug)
+    estimate and show read time
+  renderFAQ(items):
+    Create accordion HTML
+    Toggle expand/collapse on click
+    CSS max-height transition for smooth animation
+  fetchRelatedTool(slug):
+    GET /api/tools/{slug} → render compact tool card in sidebar

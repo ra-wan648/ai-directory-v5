@@ -1,0 +1,244 @@
+PART 2 — FRONTEND
+
+Build all HTML pages and JS files.
+Design system details below — follow exactly.
+
+═══════════════════════════
+DESIGN SYSTEM
+═══════════════════════════
+
+Philosophy: Dense, fast, minimal. NOT heavy animated.
+NO canvas particles, NO 3D tilt, NO typewriter effect.
+Vanilla JS only. No frameworks.
+
+CSS Variables (styles.css):
+--bg:#0d0d0d; --bg-card:#141414; --bg-hover:#1a1a1a;
+--border:#1f1f1f; --accent:#22c55e; --text-1:#f2f2f2;
+--text-2:#888888; --text-3:#444444;
+--badge-free-bg:#166534; --badge-free-text:#dcfce7;
+--badge-freemium-bg:#713f12; --badge-freemium-text:#fef3c7;
+--badge-paid-bg:#1e3a5f; --badge-paid-text:#dbeafe;
+
+Font: Inter (Google Fonts). Border-radius: 6px cards, 4px badges.
+
+ONLY these animations:
+1. Navbar green dot pulse (2s infinite)
+2. Card hover: bg→--bg-hover + left border 2px --accent (0.15s)
+3. Modal open/close fade (0.15s)
+4. Skeleton shimmer on load
+
+═══════════════════════════
+LAYOUT (index.html)
+═══════════════════════════
+
+[NAVBAR 48px sticky]
+  Left: ● SiteName (● pulses green)
+  Center: [⌘K Search bar placeholder]
+  Right: [Submit Tool] [Blog] [Prompts]
+  On scroll: backdrop-filter blur(16px) + border-bottom
+
+[STATS BAR below navbar]
+  Fetch /api/stats on load
+  Show: {total_tools}+ Tools | {total_categories} Categories
+        | Updated Today: {today_added}
+
+[NEW TODAY STRIP]
+  Label: "🆕 New Today"
+  Fetch /api/tools/new (6 tools)
+  Horizontal scrollable mini-cards
+  Mini-card: favicon + name + pricing badge (compact)
+
+[MAIN AREA = SIDEBAR + CONTENT]
+
+SIDEBAR (220px fixed left):
+  "Categories" header
+  List from /api/categories:
+    [icon] Category Name [count]
+    Hover: --accent color
+    Click: filter main grid by category
+  Divider
+  Quick filters:
+    🆓 Free Only
+    🔥 Trending
+    ⭐ Featured
+  Divider
+  "Latest Prompts" (3 titles from /api/prompts?limit=3)
+  Mobile: hidden, replaced by bottom sheet
+
+FILTER BAR (sticky 40px above grid):
+  Row 1: [All][New][Free][Freemium][Paid][⭐ Featured][🔥 Trending]
+  Row 2: [📚 Tutorials][📰 Reviews][📣 News]
+  Active: background--accent text black
+
+TOOL GRID:
+  4col desktop, 2col tablet, 1col mobile
+  gap:1px, background:--border (creates grid-line effect)
+  Infinite scroll: IntersectionObserver on sentinel element
+  Load 40 per page via /api/tools?page=N&{filters}
+  Show skeleton cards while loading
+
+TOOL CARD (height:148px fixed, padding:12px):
+  Top row: [favicon 18px] [Name 14px 600] [PRICING BADGE right]
+  Second: [category emoji+name 12px --text-2]
+  Middle: [description 2 lines, overflow:ellipsis 12px --text-2]
+  Bottom: [Visit ↗ link 12px --accent]
+  Hover: bg--bg-hover + border-left:2px solid --accent
+  Transition: 0.15s
+
+  Logo logic in JS:
+    huggingface.co → show HF emoji 🤗 + "HF" text badge
+    has url → img src=`https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+    no url → category emoji in 28px colored circle div
+
+  Click card → navigate to tool.html?slug={slug}
+
+PROMPT STRIP (between grid and blog):
+  "🎨 Today's Prompts" + [See All →] link to prompts.html
+  Fetch /api/prompts?limit=4
+  Horizontal 4 cards:
+    Card: title | compatible badges | [COPY] button
+    COPY: copies prompt_text, button text→"✅ Copied!"
+
+BLOG SECTION:
+  Tab switcher: [Reviews][Tutorials][News]
+  Click tab → fetch /api/blogs?category={tab}
+  3-column grid, same 1px gap
+  Card: [eyebrow category] [title 15px 2 lines] [date · read time]
+  Click → post.html?slug={slug}
+
+FOOTER (60px):
+  Left: {total_tools}+ tools · Updated every 6hrs
+  Center: [Submit Tool] [RSS] [Blog]
+  Right: email input + [→] → POST /api/subscribe
+
+═══════════════════════════
+PAGE: tool.html
+═══════════════════════════
+
+URL pattern: tool.html?slug=chatgpt
+On load: read slug from URL params
+Fetch: /api/tools/{slug}
+
+Layout:
+  Breadcrumb: Home > {category} > {tool name}
+  Header row: [favicon 48px] [h1 name] [PRICING BADGE] [Visit ↗]
+  Full description (prose, 200 words)
+  Tags: pill chips (--bg-hover bg, --text-2 color)
+
+  Two column:
+    Left (60%): Pros/Cons table
+      ✅ Pros | ❌ Cons
+      (populate from reviews if exists, else show placeholder)
+    Right (40%): Quick Facts
+      Pricing | Category | Added | Views
+
+  Related Tools: "Similar Tools in {category}"
+    6 cards, same tool card style
+
+  Reviews: blog posts where tool_slug matches
+    List format: title + meta + Read More link
+
+JSON-LD in <head>:
+  @type: SoftwareApplication
+  name, description, applicationCategory
+  offers: {price: "0" if free, else "varies"}
+  url: canonical tool url
+
+═══════════════════════════
+PAGE: prompts.html
+═══════════════════════════
+
+Header: "🎨 AI Prompt Library"
+Subtitle: "Ready-to-use prompts for Midjourney, DALL·E, ChatGPT, Claude"
+Search input: client-side filter on loaded prompts
+
+Filter pills: [All][🖼️ Image][✍️ Text][💻 Code][🎬 Video]
+
+Fetch /api/prompts on load (all published)
+2-column grid
+
+Prompt Card:
+  [Category eyebrow 11px muted]
+  [Title 15px 600 2-lines]
+  [Description 2 lines muted]
+  [Compatible badges: MJ · DALL-E · GPT · Claude]
+  [COPY button] [TRY IT → link to tool page]
+  COPY: copies prompt_text + POST /api/prompts/copy/{id}
+  Button feedback: "✅ Copied!" for 2 seconds
+
+═══════════════════════════
+PAGE: blog.html
+═══════════════════════════
+
+Tabs: [📰 All][🔍 Reviews][📚 Tutorials][📣 News]
+Fetch /api/blogs?category={active_tab}
+3-column grid, paginated 12 per page
+Card: category eyebrow | title | date + read time estimate
+Click → post.html?slug={slug}
+
+PAGE: post.html
+URL: post.html?slug=...
+Fetch /api/blogs/{slug}
+Render content HTML directly (innerHTML)
+Parse faq_schema JSON → render Q&A section at bottom
+JSON-LD FAQ schema in <head>
+Breadcrumb: Home > Blog > {title}
+Sidebar: related tools (if tool_slug exists)
+
+PAGE: submit.html
+"Submit Your AI Tool"
+Fields (divs not form):
+  Tool Name [input]
+  Website URL [input]
+  Category [select: all 12 categories]
+  Short Description [textarea 100 chars max]
+  Pricing [3 radio buttons]
+  Your Email [input optional]
+[Submit] → POST /api/submit-tool
+Success state: "✅ Submitted! Review within 24hrs."
+Error state: "❌ Failed. Try again."
+
+PAGE: compare.html
+URL: compare.html?t1=chatgpt&t2=claude
+Auto-read params, fetch /api/compare/{t1}/{t2}
+Side-by-side layout:
+  Left: Tool 1 | Right: Tool 2
+  Comparison rows:
+    Pricing | Category | Tags | Description (truncated)
+    [Visit Tool 1] | [Visit Tool 2]
+
+PAGE: 404.html
+  Large: "🤖"
+  "Page not found"
+  [← Back to Directory] [Search ⌘K]
+
+═══════════════════════════
+JS FILES
+═══════════════════════════
+
+js/main.js:
+  DOM ready: fetchStats(), fetchNewToday(), fetchTools(1)
+  fetchTools(page, filters={}): GET /api/tools with all params
+  renderToolCard(tool): generate card HTML, logo logic
+  setupInfiniteScroll(): observe last card, load next page
+  applyFilter(key, val): update active filters, reset to page 1
+  setupSidebarFilters(): click handlers for categories + quick links
+  setupFilterPills(): click handlers for pricing/tag/content pills
+  updateURL(filters): pushState for shareable filtered URLs
+  Mobile: sidebar bottom sheet toggle
+
+js/search.js:
+  let allTools = [] // preloaded
+  On load: fetch /api/tools?limit=500 → store allTools
+  Cmd+K / Ctrl+K → open modal
+  Modal HTML: overlay + blur + input + results list
+  filterTools(query): filter allTools by name+desc+category
+  renderResult(tool): favicon | name | category | pricing
+  Keyboard nav: ArrowUp/Down, Enter→goto tool, Esc→close
+  Click outside → close
+
+js/blog.js:
+  For blog.html: tab clicks, fetch, render cards
+  For post.html: fetch post, render HTML content,
+    parse faq_schema, render FAQ accordion
+    estimate read time: Math.ceil(wordCount/200) min

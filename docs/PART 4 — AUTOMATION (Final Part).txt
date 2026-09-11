@@ -1,0 +1,786 @@
+PART 4 — AUTOMATION (Final Part)
+
+After this part is received and you say START,
+build everything from Part 1 through Part 4.
+
+═══════════════════════════
+scripts/scrapers.py
+═══════════════════════════
+
+import requests
+from bs4 import BeautifulSoup
+import time
+
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+DELAY = 2.5
+AI_KEYWORDS = ['ai','llm','gpt','ml','machine learning',
+               'neural','diffusion','agent','chatbot',
+               'vision','embedding','openai','claude','model']
+
+def safe_scrape(url, timeout=15):
+  try:
+    r = requests.get(url, headers=HEADERS, timeout=timeout)
+    return BeautifulSoup(r.text, 'html.parser')
+  except Exception as e:
+    print(f"[WARN] fetch failed {url}: {e}")
+    return None
+
+def extract_card_data(card, source, base_url=""):
+  name_el = card.select_one('h2,h3,h4,[class*="name"],[class*="title"]')
+  url_el = card.select_one('a[href]')
+  desc_el = card.select_one('p,[class*="desc"],[class*="summary"]')
+  if not name_el: return None
+  href = url_el.get('href','') if url_el else ''
+  if href.startswith('/'): href = base_url + href
+  return {
+    "name": name_el.get_text(strip=True),
+    "url": href,
+    "raw_desc": desc_el.get_text(strip=True)[:300] if desc_el else "",
+    "source": source
+  }
+
+def scrape_toolify():
+  soup = safe_scrape("https://www.toolify.ai/new-ai-tools")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:15]:
+    d = extract_card_data(card, "toolify")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_futurepedia():
+  soup = safe_scrape("https://www.futurepedia.io/ai-tools")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:15]:
+    d = extract_card_data(card, "futurepedia", "https://www.futurepedia.io")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_taaft():
+  soup = safe_scrape("https://theresanaiforthat.com/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"]')[:15]:
+    d = extract_card_data(card, "taaft")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_futuretools():
+  soup = safe_scrape("https://www.futuretools.io/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:12]:
+    d = extract_card_data(card, "futuretools")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_topaitools():
+  soup = safe_scrape("https://topai.tools/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:12]:
+    d = extract_card_data(card, "topaitools")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_aixploria():
+  soup = safe_scrape("https://www.aixploria.com/en/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:12]:
+    d = extract_card_data(card, "aixploria")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_allthingsai():
+  soup = safe_scrape("https://allthingsai.com/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:12]:
+    d = extract_card_data(card, "allthingsai")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_insidr():
+  soup = safe_scrape("https://insidr.ai/ai-tools/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:12]:
+    d = extract_card_data(card, "insidr")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_toolfk():
+  soup = safe_scrape("https://toolfk.com/")
+  if not soup: return []
+  tools = []
+  for card in soup.select('[class*="tool"],[class*="card"],article')[:12]:
+    d = extract_card_data(card, "toolfk")
+    if d: tools.append(d)
+  time.sleep(DELAY)
+  return tools
+
+def scrape_trendshift():
+  tools = []
+  for url in ["https://trendshift.io/", "https://trendshift.io/weekly"]:
+    soup = safe_scrape(url)
+    if not soup:
+      time.sleep(DELAY)
+      continue
+    for card in soup.select('[class*="repo"],[class*="card"],article')[:20]:
+      name_el = card.select_one('h2,h3,[class*="name"],[class*="title"]')
+      url_el = card.select_one('a[href]')
+      desc_el = card.select_one('p,[class*="desc"]')
+      star_el = card.select_one('[class*="star"],[class*="count"]')
+      if not name_el: continue
+      desc = desc_el.get_text(strip=True) if desc_el else ""
+      if not any(kw in desc.lower() or kw in (name_el.get_text(strip=True)).lower()
+                 for kw in AI_KEYWORDS):
+        continue
+      href = url_el.get('href','') if url_el else ''
+      if href.startswith('/'): href = 'https://trendshift.io' + href
+      stars = 0
+      if star_el:
+        try: stars = int(''.join(filter(str.isdigit, star_el.get_text())))
+        except: pass
+      tools.append({
+        "name": name_el.get_text(strip=True),
+        "url": href,
+        "raw_desc": desc[:300],
+        "source": "trendshift",
+        "votes": stars
+      })
+    time.sleep(DELAY)
+  return tools
+
+def scrape_all():
+  all_tools = []
+  scrapers = [
+    ("toolify", scrape_toolify),
+    ("futurepedia", scrape_futurepedia),
+    ("taaft", scrape_taaft),
+    ("futuretools", scrape_futuretools),
+    ("topaitools", scrape_topaitools),
+    ("aixploria", scrape_aixploria),
+    ("allthingsai", scrape_allthingsai),
+    ("insidr", scrape_insidr),
+    ("toolfk", scrape_toolfk),
+    ("trendshift", scrape_trendshift),
+  ]
+  for name, fn in scrapers:
+    print(f"🔍 Scraping {name}...")
+    try:
+      results = fn()
+      all_tools.extend(results)
+      print(f"   → {len(results)} items")
+    except Exception as e:
+      print(f"   ⚠️ {name} failed: {e}")
+  print(f"✅ Total scraped: {len(all_tools)}")
+  return all_tools
+
+═══════════════════════════
+scripts/rss.py
+═══════════════════════════
+
+import feedparser, time
+
+RSS_FEEDS = [
+  {"url":"https://www.producthunt.com/feed?category=artificial-intelligence",
+   "type":"tools","source":"producthunt"},
+  {"url":"https://tldr.tech/ai/rss","type":"news","source":"tldr_ai"},
+  {"url":"https://www.bensbites.com/rss","type":"news","source":"bensbites"},
+  {"url":"https://feeds.feedburner.com/venturebeat/SZYF",
+   "type":"news","source":"venturebeat"},
+  {"url":"https://openai.com/news/rss","type":"news","source":"openai"},
+  {"url":"https://anthropic.com/news/rss","type":"news","source":"anthropic"},
+  {"url":"https://aiwire.net/feed/","type":"news","source":"aiwire"},
+  {"url":"https://marktechpost.com/feed/","type":"news","source":"marktechpost"},
+  {"url":"https://therundown.ai/rss","type":"news","source":"therundown"},
+]
+
+def fetch_rss(feed):
+  try:
+    f = feedparser.parse(feed["url"])
+    items = []
+    for entry in f.entries[:5]:
+      items.append({
+        "title": entry.get("title",""),
+        "url": entry.get("link",""),
+        "summary": entry.get("summary","")[:500],
+        "type": feed["type"],
+        "source": feed["source"]
+      })
+    time.sleep(1)
+    return items
+  except Exception as e:
+    print(f"[WARN] RSS {feed['source']} failed: {e}")
+    return []
+
+def fetch_all_rss():
+  all_items = []
+  for feed in RSS_FEEDS:
+    print(f"📡 RSS: {feed['source']}...")
+    all_items.extend(fetch_rss(feed))
+  print(f"✅ Total RSS: {len(all_items)}")
+  return all_items
+
+═══════════════════════════
+scripts/llm.py
+═══════════════════════════
+
+import requests, json, re, os
+
+MANIFEST_URL = os.environ['MANIFEST_BASE_URL']
+API_KEY = os.environ['MANIFEST_API_KEY']
+
+def call_llm(prompt, use_web_search=False, max_tokens=2000):
+  body = {
+    "model": "auto",
+    "max_tokens": max_tokens,
+    "messages": [{"role":"user","content":prompt}]
+  }
+  if use_web_search:
+    body["tools"] = [{"type":"web_search_20250305","name":"web_search"}]
+  try:
+    r = requests.post(
+      f"{MANIFEST_URL}/v1/chat/completions",
+      headers={"Authorization":f"Bearer {API_KEY}",
+               "Content-Type":"application/json"},
+      json=body, timeout=60
+    )
+    r.raise_for_status()
+    data = r.json()
+    content = data['choices'][0]['message'].get('content','')
+    if isinstance(content, list):
+      return ' '.join(b.get('text','') for b in content if b.get('type')=='text')
+    return content
+  except Exception as e:
+    print(f"[ERROR] LLM failed: {e}")
+    return None
+
+def extract_json(text, array=False):
+  if not text: return None
+  try:
+    pattern = r'\[.*\]' if array else r'\{.*\}'
+    match = re.search(pattern, text, re.DOTALL)
+    if match: return json.loads(match.group())
+  except: pass
+  return None
+
+def parse_tool_from_raw(raw):
+  prompt = f"""You are an AI tools directory curator.
+Research this tool and return structured data.
+
+Name: {raw.get('name','')}
+URL: {raw.get('url','')}
+Description: {raw.get('raw_desc','')}
+
+Search the web for current info about this tool.
+Return ONLY valid JSON, no markdown:
+{{
+  "name": "official name",
+  "slug": "lowercase-hyphen-slug",
+  "description": "150-200 word SEO description",
+  "short_desc": "one sentence under 100 chars",
+  "category": "Writing|Coding|Image|Video|Marketing|Productivity|Research|Audio|Chat|Business|Automation|Analytics",
+  "pricing": "free|freemium|paid",
+  "url": "https://official-url.com",
+  "tags": "tag1,tag2,tag3,tag4"
+}}
+If tool info cannot be verified: {{"skip": true}}"""
+  result = call_llm(prompt, use_web_search=True)
+  data = extract_json(result)
+  if not data or data.get('skip'): return None
+  if raw.get('votes'): data['votes'] = raw['votes']
+  return data
+
+def generate_blog_from_news(item):
+  prompt = f"""Rewrite this AI news as an SEO and AEO optimized blog post.
+
+Title: {item['title']}
+URL: {item['url']}
+Summary: {item['summary']}
+Source: {item['source']}
+
+Requirements:
+- 600-900 words
+- H2 and H3 headings
+- AEO: clear Q&A format, fact-based, citable
+- Include 5-question FAQ section
+- Do NOT copy original text
+
+Return ONLY valid JSON:
+{{
+  "title": "SEO title with keyword",
+  "slug": "url-slug",
+  "content": "<full HTML with h2/h3/p/ul>",
+  "meta_description": "max 155 chars",
+  "focus_keyword": "primary keyword",
+  "category": "review|tutorial|news",
+  "faq_schema": [
+    {{"q":"Question?","a":"Answer."}},
+    {{"q":"Question?","a":"Answer."}},
+    {{"q":"Question?","a":"Answer."}},
+    {{"q":"Question?","a":"Answer."}},
+    {{"q":"Question?","a":"Answer."}}
+  ]
+}}"""
+  result = call_llm(prompt, max_tokens=3000)
+  return extract_json(result)
+
+def llm_find_new_tools():
+  prompt = """Search the web RIGHT NOW for 5 brand new AI tools
+launched in the last 48 hours on producthunt.com,
+toolify.ai, futurepedia.io, or theresanaiforthat.com.
+
+Avoid well-known tools like ChatGPT or Midjourney.
+
+Return ONLY a valid JSON array:
+[
+  {
+    "name": "Tool Name",
+    "slug": "tool-name",
+    "description": "150-200 word SEO description",
+    "short_desc": "one sentence under 100 chars",
+    "category": "Writing|Coding|Image|Video|Marketing|Productivity|Research|Audio|Chat|Business|Automation|Analytics",
+    "pricing": "free|freemium|paid",
+    "url": "https://...",
+    "tags": "tag1,tag2,tag3"
+  }
+]"""
+  result = call_llm(prompt, use_web_search=True, max_tokens=3000)
+  return extract_json(result, array=True) or []
+
+def generate_prompt_ideas():
+  prompt = """Create 3 creative AI prompts for image generation and text tasks.
+
+Return ONLY valid JSON array:
+[
+  {
+    "title": "Prompt title",
+    "slug": "prompt-title-slug",
+    "prompt_text": "full copyable prompt text",
+    "description": "what this prompt creates, 1-2 sentences",
+    "category": "image|text|code|video",
+    "compatible_tools": "midjourney,dalle,stable-diffusion"
+  }
+]"""
+  result = call_llm(prompt, max_tokens=2000)
+  return extract_json(result, array=True) or []
+
+═══════════════════════════
+scripts/db.py
+═══════════════════════════
+
+import requests, os
+
+CF_ACCOUNT = os.environ['CF_ACCOUNT_ID']
+CF_TOKEN = os.environ['CF_API_TOKEN']
+CF_D1_ID = os.environ['CF_D1_ID']
+WORKER_URL = os.environ['WORKER_URL'].rstrip('/')
+INTERNAL_KEY = os.environ['INTERNAL_API_KEY']
+
+D1_URL = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/d1/database/{CF_D1_ID}/query"
+CF_HEADERS = {"Authorization":f"Bearer {CF_TOKEN}","Content-Type":"application/json"}
+WORKER_HEADERS = {"X-Internal-Key":INTERNAL_KEY,"Content-Type":"application/json"}
+
+def d1_query(sql, params=None):
+  try:
+    r = requests.post(D1_URL, headers=CF_HEADERS,
+      json={"sql":sql,"params":params or []}, timeout=30)
+    return r.json()
+  except Exception as e:
+    print(f"[ERROR] D1: {e}")
+    return None
+
+def tool_exists(slug, url):
+  r = d1_query("SELECT id FROM tools WHERE slug=? OR url=?", [slug, url or ''])
+  try: return bool(r['result'][0]['results'])
+  except: return False
+
+def save_tool(tool):
+  try:
+    r = requests.post(f"{WORKER_URL}/api/internal/add-tool",
+      headers=WORKER_HEADERS, json=tool, timeout=30)
+    return r.json()
+  except Exception as e:
+    print(f"[ERROR] save_tool: {e}")
+    return None
+
+def save_blog(blog):
+  try:
+    r = requests.post(f"{WORKER_URL}/api/internal/add-blog",
+      headers=WORKER_HEADERS, json=blog, timeout=30)
+    data = r.json()
+    return data.get('id')
+  except Exception as e:
+    print(f"[ERROR] save_blog: {e}")
+    return None
+
+def save_prompt(prompt):
+  try:
+    r = requests.post(f"{WORKER_URL}/api/internal/add-prompt",
+      headers=WORKER_HEADERS, json=prompt, timeout=30)
+    data = r.json()
+    return data.get('id')
+  except Exception as e:
+    print(f"[ERROR] save_prompt: {e}")
+    return None
+
+def bulk_insert(tools):
+  try:
+    r = requests.post(f"{WORKER_URL}/api/internal/bulk-insert",
+      headers=WORKER_HEADERS,
+      json={"tools": tools}, timeout=60)
+    return r.json()
+  except Exception as e:
+    print(f"[ERROR] bulk_insert: {e}")
+    return None
+
+═══════════════════════════
+scripts/telegram.py
+═══════════════════════════
+
+import requests, os
+
+TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
+ADMIN = os.environ['ADMIN_TELEGRAM_ID']
+BASE = f"https://api.telegram.org/bot{TOKEN}"
+
+def send(method, data):
+  try:
+    r = requests.post(f"{BASE}/{method}", json=data, timeout=15)
+    return r.json()
+  except Exception as e:
+    print(f"[ERROR] Telegram {method}: {e}")
+    return None
+
+def send_blog_notification(blog, blog_id):
+  text = (
+    f"📝 <b>New Blog Ready!</b>\n\n"
+    f"📌 <b>Title:</b> {blog.get('title','')}\n"
+    f"🎯 <b>Keyword:</b> {blog.get('focus_keyword','')}\n"
+    f"📂 <b>Category:</b> {blog.get('category','')}\n"
+    f"📊 <b>Meta:</b> {blog.get('meta_description','')[:100]}"
+  )
+  keyboard = {"inline_keyboard":[[
+    {"text":"✅ Approve","callback_data":f"approve_blog_{blog_id}"},
+    {"text":"❌ Reject","callback_data":f"reject_blog_{blog_id}"}
+  ]]}
+  r = send("sendMessage",{
+    "chat_id":ADMIN,"text":text,
+    "parse_mode":"HTML","reply_markup":keyboard
+  })
+  return r.get('result',{}).get('message_id') if r else None
+
+def send_prompt_notification(prompt, prompt_id):
+  preview = prompt.get('prompt_text','')[:100]
+  text = (
+    f"🎨 <b>New Prompt Ready!</b>\n\n"
+    f"📌 <b>Title:</b> {prompt.get('title','')}\n"
+    f"🔧 <b>For:</b> {prompt.get('compatible_tools','')}\n"
+    f"📝 <b>Preview:</b> {preview}..."
+  )
+  keyboard = {"inline_keyboard":[[
+    {"text":"✅ Approve","callback_data":f"approve_prompt_{prompt_id}"},
+    {"text":"❌ Reject","callback_data":f"reject_prompt_{prompt_id}"}
+  ]]}
+  send("sendMessage",{
+    "chat_id":ADMIN,"text":text,
+    "parse_mode":"HTML","reply_markup":keyboard
+  })
+
+def send_error(msg):
+  send("sendMessage",{
+    "chat_id":ADMIN,
+    "text":f"⚠️ <b>Pipeline Error!</b>\n\n<code>{str(msg)[:400]}</code>",
+    "parse_mode":"HTML"
+  })
+
+def send_summary(tools, blogs, prompts, errors):
+  send("sendMessage",{
+    "chat_id":ADMIN,
+    "text":(
+      f"✅ <b>Pipeline Complete!</b>\n\n"
+      f"🔧 Tools added: <b>{tools}</b>\n"
+      f"📝 Blogs generated: <b>{blogs}</b>\n"
+      f"🎨 Prompts generated: <b>{prompts}</b>\n"
+      f"⚠️ Errors: <b>{errors}</b>"
+    ),
+    "parse_mode":"HTML"
+  })
+
+═══════════════════════════
+scripts/pipeline.py
+═══════════════════════════
+
+import sys
+from scrapers import scrape_all
+from rss import fetch_all_rss
+from llm import (parse_tool_from_raw, generate_blog_from_news,
+                 llm_find_new_tools, generate_prompt_ideas)
+from db import tool_exists, save_tool, save_blog, save_prompt
+from telegram import (send_blog_notification, send_prompt_notification,
+                      send_error, send_summary)
+
+tools_added = blogs_generated = prompts_generated = errors = 0
+
+def process_tools():
+  global tools_added, errors
+  raw_all = scrape_all()
+  try:
+    llm_tools = llm_find_new_tools()
+    raw_all.extend([{
+      "name":t.get("name",""),
+      "url":t.get("url",""),
+      "raw_desc":t.get("description",""),
+      "source":"llm_search",
+      "_structured": t
+    } for t in llm_tools])
+  except Exception as e:
+    print(f"[WARN] LLM find tools failed: {e}")
+
+  for raw in raw_all:
+    try:
+      if raw.get('_structured'):
+        tool = raw['_structured']
+      else:
+        tool = parse_tool_from_raw(raw)
+      if not tool: continue
+      result = save_tool(tool)
+      if result and result.get('status') == 'inserted':
+        tools_added += 1
+        print(f"[NEW] {tool.get('name')}")
+      elif result and result.get('status') == 'updated':
+        print(f"[UPD] {tool.get('name')}")
+      else:
+        print(f"[SKP] {tool.get('name','unknown')}")
+    except Exception as e:
+      errors += 1
+      print(f"[ERR] tool: {e}")
+
+def process_blogs():
+  global blogs_generated, errors
+  rss_items = fetch_all_rss()
+  count = 0
+  for item in rss_items:
+    if count >= 3: break
+    try:
+      blog = generate_blog_from_news(item)
+      if not blog: continue
+      blog_id = save_blog(blog)
+      if blog_id:
+        send_blog_notification(blog, blog_id)
+        blogs_generated += 1
+        count += 1
+        print(f"[BLOG] {blog.get('title')}")
+    except Exception as e:
+      errors += 1
+      print(f"[ERR] blog: {e}")
+
+def process_prompts():
+  global prompts_generated, errors
+  try:
+    prompts = generate_prompt_ideas()
+    for p in prompts:
+      pid = save_prompt(p)
+      if pid:
+        send_prompt_notification(p, pid)
+        prompts_generated += 1
+        print(f"[PROMPT] {p.get('title')}")
+  except Exception as e:
+    errors += 1
+    print(f"[ERR] prompts: {e}")
+
+if __name__ == "__main__":
+  print("🚀 Pipeline starting...")
+  try: process_tools()
+  except Exception as e: send_error(f"Tools crashed: {e}"); errors+=1
+  try: process_blogs()
+  except Exception as e: send_error(f"Blogs crashed: {e}"); errors+=1
+  try: process_prompts()
+  except Exception as e: send_error(f"Prompts crashed: {e}"); errors+=1
+  send_summary(tools_added, blogs_generated, prompts_generated, errors)
+  print(f"✅ Done! Tools:{tools_added} Blogs:{blogs_generated} Prompts:{prompts_generated} Errors:{errors}")
+
+═══════════════════════════
+scripts/bulk_import.py
+═══════════════════════════
+
+import json, os, time, requests
+from bs4 import BeautifulSoup
+from llm import parse_tool_from_raw
+from db import tool_exists, bulk_insert
+
+HEADERS = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+PROGRESS_FILE = "bulk_progress.json"
+
+def load_progress():
+  try:
+    with open(PROGRESS_FILE) as f: return json.load(f)
+  except: return {}
+
+def save_progress(p):
+  with open(PROGRESS_FILE,'w') as f: json.dump(p, f)
+
+def scrape_page(url):
+  try:
+    r = requests.get(url, headers=HEADERS, timeout=15)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    tools = []
+    for card in soup.select('[class*="tool"],[class*="card"],article')[:30]:
+      name_el = card.select_one('h2,h3,h4,[class*="name"],[class*="title"]')
+      url_el = card.select_one('a[href]')
+      desc_el = card.select_one('p,[class*="desc"]')
+      if not name_el: continue
+      href = url_el.get('href','') if url_el else ''
+      tools.append({
+        "name": name_el.get_text(strip=True),
+        "url": href,
+        "raw_desc": desc_el.get_text(strip=True)[:300] if desc_el else "",
+        "source": "bulk"
+      })
+    return tools
+  except Exception as e:
+    print(f"[WARN] {url}: {e}")
+    return []
+
+BULK_SOURCES = [
+  {"name":"toolify","base":"https://www.toolify.ai/new-ai-tools","param":"?page={}","max":100},
+  {"name":"futurepedia","base":"https://www.futurepedia.io/ai-tools","param":"?page={}","max":50},
+  {"name":"topaitools","base":"https://topai.tools","param":"?page={}","max":50},
+  {"name":"allthingsai","base":"https://allthingsai.com","param":"?page={}","max":30},
+  {"name":"trendshift_yearly","base":"https://trendshift.io/yearly","param":"","max":1},
+  {"name":"trendshift_monthly","base":"https://trendshift.io/monthly","param":"","max":1},
+]
+
+def run_bulk():
+  progress = load_progress()
+  all_raw = []
+  
+  for source in BULK_SOURCES:
+    name = source['name']
+    done_pages = progress.get(name, [])
+    print(f"\n{'='*40}")
+    print(f"📦 Source: {name}")
+    
+    for page in range(1, source['max']+1):
+      if page in done_pages:
+        continue
+      param = source['param'].format(page) if source['param'] else ''
+      url = source['base'] + param
+      print(f"  Page {page}/{source['max']}: {url}")
+      tools = scrape_page(url)
+      if not tools:
+        print(f"  → Empty. Stopping {name}.")
+        break
+      all_raw.extend(tools)
+      print(f"  → {len(tools)} raw items")
+      done_pages.append(page)
+      progress[name] = done_pages
+      save_progress(progress)
+      time.sleep(3)
+
+  print(f"\n✅ Total raw: {len(all_raw)}")
+  print("🤖 Processing with LLM (batch)...")
+
+  batch = []
+  inserted = skipped = errors = 0
+
+  for i, raw in enumerate(all_raw):
+    print(f"[{i+1}/{len(all_raw)}] {raw.get('name','?')}")
+    try:
+      if tool_exists(
+        raw.get('name','').lower().replace(' ','-'),
+        raw.get('url','')
+      ):
+        print("  → SKIP (duplicate)")
+        skipped += 1
+        continue
+      tool = parse_tool_from_raw(raw)
+      if not tool:
+        skipped += 1
+        continue
+      batch.append(tool)
+      if len(batch) >= 10:
+        result = bulk_insert(batch)
+        if result:
+          inserted += result.get('inserted',0)
+        batch = []
+      time.sleep(1)
+    except Exception as e:
+      errors += 1
+      print(f"  → ERROR: {e}")
+
+  if batch:
+    result = bulk_insert(batch)
+    if result: inserted += result.get('inserted',0)
+
+  print(f"\n🎉 BULK IMPORT DONE!")
+  print(f"   Inserted: {inserted}")
+  print(f"   Skipped:  {skipped}")
+  print(f"   Errors:   {errors}")
+
+if __name__ == "__main__":
+  run_bulk()
+
+═══════════════════════════
+.github/workflows/pipeline.yml
+═══════════════════════════
+
+name: AI Directory Pipeline
+on:
+  schedule:
+    - cron: '0 0,6,12,18 * * *'
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 feedparser
+      - name: Run pipeline
+        run: cd scripts && python pipeline.py
+        env:
+          MANIFEST_BASE_URL: ${{secrets.MANIFEST_BASE_URL}}
+          MANIFEST_API_KEY: ${{secrets.MANIFEST_API_KEY}}
+          CF_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CF_D1_ID: ${{secrets.CF_D1_ID}}
+          WORKER_URL: ${{secrets.WORKER_URL}}
+          INTERNAL_API_KEY: ${{secrets.INTERNAL_API_KEY}}
+          TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+          ADMIN_TELEGRAM_ID: ${{secrets.ADMIN_TELEGRAM_ID}}
+
+═══════════════════════════
+CREDENTIALS NEEDED
+═══════════════════════════
+
+Ask me one at a time when needed:
+1. Cloudflare Account ID
+2. Cloudflare API Token (D1+Workers+Pages)
+3. D1 Database ID (guide me to create first)
+4. GitHub Repository URL
+5. Manifest.build Base URL
+6. Manifest.build API Key
+7. Telegram Bot Token (guide me via @BotFather)
+8. Telegram Admin Chat ID (via @userinfobot)
+9. Internal API Key (you generate random 32-char)
+
+All 4 parts received. START building now.
+Begin with Phase 1: schema.sql → wrangler.toml → worker.js
+Ask for credentials only when deploying.
