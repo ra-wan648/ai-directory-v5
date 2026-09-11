@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 Apify-based AI Tools Scraper
-Uses apify/web-scraper actor with 4 API keys, fixed site assignments, and
-fallback rotation. Inserts new tools into remote D1 via wrangler.
+Uses the apify/web-scraper actor with any number of API keys (APIFY_KEY_1..N),
+auto-distributed site assignments, and quota-aware fallback rotation.
+Inserts new tools into remote D1 via wrangler.
 """
 
 import os
@@ -19,26 +20,34 @@ import requests
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
-APIFY_KEYS = {
-    'key4': os.environ.get('APIFY_KEY_4', ''),
-    'key1': os.environ.get('APIFY_KEY_1', ''),
-    'key2': os.environ.get('APIFY_KEY_2', ''),
-    'key3': os.environ.get('APIFY_KEY_3', ''),
-}
+def _load_apify_keys():
+    """Read APIFY_KEY_1..APIFY_KEY_N from the environment, stopping at the first gap.
 
-# Fixed account assignments
-SITE_KEYS = {
-    'toolify': 'key4',
-    'futurepedia': 'key4',
-    'taaft': 'key4',
-    'allthingsai': 'key1',
-    'futuretools': 'key3',
-    'topai': 'key1',
-    'aixploria': 'key2',
-    'insidr': 'key2',
-    'toolfk': 'key1',
-    'trendshift': 'key3',
-}
+    Any number of keys works: one for a solo run, or many when several people pool
+    their Apify quota. Adding or removing a key needs no code change.
+    """
+    keys = {}
+    i = 1
+    while True:
+        val = (os.environ.get(f'APIFY_KEY_{i}') or '').strip()
+        if not val:
+            break
+        keys[f'key{i}'] = val
+        i += 1
+    return keys
+
+
+APIFY_KEYS = _load_apify_keys()
+KEY_ORDER = list(APIFY_KEYS.keys())
+
+if not APIFY_KEYS:
+    raise SystemExit(
+        'No Apify keys found. Set APIFY_KEY_1 '
+        '(APIFY_KEY_2, APIFY_KEY_3, ... are optional but must not have gaps).'
+    )
+
+# SITE_KEYS is derived from the available keys just below, once SITES is defined.
+SITE_KEYS = {}
 
 SITES = {
     'toolify': {
@@ -92,6 +101,14 @@ SITES = {
         'scrollForLazyLoad': False,
     },
 }
+
+# ─────────────────────────────────────────────
+# Key distribution
+# ─────────────────────────────────────────────
+# Spread the sites over the available keys, heaviest crawl first, so no single key
+# carries every large site. Round-robin keeps the split even as keys are added.
+_sites_by_load = sorted(SITES.keys(), key=lambda s: SITES[s]['maxPages'], reverse=True)
+SITE_KEYS = {site: KEY_ORDER[i % len(KEY_ORDER)] for i, site in enumerate(_sites_by_load)}
 
 CF_API_TOKEN = os.environ.get('CF_API_TOKEN', '')
 CF_ACCOUNT_ID = os.environ.get('CLOUDFLARE_ACCOUNT_ID', '')
@@ -258,8 +275,8 @@ def pick_key(primary_key, site):
     fallback_log = load_fallback_log()
     today = datetime.utcnow().strftime('%Y-%m-%d')
 
-    # Ordered fallback: try all 4 keys, never reuse a key used today
-    key_order = [primary_key] + [k for k in ['key1', 'key2', 'key3', 'key4'] if k != primary_key]
+    # Ordered fallback: try every configured key, never reuse one already used today
+    key_order = [primary_key] + [k for k in KEY_ORDER if k != primary_key]
 
     for k in key_order:
         key_val = APIFY_KEYS.get(k, '')
@@ -682,8 +699,8 @@ def process_site(site):
         }
         save_fallback_log(fallback_log)
         # Try next key
-        for alt_name, alt_val in [('key4', APIFY_KEYS['key4']), ('key1', APIFY_KEYS['key1']),
-                                  ('key2', APIFY_KEYS['key2']), ('key3', APIFY_KEYS['key3'])]:
+        for alt_name in KEY_ORDER:
+            alt_val = APIFY_KEYS.get(alt_name, '')
             if alt_name == key_name or alt_name in USED_KEYS:
                 continue
             if not alt_val:
@@ -770,6 +787,8 @@ def process_site(site):
 
 
 def main():
+    log(f"Apify keys detected: {len(KEY_ORDER)} ({', '.join(KEY_ORDER)})")
+    log(f"Site -> key distribution: {json.dumps(SITE_KEYS)}")
     all_results = []
     for site in SITES:
         result = process_site(site)
