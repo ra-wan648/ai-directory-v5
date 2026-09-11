@@ -1,7 +1,9 @@
-import requests, json, time, subprocess
+import os, requests, json, time, subprocess
 
-MANIFEST_URL = "https://app.manifest.build/v1/responses"
-MANIFEST_KEY = "mnfst_dCs24ciL5gMHegg7b1qr-Mn5TgBspc7O-h3KhAwFDcU"
+# The API key must come from the environment. It was previously hardcoded here and
+# therefore committed to a public repository — rotate it if that copy was ever live.
+MANIFEST_URL = os.environ.get("MANIFEST_BASE_URL", "https://app.manifest.build/v1/responses")
+MANIFEST_KEY = os.environ.get("MANIFEST_API_KEY", "")
 DB = "ai-directory-db"
 
 def get_unfilled():
@@ -62,6 +64,10 @@ def update(tid, data):
     subprocess.run(["wrangler", "d1", "execute", DB, "--remote", "--command",
         f"UPDATE tools SET description_full='{d}',features='{f}',pricing_detail='{p}',llm_filled=1 WHERE id={tid}"],
         capture_output=True)
+
+if not MANIFEST_KEY:
+    print("MANIFEST_API_KEY is not set - skipping LLM enrichment (this is optional).")
+    raise SystemExit(0)
 
 tools = get_unfilled()
 print(f"Filling {len(tools)} tools...")

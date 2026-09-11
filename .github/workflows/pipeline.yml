@@ -41,11 +41,15 @@ jobs:
         env:
           PRODUCT_HUNT_KEY: ${{secrets.PRODUCT_HUNT_KEY}}
           PRODUCT_HUNT_SECRET: ${{secrets.PRODUCT_HUNT_SECRET}}
+          # optional: raises the GitHub search rate limit from 60/h to 5,000/h
+          GITHUB_TOKEN: ${{secrets.GH_SEARCH_TOKEN}}
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+      # Optional enrichment. Skips itself cleanly when MANIFEST_API_KEY is absent.
       - name: LLM fill missing tool data
         run: python scripts/llm_fill.py
         env:
+          MANIFEST_API_KEY: ${{secrets.MANIFEST_API_KEY}}
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
       - name: Telegram stats
