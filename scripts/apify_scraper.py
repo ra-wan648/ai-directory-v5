@@ -492,11 +492,19 @@ def build_input(site_cfg):
         };
     }
     """
+    # Without these the Actor reads only the start URL and stops: a run that
+    # reported SUCCEEDED returned 7 links where the content crawler had pulled
+    # 259 from the same site. These let it walk the site's own links
+    # (pagination, tool pages) up to maxPagesPerCrawl.
+    host = urlparse(site_cfg['startUrls'][0]).netloc
+
     return {
         "startUrls": start_urls,
         "maxPagesPerCrawl": site_cfg['maxPages'],
         "maxPagesPerCrawlDeprecated": site_cfg['maxPages'],
         "pageFunction": page_function,
+        "linkSelector": "a[href]",
+        "pseudoUrls": [{"purl": f"https://{host}/.*"}],
         "scrollForLazyLoad": site_cfg['scrollForLazyLoad'],
         "proxyConfiguration": {"useApifyProxy": True},
         "runMode": "PRODUCTION",
@@ -868,6 +876,28 @@ def process_site(site):
     existing_urls = get_existing_urls()
     site_url = site_cfg['startUrls'][0]
     tools = extract_tools_from_items(items, site, site_url, existing_urls)
+
+    # A web-scraper run can report SUCCEEDED while having read only the start
+    # page, which looks identical to a site that genuinely has nothing new.
+    # If it came back empty, try the same site once through the content
+    # crawler, which returns full HTML that this same parser also understands.
+    if not tools and not used_crawler:
+        log("  web-scraper returned nothing; retrying via website-content-crawler")
+        r2 = start_crawler_run(key_val, site_cfg)
+        if r2.status_code in (200, 201):
+            rid2 = (r2.json().get('data') or {}).get('id')
+            if rid2:
+                st2, _ = wait_for_run(key_val, rid2)
+                if st2 == 'SUCCEEDED':
+                    items2 = get_run_dataset(key_val, rid2)
+                    if items2:
+                        used_crawler = True
+                        items = items2
+                        tools = extract_tools_from_items(items2, site, site_url,
+                                                         existing_urls)
+                        log(f"  crawler retry recovered {len(tools)} potential tools")
+        else:
+            log(f"  crawler retry could not start ({r2.status_code})")
 
     log(f"  Scraped {len(tools)} potential tools")
 
