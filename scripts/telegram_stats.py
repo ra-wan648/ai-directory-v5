@@ -74,7 +74,11 @@ def get_source_health():
 
 def get_stats():
     total = query_rows("SELECT COUNT(*) as c FROM tools WHERE status='published'")
-    total_count = total[0]['c'] if total else 0
+    # Distinguish "the table is empty" from "the read failed". Reporting 0 when
+    # D1's daily row-read quota is exhausted looked exactly like the directory
+    # had been wiped - the Telegram summary said "Published: 0" while the table
+    # still held 12,326 rows. None means unreadable.
+    total_count = total[0]['c'] if total else None
 
     # The tags breakdown is gone on purpose. It grouped by the whole tag string
     # ("ai,google"), so it was not a useful breakdown anyway, and D1's free tier
@@ -122,7 +126,7 @@ def main():
         "AI Directory — Daily Pipeline Report",
         f"Date: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}",
         "",
-        f"Published tools: <b>{total}</b>",
+        f"Published tools: <b>{'unreadable — D1 read quota exhausted, not zero' if total is None else total}</b>",
         "",
     ]
     if by_tag:
@@ -159,7 +163,7 @@ def main():
                 lines.append(f"  • {name}")
 
     send_telegram("\n".join(lines))
-    log(f"  Published: {total}")
+    log(f"  Published: {'unreadable (D1 read quota exhausted?)' if total is None else total}")
 
 
 if __name__ == '__main__':
