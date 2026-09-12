@@ -76,10 +76,11 @@ def get_stats():
     total = query_rows("SELECT COUNT(*) as c FROM tools WHERE status='published'")
     total_count = total[0]['c'] if total else 0
 
-    by_tag = query_rows(
-        "SELECT tags, COUNT(*) as c FROM tools WHERE status='published' "
-        "GROUP BY tags ORDER BY c DESC LIMIT 10"
-    )
+    # The tags breakdown is gone on purpose. It grouped by the whole tag string
+    # ("ai,google"), so it was not a useful breakdown anyway, and D1's free tier
+    # bills by rows read - every GROUP BY here scans the entire table, and the
+    # daily row-read limit is easily exhausted by a handful of runs.
+    by_tag = []
     by_category = query_rows(
         "SELECT category, COUNT(*) as c FROM tools WHERE status='published' "
         "GROUP BY category ORDER BY c DESC LIMIT 10"
@@ -123,12 +124,13 @@ def main():
         "",
         f"Published tools: <b>{total}</b>",
         "",
-        "Top sources:",
     ]
-    for row in by_tag[:8]:
-        tag = row.get('tags') or 'untagged'
-        lines.append(f"  • {tag}: {row['c']}")
-    lines.append("")
+    if by_tag:
+        lines.append("Top sources:")
+        for row in by_tag[:8]:
+            tag = row.get('tags') or 'untagged'
+            lines.append(f"  • {tag}: {row['c']}")
+        lines.append("")
     lines.append("Top categories:")
     for row in by_category[:8]:
         cat = row.get('category') or 'uncategorized'

@@ -890,15 +890,35 @@ def scrape_trendshift():
         except Exception as e:
             log(f"    {page} error: {e}")
 
-    checked = 0
+    checked = failed = 0
     for full_name in candidates[:TRENDSHIFT_MAX_REPOS]:
         repo = _gh_repo(full_name)
         checked += 1
-        if not repo or repo.get('archived'):
+        if not repo:
+            # Unauthenticated GitHub allows 60 reads an hour and this source
+            # wants up to 40, so one pipeline run fits but a second one within
+            # the hour does not. Counted rather than swallowed, because a
+            # rate-limited run looks exactly like a day with nothing trending.
+            failed += 1
+            continue
+        if repo.get('archived'):
             continue
         name = (repo.get('name') or full_name.split('/')[-1]).strip()
         desc = (repo.get('description') or '').strip()
-        text = (name + ' ' + desc).lower()
+
+        # An empty description is what actually identifies the ad slots - every
+        # one of them (FPS-Booster-for-Wiindows, KMS-Pico-for-Win, Monero-Miner,
+        # AutoCad-setup, Acrobat-Reader-Pro...) ships with none. Filtering on
+        # that alone is more accurate than the keyword gate, which was also
+        # throwing away genuine projects: colibri ("run frontier MoE models on
+        # hardware you already own") is plainly an AI tool and got dropped only
+        # because its wording missed the keyword list.
+        if not desc:
+            continue
+
+        # Topics are folded in so a real AI repo is not lost to phrasing alone.
+        topics = ' '.join(repo.get('topics') or [])
+        text = f"{name} {desc} {topics}".lower()
         if not any(kw in text for kw in HN_KEYWORDS):
             continue
         homepage = (repo.get('homepage') or '').strip()
@@ -920,6 +940,10 @@ def scrape_trendshift():
         })
 
     log(f"    checked {checked} repo(s), kept {len(tools)} AI tool(s)")
+    if failed > len(candidates[:TRENDSHIFT_MAX_REPOS]) // 3:
+        log(f"    WARNING: {failed}/{checked} GitHub API reads failed. "
+            f"Unauthenticated GitHub allows only 60 reads/hour; set "
+            f"GH_SEARCH_TOKEN (5,000/hour) or this source stays mostly empty.")
     log(f"  Trendshift total: {len(tools)} tools")
     return blogs, tools, 'trendshift'
 

@@ -51,55 +51,63 @@ if not APIFY_KEYS:
 # SITE_KEYS is derived from the available keys just below, once SITES is defined.
 SITE_KEYS = {}
 
+# Page budgets are deliberately shallow. Every one of these directories lists
+# its newest tools first, so a run only has to reach far enough to cover what
+# appeared since the last run - the deep tail is stuff we already have. Run 1
+# proved the point: 10,470 of the 12,000 scraped URLs were duplicates. Apify
+# bills by compute time, so pages we do not need are money burnt. If a site ever
+# reorders to "oldest first" this breaks, and the silent-source alert will say so.
 SITES = {
     'toolify': {
         'startUrls': ['https://www.toolify.ai/'],
-        'maxPages': 50,
+        'maxPages': 15,          # was 50
         'scrollForLazyLoad': False,
     },
     'futurepedia': {
         'startUrls': ['https://www.futurepedia.io/ai-tools'],
-        'maxPages': 20,
+        'maxPages': 10,          # was 20
         'scrollForLazyLoad': True,
     },
     'taaft': {
         'startUrls': ['https://theresanaiforthat.com/'],
-        'maxPages': 30,
+        'maxPages': 15,          # was 30
         'scrollForLazyLoad': False,
     },
     'allthingsai': {
         'startUrls': ['https://allthingsai.com/'],
-        'maxPages': 10,
+        'maxPages': 5,           # was 10
         'scrollForLazyLoad': False,
     },
     'futuretools': {
         'startUrls': ['https://www.futuretools.io/'],
-        'maxPages': 20,
+        'maxPages': 10,          # was 20
         'scrollForLazyLoad': False,
     },
     'topai': {
         'startUrls': ['https://topai.tools/'],
-        'maxPages': 30,
+        'maxPages': 10,          # was 30
         'scrollForLazyLoad': False,
     },
     'aixploria': {
         'startUrls': ['https://www.aixploria.com/en/'],
-        'maxPages': 20,
+        'maxPages': 10,          # was 20
         'scrollForLazyLoad': False,
     },
     'insidr': {
         'startUrls': ['https://www.insidr.ai/ai-tools/'],
-        'maxPages': 20,
+        'maxPages': 5,           # was 20
         'scrollForLazyLoad': False,
     },
     'toolfk': {
         'startUrls': ['https://www.toolfk.com/'],
-        'maxPages': 20,
+        'maxPages': 10,          # was 20
         'scrollForLazyLoad': False,
     },
+    # trendshift.io is now covered for free by Source G in fresh_data_pipeline,
+    # so paying Apify for the same page is wasted budget.
     'trendshift': {
         'startUrls': ['https://trendshift.io/'],
-        'maxPages': 20,
+        'maxPages': 5,           # was 20
         'scrollForLazyLoad': False,
     },
 }
@@ -118,7 +126,8 @@ CADENCE = {
     'toolify':     'daily',
     'taaft':       'daily',
     'futurepedia': 'weekly',
-    'trendshift':  'weekly',
+    # trendshift runs free via Source G (GitHub API), so Apify stays off it.
+    'trendshift':  'off',
     'toolfk':      'weekly',
     'aixploria':   'weekly',
     'futuretools': 'weekly',
@@ -326,7 +335,20 @@ def get_existing_urls():
     return set(_EXISTING_URLS_CACHE)
 
 
+_D1_COUNT_CACHE = None
+
+
 def get_d1_count():
+    """Published tool count, read at most once per run.
+
+    Every COUNT(*) here scans the whole table and D1's free tier bills by rows
+    read. This is called from each site's return value, so an uncached version
+    meant a Sunday run counted the same 12k rows nine times over - part of what
+    exhausted the daily row-read limit.
+    """
+    global _D1_COUNT_CACHE
+    if _D1_COUNT_CACHE is not None:
+        return _D1_COUNT_CACHE
     env = d1_env()
     r = subprocess.run(
         ['wrangler', 'd1', 'execute', DB_NAME, '--remote', '--json',
@@ -336,7 +358,8 @@ def get_d1_count():
     try:
         data = json.loads(r.stdout)
         if isinstance(data, list) and data and data[0].get('results'):
-            return data[0]['results'][0]['c']
+            _D1_COUNT_CACHE = data[0]['results'][0]['c']
+            return _D1_COUNT_CACHE
     except Exception:
         pass
     return '?'
@@ -820,9 +843,18 @@ def process_site(site):
         fallback_log[key_name] = entry
         save_fallback_log(fallback_log)
 
-    # Start run with web-scraper
+    # The content crawler leads. It is empirically the productive route: on
+    # toolify it pulled 259 items where the web-scraper returned 7-9, because it
+    # reads the full HTML of every page it follows and our parser understands
+    # that shape directly. The web-scraper stays as the fallback.
     payload = build_input(site_cfg)
-    r = start_actor_run(key_val, payload)
+    used_crawler = True
+    log("  starting website-content-crawler (primary)")
+    r = start_crawler_run(key_val, site_cfg)
+    if r.status_code not in (200, 201):
+        log(f"  crawler would not start ({r.status_code}); falling back to web-scraper")
+        used_crawler = False
+        r = start_actor_run(key_val, payload)
 
     used_crawler = False
 
@@ -848,7 +880,9 @@ def process_site(site):
             entry['last_used'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
             fallback_log[alt_name] = entry
             save_fallback_log(fallback_log)
-            r = start_actor_run(key_val, payload)
+            # retry with whichever actor this site is using
+            r = (start_crawler_run(key_val, site_cfg) if used_crawler
+                 else start_actor_run(key_val, payload))
             break
 
     if r.status_code == 402:
@@ -909,9 +943,9 @@ def process_site(site):
     # page, which looks identical to a site that genuinely has nothing new.
     # If it came back empty, try the same site once through the content
     # crawler, which returns full HTML that this same parser also understands.
-    if not tools and not used_crawler:
-        log("  web-scraper returned nothing; retrying via website-content-crawler")
-        r2 = start_crawler_run(key_val, site_cfg)
+    if not tools and used_crawler:
+        log("  crawler returned nothing; retrying via web-scraper")
+        r2 = start_actor_run(key_val, build_input(site_cfg))
         if r2.status_code in (200, 201):
             rid2 = (r2.json().get('data') or {}).get('id')
             if rid2:
@@ -919,13 +953,12 @@ def process_site(site):
                 if st2 == 'SUCCEEDED':
                     items2 = get_run_dataset(key_val, rid2)
                     if items2:
-                        used_crawler = True
                         items = items2
                         tools = extract_tools_from_items(items2, site, site_url,
                                                          existing_urls)
-                        log(f"  crawler retry recovered {len(tools)} potential tools")
+                        log(f"  web-scraper retry recovered {len(tools)} potential tools")
         else:
-            log(f"  crawler retry could not start ({r2.status_code})")
+            log(f"  web-scraper retry could not start ({r2.status_code})")
 
     log(f"  Scraped {len(tools)} potential tools")
 
