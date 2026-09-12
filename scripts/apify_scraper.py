@@ -103,12 +103,55 @@ SITES = {
 }
 
 # ─────────────────────────────────────────────
+# Crawl cadence
+# ─────────────────────────────────────────────
+# Measured over one full 10-site run ($1.4421, 245 new tools):
+#   toolify + taaft produced 244 of those 245 tools for 35% of the budget,
+#   while insidr cost $0.5659 (39% of the budget) and produced nothing.
+# So the two producers run nightly, the long tail runs weekly, and insidr is
+# off. Daily freshness still comes from fresh_data_pipeline.py, which spends no
+# Apify credit at all. See FULL-PLAN.md sections 2-3.
+WEEKLY_WEEKDAY = 6          # Sunday (Monday=0 ... Sunday=6)
+CADENCE = {
+    'toolify':     'daily',
+    'taaft':       'daily',
+    'futurepedia': 'weekly',
+    'trendshift':  'weekly',
+    'toolfk':      'weekly',
+    'aixploria':   'weekly',
+    'futuretools': 'weekly',
+    'topai':       'weekly',
+    'allthingsai': 'weekly',
+    'insidr':      'off',
+}
+
+
+def should_run(site, weekday=None):
+    """Is this site due today? Returns (bool, reason)."""
+    cadence = CADENCE.get(site, 'daily')
+    if weekday is None:
+        weekday = datetime.utcnow().weekday()
+    if cadence == 'off':
+        return False, 'cadence=off'
+    if cadence == 'weekly' and weekday != WEEKLY_WEEKDAY:
+        return False, 'cadence=weekly (Sundays only)'
+    return True, f'cadence={cadence}'
+
+
+# ─────────────────────────────────────────────
 # Key distribution
 # ─────────────────────────────────────────────
-# Spread the sites over the available keys, heaviest crawl first, so no single key
-# carries every large site. Round-robin keeps the split even as keys are added.
+# Spread the sites over the available keys, heaviest crawl first, and rotate the
+# whole assignment one step per day. A fixed assignment is unsafe once the
+# schedule is cost-weighted: toolify alone spends ~$6.65/month, which is more
+# than a free key's cap, so it must not land on the same key every night.
+# Rotating nightly gives each key a similar share (~$3.6/month with four keys).
 _sites_by_load = sorted(SITES.keys(), key=lambda s: SITES[s]['maxPages'], reverse=True)
-SITE_KEYS = {site: KEY_ORDER[i % len(KEY_ORDER)] for i, site in enumerate(_sites_by_load)}
+_nightly_shift = datetime.utcnow().timetuple().tm_yday
+SITE_KEYS = {
+    site: KEY_ORDER[(i + _nightly_shift) % len(KEY_ORDER)]
+    for i, site in enumerate(_sites_by_load)
+}
 
 CF_API_TOKEN = os.environ.get('CF_API_TOKEN', '')
 CF_ACCOUNT_ID = os.environ.get('CLOUDFLARE_ACCOUNT_ID', '')
@@ -791,6 +834,10 @@ def main():
     log(f"Site -> key distribution: {json.dumps(SITE_KEYS)}")
     all_results = []
     for site in SITES:
+        due, why = should_run(site)
+        if not due:
+            log(f"--- {site}: skipped ({why})")
+            continue
         result = process_site(site)
         all_results.append(result)
         # Save progress
