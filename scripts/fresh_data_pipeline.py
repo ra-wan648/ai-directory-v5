@@ -161,12 +161,42 @@ def batch_insert(tools_batch):
 
 
 # Blog/news feeds produce articles, not tools. Their URLs live on news domains.
+# The list below is matched on host boundaries (exact host or subdomain), never as
+# a bare substring - a substring match is what let reuters.com and theguardian.com
+# through (both are absent from the old list, and a substring check on short
+# domains such as 'x.com' would also wrongly reject box.com).
 NEWS_DOMAINS = (
     'news.ycombinator.com', 'bensbites.com', 'tldr.tech', 'therundown.ai',
-    'commentary', 'arxiv.org', 'nature.com', 'bloomberg.com', 'techcrunch.com',
+    'arxiv.org', 'nature.com', 'bloomberg.com', 'techcrunch.com',
     'youtube.com', 'davidepiffer.com', 'netflixtechblog.com', 'lists.debian.org',
-    'cnn.com', 'bbc.com', 'wired.com', 'theverge.com', 'medium.com',
+    'cnn.com', 'bbc.com', 'bbc.co.uk', 'wired.com', 'theverge.com', 'medium.com',
+    # Wire services and newspapers - added after the 2026-09-12 live junk audit.
+    'reuters.com', 'theguardian.com', 'guardian.co.uk', 'apnews.com', 'nytimes.com',
+    'washingtonpost.com', 'forbes.com', 'cnbc.com', 'ft.com', 'wsj.com',
+    'economist.com', 'businessinsider.com', 'engadget.com', 'arstechnica.com',
+    'zdnet.com', 'cnet.com', 'gizmodo.com', 'mashable.com', 'venturebeat.com',
+    'thenextweb.com', 'theregister.com', 'axios.com', 'theinformation.com',
+    'newsweek.com', 'time.com', 'fortune.com', 'usatoday.com', 'nbcnews.com',
+    'abcnews.go.com', 'cbsnews.com', 'aljazeera.com', 'dw.com', 'scmp.com',
+    'indiatimes.com', 'timesofindia.com', 'thehindu.com', 'livemint.com',
+    'siliconangle.com', 'tomshardware.com', 'infoq.com', 'sdtimes.com',
+    'qz.com', 'vice.com', 'semafor.com', 'theatlantic.com', 'politico.com',
+    'news.google.com', 'apple.news', 'flipboard.com', 'yahoo.com', 'msn.com',
+    # Personal publishing platforms are articles, not products.
+    'substack.com', 'ghost.io', 'wordpress.com', 'blogspot.com', 'notion.site',
+    # Event, ticketing and hackathon pages are not tools.
+    'luma.com', 'lu.ma', 'eventbrite.com', 'meetup.com', 'ticketmaster.com',
+    'devpost.com', 'hopin.com', 'airmeet.com',
+    # Social, aggregators and discussion sites.
+    'reddit.com', 'twitter.com', 'x.com', 'facebook.com', 'linkedin.com',
+    'instagram.com', 'tiktok.com', 'threads.net', 'hackernews.com',
+    'techmeme.com', 'indiehackers.com',
 )
+
+
+def _host_is(host, domain):
+    """True when host is exactly `domain` or a subdomain of it."""
+    return host == domain or host.endswith('.' + domain)
 
 
 def is_real_tool_url(url):
@@ -177,12 +207,51 @@ def is_real_tool_url(url):
         return False
     if not host:
         return False
-    if host == 'x.ai' or host == 'openai.com':
+    # Strip userinfo and port so "user@host:443" is compared as "host".
+    host = host.rsplit('@', 1)[-1].split(':', 1)[0]
+    if not host:
+        return False
+    if _host_is(host, 'x.ai') or _host_is(host, 'openai.com'):
         return True
     for d in NEWS_DOMAINS:
-        if d in host:
+        if _host_is(host, d):
             return False
     return True
+
+
+# Headlines read like sentences; product names do not. Used as a second gate so a
+# news article cannot reach the tools table just because its snippet says "app".
+NEWS_TITLE_RE = re.compile(
+    r'\b(sources say|report says|reports say|data shows|study finds|says study'
+    r'|opinion:|analysis:|exclusive:|live updates?|breaking:)',
+    re.IGNORECASE,
+)
+
+
+def looks_like_news_title(title, max_len=110):
+    """True when a title is almost certainly an article headline, not a tool name."""
+    t = (title or '').strip()
+    if not t:
+        return True
+    if len(t) > max_len:
+        return True
+    return bool(NEWS_TITLE_RE.search(t))
+
+
+# Product-ish vocabulary, matched on word boundaries. The old check used bare
+# `s in text`, so 'app' matched inside "apprenticeships"/"applications" and let
+# news articles through.
+_TOOL_WORD_RE = re.compile(
+    r'\b(tools?|apps?|application|platform|assistant|generator|api|sdk|library'
+    r'|framework|engine|model|plugin|extension|bot|agent|studio|suite|dashboard'
+    r'|show hn)\b',
+    re.IGNORECASE,
+)
+
+
+def looks_like_tool_text(text):
+    """True when text contains product vocabulary as whole words."""
+    return bool(_TOOL_WORD_RE.search(text or ''))
 
 
 def batch_insert_blogs(blogs_batch):
@@ -612,11 +681,12 @@ def scrape_hn():
             text = (title + ' ' + (hit.get('story_text') or '')).lower()
             if not any(kw in text for kw in HN_KEYWORDS):
                 continue
-            # Sort into real tools vs news/articles.
-            is_tool_like = any(s in text for s in ['show hn', 'launch', 'app', 'api',
-                                                   'library', 'framework', 'sdk', 'generator',
-                                                   'assistant', 'engine'])
-            if is_tool_like and is_real_tool_url(story_url) and 'show hn' in text:
+            # Sort into real tools vs news/articles. Word boundaries, not substrings:
+            # the old `'app' in text` matched inside "apprenticeships".
+            if (looks_like_tool_text(text)
+                    and is_real_tool_url(story_url)
+                    and 'show hn' in text
+                    and not looks_like_news_title(title)):
                 tools.append({
                     'name': title,
                     'slug': slugify(title),
@@ -798,9 +868,9 @@ def scrape_serpapi():
                 if not any(kw in text for kw in HN_KEYWORDS):
                     continue
                 # Sort into real tools vs news/articles, like the HN source.
-                is_tool_like = any(s in text for s in ['tool', 'app', 'platform',
-                                                       'assistant', 'generator', 'api'])
-                if is_tool_like and is_real_tool_url(link):
+                if (looks_like_tool_text(text)
+                        and is_real_tool_url(link)
+                        and not looks_like_news_title(title)):
                     tools.append({
                         'name': title,
                         'slug': slugify(title),
