@@ -91,10 +91,25 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
   "features": ["feature1","feature2","feature3","feature4"],
   "pricing_detail": "Free / Freemium from $X/mo / Paid from $X/mo"
 }}"""
-    r = requests.post(MANIFEST_URL,
-        headers={"Authorization": f"Bearer {MANIFEST_KEY}", "Content-Type": "application/json"},
-        json={"model": "auto", "input": prompt, "store": False}, timeout=30)
-    if r.status_code != 200:
+    # A single slow response used to raise straight through and fail the whole
+    # step (TimeoutError after ~5 tools). Retry once with a longer timeout and
+    # give up on just this tool instead of the batch.
+    r = None
+    for attempt, timeout in enumerate((60, 90), start=1):
+        try:
+            r = requests.post(
+                MANIFEST_URL,
+                headers={"Authorization": f"Bearer {MANIFEST_KEY}",
+                         "Content-Type": "application/json"},
+                json={"model": "auto", "input": prompt, "store": False},
+                timeout=timeout,
+            )
+            break
+        except Exception as e:
+            print(f"    ! request failed ({type(e).__name__}), attempt {attempt}")
+            r = None
+            time.sleep(3)
+    if r is None or r.status_code != 200:
         return None
     out = r.json().get("output", "")
     out = extract_text(out)
@@ -121,9 +136,13 @@ tools = get_unfilled()
 print(f"Filling {len(tools)} tools...")
 for i, t in enumerate(tools):
     print(f"[{i+1}/{len(tools)}] {t['name']}")
-    data = fill(t)
-    if data:
-        update(t['id'], data)
-        print("  \u2713")
+    try:
+        data = fill(t)
+        if data:
+            update(t['id'], data)
+            print("  \u2713")
+    except Exception as e:
+        # Never let one bad tool abort the batch — the step must still exit 0.
+        print(f"  ! skipped ({type(e).__name__}: {e})")
     time.sleep(1)
 print("Done.")
