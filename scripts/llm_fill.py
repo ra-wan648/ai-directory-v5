@@ -1,4 +1,5 @@
 import os, requests, json, time, subprocess
+from concurrent.futures import ThreadPoolExecutor
 
 # The API key must come from the environment. It was previously hardcoded here and
 # therefore committed to a public repository — rotate it if that copy was ever live.
@@ -57,9 +58,9 @@ def run_sql(sql, timeout=180):
     return []
 
 
-def get_unfilled():
+def get_unfilled(limit):
     return run_sql("SELECT id,name,url,category,description FROM tools "
-                   "WHERE llm_filled=0 AND status='published' LIMIT 100")
+                   f"WHERE llm_filled=0 AND status='published' LIMIT {int(limit)}")
 
 def extract_text(node):
     """Recursively extract readable text from the OpenAI/Manifest response output."""
@@ -124,28 +125,69 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
     except Exception:
         return None
 
-def update(tid, data):
-    d = data.get("description_full", "").replace("'", "''")
-    f = json.dumps(data.get("features", [])).replace("'", "''")
-    p = data.get("pricing_detail", "").replace("'", "''")
-    run_sql(f"UPDATE tools SET description_full='{d}',features='{f}',"
-            f"pricing_detail='{p}',llm_filled=1 WHERE id={tid}")
+def escape(text):
+    return str(text or "").replace("'", "''")
+
+
+def write_batch(pairs):
+    """Write a batch of enriched rows in ONE wrangler call.
+
+    This used to spawn a wrangler process per tool. wrangler is a Node CLI, so
+    that is a few seconds of process start-up per row - on a 6,000-tool backlog
+    it is hours of overhead before the database does any real work. The CLI
+    accepts several statements in one --command, so a whole batch goes in one.
+    """
+    stmts = []
+    for tid, data in pairs:
+        d = escape(data.get("description_full", ""))[:2000]
+        f = escape(json.dumps(data.get("features", [])))[:2000]
+        p = escape(data.get("pricing_detail", ""))[:200]
+        stmts.append(
+            f"UPDATE tools SET description_full='{d}',features='{f}',"
+            f"pricing_detail='{p}',llm_filled=1 WHERE id={tid};"
+        )
+    if stmts:
+        run_sql(" ".join(stmts))
+
+
+MAX_TOOLS = int(os.environ.get("LLM_FILL_MAX", "600"))
+WORKERS = int(os.environ.get("LLM_FILL_WORKERS", "8"))
+WRITE_BATCH = int(os.environ.get("LLM_FILL_WRITE_BATCH", "40"))
 
 if not MANIFEST_KEY:
     print("MANIFEST_API_KEY is not set - skipping LLM enrichment (this is optional).")
     raise SystemExit(0)
 
-tools = get_unfilled()
-print(f"Filling {len(tools)} tools...")
-for i, t in enumerate(tools):
-    print(f"[{i+1}/{len(tools)}] {t['name']}")
+tools = get_unfilled(MAX_TOOLS)
+print(f"Filling up to {MAX_TOOLS} tool(s), {WORKERS} concurrent; "
+      f"{len(tools)} outstanding.")
+
+
+def job(tool):
     try:
-        data = fill(t)
-        if data:
-            update(t['id'], data)
-            print("  \u2713")
+        return tool, fill(tool)
     except Exception as e:
         # Never let one bad tool abort the batch — the step must still exit 0.
-        print(f"  ! skipped ({type(e).__name__}: {e})")
-    time.sleep(1)
-print("Done.")
+        print(f"  ! {tool['name'][:40]}: skipped ({type(e).__name__})")
+        return tool, None
+
+
+processed = written = failed = 0
+buf = []
+with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+    for tool, data in pool.map(job, tools):
+        processed += 1
+        if data:
+            buf.append((tool["id"], data))
+        else:
+            failed += 1
+        if len(buf) >= WRITE_BATCH:
+            write_batch(buf)
+            written += len(buf)
+            buf = []
+            print(f"  [{processed}/{len(tools)}] processed, {written} written")
+if buf:
+    write_batch(buf)
+    written += len(buf)
+
+print(f"Done. processed={processed} written={written} failed={failed}")

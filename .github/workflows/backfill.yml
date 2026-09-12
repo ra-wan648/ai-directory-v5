@@ -1,0 +1,76 @@
+name: Backfill descriptions + cleanup
+
+# Manual and Apify-free: hides junk rows and writes missing descriptions without
+# running the scrapers, so it can be dispatched as often as needed.
+#
+# One pass will not clear a 6,300-row backlog. Each LLM call takes roughly 18s
+# and the router is shared, so the work done is bounded by LLM_FILL_MAX and the
+# job timeout - not by ambition. Raise fill_max to go faster, but keep an eye on
+# the account's monthly request allowance: the free tier is 10,000 requests a
+# month and the backlog alone is about 6,300 of them.
+on:
+  workflow_dispatch:
+    inputs:
+      fill_max:
+        description: 'Descriptions to write this pass'
+        required: false
+        default: '2500'
+      workers:
+        description: 'Concurrent LLM calls'
+        required: false
+        default: '10'
+      cleanup:
+        description: 'Hide junk rows too? (true/false)'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      # Both steps are idempotent and safe to repeat.
+      - name: Apply D1 indexes
+        run: wrangler d1 execute ai-directory-db --remote --file=migrations/001_indexes.sql
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+
+      - name: Hide junk rows
+        if: ${{ inputs.cleanup == 'true' }}
+        run: cd scripts && python cleanup_junk.py --apply
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+
+      - name: Fill missing descriptions
+        run: cd scripts && python llm_fill.py
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+          MANIFEST_API_KEY: ${{secrets.MANIFEST_API_KEY}}
+          LLM_FILL_MAX: ${{inputs.fill_max}}
+          LLM_FILL_WORKERS: ${{inputs.workers}}
+
+      - name: Telegram stats
+        if: always()
+        run: cd scripts && python telegram_stats.py
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+          TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+          ADMIN_TELEGRAM_ID: ${{secrets.ADMIN_TELEGRAM_ID}}
