@@ -277,13 +277,26 @@ def d1_env():
     return env
 
 
-def get_existing_urls():
-    """Fetch all existing website_url values from D1.
+_EXISTING_URLS_CACHE = None
 
-    Fails loudly rather than returning an empty set: D1's free tier has a daily
-    row-read limit, and once it is hit every read errors out. An empty set would
-    make every scraped tool look new and insert duplicates by the thousand.
+
+def get_existing_urls():
+    """Fetch all existing website_url values from D1, once per run.
+
+    Cached on purpose. This used to be called inside the per-site loop, so a
+    Sunday run re-read the whole table nine times - 12,326 rows a go - and that
+    repeated scanning is what burned through D1's free-tier daily row-read
+    limit. The set only grows as we insert, and new rows are added to it by the
+    caller, so one read up front is correct.
+
+    Fails loudly rather than returning an empty set: once the daily read limit
+    is hit every read errors out, and an empty set would make every scraped tool
+    look new and insert duplicates by the thousand.
     """
+    global _EXISTING_URLS_CACHE
+    if _EXISTING_URLS_CACHE is not None:
+        return set(_EXISTING_URLS_CACHE)
+
     env = d1_env()
     r = subprocess.run(
         ['wrangler', 'd1', 'execute', DB_NAME, '--remote', '--json',
@@ -307,8 +320,10 @@ def get_existing_urls():
             f'refusing to continue rather than insert duplicates. Said: {detail}'
         )
 
-    return {(row.get('url') or '').strip().lower()
-            for row in rows if row.get('url')}
+    _EXISTING_URLS_CACHE = {(row.get('url') or '').strip().lower()
+                            for row in rows if row.get('url')}
+    log(f"  loaded {len(_EXISTING_URLS_CACHE)} existing URLs from D1 (cached for this run)")
+    return set(_EXISTING_URLS_CACHE)
 
 
 def get_d1_count():
