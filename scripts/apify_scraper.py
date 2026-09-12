@@ -467,20 +467,27 @@ def get_run_dataset(key, run_id):
 def build_input(site_cfg):
     """Build web-scraper actor input for a site."""
     start_urls = [{'url': u} for u in site_cfg['startUrls']]
-    page_function = """
+    # Plain DOM APIs, not jQuery. The previous version reached for `$(this)`
+    # inside the .each() callback, where `$` is not callable, and the Actor
+    # failed every request with "TypeError: $ is not a function" after three
+    # retries -- a successful run that silently produced zero items. That went
+    # unnoticed because the crawler fallback was covering for it.
+    # Kept as a raw string so the regex escape survives into the Actor input.
+    page_function = r"""
     async function pageFunction(context) {
-        const { request, $ } = context;
+        const { request } = context;
         const items = [];
-        $('a').each(function() {
-            const href = $(this).attr('href');
-            const text = $(this).text().trim().replace(/\\s+/g, ' ').slice(0, 200);
-            if (href && text && text.length > 3) {
+        const anchors = document.querySelectorAll('a[href]');
+        for (const a of anchors) {
+            const href = a.getAttribute('href');
+            const text = (a.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 200);
+            if (href && text.length > 3) {
                 items.push({ url: href, text: text });
             }
-        });
+        }
         return {
             pageUrl: request.url,
-            title: $('title').text().trim(),
+            title: (document.title || '').trim(),
             links: items,
         };
     }
