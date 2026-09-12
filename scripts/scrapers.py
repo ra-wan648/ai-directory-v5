@@ -1,3 +1,35 @@
+"""
+DEPRECATED - do not wire this file into the pipeline. Kept only for reference.
+
+This was hand-written by an outside developer a long time ago. It is not run by
+any workflow, and it does not work well enough to start using it now. Measured
+on 12 Sep 2026:
+
+  scrape_toolify      100 items, but only 10 UNIQUE urls - pagination does not
+                      advance, so it returns the first page ten times over.
+                      Names are concatenated with the description
+                      ("CocoHumanizer Free Free AI humanizer for...").
+  scrape_insidr       860 items, 178 unique, and 844 of them point back at
+                      insidr.ai itself - internal navigation and even affiliate
+                      links (/aff/semrush). It collects the wrong kind of link.
+  scrape_futuretools  318 items, 179 unique, 252 of them futuretools.io
+                      boilerplate ("Blog", "AI News", "Next") mixed in with real
+                      tools.
+  scrape_trendshift   dead: /repositories returns 404 and the card markup no
+                      longer matches.
+  taaft, futurepedia, topaitools, aixploria, toolfk   all HTTP 403.
+  allthingsai         DNS no longer resolves.
+
+The lesson is in the counts: a big number is not a working scraper. Read
+`scraped` and `unique` together, never one alone. Anything that parses HTML
+breaks the moment the site is redesigned, and nobody here maintains these.
+
+Use the API-backed sources in fresh_data_pipeline.py instead (GitHub API, HN
+Algolia, Product Hunt GraphQL, HuggingFace, SerpAPI) - they have stable
+contracts - and let Apify handle the sites that have no API, since the actor
+author keeps those working, not you.
+"""
+
 import requests
 from bs4 import BeautifulSoup
 import time
