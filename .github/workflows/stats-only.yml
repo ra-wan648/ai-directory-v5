@@ -1,0 +1,28 @@
+name: Telegram stats only
+
+# Manual, no-cost way to exercise the Telegram summary on its own.
+# The full pipeline step can be skipped (or crash) before it, so this runs
+# telegram_stats.py in isolation without spending any Apify credits.
+on:
+  workflow_dispatch:
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Install wrangler
+        run: npm install -g wrangler
+      - name: Telegram stats
+        run: cd scripts && python telegram_stats.py
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+          TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+          ADMIN_TELEGRAM_ID: ${{secrets.ADMIN_TELEGRAM_ID}}
