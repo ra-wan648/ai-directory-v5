@@ -78,24 +78,40 @@ def get_d1_count():
 
 
 def get_existing_urls():
-    """Fetch all existing website_url values from D1."""
+    """Fetch all existing website_url values from D1.
+
+    Fails loudly instead of returning an empty set. D1's free tier has a daily
+    row-read limit, and once it is hit every read fails - we saw that on
+    12 Sep, which is what made the pipeline report "Published: 0" while the
+    table still held 12,326 rows. If this quietly returned empty, every scraped
+    tool would look brand new: thousands of duplicate inserts, and the write
+    quota burned with them. Refusing to run is the safer failure.
+    """
     env = d1_env()
     r = subprocess.run(
         ['wrangler', 'd1', 'execute', DB_NAME, '--remote', '--json',
          '--command', "SELECT url FROM tools WHERE status='published'"],
         capture_output=True, text=True, timeout=60, env=env
     )
-    urls = set()
+    rows = None
     try:
         data = json.loads(r.stdout)
-        if isinstance(data, list) and data and data[0].get('results'):
-            for row in data[0]['results']:
-                u = row.get('url')
-                if u:
-                    urls.add(u.strip().lower())
+        if isinstance(data, list) and data and isinstance(data[0], dict):
+            rows = data[0].get('results')
+        elif isinstance(data, dict):
+            rows = data.get('results') or (data.get('result') or {}).get('results')
     except Exception:
-        pass
-    return urls
+        rows = None
+
+    if rows is None:
+        detail = (r.stdout or r.stderr or '').strip()[:300]
+        raise RuntimeError(
+            'could not read existing URLs from D1 (row-read limit or auth?) - '
+            f'refusing to continue rather than insert duplicates. Said: {detail}'
+        )
+
+    return {(row.get('url') or '').strip().lower()
+            for row in rows if row.get('url')}
 
 
 def batch_insert(tools_batch):
@@ -915,7 +931,11 @@ def main():
 
     progress = load_progress()
     seen_urls = load_dedup_set()
-    existing_urls = get_existing_urls()
+    try:
+        existing_urls = get_existing_urls()
+    except RuntimeError as e:
+        log(f"ABORTING: {e}")
+        raise SystemExit(1)
     log(f"Existing URLs in D1: {len(existing_urls)}")
 
     sources = [

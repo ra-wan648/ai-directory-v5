@@ -278,24 +278,37 @@ def d1_env():
 
 
 def get_existing_urls():
-    """Fetch all existing website_url values from D1."""
+    """Fetch all existing website_url values from D1.
+
+    Fails loudly rather than returning an empty set: D1's free tier has a daily
+    row-read limit, and once it is hit every read errors out. An empty set would
+    make every scraped tool look new and insert duplicates by the thousand.
+    """
     env = d1_env()
     r = subprocess.run(
         ['wrangler', 'd1', 'execute', DB_NAME, '--remote', '--json',
          '--command', "SELECT url FROM tools WHERE status='published'"],
         capture_output=True, text=True, timeout=60, env=env
     )
-    urls = set()
+    rows = None
     try:
         data = json.loads(r.stdout)
-        if isinstance(data, list) and data and data[0].get('results'):
-            for row in data[0]['results']:
-                u = row.get('url')
-                if u:
-                    urls.add(u.strip().lower())
+        if isinstance(data, list) and data and isinstance(data[0], dict):
+            rows = data[0].get('results')
+        elif isinstance(data, dict):
+            rows = data.get('results') or (data.get('result') or {}).get('results')
     except Exception:
-        pass
-    return urls
+        rows = None
+
+    if rows is None:
+        detail = (r.stdout or r.stderr or '').strip()[:300]
+        raise RuntimeError(
+            'could not read existing URLs from D1 (row-read limit or auth?) - '
+            f'refusing to continue rather than insert duplicates. Said: {detail}'
+        )
+
+    return {(row.get('url') or '').strip().lower()
+            for row in rows if row.get('url')}
 
 
 def get_d1_count():
