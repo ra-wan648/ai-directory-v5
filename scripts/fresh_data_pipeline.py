@@ -785,6 +785,97 @@ def scrape_serpapi():
     return blogs, tools, 'serpapi'
 
 
+# ─────────────────────────────────────────────
+# Source G: Trendshift (free) — trending GitHub AI repos
+# ─────────────────────────────────────────────
+TRENDSHIFT_PAGES = ['https://trendshift.io/', 'https://trendshift.io/weekly']
+GH_API_TOKEN = os.environ.get('GITHUB_TOKEN', '')
+TRENDSHIFT_MAX_REPOS = 40
+
+
+def _gh_repo(full_name):
+    """Repo metadata from the public GitHub API (free; a token just ups the cap)."""
+    headers = {'Accept': 'application/vnd.github+json',
+               'User-Agent': 'ai-directory-v5'}
+    if GH_API_TOKEN:
+        headers['Authorization'] = f'Bearer {GH_API_TOKEN}'
+    try:
+        r = requests.get(f'https://api.github.com/repos/{full_name}',
+                         headers=headers, timeout=20)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except Exception:
+        return None
+
+
+def scrape_trendshift():
+    """Source G: trending GitHub repos, read from trendshift.io.
+
+    The legacy direct scraper in scripts/scrapers.py is dead — /repositories
+    now returns 404 and the page markup changed — which is why this source had
+    gone quiet. The page links every trending repo out to GitHub, so collect
+    those links and describe each one from the public GitHub API instead of
+    trying to parse trendshift's own cards.
+
+    The keyword gate does real work here: trendshift also sells ad slots, and
+    those entries are junk (an FPS booster, an AutoCAD installer, a Monero
+    miner). Ad entries never look like AI tools, so the gate drops them.
+    """
+    blogs, tools = [], []
+    log("  Source G: Trendshift (GitHub trending, free)")
+
+    candidates = []
+    for page in TRENDSHIFT_PAGES:
+        try:
+            r = requests.get(page, headers={'User-Agent': 'Mozilla/5.0'}, timeout=25)
+            if r.status_code != 200:
+                log(f"    {page} -> HTTP {r.status_code}")
+                continue
+            found = re.findall(
+                r'https://github\.com/([A-Za-z0-9._-]+/[A-Za-z0-9._-]+)', r.text)
+            log(f"    {page} -> {len(found)} repo links")
+            for full_name in found:
+                full_name = full_name.rstrip('.')
+                if full_name not in candidates:
+                    candidates.append(full_name)
+        except Exception as e:
+            log(f"    {page} error: {e}")
+
+    checked = 0
+    for full_name in candidates[:TRENDSHIFT_MAX_REPOS]:
+        repo = _gh_repo(full_name)
+        checked += 1
+        if not repo or repo.get('archived'):
+            continue
+        name = (repo.get('name') or full_name.split('/')[-1]).strip()
+        desc = (repo.get('description') or '').strip()
+        text = (name + ' ' + desc).lower()
+        if not any(kw in text for kw in HN_KEYWORDS):
+            continue
+        homepage = (repo.get('homepage') or '').strip()
+        url = homepage if homepage.startswith('http') else (repo.get('html_url') or '')
+        if not url:
+            continue
+        tools.append({
+            'name': name,
+            'slug': slugify(name),
+            'description': desc[:1000] or f"Trending open-source AI project ({full_name})",
+            'short_desc': desc[:100] or full_name,
+            'category': categorize(desc or name),
+            'pricing': 'free',
+            'website_url': url,
+            'logo_url': (repo.get('owner') or {}).get('avatar_url') or get_logo_url(url),
+            'tags': 'ai,github,open-source,trending',
+            'source': 'trendshift',
+            'kind': 'tool',
+        })
+
+    log(f"    checked {checked} repo(s), kept {len(tools)} AI tool(s)")
+    log(f"  Trendshift total: {len(tools)} tools")
+    return blogs, tools, 'trendshift'
+
+
 def main():
     log("=" * 60)
     log("Fresh AI Tools Pipeline — Starting")
@@ -802,6 +893,7 @@ def main():
         ('HN Algolia', scrape_hn),
         ('RSS', scrape_rss),
         ('SerpAPI', scrape_serpapi),
+        ('Trendshift', scrape_trendshift),
     ]
 
     total_scraped = 0
