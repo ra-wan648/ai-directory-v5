@@ -856,8 +856,6 @@ def process_site(site):
         used_crawler = False
         r = start_actor_run(key_val, payload)
 
-    used_crawler = False
-
     if r.status_code == 402:
         log(f"  QUOTA EXHAUSTED on {key_name} for {site}, trying fallback")
         fallback_log[key_name] = {
