@@ -43,6 +43,8 @@ jobs:
         env:
           PRODUCT_HUNT_KEY: ${{secrets.PRODUCT_HUNT_KEY}}
           PRODUCT_HUNT_SECRET: ${{secrets.PRODUCT_HUNT_SECRET}}
+          # Source F. Skips itself cleanly when the secret is unset.
+          SERPAPI_KEY: ${{secrets.SERPAPI_KEY}}
           # optional: raises the GitHub search rate limit from 60/h to 5,000/h
           GITHUB_TOKEN: ${{secrets.GH_SEARCH_TOKEN}}
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}

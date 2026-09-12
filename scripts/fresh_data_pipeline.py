@@ -697,6 +697,94 @@ def scrape_rss():
 # ─────────────────────────────────────────────
 # MAIN
 # ─────────────────────────────────────────────
+# ─────────────────────────────────────────────
+# Source F: SerpAPI (Google)
+# ─────────────────────────────────────────────
+SERPAPI_KEY = os.environ.get('SERPAPI_KEY', '')
+
+SERP_QUERIES = [
+    '"AI tool" launch 2026 -site:reddit.com',
+    'best new AI tools this week',
+    'site:producthunt.com AI tool',
+    'new AI SaaS tool launched',
+    'AI assistant app free tier 2026',
+]
+
+
+def scrape_serpapi():
+    """Source F: Google results via SerpAPI, aimed at brand-new AI tools.
+
+    Only successful searches are billed (cached/errored ones are free), and the
+    free plan covers 250 searches a month. Five queries a night is ~130 a month,
+    so this stays inside the free tier. Skips itself cleanly when the key is
+    absent, the same way the Product Hunt source does.
+    """
+    blogs, tools = [], []
+    log("  Source F: SerpAPI (Google)")
+    if not SERPAPI_KEY:
+        log("    SERPAPI_KEY not set - skipping")
+        return blogs, tools, 'serpapi'
+
+    for query in SERP_QUERIES:
+        try:
+            r = requests.get("https://serpapi.com/search.json", params={
+                'engine': 'google',
+                'q': query,
+                'num': 20,
+                'api_key': SERPAPI_KEY,
+            }, timeout=25)
+            if r.status_code != 200:
+                log(f"    '{query}' -> HTTP {r.status_code}")
+                continue
+            results = r.json().get('organic_results', [])
+            found_tool = found_blog = 0
+            for item in results:
+                link = (item.get('link') or '').strip()
+                title = (item.get('title') or '').strip()
+                if not link or not title:
+                    continue
+                snippet = (item.get('snippet') or '').strip()
+                text = (title + ' ' + snippet).lower()
+                if not any(kw in text for kw in HN_KEYWORDS):
+                    continue
+                # Sort into real tools vs news/articles, like the HN source.
+                is_tool_like = any(s in text for s in ['tool', 'app', 'platform',
+                                                       'assistant', 'generator', 'api'])
+                if is_tool_like and is_real_tool_url(link):
+                    tools.append({
+                        'name': title,
+                        'slug': slugify(title),
+                        'description': snippet[:1000],
+                        'short_desc': snippet[:100],
+                        'category': categorize(title + ' ' + snippet),
+                        'pricing': 'unknown',
+                        'website_url': link,
+                        'logo_url': get_logo_url(link),
+                        'tags': 'ai,google',
+                        'source': 'serpapi',
+                        'kind': 'tool',
+                    })
+                    found_tool += 1
+                else:
+                    blogs.append({
+                        'title': title,
+                        'slug': slugify(title),
+                        'content': snippet or title,
+                        'meta_description': snippet[:200] or title[:200],
+                        'category': 'news',
+                        'tool_slug': '',
+                        'website_url': link,
+                        'kind': 'blog',
+                    })
+                    found_blog += 1
+            log(f"    '{query}' -> {found_tool} tools, {found_blog} articles")
+        except Exception as e:
+            log(f"    '{query}' error: {e}")
+
+    log(f"  SerpAPI total: {len(blogs)} blogs, {len(tools)} tools")
+    return blogs, tools, 'serpapi'
+
+
 def main():
     log("=" * 60)
     log("Fresh AI Tools Pipeline — Starting")
@@ -713,6 +801,7 @@ def main():
         ('GitHub', scrape_github),
         ('HN Algolia', scrape_hn),
         ('RSS', scrape_rss),
+        ('SerpAPI', scrape_serpapi),
     ]
 
     total_scraped = 0
