@@ -17,6 +17,8 @@ from datetime import datetime
 
 import requests
 
+import validate
+
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
@@ -960,19 +962,13 @@ def process_site(site):
 
     log(f"  Scraped {len(tools)} potential tools")
 
-    # Filter out low-quality names (pure numbers, nav words)
-    filtered = []
-    skip_words = {'home', 'about', 'contact', 'pricing', 'sign in', 'sign up', 'login',
-                  'logout', 'privacy', 'terms', 'search', 'menu', 'more', 'read more',
-                  'newsletter', 'subscribe', 'categories', 'tags', 'blog', 'faq', 'help',
-                  'jobs', 'careers', 'press', 'team', 'partners', 'back to top'}
-    for t in tools:
-        name_l = t['name'].lower().strip()
-        if name_l in skip_words or len(name_l) < 4:
-            continue
-        if re.match(r'^[\d\W_]+$', t['name']):
-            continue
-        filtered.append(t)
+    # Validation lives in validate.py so both scrapers share one rule set, and
+    # every rejection carries a reason. The thin checks that stood here let
+    # '";> API' and 'cloudflare.com' through onto the live site.
+    filtered, rejected = validate.filter_rows(tools)
+    if rejected:
+        log(f"  dropped {sum(rejected.values())} low-quality row(s): "
+            + ', '.join(f'{k}={v}' for k, v in sorted(rejected.items())))
 
     inserted, failed = batch_insert(filtered)
     d1_total = get_d1_count()

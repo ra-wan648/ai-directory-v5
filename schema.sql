@@ -115,3 +115,20 @@ INSERT INTO prompts (title, slug, prompt_text, description, category, compatible
   ('Code Reviewer', 'code-reviewer', 'Review this code and provide: 1) Bugs or errors found 2) Performance improvements 3) Security issues 4) Better alternatives. Be specific with line numbers.
 
 [PASTE CODE HERE]', 'Get professional code reviews from AI', 'text', 'chatgpt,claude,gemini', 'published');
+
+-- ============================================================
+-- INDEXES
+-- A fresh database needs these too, not just the migration: the site's Worker
+-- filters and sorts on status/category/pricing/featured/created_at, and without
+-- indexes every listing request is a full table scan. D1's free tier bills by
+-- rows read (5M/day), so an unindexed 12k-row table costs the whole allowance
+-- within a few hundred page views. See migrations/001_indexes.sql.
+-- ============================================================
+CREATE INDEX IF NOT EXISTS idx_tools_status_created      ON tools(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tools_status_category     ON tools(status, category, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tools_status_pricing      ON tools(status, pricing, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tools_featured            ON tools(featured, status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tools_status_ranking      ON tools(status, votes DESC, views DESC, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tools_url                 ON tools(url);
+CREATE INDEX IF NOT EXISTS idx_tools_category            ON tools(category);
+CREATE INDEX IF NOT EXISTS idx_blogs_status_published    ON blogs(status, published_at DESC);

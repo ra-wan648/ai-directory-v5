@@ -18,6 +18,8 @@ import json
 import time
 import subprocess
 from urllib.parse import urlparse, quote
+
+import validate
 from datetime import datetime, timedelta
 
 import requests
@@ -1013,13 +1015,21 @@ def main():
                 time.sleep(0.5)
 
         new_tools = []
+        rejected = {}
         for t in tools:
             url = t['website_url'].strip().lower()
             key = dedupe_key(t['website_url'])
             if url in existing_urls or key in seen_urls:
                 continue
-            if len(t['name'].strip()) < 3:
+            # Name/slug validation (shared with apify_scraper via validate.py).
+            # The old check was just "name longer than 3 characters", which is
+            # how 'cloudflare.com' and '";> API' ended up on the live site.
+            t['name'] = validate.clean_name(t['name'])
+            ok, why = validate.is_valid_name(t['name'])
+            if not ok:
+                rejected[why] = rejected.get(why, 0) + 1
                 continue
+            t['slug'] = validate.normalize_slug(t['name'], t.get('slug'))
             # Only insert to tools table if URL is a real tool website.
             if not is_real_tool_url(url):
                 continue
@@ -1027,6 +1037,10 @@ def main():
             existing_urls.add(url)
             new_tools.append(t)
 
+        if rejected:
+            log(f"  dropped {sum(rejected.values())} low-quality row(s) from "
+                f"{source_name}: "
+                + ', '.join(f'{k}={v}' for k, v in sorted(rejected.items())))
         log(f"  New unique tools: {len(new_tools)}")
 
         for i in range(0, len(new_tools), 30):

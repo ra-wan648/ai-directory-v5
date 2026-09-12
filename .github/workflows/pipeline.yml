@@ -19,6 +19,15 @@ jobs:
         run: pip install requests beautifulsoup4 feedparser playwright apify-client python-telegram-bot
       - name: Install wrangler
         run: npm install -g wrangler
+      # Idempotent: every statement is IF NOT EXISTS. Applying it each pass
+      # keeps the indexes in place even if the database is rebuilt from
+      # schema.sql, and it is metadata work, not a table scan.
+      - name: Apply D1 indexes
+        run: wrangler d1 execute ai-directory-db --remote --file=migrations/001_indexes.sql
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+
       - name: Delete synthetic tools
         run: cd scripts && python delete_synthetic.py
         env:
