@@ -141,12 +141,59 @@ def should_run(site, weekday=None):
 # ─────────────────────────────────────────────
 # Key distribution
 # ─────────────────────────────────────────────
-# Spread the sites over the available keys, heaviest crawl first, and rotate the
-# whole assignment one step per day. A fixed assignment is unsafe once the
-# schedule is cost-weighted: toolify alone spends ~$6.65/month, which is more
-# than a free key's cap, so it must not land on the same key every night.
-# Rotating nightly gives each key a similar share (~$3.6/month with four keys).
+def _key_headroom(key):
+    """Remaining monthly spend for one key, in USD. None when unknown."""
+    try:
+        r = requests.get(f'https://api.apify.com/v2/users/me/limits?token={key}',
+                         timeout=20)
+        if r.status_code != 200:
+            return None
+        d = r.json().get('data', {})
+        cap = (d.get('limits') or {}).get('maxMonthlyUsageUsd')
+        used = (d.get('current') or {}).get('monthlyUsageUsd') or 0
+        if cap is None:
+            return None
+        return max(0.0, float(cap) - float(used))
+    except Exception:
+        return None
+
+
+def build_key_slots():
+    """Turn the key list into a weighted rotation.
+
+    Free keys do not all carry the same allowance ($5 and $10 here), and a key
+    that has already spent most of its budget must not be handed the same share
+    as a fresh one. Each key is weighted by its *remaining* budget, normalised
+    so an average key gets one slot, and a key that is out of budget drops out
+    of the rotation. Costs are per run, so this is recomputed on every run.
+    """
+    headroom = {name: _key_headroom(APIFY_KEYS[name]) for name in KEY_ORDER}
+    known = [v for v in headroom.values() if v is not None]
+    slots = []
+    if not known:
+        log('Key budgets unknown - falling back to an even rotation')
+        return [k for k in KEY_ORDER], headroom
+    average = sum(known) / len(known)
+    for name in KEY_ORDER:
+        h = headroom[name]
+        if h is None:
+            shares = 1                       # unknown budget: treat as average
+        elif h <= 0:
+            shares = 0                       # spent up: skip this key entirely
+        else:
+            shares = max(1, min(4, round(h / average)))
+        log(f'  {name}: ${h:.2f} left' if h is not None else f'  {name}: budget unknown'
+            f' -> {shares} slot(s)')
+        slots.extend([name] * shares)
+    return (slots or list(KEY_ORDER)), headroom
+
+
+# Spread the sites over the keys, heaviest crawl first, and rotate the whole
+# assignment one step per day. A fixed assignment is unsafe once the schedule is
+# cost-weighted: toolify alone spends ~$6.65/month, which is more than a free
+# key's cap, so it must not land on the same key every night.
 _sites_by_load = sorted(SITES.keys(), key=lambda s: SITES[s]['maxPages'], reverse=True)
+KEY_SLOTS = None          # filled in main(), once logging is available
 _nightly_shift = datetime.utcnow().timetuple().tm_yday
 SITE_KEYS = {
     site: KEY_ORDER[(i + _nightly_shift) % len(KEY_ORDER)]
@@ -830,7 +877,14 @@ def process_site(site):
 
 
 def main():
+    global SITE_KEYS, KEY_SLOTS
     log(f"Apify keys detected: {len(KEY_ORDER)} ({', '.join(KEY_ORDER)})")
+    log("Key budgets -> rotation slots:")
+    KEY_SLOTS, _ = build_key_slots()
+    SITE_KEYS = {
+        site: KEY_SLOTS[(i + _nightly_shift) % len(KEY_SLOTS)]
+        for i, site in enumerate(_sites_by_load)
+    }
     log(f"Site -> key distribution: {json.dumps(SITE_KEYS)}")
     all_results = []
     for site in SITES:

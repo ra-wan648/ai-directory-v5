@@ -91,11 +91,13 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
   "features": ["feature1","feature2","feature3","feature4"],
   "pricing_detail": "Free / Freemium from $X/mo / Paid from $X/mo"
 }}"""
-    # A single slow response used to raise straight through and fail the whole
-    # step (TimeoutError after ~5 tools). Retry once with a longer timeout and
-    # give up on just this tool instead of the batch.
+    # The router is slow: it may sit on a request while it tries several
+    # providers, so a short socket timeout is the wrong tool here. Wait long,
+    # and keep retrying while it is still thinking. A single slow response used
+    # to raise straight through and kill the whole step after ~5 tools.
+    ATTEMPT_TIMEOUTS = (90, 180, 300)      # seconds, one attempt each
     r = None
-    for attempt, timeout in enumerate((60, 90), start=1):
+    for attempt, timeout in enumerate(ATTEMPT_TIMEOUTS, start=1):
         try:
             r = requests.post(
                 MANIFEST_URL,
@@ -106,9 +108,10 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
             )
             break
         except Exception as e:
-            print(f"    ! request failed ({type(e).__name__}), attempt {attempt}")
+            print(f"    ! still waiting ({type(e).__name__}), attempt "
+                  f"{attempt}/{len(ATTEMPT_TIMEOUTS)}, waited {timeout}s")
             r = None
-            time.sleep(3)
+            time.sleep(5)
     if r is None or r.status_code != 200:
         return None
     out = r.json().get("output", "")
