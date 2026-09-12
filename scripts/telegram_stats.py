@@ -55,6 +55,23 @@ def query_rows(sql):
     return []
 
 
+HEALTH_FILE = '/tmp/source_health.json'
+
+
+def get_source_health():
+    """Per-source counts written by the earlier steps of this same job.
+
+    A source that returns nothing looks identical to a quiet day, so surface it
+    explicitly: a hand-written scraper dies the moment a site changes its HTML,
+    and the only way to notice is to be told.
+    """
+    try:
+        with open(HEALTH_FILE) as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
 def get_stats():
     total = query_rows("SELECT COUNT(*) as c FROM tools WHERE status='published'")
     total_count = total[0]['c'] if total else 0
@@ -120,6 +137,24 @@ def main():
     lines.append("Latest additions:")
     for row in recent:
         lines.append(f"  • {row.get('name', '?')} ({row.get('category', '?')})")
+
+    health = get_source_health()
+    if health:
+        silent = [n for n, v in health.items() if v.get('status') == 'silent']
+        lines.append("")
+        lines.append("Source health (this run):")
+        for name, v in health.items():
+            mark = "OK" if v.get('status') == 'ok' else "ZERO"
+            lines.append(
+                f"  • {name}: {v.get('scraped', 0)} scraped / "
+                f"{v.get('fresh', 0)} new [{mark}]"
+            )
+        if silent:
+            lines.append("")
+            lines.append("\u26a0\ufe0f <b>Silent sources</b> — 0 items, the scraper "
+                         "may be broken:")
+            for name in silent:
+                lines.append(f"  • {name}")
 
     send_telegram("\n".join(lines))
     log(f"  Published: {total}")

@@ -698,6 +698,38 @@ def scrape_rss():
 # MAIN
 # ─────────────────────────────────────────────
 # ─────────────────────────────────────────────
+# Source health
+# ─────────────────────────────────────────────
+HEALTH_FILE = '/tmp/source_health.json'
+
+
+def record_health(source, scraped, fresh, articles=0):
+    """Record this source's counts for the Telegram report later in the same job.
+
+    There is no persistence between runs (every Actions runner starts clean), so
+    this is a per-run picture rather than a trend. Its job is to make a source
+    that has quietly stopped working visible, instead of letting a dead scraper
+    look exactly like a day with nothing new to add.
+    """
+    try:
+        try:
+            with open(HEALTH_FILE) as f:
+                health = json.load(f)
+        except Exception:
+            health = {}
+        health[source] = {
+            'scraped': scraped,
+            'fresh': fresh,
+            'articles': articles,
+            'status': 'ok' if (scraped or articles) else 'silent',
+        }
+        with open(HEALTH_FILE, 'w') as f:
+            json.dump(health, f)
+    except Exception as e:
+        log(f"  (source health not recorded: {e})")
+
+
+# ─────────────────────────────────────────────
 # Source F: SerpAPI (Google)
 # ─────────────────────────────────────────────
 SERPAPI_KEY = os.environ.get('SERPAPI_KEY', '')
@@ -962,6 +994,8 @@ def main():
 
         total_scraped += len(new_tools)
         summary[source_name] = len(new_tools)
+        record_health(source_name, scraped=len(tools), fresh=len(new_tools),
+                      articles=len(blogs))
         progress.setdefault('sources_completed', []).append(source_name)
         save_progress(progress)
         save_dedup_set(seen_urls)

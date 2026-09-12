@@ -20,20 +20,22 @@ import requests
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
-def _load_apify_keys():
-    """Read APIFY_KEY_1..APIFY_KEY_N from the environment, stopping at the first gap.
+APIFY_KEY_SLOTS = int(os.environ.get('APIFY_KEY_SLOTS', '12'))
 
-    Any number of keys works: one for a solo run, or many when several people pool
-    their Apify quota. Adding or removing a key needs no code change.
+
+def _load_apify_keys():
+    """Read APIFY_KEY_1..APIFY_KEY_N from the environment, skipping holes.
+
+    Any number of keys works: one for a solo run, or many when several people
+    pool their Apify quota. Slots may be left empty on purpose — a gap must not
+    hide the keys after it, otherwise one revoked token silently disables the
+    whole rest of the pool and the run quietly shrinks to fewer keys.
     """
     keys = {}
-    i = 1
-    while True:
+    for i in range(1, APIFY_KEY_SLOTS + 1):
         val = (os.environ.get(f'APIFY_KEY_{i}') or '').strip()
-        if not val:
-            break
-        keys[f'key{i}'] = val
-        i += 1
+        if val:
+            keys[f'key{i}'] = val
     return keys
 
 
@@ -928,6 +930,40 @@ def main():
     total_inserted = sum(r.get('inserted', 0) for r in all_results)
     print(f"\nTotal scraped: {total_scraped}, Total inserted: {total_inserted}")
     print(f"Fallback log: {json.dumps(load_fallback_log(), indent=2)}")
+
+    # Feed the Telegram report. A site that is due and returns nothing is the
+    # failure worth shouting about: toolify once came back with 0 items from a
+    # 2-minute crawl after a normal run had pulled 259 from it.
+    silent = []
+    try:
+        path = '/tmp/source_health.json'
+        try:
+            with open(path) as f:
+                health = json.load(f)
+        except Exception:
+            health = {}
+        for r in all_results:
+            due, why = should_run(r['site'])
+            fresh = r.get('inserted', 0)
+            health[f"apify:{r['site']}"] = {
+                'scraped': r.get('scraped', 0),
+                'fresh': fresh,
+                'articles': 0,
+                'status': 'ok' if fresh or r.get('scraped', 0) else 'silent',
+            }
+            if not r.get('scraped', 0):
+                silent.append(r['site'])
+        if not all_results:
+            health['apify:all'] = {'scraped': 0, 'fresh': 0, 'articles': 0,
+                                   'status': 'silent'}
+        with open(path, 'w') as f:
+            json.dump(health, f)
+    except Exception as e:
+        print(f"  (source health not recorded: {e})")
+
+    if silent:
+        print(f"\n!! SILENT SITES (due but scraped 0): {', '.join(silent)}")
+        print("   Check the actor approval and whether the site changed its markup.")
 
 
 if __name__ == '__main__':
