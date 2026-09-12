@@ -52,6 +52,8 @@ jobs:
 
       - name: Hide junk rows
         if: ${{ inputs.cleanup == 'true' }}
+        # A blocked D1 read must not take the description fill down with it.
+        continue-on-error: true
         run: cd scripts && python cleanup_junk.py --apply
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}

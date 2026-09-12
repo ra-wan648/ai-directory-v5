@@ -32,6 +32,9 @@ jobs:
       # those rules existed. Soft-hide (status='rejected'), so it is reversible
       # and the scraped payload stays in the row.
       - name: Hide junk rows
+        # Never fatal: if D1's read limit is exhausted this is a no-op, and the
+        # rest of the run should still go ahead.
+        continue-on-error: true
         run: cd scripts && python cleanup_junk.py --apply
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}

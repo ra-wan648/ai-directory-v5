@@ -67,9 +67,13 @@ def main():
 
     rows = run_sql("SELECT id,name FROM tools WHERE status='published'")
     if not rows:
-        print("  no rows returned - D1 read blocked, or the table is empty. "
-              "Nothing changed.")
-        return 1
+        # A blocked read (D1's free tier resets at midnight UTC) reaches here.
+        # Deliberately exit 0: nothing was changed, and failing the step would
+        # take the description fill and the Telegram summary down with it. The
+        # next run, on a fresh quota, will do the work.
+        print("  no rows returned - D1 read blocked (or the table is empty). "
+              "Nothing changed; this step is safe to re-run.")
+        return 0
 
     bad, reasons, samples = [], {}, []
     for row in rows:
