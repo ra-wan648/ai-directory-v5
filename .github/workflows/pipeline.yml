@@ -22,9 +22,9 @@ jobs:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
       # Keys are read as APIFY_KEY_1..APIFY_KEY_N and the sites are auto-distributed.
-      # Any count works — add more keys (yours plus friends') as extra secrets named
-      # APIFY_KEY_5, APIFY_KEY_6, ... with no gaps: the loader stops at the first
-      # missing one. Unset secrets arrive as empty strings, which stops the scan.
+      # Slots 1-8 are wired up here; add APIFY_KEY_9 and beyond if you ever need
+      # more. Keep them gapless: the loader stops at the first missing one, and an
+      # unset secret arrives as an empty string, which stops the scan.
       - name: Apify scraper
         run: cd scripts && python apify_scraper.py
         env:
@@ -34,6 +34,8 @@ jobs:
           APIFY_KEY_4: ${{secrets.APIFY_KEY_4}}
           APIFY_KEY_5: ${{secrets.APIFY_KEY_5}}
           APIFY_KEY_6: ${{secrets.APIFY_KEY_6}}
+          APIFY_KEY_7: ${{secrets.APIFY_KEY_7}}
+          APIFY_KEY_8: ${{secrets.APIFY_KEY_8}}
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
       - name: Fresh data pipeline
@@ -52,7 +54,9 @@ jobs:
           MANIFEST_API_KEY: ${{secrets.MANIFEST_API_KEY}}
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+      # always() so a failure in the step above still sends the run summary.
       - name: Telegram stats
+        if: always()
         run: cd scripts && python telegram_stats.py
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}

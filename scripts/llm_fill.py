@@ -6,11 +6,60 @@ MANIFEST_URL = os.environ.get("MANIFEST_BASE_URL", "https://app.manifest.build/v
 MANIFEST_KEY = os.environ.get("MANIFEST_API_KEY", "")
 DB = "ai-directory-db"
 
+def d1_env():
+    """wrangler authenticates with CLOUDFLARE_API_TOKEN, but the workflow only
+    exports CF_API_TOKEN — without this the CLI is unauthenticated."""
+    env = os.environ.copy()
+    env["CLOUDFLARE_API_TOKEN"] = (
+        os.environ.get("CF_API_TOKEN") or os.environ.get("CLOUDFLARE_API_TOKEN", "")
+    )
+    env["CLOUDFLARE_ACCOUNT_ID"] = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
+    return env
+
+
+def run_sql(sql, timeout=180):
+    """Run a D1 statement via wrangler and return the row list.
+
+    wrangler's --json output has moved between a bare array and a wrapped
+    object, and it can print stray non-JSON lines before the payload. Parse
+    defensively instead of assuming ``[0]["results"]`` — that assumption used
+    to raise KeyError: 0 and kill the whole pipeline job.
+    """
+    r = subprocess.run(
+        ["wrangler", "d1", "execute", DB, "--remote", "--json", "--command", sql],
+        capture_output=True, text=True, timeout=timeout, env=d1_env(),
+    )
+    raw = (r.stdout or "").strip()
+    if raw and raw[0] not in "[{":
+        starts = [p for p in (raw.find("["), raw.find("{")) if p >= 0]
+        if not starts:
+            print("  ! wrangler returned no JSON:",
+                  (raw or (r.stderr or ""))[:300])
+            return []
+        raw = raw[min(starts):]
+    try:
+        data = json.loads(raw)
+    except Exception as e:
+        print(f"  ! unparseable wrangler output ({e}); stderr: {(r.stderr or '')[:300]}")
+        return []
+    if isinstance(data, dict):
+        if "error" in data:
+            print("  ! D1 error:", str(data["error"])[:300])
+            return []
+        for key in ("result", "results"):
+            if isinstance(data.get(key), list):
+                return data[key]
+        return [data]
+    if isinstance(data, list):
+        if data and isinstance(data[0], dict) and "results" in data[0]:
+            return data[0].get("results") or []
+        return data
+    return []
+
+
 def get_unfilled():
-    r = subprocess.run(["wrangler", "d1", "execute", DB, "--remote", "--command",
-        "SELECT id,name,url,category,description FROM tools WHERE llm_filled=0 AND status='published' LIMIT 100",
-        "--json"], capture_output=True, text=True)
-    return json.loads(r.stdout)[0]["results"]
+    return run_sql("SELECT id,name,url,category,description FROM tools "
+                   "WHERE llm_filled=0 AND status='published' LIMIT 100")
 
 def extract_text(node):
     """Recursively extract readable text from the OpenAI/Manifest response output."""
@@ -61,9 +110,8 @@ def update(tid, data):
     d = data.get("description_full", "").replace("'", "''")
     f = json.dumps(data.get("features", [])).replace("'", "''")
     p = data.get("pricing_detail", "").replace("'", "''")
-    subprocess.run(["wrangler", "d1", "execute", DB, "--remote", "--command",
-        f"UPDATE tools SET description_full='{d}',features='{f}',pricing_detail='{p}',llm_filled=1 WHERE id={tid}"],
-        capture_output=True)
+    run_sql(f"UPDATE tools SET description_full='{d}',features='{f}',"
+            f"pricing_detail='{p}',llm_filled=1 WHERE id={tid}")
 
 if not MANIFEST_KEY:
     print("MANIFEST_API_KEY is not set - skipping LLM enrichment (this is optional).")
