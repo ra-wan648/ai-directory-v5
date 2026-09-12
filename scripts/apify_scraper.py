@@ -810,9 +810,27 @@ def process_site(site):
         log(f"  SKIP {site}: all keys quota exhausted")
         return {'site': site, 'key': key_name, 'scraped': 0, 'inserted': 0, 'd1_total': get_d1_count(), 'status': 'quota'}
 
-    # 403 full-permission-actor-not-approved: fall back to website-content-crawler
+    # 403 full-permission-actor-not-approved. Since May 2026 Apify makes
+    # full-permission Actors require a one-time approval *per account*, and the
+    # error body carries an approvalUrl. Surface that link so the account owner
+    # can just click it, instead of silently falling back to the crawler.
     if r.status_code == 403:
-        log(f"  web-scraper requires approval on {key_name}; using website-content-crawler fallback")
+        approval = ''
+        try:
+            err = (r.json() or {}).get('error', {}) or {}
+            data = err.get('data') or {}
+            approval = data.get('approvalUrl') or err.get('approvalUrl') or ''
+        except Exception:
+            pass
+        if not approval:
+            m = re.search(r'https://console\.apify\.com/\S+', r.text or '')
+            approval = m.group(0).rstrip('",}').rstrip('\\') if m else ''
+        log(f"  web-scraper needs ONE-TIME approval on {key_name} "
+            f"-> using website-content-crawler fallback")
+        if approval:
+            log(f"    approve it here: {approval}")
+        else:
+            log("    approve it on the apify~web-scraper page in Apify Console")
         r = start_crawler_run(key_val, site_cfg)
         used_crawler = True
 
