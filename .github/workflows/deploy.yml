@@ -44,8 +44,7 @@ jobs:
         run: |
           sleep 5
           W=https://ai-directory-v5-worker.radwanislam648.workers.dev
-          ok=0
-          bad=0
+          ok=0; bad=0; quota=0
           for p in \
             "/api/stats" \
             "/api/categories" \
@@ -61,15 +60,26 @@ jobs:
             "/api/prompts?limit=12" \
             "/sitemap.xml" \
             "/rss.xml" ; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
+            body=$(curl -s -m 20 -w '\n%{http_code}' "$W$p")
+            code=$(printf '%s' "$body" | tail -n1)
             echo "  $code  $p"
-            if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
+            if [ "$code" = "200" ]; then ok=$((ok+1))
+            elif printf '%s' "$body" | grep -q "exceeded D1"; then quota=$((quota+1))
+            else bad=$((bad+1)); fi
           done
-          echo "warmed $ok, not warmed $bad"
-          # Best effort. A blocked D1 read quota makes these 500, which is the
-          # very thing this step exists to soften - it must not turn the deploy
-          # red. Only a deploy where nothing answers at all is a real failure.
-          test "$ok" != "0"
+          echo "warmed $ok | quota-blocked $quota | other failures $bad"
+          # This step must not decide whether the site gets published. Failing it
+          # skips the deploy-pages job, which is how /blog and /prompts stayed
+          # 404 after the 20de337 push: the worker deployed, the warm step failed
+          # on an exhausted D1 quota, and Pages never ran.
+          if [ "$ok" != "0" ]; then exit 0; fi
+          if [ "$bad" = "0" ] && [ "$quota" != "0" ]; then
+            echo "Nothing could be warmed because the D1 read quota is exhausted."
+            echo "That is not a deploy failure - the cache fills in on a later pass."
+            exit 0
+          fi
+          echo "Nothing answered and no D1 quota error was reported: the worker deploy looks broken."
+          exit 1
 
   pages:
     name: Publish site
