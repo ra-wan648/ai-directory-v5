@@ -17,6 +17,7 @@ Every decision is logged with its reason and a few examples, so a run can be
 audited after the fact. To undo a batch, flip those ids back to 'published'.
 """
 import os
+import shutil
 import subprocess
 import sys
 
@@ -37,7 +38,60 @@ def d1_env():
     return env
 
 
+def _database_id():
+    """Read database_id from wrangler.toml so the HTTP path needs no extra secret."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    try:
+        with open(os.path.join(here, "..", "wrangler.toml")) as fh:
+            for line in fh:
+                line = line.strip()
+                if line.startswith("database_id"):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+    except Exception:
+        pass
+    return ""
+
+
+def run_sql_http(sql, timeout=300):
+    """Same job as run_sql, but over D1's HTTP API - no wrangler install needed.
+
+    Used when the wrangler CLI is not on PATH, so the same script can be run
+    from a laptop or an agent shell that only holds CF_API_TOKEN.
+    """
+    import json
+    import urllib.request
+    token = (os.environ.get("CF_API_TOKEN")
+             or os.environ.get("CLOUDFLARE_API_TOKEN", ""))
+    account = (os.environ.get("CF_ACCOUNT_ID")
+               or os.environ.get("CLOUDFLARE_ACCOUNT_ID", ""))
+    db_id = _database_id()
+    if not (token and account and db_id):
+        print("  ! wrangler is not installed, and CF_API_TOKEN / CF_ACCOUNT_ID / "
+              "database_id are not all available - cannot run SQL.")
+        return []
+    req = urllib.request.Request(
+        f"https://api.cloudflare.com/client/v4/accounts/{account}"
+        f"/d1/database/{db_id}/query",
+        data=json.dumps({"sql": sql}).encode(),
+        headers={"Authorization": f"Bearer {token}",
+                 "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read())
+    except Exception as e:
+        print(f"  ! D1 HTTP request failed: {str(e)[:200]}")
+        return []
+    if not data.get("success"):
+        print(f"  ! D1 error: {str(data.get('errors'))[:200]}")
+        return []
+    return (data["result"][0].get("results") or [])
+
+
 def run_sql(sql, timeout=300):
+    if shutil.which("wrangler") is None:
+        return run_sql_http(sql, timeout)
     r = subprocess.run(
         ["wrangler", "d1", "execute", DB, "--remote", "--json", "--command", sql],
         capture_output=True, text=True, timeout=timeout, env=d1_env(),
@@ -65,7 +119,9 @@ def run_sql(sql, timeout=300):
 def main():
     print(f"cleanup_junk: {'DRY RUN (nothing will be written)' if not APPLY else 'APPLYING'}")
 
-    rows = run_sql("SELECT id,name FROM tools WHERE status='published'")
+    # url is selected too: a name-only check let news articles through, because a
+    # headline can look like a plausible product name (see validate.is_valid_row).
+    rows = run_sql("SELECT id,name,url FROM tools WHERE status='published'")
     if not rows:
         # A blocked read (D1's free tier resets at midnight UTC) reaches here.
         # Deliberately exit 0: nothing was changed, and failing the step would
@@ -78,13 +134,14 @@ def main():
     bad, reasons, samples = [], {}, []
     for row in rows:
         name = validate.clean_name(row.get("name"))
-        ok, why = validate.is_valid_name(name)
+        ok, why = validate.is_valid_row(name, row.get("url"))
         if ok:
             continue
         bad.append(row["id"])
         reasons[why] = reasons.get(why, 0) + 1
         if len(samples) < 15:
-            samples.append(f"{row.get('name')!r} ({why})")
+            host = validate.host_of(row.get("url")) or "-"
+            samples.append(f"{name[:52]!r} [{host}] ({why})")
 
     print(f"  scanned {len(rows)} published row(s); {len(bad)} fail validation")
     for why, n in sorted(reasons.items(), key=lambda kv: -kv[1]):

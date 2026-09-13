@@ -160,63 +160,15 @@ def batch_insert(tools_batch):
     return total_inserted, len(tools_batch) - total_inserted
 
 
-# Blog/news feeds produce articles, not tools. Their URLs live on news domains.
-# The list below is matched on host boundaries (exact host or subdomain), never as
-# a bare substring - a substring match is what let reuters.com and theguardian.com
-# through (both are absent from the old list, and a substring check on short
-# domains such as 'x.com' would also wrongly reject box.com).
-NEWS_DOMAINS = (
-    'news.ycombinator.com', 'bensbites.com', 'tldr.tech', 'therundown.ai',
-    'arxiv.org', 'nature.com', 'bloomberg.com', 'techcrunch.com',
-    'youtube.com', 'davidepiffer.com', 'netflixtechblog.com', 'lists.debian.org',
-    'cnn.com', 'bbc.com', 'bbc.co.uk', 'wired.com', 'theverge.com', 'medium.com',
-    # Wire services and newspapers - added after the 2026-09-12 live junk audit.
-    'reuters.com', 'theguardian.com', 'guardian.co.uk', 'apnews.com', 'nytimes.com',
-    'washingtonpost.com', 'forbes.com', 'cnbc.com', 'ft.com', 'wsj.com',
-    'economist.com', 'businessinsider.com', 'engadget.com', 'arstechnica.com',
-    'zdnet.com', 'cnet.com', 'gizmodo.com', 'mashable.com', 'venturebeat.com',
-    'thenextweb.com', 'theregister.com', 'axios.com', 'theinformation.com',
-    'newsweek.com', 'time.com', 'fortune.com', 'usatoday.com', 'nbcnews.com',
-    'abcnews.go.com', 'cbsnews.com', 'aljazeera.com', 'dw.com', 'scmp.com',
-    'indiatimes.com', 'timesofindia.com', 'thehindu.com', 'livemint.com',
-    'siliconangle.com', 'tomshardware.com', 'infoq.com', 'sdtimes.com',
-    'qz.com', 'vice.com', 'semafor.com', 'theatlantic.com', 'politico.com',
-    'news.google.com', 'apple.news', 'flipboard.com', 'yahoo.com', 'msn.com',
-    # Personal publishing platforms are articles, not products.
-    'substack.com', 'ghost.io', 'wordpress.com', 'blogspot.com', 'notion.site',
-    # Event, ticketing and hackathon pages are not tools.
-    'luma.com', 'lu.ma', 'eventbrite.com', 'meetup.com', 'ticketmaster.com',
-    'devpost.com', 'hopin.com', 'airmeet.com',
-    # Social, aggregators and discussion sites.
-    'reddit.com', 'twitter.com', 'x.com', 'facebook.com', 'linkedin.com',
-    'instagram.com', 'tiktok.com', 'threads.net', 'hackernews.com',
-    'techmeme.com', 'indiehackers.com',
-)
-
-
-def _host_is(host, domain):
-    """True when host is exactly `domain` or a subdomain of it."""
-    return host == domain or host.endswith('.' + domain)
-
-
+# The news-host rules live in validate.py, so the scrapers and cleanup_junk.py
+# cannot drift apart. Cleanup used to look at the name alone, which is how a
+# wsj.com article stayed live - its headline is 70 characters and 12 words, so
+# it read as a plausible product name.
 def is_real_tool_url(url):
     """Return True if the URL points to a real tool website (not a news host)."""
-    try:
-        host = urlparse(url).netloc.lower()
-    except Exception:
+    if not validate.host_of(url):
         return False
-    if not host:
-        return False
-    # Strip userinfo and port so "user@host:443" is compared as "host".
-    host = host.rsplit('@', 1)[-1].split(':', 1)[0]
-    if not host:
-        return False
-    if _host_is(host, 'x.ai') or _host_is(host, 'openai.com'):
-        return True
-    for d in NEWS_DOMAINS:
-        if _host_is(host, d):
-            return False
-    return True
+    return not validate.is_news_host(url)
 
 
 # Headlines read like sentences; product names do not. Used as a second gate so a
@@ -1095,7 +1047,7 @@ def main():
             # The old check was just "name longer than 3 characters", which is
             # how 'cloudflare.com' and '";> API' ended up on the live site.
             t['name'] = validate.clean_name(t['name'])
-            ok, why = validate.is_valid_name(t['name'])
+            ok, why = validate.is_valid_row(t['name'], t.get('website_url'))
             if not ok:
                 rejected[why] = rejected.get(why, 0) + 1
                 continue

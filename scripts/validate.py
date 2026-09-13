@@ -45,6 +45,76 @@ _DESC_CONNECTOR_RE = re.compile(
 _TAG_RE = re.compile(r'<[^>]*>')
 _ENTITY_RE = re.compile(r'&[a-zA-Z]+;|&#\d+;')
 
+# ─────────────────────────────────────────────
+# Host rules — the single source of truth
+# ─────────────────────────────────────────────
+# A name-only check cannot catch a news article whose headline looks like a
+# plausible product name: "UAE revises 5GW AI data center plan after Iranian
+# attacks, sources say" is 70 characters and 12 words, so it passed. The host is
+# the reliable signal, so the rule lives here and both the scrapers and
+# cleanup_junk.py read it from this one place.
+#
+# Matched on host boundaries (exact host or subdomain), never as a bare
+# substring — a substring check for 'x.com' would also reject box.com.
+NEWS_HOSTS = (
+    'news.ycombinator.com', 'bensbites.com', 'tldr.tech', 'therundown.ai',
+    'arxiv.org', 'nature.com', 'bloomberg.com', 'techcrunch.com',
+    'youtube.com', 'davidepiffer.com', 'netflixtechblog.com', 'lists.debian.org',
+    'cnn.com', 'bbc.com', 'bbc.co.uk', 'wired.com', 'theverge.com', 'medium.com',
+    # Wire services and newspapers
+    'reuters.com', 'theguardian.com', 'guardian.co.uk', 'apnews.com', 'nytimes.com',
+    'washingtonpost.com', 'forbes.com', 'cnbc.com', 'ft.com', 'wsj.com',
+    'economist.com', 'businessinsider.com', 'engadget.com', 'arstechnica.com',
+    'zdnet.com', 'cnet.com', 'gizmodo.com', 'mashable.com', 'venturebeat.com',
+    'thenextweb.com', 'theregister.com', 'axios.com', 'theinformation.com',
+    'newsweek.com', 'time.com', 'fortune.com', 'usatoday.com', 'nbcnews.com',
+    'abcnews.go.com', 'cbsnews.com', 'aljazeera.com', 'dw.com', 'scmp.com',
+    'indiatimes.com', 'timesofindia.com', 'thehindu.com', 'livemint.com',
+    'siliconangle.com', 'tomshardware.com', 'infoq.com', 'sdtimes.com',
+    'qz.com', 'vice.com', 'semafor.com', 'theatlantic.com', 'politico.com',
+    'news.google.com', 'apple.news', 'flipboard.com', 'yahoo.com', 'msn.com',
+    # Personal publishing platforms publish articles, not products.
+    'substack.com', 'ghost.io', 'wordpress.com', 'blogspot.com', 'notion.site',
+    # Event, ticketing and hackathon pages are not tools.
+    'luma.com', 'lu.ma', 'eventbrite.com', 'meetup.com', 'ticketmaster.com',
+    'devpost.com', 'hopin.com', 'airmeet.com',
+    # Social, aggregators and discussion sites.
+    'reddit.com', 'twitter.com', 'x.com', 'facebook.com', 'linkedin.com',
+    'instagram.com', 'tiktok.com', 'threads.net', 'hackernews.com',
+    'techmeme.com', 'indiehackers.com',
+)
+
+# Hosts that must survive the blocklist above.
+ALLOWED_TOOL_HOSTS = ('x.ai', 'openai.com')
+
+
+def _host_is(host, domain):
+    """True when host is exactly `domain` or a subdomain of it."""
+    return host == domain or host.endswith('.' + domain)
+
+
+def host_of(url):
+    """Lowercase hostname of a URL, with userinfo and port stripped."""
+    s = str(url or '').strip().lower()
+    if not s:
+        return ''
+    if '//' in s:
+        s = s.split('//', 1)[1]
+    s = s.split('/', 1)[0].split('?', 1)[0]
+    s = s.rsplit('@', 1)[-1].split(':', 1)[0]
+    return s
+
+
+def is_news_host(url):
+    """True when the URL lives on a news, event, social or publishing host."""
+    host = host_of(url)
+    if not host:
+        return False
+    for d in ALLOWED_TOOL_HOSTS:
+        if _host_is(host, d):
+            return False
+    return any(_host_is(host, d) for d in NEWS_HOSTS)
+
 
 def clean_name(raw):
     """Tidy a scraped name: drop markup, entities and stray separators."""
@@ -88,6 +158,21 @@ def is_valid_name(name):
         return False, 'duplicated word'
     if len(words) > 5 and _DESC_CONNECTOR_RE.search(n):
         return False, 'name mixed with description'
+    return True, ''
+
+
+def is_valid_row(name, url=''):
+    """Should this row be published? Checks the name AND the host.
+
+    cleanup_junk.py used to look at the name alone, so a news article with a
+    headline-shaped name stayed live even though its URL was wsj.com. Returns
+    (ok, reason).
+    """
+    ok, why = is_valid_name(clean_name(name))
+    if not ok:
+        return False, why
+    if is_news_host(url):
+        return False, 'news/article host'
     return True, ''
 
 
