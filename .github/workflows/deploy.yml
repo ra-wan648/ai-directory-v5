@@ -31,14 +31,40 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: deploy
 
-      - name: Smoke test
+      # Warm every path the site itself requests, right after each deploy.
+      # cacheFetch keeps a week-long second copy of each cached response and
+      # serves it when the handler throws, so an exhausted D1 read quota shows
+      # yesterday's data instead of "Could not load this section.". That only
+      # helps for keys that have been fetched at least once since the deploy,
+      # and this site has little traffic - on 13 Sep /api/tools?featured=1 and
+      # /api/news had never been warmed, so those two sections still went blank.
+      # The params must match public/js/app.js exactly or they warm a different
+      # key. Warming also replaces the old /api/stats smoke test.
+      - name: Smoke test and warm the cache
         run: |
           sleep 5
-          code=$(curl -s -o /tmp/stats.json -w '%{http_code}' \
-            https://ai-directory-v5-worker.radwanislam648.workers.dev/api/stats)
-          echo "GET /api/stats -> $code"
-          cat /tmp/stats.json
-          test "$code" = "200"
+          W=https://ai-directory-v5-worker.radwanislam648.workers.dev
+          fail=0
+          for p in \
+            "/api/stats" \
+            "/api/categories" \
+            "/api/tools?limit=6" \
+            "/api/tools?limit=6&sort=newest&days=7" \
+            "/api/tools?limit=6&featured=1" \
+            "/api/tools?limit=6&pricing=free" \
+            "/api/tools/new?limit=8" \
+            "/api/tools/trending?limit=6" \
+            "/api/free-tools?limit=6" \
+            "/api/news?limit=8" \
+            "/api/blogs?limit=12" \
+            "/api/prompts?limit=12" \
+            "/sitemap.xml" \
+            "/rss.xml" ; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
+            echo "  $code  $p"
+            [ "$code" = "200" ] || fail=1
+          done
+          test "$fail" = "0"
 
   pages:
     name: Publish site

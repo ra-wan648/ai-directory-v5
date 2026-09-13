@@ -36,6 +36,14 @@ jobs:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
 
+      # ORDER BY views DESC inside a filter had no index, so each tool
+      # page and each alternatives page read the whole category. See the file.
+      - name: Apply views-ordering indexes
+        run: wrangler d1 execute ai-directory-db --remote --file=migrations/003_views_ordering_indexes.sql
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+
       # validate.py keeps new junk out; this hides the rows that got in before
       # those rules existed. Soft-hide (status='rejected'), so it is reversible
       # and the scraped payload stays in the row.

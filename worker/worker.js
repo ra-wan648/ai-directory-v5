@@ -235,7 +235,7 @@ function buildToolsWhere(params) {
 async function getToolsTotal(env, params) {
   const { where, binds } = buildToolsWhere(params);
   const key = 'api-tools-count-v1?' + hashKey(where + '|' + JSON.stringify(binds));
-  const res = await cacheFetch(null, env, key, 21600, async () => {
+  const res = await cacheFetch(null, env, key, 86400, async () => {
     const row = await env.DB.prepare(
       `SELECT COUNT(*) as total FROM tools WHERE ${where}`
     ).bind(...binds).first();
