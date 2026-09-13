@@ -363,3 +363,15 @@ table.cmpt tr:last-child td,table.cmpt tr:last-child th{border-bottom:0}
   .pmain{padding:16px}
 }
 @media(prefers-reduced-motion:reduce){.mtrack,.live i,.skl{animation:none}*{transition:none!important}}
+
+/* Category grid on the homepage. Was a four-column list fed by four extra
+   api.tools() calls; now every category is one link into /tools. */
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.catlink{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border,#eee);
+  border-radius:10px;text-decoration:none;color:inherit;font-size:13px}
+.catlink:hover{border-color:var(--fg,#111)}
+.catlink .ci{font-size:15px;line-height:1}
+.catlink .cn{flex:1;font-weight:600}
+.catlink .cc{font-size:11px;opacity:.6}
+.catmore{margin:10px 0 0;font-size:12px}
+.catmore a{opacity:.75}

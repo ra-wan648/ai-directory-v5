@@ -31,6 +31,14 @@ const api = {
 };
 
 
+/* Turn a section's filter object into a browse-page URL, so "See all" opens the
+   same view the section is showing. */
+function toolsUrl(q) {
+  const p = new URLSearchParams({ sort: 'newest' });
+  Object.keys(q || {}).forEach((k) => p.set(k, q[k]));
+  return '/tools?' + p.toString();
+}
+
 /* ==================== offline fallback ====================
    /data/offline.json is baked by the pipeline (scripts/snapshot_offline.py) and
    served as a plain static asset. It is the only thing on this site that still
@@ -328,7 +336,7 @@ async function loadHome() {
 function renderSections() {
   $('#sections').innerHTML = SECTIONS.map((s, i) => '<section class="sec' + (s.alt ? ' alt' : '') + '" data-sec="' + i + '">'
     + '<div class="sechead"><span class="ic">' + s.ic + '</span><span class="t">' + esc(s.t) + '</span>'
-    + '<span class="c" id="cnt' + i + '"></span><a class="all" href="#sections" data-sec-all="' + i + '">See all →</a></div>'
+    + '<span class="c" id="cnt' + i + '"></span><a class="all" href="' + toolsUrl(cfg.q) + '">See all →</a></div>'
     + '<div class="grid" data-grid="' + i + '">' + skel(6) + '</div></section>').join('');
   lazySections();
 }
@@ -393,7 +401,7 @@ function bentoHTML(tools, today) {
   const rest = tools.slice(1, 8);
   return '<div class="ntwrap"><div class="sechead"><span class="ic">✨</span><span class="t">New Today</span>'
     + '<span class="live"><i></i>LIVE</span><span class="c">· ' + num(today) + ' added in 24h</span>'
-    + '<a class="all" href="#sections" data-sec-all="new">See all new →</a></div>'
+    + '<a class="all" href="/tools?sort=newest&days=7">See all new →</a></div>'
     + '<div class="bento">'
     + '<article class="big" data-slug="' + esc(lead.slug) + '" tabindex="0">'
     + '<div class="lot"><span class="lbl">🏆 LATEST ADDITION</span><span style="font-size:11px;color:var(--soft)">' + esc(ago(lead.created_at)) + '</span></div>'
@@ -415,13 +423,23 @@ async function loadExtras() {
   if (p.status === 'fulfilled') prompts = p.value.prompts || p.value.results || [];
   if (b.status === 'fulfilled') blogs = b.value.blogs || b.value.results || [];
 
-  const catCols = CATS.slice(0, 4);
+  // Was CATS.slice(0, 4): only four categories ever showed, and each column then
+  // fired its own api.tools() call, so the homepage spent four extra D1 reads to
+  // render a partial grid. Now every category is a link into the browse page,
+  // with no extra reads.
+  const catCols = CATS.slice();
   box.innerHTML = ''
     + '<div class="marquee"><div class="mlbl">Sources we index from</div><div class="mtrack" id="mtrack"></div></div>'
     + '<section class="sec alt"><div class="sechead"><span class="ic">📚</span><span class="t">Browse by Category</span>'
       + '<span class="c">· ' + num(CATS.length) + ' categories</span></div>'
-      + '<div class="cols4">' + catCols.map((c) => '<div class="colcard" id="catcol-' + esc(String(c.name).replace(/\s+/g, '-')) + '">'
-        + '<h5>' + (ICON[String(c.name).toLowerCase()] || '🧠') + ' ' + esc(c.name) + '</h5><ol></ol></div>').join('') + '</div></section>'
+      + '<div class="catgrid">' + catCols.map((c) => {
+          const nm = c.category || c.name || '';
+          return '<a class="catlink" href="/tools?category=' + encodeURIComponent(nm) + '">'
+            + '<span class="ci">' + (ICON[String(nm).toLowerCase()] || '🧠') + '</span>'
+            + '<span class="cn">' + esc(nm) + '</span>'
+            + '<span class="cc">' + num(c.tool_count || 0) + '</span></a>';
+        }).join('') + '</div>'
+      + '<p class="catmore"><a href="/tools">Browse all tools →</a></p></section>'
     + (news.length ? '<section class="sec"><div class="sechead"><span class="ic">📰</span><span class="t">Latest News</span>'
       + '<span class="c">· ' + num(news.length) + ' recent</span><a class="all" href="#blog">All posts →</a></div>'
       + '<div class="cols4 news">' + news.map((x) => '<div class="colcard" data-blog="' + esc(x.slug) + '">'
@@ -442,14 +460,6 @@ async function loadExtras() {
   const mt = $('#mtrack');
   if (mt) mt.innerHTML = [...SOURCES, ...SOURCES].map((s) => '<span>' + esc(s) + '</span>').join('');
 
-  catCols.forEach(async (c) => {
-    const el = $('#catcol-' + String(c.name).replace(/\s+/g, '-') + ' ol');
-    if (!el) return;
-    try {
-      const d = await api.tools({ category: c.name, limit: 8, sort: 'newest' });
-      el.innerHTML = (d.tools || []).map((t) => '<li data-slug="' + esc(t.slug) + '">' + esc(t.name) + ' ↗</li>').join('');
-    } catch (e) { /* skip column */ }
-  });
 }
 
 /* ======================= filtered results ======================= */

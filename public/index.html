@@ -27,17 +27,17 @@
   <div class="navin">
     <a class="brand" href="/" id="home"><span class="dot"></span>AI Directory</a>
     <nav class="nlinks">
-      <a href="#sections" data-nav="all">Tools</a>
-      <a href="#sections" data-nav="pricing:free">Free</a>
-      <a href="#sections" data-nav="tag:new">New</a>
-      <a href="#prompts">Prompts</a>
-      <a href="#blog">Blog</a>
-      <a href="#news">News</a>
+      <a href="/tools">All Tools</a>
+      <a href="/tools?pricing=free">Free</a>
+      <a href="/tools?sort=newest&days=7">New</a>
+      <a href="/prompts">Prompts</a>
+      <a href="/blog">Blog</a>
+      <a href="/blog">News</a>
     </nav>
     <div class="spacer"></div>
     <div class="nsearch"><span>🔍</span><input id="ns" placeholder="Search tools…" aria-label="Search tools"><kbd>/</kbd></div>
     <button class="tgl" id="tgl" aria-label="Toggle theme">🌙</button>
-    <a class="cta" href="#sections">Browse Tools</a>
+    <a class="cta" href="/tools">Browse Tools</a>
   </div>
 </header>
 
@@ -72,8 +72,11 @@
   </aside>
   <div>
     <div id="newtoday"></div>
-    <div id="sections"></div>
+    <!-- Category grid first: people look for the kind of tool they need before
+         they look for what is new. Extras also carries the news, prompts and
+         blog blocks, which stay below the tool sections. -->
     <div id="extras"></div>
+    <div id="sections"></div>
   </div>
 </main>
 
