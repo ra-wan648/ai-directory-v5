@@ -44,6 +44,38 @@ jobs:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
 
+      # Runs before the scrapers and the LLM fill, because the week-long stale
+      # copy cacheFetch keeps is what lets the public site serve data once the D1
+      # daily read quota is gone. The 13 Sep nightly hit the limit at 07:39 UTC
+      # and every listing route that had never been warmed answered 500. This
+      # fires two hours after the quota resets, so the copies are in place before
+      # the day's spending starts. Best effort on purpose: a blocked quota must
+      # not turn the run red on top of everything else.
+      - name: Warm the public cache
+        run: |
+          W=https://ai-directory-v5-worker.radwanislam648.workers.dev
+          ok=0; bad=0
+          for p in \
+            "/api/stats" \
+            "/api/categories" \
+            "/api/tools?limit=6" \
+            "/api/tools?limit=6&sort=newest&days=7" \
+            "/api/tools?limit=6&featured=1" \
+            "/api/tools?limit=6&pricing=free" \
+            "/api/tools/new?limit=8" \
+            "/api/tools/trending?limit=6" \
+            "/api/free-tools?limit=6" \
+            "/api/news?limit=8" \
+            "/api/blogs?limit=12" \
+            "/api/prompts?limit=12" \
+            "/sitemap.xml" \
+            "/rss.xml" ; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
+            echo "  $code  $p"
+            if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
+          done
+          echo "warmed $ok, not warmed $bad"
+
       # validate.py keeps new junk out; this hides the rows that got in before
       # those rules existed. Soft-hide (status='rejected'), so it is reversible
       # and the scraped payload stays in the row.

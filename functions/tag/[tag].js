@@ -27,9 +27,10 @@ export async function onRequest(context) {
     }
   } catch (e) { /* empty state below */ }
 
-  // Lowercase slugs read badly at the start of a title.
-  const tagLabel = tag.charAt(0).toUpperCase() + tag.slice(1);
-  const title = `${tagLabel} AI tools — ${total} listed | AI Directory`;
+  // 'ai' became 'Ai', and 'Ai AI tools' read badly. Short tags are acronyms,
+  // and the label now sits inside the phrase instead of starting it.
+  const tagLabel = tag.length <= 3 ? tag.toUpperCase() : tag.charAt(0).toUpperCase() + tag.slice(1);
+  const title = `AI tools tagged ${tagLabel} — ${total} listed | AI Directory`;
   const description = `AI tools tagged ${tag}: ${total} listings with pricing and links to each official site, refreshed daily.`;
 
   const rows = tools.map((t) => `<li style="padding:8px 0;border-bottom:1px solid var(--border,#eee)">
