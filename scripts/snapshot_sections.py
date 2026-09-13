@@ -22,6 +22,9 @@ import time
 import urllib.request
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import validate  # noqa: E402
+
 WORKER = "https://ai-directory-v5-worker.radwanislam648.workers.dev"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "data", "sections.json")
 
@@ -80,7 +83,14 @@ def main():
         from urllib.parse import urlencode
         d = fetch("/api/tools?" + urlencode(dict(q, limit=6)))
         if d and isinstance(d.get("tools"), list):
-            snap["sections"][k] = {"tools": d["tools"], "total": d.get("total", len(d["tools"]))}
+            # Only rows that still pass validation - the snapshot must not
+            # resurrect anything cleanup_junk has decided is junk.
+            kept = [t for t in d["tools"]
+                    if validate.is_valid_row(t.get("name") or "", t.get("url") or "")[0]]
+            if not kept:
+                print(f"  {k}: every row failed validation - left out of the snapshot")
+                continue
+            snap["sections"][k] = {"tools": kept, "total": d.get("total", len(kept))}
             ok += 1
             print(f"  {k}: {len(d['tools'])} tool(s)")
         else:

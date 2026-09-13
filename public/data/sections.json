@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-09-13T17:57:52Z",
- "note": "Seeded from the endpoints that still answered while D1 was over its daily read limit; the nightly pipeline rebuilds this in full.",
+ "generated_at": "2026-09-13T17:58:16Z",
+ "note": "Seeded from the endpoints that still answered while D1 was over its daily read limit, filtered through validate.is_valid_row. The nightly pipeline rebuilds this in full.",
  "stats": {
   "total_tools": 7812,
   "total_blogs": 466,
@@ -21,34 +21,6 @@
      "pricing": "free",
      "url": "https://crazygames-poki.com",
      "logo_url": "https://www.google.com/s2/favicons?domain=crazygames-poki.com&sz=64",
-     "logo_type": "favicon",
-     "tags": "ai,toolfk",
-     "compatible_tools": null,
-     "views": 0,
-     "votes": 0,
-     "featured": 0,
-     "tag": "regular",
-     "status": "published",
-     "last_updated": null,
-     "created_at": "2026-09-13 07:39:17",
-     "description_full": null,
-     "features": null,
-     "pricing_detail": null,
-     "screenshot_url": null,
-     "llm_filled": 0,
-     "visit_url": null,
-     "is_free_tool": 0
-    },
-    {
-     "id": 21885,
-     "name": "View PDF",
-     "slug": "view-pdf",
-     "description": "View PDF",
-     "short_desc": "View PDF",
-     "category": "AI Tools",
-     "pricing": "free",
-     "url": "https://googleads.g.doubleclick.net/aclk",
-     "logo_url": "https://www.google.com/s2/favicons?domain=googleads.g.doubleclick.net&sz=64",
      "logo_type": "favicon",
      "tags": "ai,toolfk",
      "compatible_tools": null,
@@ -178,9 +150,37 @@
      "llm_filled": 0,
      "visit_url": null,
      "is_free_tool": 0
+    },
+    {
+     "id": 21867,
+     "name": "Winston AI",
+     "slug": "winston-ai",
+     "description": "Winston AI",
+     "short_desc": "Winston AI",
+     "category": "AI Tools",
+     "pricing": "free",
+     "url": "https://gowinston.ai",
+     "logo_url": "https://www.google.com/s2/favicons?domain=gowinston.ai&sz=64",
+     "logo_type": "favicon",
+     "tags": "ai,topai",
+     "compatible_tools": null,
+     "views": 0,
+     "votes": 0,
+     "featured": 0,
+     "tag": "regular",
+     "status": "published",
+     "last_updated": null,
+     "created_at": "2026-09-13 07:36:28",
+     "description_full": null,
+     "features": null,
+     "pricing_detail": null,
+     "screenshot_url": null,
+     "llm_filled": 0,
+     "visit_url": null,
+     "is_free_tool": 0
     }
    ],
-   "total": 42
+   "total": 6
   }
  }
 }
