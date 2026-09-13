@@ -631,7 +631,7 @@ def scrape_hn():
             if not title or not story_url:
                 continue
             text = (title + ' ' + (hit.get('story_text') or '')).lower()
-            if not any(kw in text for kw in HN_KEYWORDS):
+            if not validate.matches_keywords(text, HN_KEYWORDS):
                 continue
             # Sort into real tools vs news/articles. Word boundaries, not substrings:
             # the old `'app' in text` matched inside "apprenticeships".
@@ -711,7 +711,7 @@ def scrape_rss():
                 if not title or not link:
                     continue
                 text = (title + ' ' + desc).lower()
-                if not any(kw in text for kw in HN_KEYWORDS):
+                if not validate.matches_keywords(text, HN_KEYWORDS):
                     continue
                 # RSS items are news/editions -> route to blogs table.
                 blogs.append({
@@ -817,7 +817,7 @@ def scrape_serpapi():
                     continue
                 snippet = (item.get('snippet') or '').strip()
                 text = (title + ' ' + snippet).lower()
-                if not any(kw in text for kw in HN_KEYWORDS):
+                if not validate.matches_keywords(text, HN_KEYWORDS):
                     continue
                 # Sort into real tools vs news/articles, like the HN source.
                 if (looks_like_tool_text(text)
@@ -943,7 +943,7 @@ def scrape_trendshift():
         # Topics are folded in so a real AI repo is not lost to phrasing alone.
         topics = ' '.join(repo.get('topics') or [])
         text = f"{name} {desc} {topics}".lower()
-        if not any(kw in text for kw in HN_KEYWORDS):
+        if not validate.matches_keywords(text, HN_KEYWORDS):
             continue
         homepage = (repo.get('homepage') or '').strip()
         url = homepage if homepage.startswith('http') else (repo.get('html_url') or '')

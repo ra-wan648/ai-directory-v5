@@ -92,3 +92,51 @@ if FAILURES:
         print(f"  - {f}")
     sys.exit(1)
 print(f"PASSED: all {CHECKS} checks")
+
+
+# ── Keyword relevance filter ────────────────────────────────────────────────
+# HN_KEYWORDS starts with 'ai' and the scrapers used a bare substring test, so
+# the filter matched "said", "email", "again" and "storage". These cases pin the
+# whole-word behaviour.
+print("\n[7] matches_keywords - whole words, not substrings")
+
+from validate import matches_keywords  # noqa: E402
+
+KEYWORDS = ['ai', 'artificial intelligence', 'machine learning', 'llm', 'gpt',
+            'claude', 'chatbot', 'agent', 'generative', 'prompt', 'neural',
+            'diffusion', 'nlp', 'computer vision', 'speech', 'translation',
+            'automation', 'coding', 'text-to-image', 'stable diffusion',
+            'rag', 'embedding']
+
+NOT_AI = [
+    "Local council approves new parking rules for the town centre",
+    "The company said it will email the report again",
+    "A study of chair design through the ages",
+    "Storage units available for rent in Leeds",
+    "RAGBRAI bicycle ride draws 20,000 riders across Iowa",
+    "The html and css were minified before the release",
+]
+for t in NOT_AI:
+    check(f"not AI: {t[:44]!r}", matches_keywords(t, KEYWORDS), False)
+
+IS_AI = [
+    "A new AI agent for writing code",
+    "Show HN: an LLM gateway with prompt caching",
+    "We use rag pipelines and embedding search",
+    "Agents that automate browser workflows",
+    "Text-to-image generation with stable diffusion",
+]
+for t in IS_AI:
+    check(f"is AI: {t[:44]!r}", matches_keywords(t, KEYWORDS), True)
+
+
+# ── Final verdict ───────────────────────────────────────────────────────────
+# The summary block further up runs before the keyword section was added, so a
+# failure there would print FAIL and still exit 0. Re-check at the very end.
+print("\n" + "=" * 60)
+if FAILURES:
+    print(f"FAILED: {len(FAILURES)} check(s) across all sections")
+    for f in FAILURES:
+        print(f"  - {f}")
+    sys.exit(1)
+print(f"ALL SECTIONS PASSED ({CHECKS} checks)")

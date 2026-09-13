@@ -116,6 +116,30 @@ def is_news_host(url):
     return any(_host_is(host, d) for d in NEWS_HOSTS)
 
 
+def matches_keywords(text, keywords):
+    """Whole-word keyword match.
+
+    The scrapers used `any(kw in text for kw in HN_KEYWORDS)` with 'ai' first in
+    the list, so the relevance filter also matched "s(ai)d", "em(ai)l", "ag(ai)n",
+    "ch(ai)r" and "av(ai)lable" - and 'ml' matched "html", 'rag' matched
+    "storage". In practice it let almost any English text through.
+
+    Short keywords are matched on word boundaries, with an optional plural 's'.
+    Multi-word and hyphenated keywords stay plain substrings.
+    """
+    low = (text or '').lower()
+    for kw in keywords:
+        k = str(kw).lower().strip()
+        if not k:
+            continue
+        if ' ' in k or '-' in k:
+            if k in low:
+                return True
+        elif re.search(r'(?<![a-z0-9])' + re.escape(k) + r's?(?![a-z0-9])', low):
+            return True
+    return False
+
+
 def clean_name(raw):
     """Tidy a scraped name: drop markup, entities and stray separators."""
     name = str(raw or '')

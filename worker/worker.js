@@ -545,18 +545,20 @@ const handler = {
     }
     slugs = slugs.slice(0, 4);
 
-    const placeholders = slugs.map(() => '?').join(',');
-    const result = await env.DB.prepare(
-      `SELECT * FROM tools WHERE slug IN (${placeholders}) AND status = 'published'`
-    ).bind(...slugs).all();
+    return cacheFetch(null, env, 'api-compare-v1?' + hashKey(slugs.join('|')), 1800, async () => {
+      const placeholders = slugs.map(() => '?').join(',');
+      const result = await env.DB.prepare(
+        `SELECT * FROM tools WHERE slug IN (${placeholders}) AND status = 'published'`
+      ).bind(...slugs).all();
 
-    const bySlug = Object.fromEntries(result.results.map(t => [t.slug, t]));
-    const tools = slugs.map(s => bySlug[s]).filter(Boolean);
-    if (tools.length < 2) {
-      return jsonError('Fewer than two of those tools were found', 404);
-    }
-    // tool1/tool2 kept for callers written against the old two-tool shape
-    return okResponse({ tools: tools, tool1: tools[0], tool2: tools[1] });
+      const bySlug = Object.fromEntries(result.results.map(t => [t.slug, t]));
+      const tools = slugs.map(s => bySlug[s]).filter(Boolean);
+      if (tools.length < 2) {
+        return jsonError('Fewer than two of those tools were found', 404);
+      }
+      // tool1/tool2 kept for callers written against the old two-tool shape
+      return okResponse({ tools: tools, tool1: tools[0], tool2: tools[1] });
+    });
   },
 
   // ─────────────────────────────
@@ -565,48 +567,56 @@ const handler = {
   // ─────────────────────────────
   async apiNews(env, url) {
     const limit = Math.min(24, Math.max(1, parseInt(url.searchParams.get('limit') || '8', 10)));
-    const result = await env.DB.prepare(
-      `SELECT id, title, slug, meta_description, category, published_at, created_at
-       FROM blogs
-       WHERE status = 'published' AND LOWER(category) = 'news'
-       ORDER BY COALESCE(published_at, created_at) DESC LIMIT ?`
-    ).bind(limit).all();
-    return okResponse({ news: result.results });
+    return cacheFetch(null, env, 'api-news-v1?limit=' + limit, 1800, async () => {
+      const result = await env.DB.prepare(
+        `SELECT id, title, slug, meta_description, category, published_at, created_at
+         FROM blogs
+         WHERE status = 'published' AND LOWER(category) = 'news'
+         ORDER BY COALESCE(published_at, created_at) DESC LIMIT ?`
+      ).bind(limit).all();
+      return okResponse({ news: result.results });
+    });
   },
 
   // ─────────────────────────────
   // ROUTE 5: GET /api/tools/:slug
   // ─────────────────────────────
   async apiToolsSlug(env, slug) {
-    const tool = await env.DB.prepare(
-      `SELECT * FROM tools WHERE slug = ? AND status = 'published'`
-    ).bind(slug).first();
+    // Every one of the 8,674 tool pages is in the sitemap, so crawlers walk all
+    // of them. Un-cached, that was four D1 calls - including a write - per view.
+    // Caching costs a frozen view counter for the hour, and views are not used
+    // for ranking yet, so the trade is worth it.
+    return cacheFetch(null, env, 'api-tool-v1?' + hashKey(slug), 3600, async () => {
+      const tool = await env.DB.prepare(
+        `SELECT * FROM tools WHERE slug = ? AND status = 'published'`
+      ).bind(slug).first();
 
-    if (!tool) {
-      return jsonError('Tool not found', 404);
-    }
+      if (!tool) {
+        return jsonError('Tool not found', 404);
+      }
 
-    await env.DB.prepare(
-      `UPDATE tools SET views = views + 1 WHERE slug = ?`
-    ).bind(slug).run();
-    tool.views = (tool.views || 0) + 1;
+      await env.DB.prepare(
+        `UPDATE tools SET views = views + 1 WHERE slug = ?`
+      ).bind(slug).run();
+      tool.views = (tool.views || 0) + 1;
 
-    const related = await env.DB.prepare(
-      `SELECT * FROM tools
-       WHERE category = ? AND slug != ? AND status = 'published'
-       ORDER BY views DESC LIMIT 6`
-    ).bind(tool.category, slug).all();
+      const related = await env.DB.prepare(
+        `SELECT * FROM tools
+         WHERE category = ? AND slug != ? AND status = 'published'
+         ORDER BY views DESC LIMIT 6`
+      ).bind(tool.category, slug).all();
 
-    const reviews = await env.DB.prepare(
-      `SELECT id, title, slug, category, meta_description, published_at
-       FROM blogs WHERE tool_slug = ? AND status = 'published'
-       ORDER BY published_at DESC`
-    ).bind(slug).all();
+      const reviews = await env.DB.prepare(
+        `SELECT id, title, slug, category, meta_description, published_at
+         FROM blogs WHERE tool_slug = ? AND status = 'published'
+         ORDER BY published_at DESC`
+      ).bind(slug).all();
 
-    return okResponse({
-      tool: tool,
-      related: related.results,
-      reviews: reviews.results
+      return okResponse({
+        tool: tool,
+        related: related.results,
+        reviews: reviews.results
+      });
     });
   },
 
@@ -649,23 +659,25 @@ const handler = {
   // ROUTE 7: GET /api/blogs/:slug
   // ─────────────────────────────
   async apiBlogsSlug(env, slug) {
-    const blog = await env.DB.prepare(
-      `SELECT * FROM blogs WHERE slug = ? AND status = 'published'`
-    ).bind(slug).first();
+    return cacheFetch(null, env, 'api-blog-v1?' + hashKey(slug), 3600, async () => {
+      const blog = await env.DB.prepare(
+        `SELECT * FROM blogs WHERE slug = ? AND status = 'published'`
+      ).bind(slug).first();
 
-    if (!blog) {
-      return jsonError('Blog not found', 404);
-    }
-
-    if (blog.faq_schema) {
-      try {
-        blog.faq_schema = JSON.parse(blog.faq_schema);
-      } catch (e) {
-        blog.faq_schema = null;
+      if (!blog) {
+        return jsonError('Blog not found', 404);
       }
-    }
 
-    return okResponse({ blog: blog });
+      if (blog.faq_schema) {
+        try {
+          blog.faq_schema = JSON.parse(blog.faq_schema);
+        } catch (e) {
+          blog.faq_schema = null;
+        }
+      }
+
+      return okResponse({ blog: blog });
+    });
   },
 
   // ─────────────────────────────
@@ -713,20 +725,22 @@ const handler = {
   // ROUTE 9: GET /api/prompts/:slug
   // ─────────────────────────────
   async apiPromptsSlug(env, slug) {
-    const prompt = await env.DB.prepare(
-      `SELECT * FROM prompts WHERE slug = ? AND status = 'published'`
-    ).bind(slug).first();
+    return cacheFetch(null, env, 'api-prompt-v1?' + hashKey(slug), 3600, async () => {
+      const prompt = await env.DB.prepare(
+        `SELECT * FROM prompts WHERE slug = ? AND status = 'published'`
+      ).bind(slug).first();
 
-    if (!prompt) {
-      return jsonError('Prompt not found', 404);
-    }
+      if (!prompt) {
+        return jsonError('Prompt not found', 404);
+      }
 
-    await env.DB.prepare(
-      `UPDATE prompts SET copy_count = copy_count + 1 WHERE id = ?`
-    ).bind(prompt.id).run();
-    prompt.copy_count = (prompt.copy_count || 0) + 1;
+      await env.DB.prepare(
+        `UPDATE prompts SET copy_count = copy_count + 1 WHERE id = ?`
+      ).bind(prompt.id).run();
+      prompt.copy_count = (prompt.copy_count || 0) + 1;
 
-    return okResponse({ prompt: prompt });
+      return okResponse({ prompt: prompt });
+    });
   },
 
   // ─────────────────────────────
@@ -1004,37 +1018,41 @@ Sitemap: ${baseUrl}/sitemap.xml`;
   // ROUTE 20: GET /alternatives/:slug
   // ─────────────────────────────
   async alternatives(env, slug) {
-    const tool = await env.DB.prepare(
-      `SELECT * FROM tools WHERE slug = ? AND status = 'published'`
-    ).bind(slug).first();
+    return cacheFetch(null, env, 'alternatives-v1?' + hashKey(slug), 3600, async () => {
+      const tool = await env.DB.prepare(
+        `SELECT * FROM tools WHERE slug = ? AND status = 'published'`
+      ).bind(slug).first();
 
-    if (!tool) {
-      return jsonError('Tool not found', 404);
-    }
+      if (!tool) {
+        return jsonError('Tool not found', 404);
+      }
 
-    const alternatives = await env.DB.prepare(
-      `SELECT * FROM tools
-       WHERE category = ? AND slug != ? AND status = 'published'
-       ORDER BY views DESC LIMIT 12`
-    ).bind(tool.category, slug).all();
+      const alternatives = await env.DB.prepare(
+        `SELECT * FROM tools
+         WHERE category = ? AND slug != ? AND status = 'published'
+         ORDER BY views DESC LIMIT 12`
+      ).bind(tool.category, slug).all();
 
-    return okResponse({ tool: tool, alternatives: alternatives.results });
+      return okResponse({ tool: tool, alternatives: alternatives.results });
+    });
   },
 
   // ─────────────────────────────
   // ROUTE 21: GET /compare/:slug1/:slug2
   // ─────────────────────────────
   async compare(env, slug1, slug2) {
-    const [tool1, tool2] = await Promise.all([
-      env.DB.prepare(`SELECT * FROM tools WHERE slug = ? AND status = 'published'`).bind(slug1).first(),
-      env.DB.prepare(`SELECT * FROM tools WHERE slug = ? AND status = 'published'`).bind(slug2).first()
-    ]);
+    return cacheFetch(null, env, 'compare-v1?' + hashKey(slug1 + '|' + slug2), 3600, async () => {
+      const [tool1, tool2] = await Promise.all([
+        env.DB.prepare(`SELECT * FROM tools WHERE slug = ? AND status = 'published'`).bind(slug1).first(),
+        env.DB.prepare(`SELECT * FROM tools WHERE slug = ? AND status = 'published'`).bind(slug2).first()
+      ]);
 
-    if (!tool1 || !tool2) {
-      return jsonError('One or both tools not found', 404);
-    }
+      if (!tool1 || !tool2) {
+        return jsonError('One or both tools not found', 404);
+      }
 
-    return okResponse({ tool1: tool1, tool2: tool2 });
+      return okResponse({ tool1: tool1, tool2: tool2 });
+    });
   },
 
   // ─────────────────────────────
