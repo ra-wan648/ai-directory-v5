@@ -20,6 +20,18 @@ export async function onRequest(context) {
   const title = `${cat} AI tools — ${total} listed | AI Directory`;
   const description = `Browse ${total} ${cat} AI tools collected from public sources, with pricing and links to each official site.`;
 
+  // Machine-readable listing, so a category page reads as a list of tools
+  // rather than as loose prose.
+  const jsonld = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'ItemList',
+    name: `${cat} AI tools`, numberOfItems: total,
+    itemListElement: tools.slice(0, 60).map((t, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: { '@type': 'SoftwareApplication', name: t.name,
+              applicationCategory: t.category || cat, url: t.url || undefined },
+    })),
+  });
+
   const rows = tools.map((t) => `<li style="padding:7px 0;border-bottom:1px solid var(--border,#eee)">
     <a href="/tool/${encodeURIComponent(t.slug)}"><b>${esc(t.name)}</b></a>
     <span style="font-size:12px;opacity:.7"> · ${esc(priceOf(t.pricing))}</span>
@@ -32,6 +44,7 @@ export async function onRequest(context) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
+<script type="application/ld+json">${jsonld}</script>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${SITE}/category/${encodeURIComponent(cat)}">
 <link rel="stylesheet" href="/css/app.css">

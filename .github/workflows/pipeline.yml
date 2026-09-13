@@ -74,6 +74,11 @@ jobs:
             "/sitemap.xml" \
             "/rss.xml" ; do
 
+      # Runs before the bakes, so the snapshot already carries the tidied
+      # categories. Deterministic and free: no model calls.
+      - name: Fix the category taxonomy
+        run: python3 scripts/fix_categories.py --apply
+
       # Bakes what the homepage sections contain into public/data/sections.json,
       # a static asset, so the front end can show tools instead of "Could not
       # load this section." when D1's daily read limit is gone. Runs here, before

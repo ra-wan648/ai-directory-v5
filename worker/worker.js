@@ -866,7 +866,7 @@ const handler = {
   async sitemap(env) {
     // Every published slug is read to build this, so a long TTL is worth more
     // than truncating the list: dropping URLs would cost search coverage.
-    return cacheFetch(null, env, 'sitemap-v4', 21600, async () => {
+    return cacheFetch(null, env, 'sitemap-v5', 21600, async () => {
       const [tools, blogs] = await Promise.all([
         env.DB.prepare(
           `SELECT slug, last_updated, created_at FROM tools WHERE status = 'published'`
@@ -878,8 +878,21 @@ const handler = {
 
       const baseUrl = env.SITE_URL || 'https://YOUR_DOMAIN.pages.dev';
       let urls = `<url><loc>${baseUrl}/</loc></url>\n`;
+      urls += `<url><loc>${baseUrl}/tools</loc></url>\n`;
       urls += `<url><loc>${baseUrl}/prompts</loc></url>\n`;
       urls += `<url><loc>${baseUrl}/blog</loc></url>\n`;
+
+      // The browse page is the site's main listing, and each category is a
+      // landing page in its own right, so both belong in the sitemap.
+      try {
+        const cats = await env.DB.prepare(
+          `SELECT name FROM categories ORDER BY tool_count DESC`
+        ).all();
+        for (const c of (cats.results || [])) {
+          if (!c.name) continue;
+          urls += `<url><loc>${baseUrl}/tools?category=${encodeURIComponent(c.name)}</loc></url>\n`;
+        }
+      } catch (e) { /* the sitemap is still valid without them */ }
 
       for (const t of tools.results) {
         const lastmod = t.last_updated || t.created_at || '';
