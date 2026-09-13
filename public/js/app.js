@@ -6,9 +6,17 @@ const SITE = 'https://ai-directory-v5-radwan648.pages.dev';
 /* ============================ API ============================ */
 const api = {
   async get(path) {
-    const r = await fetch(path, { headers: { accept: 'application/json' } });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
+    try {
+      const r = await fetch(path, { headers: { accept: 'application/json' } });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return await r.json();
+    } catch (e) {
+      // Usually an exhausted D1 read quota. Answer from the baked copy instead
+      // so the visitor sees tools rather than an empty page.
+      const ans = await offlineAnswer(path);
+      if (ans) return ans;
+      throw e;
+    }
   },
   stats: () => api.get('/api/stats'),
   categories: () => api.get('/api/categories'),
@@ -21,6 +29,99 @@ const api = {
   compare: (slugs) => api.get('/api/compare?slugs=' + slugs.map(encodeURIComponent).join(',')),
   copyPrompt: (id) => fetch('/api/prompts/copy/' + id, { method: 'POST' }).catch(() => {}),
 };
+
+
+/* ==================== offline fallback ====================
+   /data/offline.json is baked by the pipeline (scripts/snapshot_offline.py) and
+   served as a plain static asset. It is the only thing on this site that still
+   answers when D1's daily row read limit is gone - the state the site was in on
+   13 Sep, when every section showed "Could not load this section." and every
+   tool showed "That tool could not be loaded". Every read falls back to it. */
+let OFFLINE = null, OFFLINE_TRIED = false, OFFLINE_MODE = false;
+
+async function offlineData() {
+  if (OFFLINE_TRIED) return OFFLINE;
+  OFFLINE_TRIED = true;
+  try {
+    const r = await fetch('/data/offline.json', { cache: 'no-store' });
+    OFFLINE = r.ok ? await r.json() : null;
+  } catch (e) { OFFLINE = null; }
+  return OFFLINE;
+}
+
+function offSort(list, sort) {
+  const arr = list.slice();
+  if (sort === 'views') arr.sort((a, b) => (b.views || 0) - (a.views || 0));
+  else if (sort === 'name') arr.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+  else arr.sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+  return arr;
+}
+
+function offTools(q) {
+  const o = OFFLINE || {};
+  const eq = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
+  let list = (o.tools || []).slice();
+  if (q.category) list = list.filter((t) => eq(t.category, q.category));
+  if (q.pricing) list = list.filter((t) => eq(t.pricing, q.pricing));
+  if (q.featured === '1' || q.featured === 1) list = list.filter((t) => Number(t.featured) === 1);
+  if (q.source) list = list.filter((t) => eq(sourceOf(t).replace(/\s/g, ''), q.source));
+  if (q.tag) list = list.filter((t) => String(t.tags || '').toLowerCase().split(',').map((x) => x.trim()).indexOf(String(q.tag).toLowerCase()) >= 0);
+  if (q.days) {
+    const since = Date.now() - Number(q.days) * 864e5;
+    list = list.filter((t) => new Date(String(t.created_at || '').replace(' ', 'T') + 'Z').getTime() >= since);
+  }
+  if (q.q) {
+    const need = String(q.q).toLowerCase();
+    list = list.filter((t) => (String(t.name || '') + ' ' + (t.short_desc || '') + ' ' + (t.category || '')).toLowerCase().includes(need));
+  }
+  list = offSort(list, q.sort || 'newest');
+  const limit = Math.max(1, Number(q.limit || 40));
+  const page = Math.max(1, Number(q.page || 1));
+  return { tools: list.slice((page - 1) * limit, page * limit), total: list.length, page: page, limit: limit, offline: true };
+}
+
+function offOne(slug) {
+  const o = OFFLINE || {};
+  const t = (o.tools || []).find((x) => x.slug === slug);
+  if (!t) return null;
+  const rel = (o.tools || []).filter((x) => x.category === t.category && x.slug !== slug).slice(0, 6);
+  return { tool: t, related: rel, reviews: [], offline: true };
+}
+
+async function offlineAnswer(path) {
+  const o = await offlineData();
+  if (!o || !o.tools) return null;
+  const u = new URL(path, location.origin);
+  const p = u.pathname;
+  const q = {};
+  u.searchParams.forEach((v, k) => { q[k] = v; });
+  OFFLINE_MODE = true;
+  if (p === '/api/stats') return Object.assign({}, o.stats, { offline: true });
+  if (p === '/api/categories') return { categories: o.categories || [], offline: true };
+  if (p === '/api/tools') return offTools(q);
+  if (p.startsWith('/api/tools/')) return offOne(decodeURIComponent(p.slice('/api/tools/'.length)));
+  if (p === '/api/free-tools') { q.pricing = 'free'; q.limit = '30'; return offTools(q); }
+  if (p === '/api/tools/new') { q.sort = 'newest'; q.limit = q.limit || '8'; return offTools(q); }
+  if (p === '/api/tools/trending') { q.sort = 'views'; return offTools(q); }
+  if (p === '/api/tools/featured') { q.featured = '1'; return offTools(q); }
+  if (p === '/api/blogs') {
+    const list = o.blogs || [];
+    const limit = Math.max(1, Number(q.limit || 12)), page = Math.max(1, Number(q.page || 1));
+    return { blogs: list.slice((page - 1) * limit, page * limit), total: list.length, offline: true };
+  }
+  if (p === '/api/news') {
+    const list = (o.blogs || []).filter((b) => String(b.category || '').toLowerCase() === 'news');
+    return { news: list.slice(0, Number(q.limit || 8)), offline: true };
+  }
+  if (p === '/api/prompts') return { prompts: o.prompts || [], total: (o.prompts || []).length, offline: true };
+  if (p === '/api/compare') {
+    const slugs = String(q.slugs || '').split(',').filter(Boolean);
+    const tools = slugs.map((sl) => (o.tools || []).find((x) => x.slug === sl)).filter(Boolean);
+    if (tools.length < 2) return null;
+    return { tools: tools, tool1: tools[0], tool2: tools[1], offline: true };
+  }
+  return null;
+}
 
 /* ======================= small helpers ======================= */
 const $ = (s, r) => (r || document).querySelector(s);
@@ -263,7 +364,7 @@ async function fillSection(cfg, i, el) {
   };
   try {
     const d = await api.tools(q);
-    show(d.tools || [], d.total, false);
+    show(d.tools || [], d.total, !!(d.offline || OFFLINE_MODE));
   } catch (e) {
     // Almost always an exhausted D1 read quota. Use the copy the pipeline baked.
     const snap = await snapshot();

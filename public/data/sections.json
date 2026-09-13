@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-13T17:58:16Z",
+ "generated_at": "2026-09-13T18:09:35Z",
  "note": "Seeded from the endpoints that still answered while D1 was over its daily read limit, filtered through validate.is_valid_row. The nightly pipeline rebuilds this in full.",
  "stats": {
   "total_tools": 7812,

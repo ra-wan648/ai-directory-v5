@@ -80,6 +80,12 @@ jobs:
       # the scrapers, so it succeeds while the day's allowance is intact.
       - name: Bake the homepage snapshot
         run: python3 scripts/snapshot_sections.py
+
+      # Bakes the whole directory into public/data/offline.json, the static copy
+      # the browser falls back to when D1's read limit is gone. Also early, for
+      # the same reason.
+      - name: Bake the offline dataset
+        run: python3 scripts/snapshot_offline.py
             code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
             echo "  $code  $p"
             if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
@@ -172,7 +178,7 @@ jobs:
           git add .pipeline-heartbeat
           # Ship the baked snapshot too: this push is what triggers the Deploy
           # workflow, which publishes the Pages site.
-          git add public/data/sections.json 2>/dev/null || true
+          git add public/data/sections.json public/data/offline.json 2>/dev/null || true
           git commit -m "pipeline heartbeat $(date -u +%Y-%m-%d)" || echo "nothing to commit"
           git push || echo "heartbeat push skipped"
         env:
