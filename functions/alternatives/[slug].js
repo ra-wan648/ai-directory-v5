@@ -39,7 +39,10 @@ export async function onRequest(context) {
 
   const name = tool.name || slug;
   const cat = tool.category || 'AI';
-  const title = `${name} alternatives — ${alts.length} similar ${cat} tools | AI Directory`;
+  // The category is often already "AI Tools", which read as "similar AI Tools
+  // tools" in the title.
+  const catLabel = /tool/i.test(cat) ? cat : `${cat} tools`;
+  const title = `${name} alternatives — ${alts.length} ${catLabel} to consider | AI Directory`;
   const description = `Alternatives to ${name} in ${cat}: ${alts.slice(0, 6).map((t) => t.name).join(', ') || 'none listed yet'}. Compare pricing and links.`;
 
   const rows = alts.map((t) => `<li style="padding:8px 0;border-bottom:1px solid var(--border,#eee)">

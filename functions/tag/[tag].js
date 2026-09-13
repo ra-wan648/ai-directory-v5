@@ -27,7 +27,9 @@ export async function onRequest(context) {
     }
   } catch (e) { /* empty state below */ }
 
-  const title = `${tag} AI tools — ${total} listed | AI Directory`;
+  // Lowercase slugs read badly at the start of a title.
+  const tagLabel = tag.charAt(0).toUpperCase() + tag.slice(1);
+  const title = `${tagLabel} AI tools — ${total} listed | AI Directory`;
   const description = `AI tools tagged ${tag}: ${total} listings with pricing and links to each official site, refreshed daily.`;
 
   const rows = tools.map((t) => `<li style="padding:8px 0;border-bottom:1px solid var(--border,#eee)">
@@ -49,7 +51,7 @@ export async function onRequest(context) {
 </head>
 <body>
 <div class="wrap" style="max-width:860px;margin:0 auto;padding:28px 16px">
-<nav style="font-size:12px;margin-bottom:16px"><a href="/">Home</a> › <span>${esc(tag)}</span></nav>
+<nav style="font-size:12px;margin-bottom:16px"><a href="/">Home</a> › <span>${esc(tagLabel)}</span></nav>
 <h1 style="font-size:24px;margin:0 0 6px">AI tools tagged ${esc(tag)}</h1>
 <p style="font-size:13px;opacity:.75;margin:0 0 20px">${total ? total.toLocaleString('en-US') : 'No'} listings carry this tag, refreshed daily.</p>
 ${rows ? `<ul style="list-style:none;padding:0;margin:0">${rows}</ul>` : '<p style="font-size:13px">Nothing carries this tag yet.</p>'}
