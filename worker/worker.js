@@ -45,18 +45,66 @@ function isInternal(request, env) {
   return key === env.INTERNAL_API_KEY;
 }
 
+// A second copy of every cached response, kept for a week. It is only ever read
+// when the handler throws, so a D1 read-limit or an outage serves yesterday's
+// data instead of a 500. Before this, an exhausted quota took the whole site
+// down and every visitor re-hit D1, which made the outage worse.
+const STALE_TTL = 604800;
+const STALE_PARAM = '__stale';
+
+function staleRequestFor(cacheUrl) {
+  const u = new URL(cacheUrl.toString());
+  u.searchParams.set(STALE_PARAM, '1');
+  return new Request(u.toString(), { method: 'GET' });
+}
+
+// Stable short key. Query strings and SQL fragments contain spaces and quotes,
+// which do not survive being pasted into a URL, so hash them.
+function hashKey(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(36);
+}
+
 async function cacheFetch(request, env, cacheKey, ttl, handler) {
   const cache = typeof caches !== 'undefined' ? caches.default : null;
   const url = new URL(request ? request.url : `https://worker.local/${cacheKey}`);
   const cacheUrl = new URL(url.toString());
   const cacheRequest = new Request(cacheUrl.toString(), request || { method: 'GET' });
   let response = cache ? await cache.match(cacheRequest) : null;
-  if (!response) {
+  if (response) return response;
+
+  try {
     response = await handler();
-    if (response.status === 200 && cache) {
-      response = new Response(response.body, response);
-      response.headers.append('Cache-Control', `public, max-age=${ttl}`);
-      await cache.put(cacheRequest, response.clone());
+  } catch (e) {
+    const stale = cache ? await cache.match(staleRequestFor(cacheUrl)) : null;
+    if (stale) {
+      console.error('handler failed, serving the last good copy:', e && e.message);
+      return stale;
+    }
+    throw e;
+  }
+
+  if (response.status === 200 && cache) {
+    const body = await response.text();
+    try {
+      const freshHeaders = new Headers(response.headers);
+      freshHeaders.set('Cache-Control', `public, max-age=${ttl}`);
+      const fresh = new Response(body, { status: 200, headers: freshHeaders });
+      await cache.put(cacheRequest, fresh.clone());
+
+      const staleHeaders = new Headers(response.headers);
+      staleHeaders.set('Cache-Control', `public, max-age=${STALE_TTL}`);
+      await cache.put(staleRequestFor(cacheUrl),
+                      new Response(body, { status: 200, headers: staleHeaders }));
+      return fresh;
+    } catch (e) {
+      // A cache write must never break the response.
+      console.error('cache put failed:', e && e.message);
+      return new Response(body, { status: 200, headers: response.headers });
     }
   }
   return response;
@@ -127,7 +175,7 @@ const SOURCE_SQL = `CASE
   WHEN url LIKE '%news.ycombinator%' THEN 'hackernews'
   ELSE 'web' END`;
 
-async function getToolsList(env, params) {
+function buildToolsWhere(params) {
   const category = params.get('category') || '';
   const pricing = params.get('pricing') || '';
   const q = params.get('q') || '';
@@ -175,18 +223,41 @@ async function getToolsList(env, params) {
   if (sort === 'votes') orderBy = 'votes DESC, created_at DESC';
   if (sort === 'alphabetical' || sort === 'name') orderBy = 'name ASC';
 
-  const countResult = await env.DB.prepare(
-    `SELECT COUNT(*) as total FROM tools WHERE ${where.join(' AND ')}`
-  ).bind(...binds).first();
+  return { where: where.join(' AND '), binds, orderBy,
+           page, limit, offset: (page - 1) * limit };
+}
 
-  const offset = (page - 1) * limit;
+// Counting a filtered set is the most expensive read on the site: COUNT over
+// tools scans every matching index entry (12,345 rows before the junk cleanup),
+// and it used to run on every cache miss of every filter combination. The number
+// only feeds a label in the UI, so it is cached for six hours under its own key
+// and a failure reports 0 instead of taking the page down with a 500.
+async function getToolsTotal(env, params) {
+  const { where, binds } = buildToolsWhere(params);
+  const key = 'api-tools-count-v1?' + hashKey(where + '|' + JSON.stringify(binds));
+  const res = await cacheFetch(null, env, key, 21600, async () => {
+    const row = await env.DB.prepare(
+      `SELECT COUNT(*) as total FROM tools WHERE ${where}`
+    ).bind(...binds).first();
+    return okResponse({ total: row ? row.total : 0 });
+  });
+  try {
+    return (await res.json()).total || 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
+async function getToolsList(env, params) {
+  const { where, binds, orderBy, page, limit, offset } = buildToolsWhere(params);
+
   const result = await env.DB.prepare(
-    `SELECT * FROM tools WHERE ${where.join(' AND ')} ORDER BY ${orderBy} LIMIT ? OFFSET ?`
+    `SELECT * FROM tools WHERE ${where} ORDER BY ${orderBy} LIMIT ? OFFSET ?`
   ).bind(...binds, limit, offset).all();
 
   return {
     tools: result.results,
-    total: countResult ? countResult.total : 0,
+    total: await getToolsTotal(env, params),
     page: page,
     limit: limit
   };
@@ -358,7 +429,9 @@ const handler = {
     // The cache key MUST include the query string, otherwise every filter/sort/page
     // combination shares one cached response.
     const qs = new URLSearchParams([...params.entries()].sort()).toString();
-    return cacheFetch(null, env, 'api-tools-v2?' + qs, 600, async () => {
+    // An hour, not ten minutes: the directory changes once a day, so the short
+    // TTL bought nothing and re-read the whole table six times more often.
+    return cacheFetch(null, env, 'api-tools-v3?' + qs, 3600, async () => {
       const data = await getToolsList(env, params);
       return okResponse(data);
     });
@@ -369,17 +442,20 @@ const handler = {
   // ─────────────────────────────
   async apiToolsNew(env, url) {
     const limit = Math.min(48, Math.max(1, parseInt(url.searchParams.get('limit') || '8', 10)));
-    const result = await env.DB.prepare(
-      `SELECT * FROM tools
-       WHERE status = 'published'
-         AND (tag = 'new' OR created_at > datetime('now', '-48 hours'))
-       ORDER BY created_at DESC LIMIT ?`
-    ).bind(limit).all();
-    const today = await env.DB.prepare(
-      `SELECT COUNT(*) AS c FROM tools
-       WHERE status = 'published' AND created_at > datetime('now', '-24 hours')`
-    ).first();
-    return okResponse({ tools: result.results, total: result.results.length, today: today ? today.c : 0 });
+    // This route had no cache at all, so every homepage view ran both queries.
+    return cacheFetch(null, env, 'api-tools-new-v1?limit=' + limit, 1800, async () => {
+      const result = await env.DB.prepare(
+        `SELECT * FROM tools
+         WHERE status = 'published'
+           AND (tag = 'new' OR created_at > datetime('now', '-48 hours'))
+         ORDER BY created_at DESC LIMIT ?`
+      ).bind(limit).all();
+      const today = await env.DB.prepare(
+        `SELECT COUNT(*) AS c FROM tools
+         WHERE status = 'published' AND created_at > datetime('now', '-24 hours')`
+      ).first();
+      return okResponse({ tools: result.results, total: result.results.length, today: today ? today.c : 0 });
+    });
   },
 
   // ─────────────────────────────
@@ -391,12 +467,14 @@ const handler = {
   // ─────────────────────────────
   async apiToolsTrending(env, url) {
     const limit = Math.min(48, Math.max(1, parseInt(url.searchParams.get('limit') || '6', 10)));
-    const result = await env.DB.prepare(
-      `SELECT * FROM tools
-       WHERE status = 'published' AND created_at > datetime('now', '-7 days')
-       ORDER BY votes DESC, views DESC, created_at DESC LIMIT ?`
-    ).bind(limit).all();
-    return okResponse({ tools: result.results });
+    return cacheFetch(null, env, 'api-tools-trending-v1?limit=' + limit, 1800, async () => {
+      const result = await env.DB.prepare(
+        `SELECT * FROM tools
+         WHERE status = 'published' AND created_at > datetime('now', '-7 days')
+         ORDER BY votes DESC, views DESC, created_at DESC LIMIT ?`
+      ).bind(limit).all();
+      return okResponse({ tools: result.results });
+    });
   },
 
   // ─────────────────────────────
@@ -404,12 +482,14 @@ const handler = {
   // ─────────────────────────────
   async apiToolsFeatured(env, url) {
     const limit = Math.min(48, Math.max(1, parseInt(url.searchParams.get('limit') || '3', 10)));
-    const result = await env.DB.prepare(
-      `SELECT * FROM tools
-       WHERE featured = 1 AND status = 'published'
-       ORDER BY created_at DESC LIMIT ?`
-    ).bind(limit).all();
-    return okResponse({ tools: result.results });
+    return cacheFetch(null, env, 'api-tools-featured-v1?limit=' + limit, 1800, async () => {
+      const result = await env.DB.prepare(
+        `SELECT * FROM tools
+         WHERE featured = 1 AND status = 'published'
+         ORDER BY created_at DESC LIMIT ?`
+      ).bind(limit).all();
+      return okResponse({ tools: result.results });
+    });
   },
 
   // ─────────────────────────────
@@ -419,31 +499,36 @@ const handler = {
     const q = (params.get('q') || '').trim();
     if (!q) return okResponse({ results: [] });
     const like = `%${q.toLowerCase().replace(/[%_]/g, m => '\\' + m)}%`;
-    const result = await env.DB.prepare(
-      `SELECT name, slug, description, short_desc, category, pricing, url, tags
-       FROM tools
-       WHERE status = 'published'
-         AND (LOWER(name) LIKE ? ESCAPE '\\' OR LOWER(description) LIKE ? ESCAPE '\\'
-              OR LOWER(short_desc) LIKE ? ESCAPE '\\' OR LOWER(category) LIKE ? ESCAPE '\\'
-              OR LOWER(tags) LIKE ? ESCAPE '\\')
-       ORDER BY views DESC
-       LIMIT 20`
-    ).bind(like, like, like, like, like).all();
-    return okResponse({ results: result.results });
+    // Five LIKE scans over the whole table per keystroke; cache the popular terms.
+    return cacheFetch(null, env, 'api-search-v1?' + hashKey(q.toLowerCase()), 900, async () => {
+      const result = await env.DB.prepare(
+        `SELECT name, slug, description, short_desc, category, pricing, url, tags
+         FROM tools
+         WHERE status = 'published'
+           AND (LOWER(name) LIKE ? ESCAPE '\\' OR LOWER(description) LIKE ? ESCAPE '\\'
+                OR LOWER(short_desc) LIKE ? ESCAPE '\\' OR LOWER(category) LIKE ? ESCAPE '\\'
+                OR LOWER(tags) LIKE ? ESCAPE '\\')
+         ORDER BY views DESC
+         LIMIT 20`
+      ).bind(like, like, like, like, like).all();
+      return okResponse({ results: result.results });
+    });
   },
 
   // ─────────────────────────────
   // ROUTE 4c: GET /api/free-tools
   // ─────────────────────────────
   async apiFreeTools(env) {
-    const result = await env.DB.prepare(
-      `SELECT name, slug, url, category, pricing
-       FROM tools
-       WHERE status = 'published' AND pricing = 'free'
-       ORDER BY views DESC
-       LIMIT 30`
-    ).all();
-    return okResponse({ tools: result.results });
+    return cacheFetch(null, env, 'api-free-tools-v1', 1800, async () => {
+      const result = await env.DB.prepare(
+        `SELECT name, slug, url, category, pricing
+         FROM tools
+         WHERE status = 'published' AND pricing = 'free'
+         ORDER BY views DESC
+         LIMIT 30`
+      ).all();
+      return okResponse({ tools: result.results });
+    });
   },
 
   // ─────────────────────────────
@@ -532,29 +617,31 @@ const handler = {
     const category = params.get('category') || '';
     const page = Math.max(1, parseInt(params.get('page') || '1', 10));
     const limit = Math.min(50, Math.max(1, parseInt(params.get('limit') || '12', 10)));
+    return cacheFetch(null, env, 'api-blogs-v1?' +
+                      hashKey(`${category}|${page}|${limit}`), 1800, async () => {
+      let where = ["status = 'published'"];
+      let binds = [];
+      if (category && category !== 'all') {
+        where.push('category = ?');
+        binds.push(category);
+      }
 
-    let where = ["status = 'published'"];
-    let binds = [];
-    if (category && category !== 'all') {
-      where.push('category = ?');
-      binds.push(category);
-    }
+      const countResult = await env.DB.prepare(
+        `SELECT COUNT(*) as total FROM blogs WHERE ${where.join(' AND ')}`
+      ).bind(...binds).first();
 
-    const countResult = await env.DB.prepare(
-      `SELECT COUNT(*) as total FROM blogs WHERE ${where.join(' AND ')}`
-    ).bind(...binds).first();
+      const offset = (page - 1) * limit;
+      const result = await env.DB.prepare(
+        `SELECT * FROM blogs WHERE ${where.join(' AND ')}
+         ORDER BY published_at DESC LIMIT ? OFFSET ?`
+      ).bind(...binds, limit, offset).all();
 
-    const offset = (page - 1) * limit;
-    const result = await env.DB.prepare(
-      `SELECT * FROM blogs WHERE ${where.join(' AND ')}
-       ORDER BY published_at DESC LIMIT ? OFFSET ?`
-    ).bind(...binds, limit, offset).all();
-
-    return okResponse({
-      blogs: result.results,
-      total: countResult ? countResult.total : 0,
-      page: page,
-      limit: limit
+      return okResponse({
+        blogs: result.results,
+        total: countResult ? countResult.total : 0,
+        page: page,
+        limit: limit
+      });
     });
   },
 
@@ -589,34 +676,36 @@ const handler = {
     const compatibleTools = params.get('compatible_tools') || '';
     const page = Math.max(1, parseInt(params.get('page') || '1', 10));
     const limit = Math.min(50, Math.max(1, parseInt(params.get('limit') || '24', 10)));
+    return cacheFetch(null, env, 'api-prompts-v1?' +
+                      hashKey(`${category}|${compatibleTools}|${page}|${limit}`), 1800, async () => {
+      let where = ["status = 'published'"];
+      let binds = [];
 
-    let where = ["status = 'published'"];
-    let binds = [];
+      if (category) {
+        where.push('category = ?');
+        binds.push(category);
+      }
+      if (compatibleTools) {
+        where.push('compatible_tools LIKE ?');
+        binds.push(`%${compatibleTools}%`);
+      }
 
-    if (category) {
-      where.push('category = ?');
-      binds.push(category);
-    }
-    if (compatibleTools) {
-      where.push('compatible_tools LIKE ?');
-      binds.push(`%${compatibleTools}%`);
-    }
+      const countResult = await env.DB.prepare(
+        `SELECT COUNT(*) as total FROM prompts WHERE ${where.join(' AND ')}`
+      ).bind(...binds).first();
 
-    const countResult = await env.DB.prepare(
-      `SELECT COUNT(*) as total FROM prompts WHERE ${where.join(' AND ')}`
-    ).bind(...binds).first();
+      const offset = (page - 1) * limit;
+      const result = await env.DB.prepare(
+        `SELECT * FROM prompts WHERE ${where.join(' AND ')}
+         ORDER BY created_at DESC LIMIT ? OFFSET ?`
+      ).bind(...binds, limit, offset).all();
 
-    const offset = (page - 1) * limit;
-    const result = await env.DB.prepare(
-      `SELECT * FROM prompts WHERE ${where.join(' AND ')}
-       ORDER BY created_at DESC LIMIT ? OFFSET ?`
-    ).bind(...binds, limit, offset).all();
-
-    return okResponse({
-      prompts: result.results,
-      total: countResult ? countResult.total : 0,
-      page: page,
-      limit: limit
+      return okResponse({
+        prompts: result.results,
+        total: countResult ? countResult.total : 0,
+        page: page,
+        limit: limit
+      });
     });
   },
 
@@ -761,7 +850,9 @@ const handler = {
   // ROUTE 15: GET /sitemap.xml
   // ─────────────────────────────
   async sitemap(env) {
-    return cacheFetch(null, env, 'sitemap-v2', 3600, async () => {
+    // Every published slug is read to build this, so a long TTL is worth more
+    // than truncating the list: dropping URLs would cost search coverage.
+    return cacheFetch(null, env, 'sitemap-v3', 21600, async () => {
       const [tools, blogs] = await Promise.all([
         env.DB.prepare(
           `SELECT slug, last_updated, created_at FROM tools WHERE status = 'published'`
@@ -797,7 +888,7 @@ const handler = {
   // ROUTE 16: GET /rss.xml
   // ─────────────────────────────
   async rss(env) {
-    return cacheFetch(null, env, 'rss-v2', 3600, async () => {
+    return cacheFetch(null, env, 'rss-v3', 21600, async () => {
       const [tools, blogs] = await Promise.all([
         env.DB.prepare(
           `SELECT name, slug, short_desc, url, created_at FROM tools
@@ -882,25 +973,30 @@ Sitemap: ${baseUrl}/sitemap.xml`;
   async byTag(env, url, tag) {
     const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
     const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '40', 10)));
-    const like = `%${tag.toLowerCase()}%`;
+    // Crawlers walk tag pages hard, and each one ran a LIKE-based COUNT over the
+    // whole tools table plus the listing. Cache the pair together.
+    return cacheFetch(null, env, 'tag-v1?' + hashKey(`${tag.toLowerCase()}|${page}|${limit}`),
+                      1800, async () => {
+      const like = `%${tag.toLowerCase()}%`;
 
-    const countResult = await env.DB.prepare(
-      `SELECT COUNT(*) as total FROM tools
-       WHERE (LOWER(tags) LIKE ? OR LOWER(category) = ?) AND status = 'published'`
-    ).bind(like, tag.toLowerCase()).first();
+      const countResult = await env.DB.prepare(
+        `SELECT COUNT(*) as total FROM tools
+         WHERE (LOWER(tags) LIKE ? OR LOWER(category) = ?) AND status = 'published'`
+      ).bind(like, tag.toLowerCase()).first();
 
-    const offset = (page - 1) * limit;
-    const result = await env.DB.prepare(
-      `SELECT * FROM tools
-       WHERE (LOWER(tags) LIKE ? OR LOWER(category) = ?) AND status = 'published'
-       ORDER BY views DESC LIMIT ? OFFSET ?`
-    ).bind(like, tag.toLowerCase(), limit, offset).all();
+      const offset = (page - 1) * limit;
+      const result = await env.DB.prepare(
+        `SELECT * FROM tools
+         WHERE (LOWER(tags) LIKE ? OR LOWER(category) = ?) AND status = 'published'
+         ORDER BY views DESC LIMIT ? OFFSET ?`
+      ).bind(like, tag.toLowerCase(), limit, offset).all();
 
-    return okResponse({
-      tools: result.results,
-      total: countResult ? countResult.total : 0,
-      page: page,
-      limit: limit
+      return okResponse({
+        tools: result.results,
+        total: countResult ? countResult.total : 0,
+        page: page,
+        limit: limit
+      });
     });
   },
 

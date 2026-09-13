@@ -7,6 +7,19 @@ MANIFEST_URL = os.environ.get("MANIFEST_BASE_URL", "https://app.manifest.build/v
 MANIFEST_KEY = os.environ.get("MANIFEST_API_KEY", "")
 DB = "ai-directory-db"
 
+# Retry policy. Each entry is the socket timeout for one attempt, and the length
+# of the list is the default attempt budget. The router sometimes answers "no
+# provider available" while it hunts for a model, so a few more asks turn a
+# failure into a result instead of a hole in the directory.
+ATTEMPT_TIMEOUTS = (60, 120, 240, 240, 300)    # seconds, one attempt each
+MAX_ATTEMPTS = int(os.environ.get("LLM_MAX_ATTEMPTS", str(len(ATTEMPT_TIMEOUTS))))
+# Wall-clock ceiling for a single tool, so a dead router cannot run the job out
+# to its 350-minute limit while every worker sits in a timeout.
+TOOL_BUDGET = int(os.environ.get("LLM_TOOL_BUDGET", "480"))
+# 401/403 mean the key is wrong or revoked and 4xx means the request itself is
+# malformed - neither will succeed on a retry, and each one costs a request.
+FATAL_STATUS = {400, 401, 403, 404, 422}
+
 def d1_env():
     """wrangler authenticates with CLOUDFLARE_API_TOKEN, but the workflow only
     exports CF_API_TOKEN — without this the CLI is unauthenticated."""
@@ -93,12 +106,15 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
   "pricing_detail": "Free / Freemium from $X/mo / Paid from $X/mo"
 }}"""
     # The router is slow: it may sit on a request while it tries several
-    # providers, so a short socket timeout is the wrong tool here. Wait long,
-    # and keep retrying while it is still thinking. A single slow response used
-    # to raise straight through and kill the whole step after ~5 tools.
-    ATTEMPT_TIMEOUTS = (90, 180, 300)      # seconds, one attempt each
-    r = None
-    for attempt, timeout in enumerate(ATTEMPT_TIMEOUTS, start=1):
+    # providers, so a short socket timeout is the wrong tool here.
+    #
+    # The retry used to fire only on a socket exception. Any HTTP error status
+    # broke out of the loop and returned None, which is why the dashboard showed
+    # failed requests with attempts=1: the router answered "no provider yet" with
+    # a 5xx and we gave up instead of asking again.
+    started = time.time()
+    last = "no attempt made"
+    for attempt, timeout in enumerate(ATTEMPT_TIMEOUTS[:MAX_ATTEMPTS], start=1):
         try:
             r = requests.post(
                 MANIFEST_URL,
@@ -107,23 +123,40 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
                 json={"model": "auto", "input": prompt, "store": False},
                 timeout=timeout,
             )
-            break
         except Exception as e:
-            print(f"    ! still waiting ({type(e).__name__}), attempt "
-                  f"{attempt}/{len(ATTEMPT_TIMEOUTS)}, waited {timeout}s")
-            r = None
-            time.sleep(5)
-    if r is None or r.status_code != 200:
-        return None
-    out = r.json().get("output", "")
-    out = extract_text(out)
-    out = out.strip()
-    if "```" in out:
-        out = out.split("```")[1].lstrip("json").strip()
-    try:
-        return json.loads(out)
-    except Exception:
-        return None
+            last = f"{type(e).__name__}: {e}"
+            print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} raised "
+                  f"{type(e).__name__} after {timeout}s; retrying")
+        else:
+            if r.status_code in FATAL_STATUS:
+                # A rejected or revoked key will never succeed here, and every
+                # retry costs a request against the monthly allowance.
+                print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP "
+                      f"{r.status_code} (not retryable): {r.text[:160]}")
+                return None
+            if r.status_code == 200:
+                out = extract_text(r.json().get("output", "")).strip()
+                if "```" in out:
+                    out = out.split("```")[1].lstrip("json").strip()
+                try:
+                    return json.loads(out)
+                except Exception:
+                    last = f"HTTP 200 but unusable body: {out[:120]!r}"
+                    print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP 200 "
+                          f"with no usable JSON; retrying")
+            else:
+                last = f"HTTP {r.status_code}: {r.text[:160]}"
+                print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP "
+                      f"{r.status_code}; retrying")
+
+        if time.time() - started > TOOL_BUDGET:
+            break
+        if attempt < MAX_ATTEMPTS:
+            time.sleep(min(20, 2 ** attempt))
+
+    print(f"    ! gave up on {tool['name'][:40]} after "
+          f"{int(time.time() - started)}s: {last[:140]}")
+    return None
 
 def escape(text):
     return str(text or "").replace("'", "''")
@@ -186,6 +219,12 @@ with ThreadPoolExecutor(max_workers=WORKERS) as pool:
             written += len(buf)
             buf = []
             print(f"  [{processed}/{len(tools)}] processed, {written} written")
+        # Nothing written after this many failures means the router is down.
+        # Stop rather than grind through the whole backlog for hours.
+        if written == 0 and failed >= 60:
+            print(f"  ! {failed} failures and nothing written - the router looks "
+                  f"down. Stopping early; re-run this workflow later.")
+            break
 if buf:
     write_batch(buf)
     written += len(buf)
