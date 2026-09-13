@@ -86,12 +86,12 @@ jobs:
           MANIFEST_API_KEY: ${{secrets.MANIFEST_API_KEY}}
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
-          # Was 100 per run, which would take two and a half months to work
-          # through a 6,300-row backlog. 600 at 8 concurrent workers is about
-          # 22 minutes, comfortably inside the job timeout. Use the Backfill
+          # 600 per run against a backlog of about 3,800. Four concurrent
+          # workers, not eight: Manifest answers 429 (M203, too many concurrent
+          # requests) above that, and every 429 costs a retry. Use the Backfill
           # workflow to clear the rest faster.
           LLM_FILL_MAX: '600'
-          LLM_FILL_WORKERS: '8'
+          LLM_FILL_WORKERS: '4'
       # always() so a failure in the step above still sends the run summary.
       - name: Telegram stats
         if: always()

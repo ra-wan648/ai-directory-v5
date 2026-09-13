@@ -97,6 +97,15 @@ def extract_text(node):
     return str(node)
 
 
+def retry_after(resp):
+    """Seconds the router asked us to wait, capped at a minute. 0 if it did not say."""
+    try:
+        v = resp.headers.get("Retry-After")
+        return min(60, int(float(v))) if v else 0
+    except Exception:
+        return 0
+
+
 def fill(tool):
     prompt = f"""Fill AI tools directory data. Return ONLY valid JSON, no markdown.
 Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
@@ -115,6 +124,7 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
     started = time.time()
     last = "no attempt made"
     for attempt, timeout in enumerate(ATTEMPT_TIMEOUTS[:MAX_ATTEMPTS], start=1):
+        wait = 0
         try:
             r = requests.post(
                 MANIFEST_URL,
@@ -134,25 +144,53 @@ Tool: {tool['name']}, URL: {tool['url']}, Category: {tool['category']}
                 print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP "
                       f"{r.status_code} (not retryable): {r.text[:160]}")
                 return None
+
             if r.status_code == 200:
-                out = extract_text(r.json().get("output", "")).strip()
-                if "```" in out:
-                    out = out.split("```")[1].lstrip("json").strip()
+                # The router sometimes answers 200 with a JSON array, or with a
+                # body that is not JSON at all. Calling .get() on a list raised
+                # AttributeError straight out of the loop and killed the whole
+                # step with exit code 1, so check the shape first and treat
+                # anything unexpected as a retryable bad response.
+                body = None
                 try:
-                    return json.loads(out)
-                except Exception:
-                    last = f"HTTP 200 but unusable body: {out[:120]!r}"
+                    body = r.json()
+                except Exception as e:
+                    last = f"HTTP 200 with unreadable body ({type(e).__name__})"
                     print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP 200 "
-                          f"with no usable JSON; retrying")
+                          f"but the body is not JSON; retrying")
+                if body is not None:
+                    if not isinstance(body, dict):
+                        last = f"HTTP 200 body is {type(body).__name__}, not an object"
+                        print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP 200 "
+                              f"body is {type(body).__name__}; retrying")
+                    else:
+                        out = extract_text(body.get("output", "")).strip()
+                        if "```" in out:
+                            out = out.split("```")[1].lstrip("json").strip()
+                        try:
+                            return json.loads(out)
+                        except Exception:
+                            last = f"HTTP 200 but unusable body: {out[:120]!r}"
+                            print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP 200 "
+                                  f"with no usable JSON; retrying")
+            elif r.status_code == 429:
+                # Manifest M203 - too many concurrent requests. Retrying at once
+                # at the same concurrency just trips the limit again, so back off
+                # harder and honour Retry-After when the router sends one.
+                last = f"HTTP 429: {r.text[:120]}"
+                wait = retry_after(r) or min(45, 3 * (2 ** attempt))
+                print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP 429 "
+                      f"(too many concurrent); waiting {wait}s")
             else:
                 last = f"HTTP {r.status_code}: {r.text[:160]}"
+                wait = min(20, 2 ** attempt)
                 print(f"    ! attempt {attempt}/{MAX_ATTEMPTS} -> HTTP "
                       f"{r.status_code}; retrying")
 
         if time.time() - started > TOOL_BUDGET:
             break
         if attempt < MAX_ATTEMPTS:
-            time.sleep(min(20, 2 ** attempt))
+            time.sleep(wait or min(20, 2 ** attempt))
 
     print(f"    ! gave up on {tool['name'][:40]} after "
           f"{int(time.time() - started)}s: {last[:140]}")
@@ -184,7 +222,9 @@ def write_batch(pairs):
 
 
 MAX_TOOLS = int(os.environ.get("LLM_FILL_MAX", "600"))
-WORKERS = int(os.environ.get("LLM_FILL_WORKERS", "8"))
+# Manifest answers 429 "too many concurrent requests" (M203) well below ten
+# workers, and a 429 storm wastes the monthly allowance, so stay low.
+WORKERS = int(os.environ.get("LLM_FILL_WORKERS", "4"))
 WRITE_BATCH = int(os.environ.get("LLM_FILL_WRITE_BATCH", "40"))
 
 if not MANIFEST_KEY:
