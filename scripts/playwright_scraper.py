@@ -145,7 +145,7 @@ def insert_into_d1(tools_batch):
         logo = (tool.get('logo_url', '') or '').replace("'", "''")
         tags = (tool.get('tags', '') or '').replace("'", "''")
         created = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-        cmd = f'''INSERT INTO tools (name, slug, description, short_desc, category, pricing, url, logo_url, logo_type, tags, status, created_at) VALUES ('{name}', '{slug}', '{desc}', '{short_desc}', '{category}', '{pricing}', '{url}', '{logo}', 'favicon', '{tags}', 'published', '{created}') ON CONFLICT(slug) DO NOTHING'''
+        cmd = f'''INSERT OR IGNORE INTO tools (name, slug, description, short_desc, category, pricing, url, logo_url, logo_type, tags, status, created_at) VALUES ('{name}', '{slug}', '{desc}', '{short_desc}', '{category}', '{pricing}', '{url}', '{logo}', 'favicon', '{tags}', 'published', '{created}')'''
         r = subprocess.run(
             ['wrangler', 'd1', 'execute', DB_NAME, '--remote', '--command', cmd],
             capture_output=True, text=True, timeout=30, env=env

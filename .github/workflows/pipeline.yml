@@ -24,6 +24,10 @@ jobs:
       # schema.sql, and it is metadata work, not a table scan.
       - name: Apply D1 indexes
         run: wrangler d1 execute ai-directory-db --remote --file=migrations/001_indexes.sql
+        # Partial unique index on published urls (see the file header): a
+        # duplicate url is now a constraint violation, which is why the
+        # inserts use OR IGNORE.
+        run: wrangler d1 execute ai-directory-db --remote --file=migrations/002_unique_published_url.sql
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}

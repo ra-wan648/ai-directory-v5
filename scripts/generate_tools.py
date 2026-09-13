@@ -84,7 +84,7 @@ for i in range(0, len(tools), BATCH_SIZE):
             f"('{name_e}', '{slug_e}', '{desc_e}', '{short_e}', '{cat_e}', '{price_e}', '{url_e}', '', 'favicon', '{tags_e}', 'published', '{created_e}')"
         )
     
-    sql = f"INSERT INTO tools (name, slug, description, short_desc, category, pricing, url, logo_url, logo_type, tags, status, created_at) VALUES {', '.join(values)} ON CONFLICT(slug) DO NOTHING"
+    sql = f"INSERT OR IGNORE INTO tools (name, slug, description, short_desc, category, pricing, url, logo_url, logo_type, tags, status, created_at) VALUES {', '.join(values)}"
     
     cmd = ['wrangler', 'd1', 'execute', 'ai-directory-db', '--remote', '--command', sql]
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, env=env)

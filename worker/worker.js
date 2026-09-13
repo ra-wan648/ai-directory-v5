@@ -1104,7 +1104,7 @@ Sitemap: ${baseUrl}/sitemap.xml`;
     if (tool.votes && tool.votes > 50) tag = 'trending';
 
     const inserted = await env.DB.prepare(
-      `INSERT INTO tools (name, slug, description, short_desc, category, pricing, url,
+      `INSERT OR IGNORE INTO tools (name, slug, description, short_desc, category, pricing, url,
          logo_url, logo_type, tags, compatible_tools, views, votes, featured, tag, status, last_updated)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', datetime('now'))`
     ).bind(

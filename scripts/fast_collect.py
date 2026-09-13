@@ -133,7 +133,7 @@ def batch_insert(tools_batch):
     total_inserted = 0
     for i in range(0, len(values), chunk_size):
         chunk = values[i:i+chunk_size]
-        sql = f"INSERT INTO tools (name, slug, description, short_desc, category, pricing, url, logo_url, logo_type, tags, status, created_at) VALUES {', '.join(chunk)} ON CONFLICT(slug) DO NOTHING"
+        sql = f"INSERT OR IGNORE INTO tools (name, slug, description, short_desc, category, pricing, url, logo_url, logo_type, tags, status, created_at) VALUES {', '.join(chunk)}"
         r = subprocess.run(
             ['wrangler', 'd1', 'execute', DB_NAME, '--remote', '--command', sql],
             capture_output=True, text=True, timeout=60, env=env
