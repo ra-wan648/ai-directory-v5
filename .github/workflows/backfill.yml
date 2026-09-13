@@ -60,7 +60,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
           # Stage one only - see pipeline.yml. Clear once the held reasons have
           # been reviewed.
-          CLEANUP_SKIP_REASONS: "too long,sentence not a name"
+          CLEANUP_SKIP_REASONS: "too long,sentence not a name,directory page"
 
       - name: Fill missing descriptions
         run: cd scripts && python llm_fill.py

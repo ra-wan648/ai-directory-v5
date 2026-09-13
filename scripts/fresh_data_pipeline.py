@@ -401,10 +401,17 @@ def scrape_product_hunt():
         for edge in edges:
             node = edge.get('node', {})
             name = node.get('name', '')
-            website = node.get('website') or node.get('url') or ''
+            # `website` is the product's own site. The API's `url` field is a
+            # producthunt.com/r/... redirect carrying our own app name and id,
+            # and falling back to it published 479 rows that pointed at Product
+            # Hunt instead of at the tool. Skip a post without a real website
+            # rather than store the redirect.
+            website = (node.get('website') or '').strip()
             votes = node.get('votesCount', 0)
             tagline = node.get('tagline', '')
             if not name or not website:
+                continue
+            if not is_real_tool_url(website):
                 continue
             topics = [t.get('node', {}).get('name', '') for t in node.get('topics', {}).get('edges', [])]
             topic_text = ' '.join(topics)

@@ -87,6 +87,29 @@ NEWS_HOSTS = (
 # Hosts that must survive the blocklist above.
 ALLOWED_TOOL_HOSTS = ('x.ai', 'openai.com')
 
+# Ad networks, redirectors and link shorteners. A row on one of these is never a
+# tool: the scrapers picked up ad-click URLs such as
+# googleads.g.doubleclick.net/aclk and googleadservices.com/pagead/aclk, and 23
+# of them were published with names like "Get Quotes" and "Start Now".
+TRACKING_HOSTS = (
+    'doubleclick.net', 'googleadservices.com', 'googlesyndication.com',
+    'adservice.google.com', 'googletagmanager.com', 'google-analytics.com',
+    'adnxs.com', 'criteo.com', 'outbrain.com', 'taboola.com', 'shareasale.com',
+    'awin1.com', 'clickbank.net', 'bit.ly', 't.co', 'tinyurl.com', 'lnkd.in',
+    'rebrand.ly', 'cutt.ly',
+)
+
+# Directory and aggregator pages. The tool's own site belongs in url, not the
+# listing page that describes it. Kept separate from TRACKING_HOSTS so it gets
+# its own reason and can be reviewed on its own: the 479 producthunt.com/r/...
+# rows are real products with the wrong URL, not junk, and each one needs its
+# real website fetched rather than deleted.
+DIRECTORY_HOSTS = (
+    'producthunt.com', 'futuretools.io', 'toolify.ai', 'theresanaiforthat.com',
+    'futurepedia.io', 'aixploria.com', 'allthingsai.com', 'toolfk.com',
+    'insidr.ai', 'topai.tools',
+)
+
 
 def _host_is(host, domain):
     """True when host is exactly `domain` or a subdomain of it."""
@@ -106,14 +129,19 @@ def host_of(url):
 
 
 def is_news_host(url):
-    """True when the URL lives on a news, event, social or publishing host."""
+    """True when the URL is not a tool's own site.
+
+    Covers news and event hosts, social and publishing platforms, ad networks,
+    link shorteners and directory pages - anything that cannot be a product's
+    homepage.
+    """
     host = host_of(url)
     if not host:
         return False
     for d in ALLOWED_TOOL_HOSTS:
         if _host_is(host, d):
             return False
-    return any(_host_is(host, d) for d in NEWS_HOSTS)
+    return any(_host_is(host, d) for d in NEWS_HOSTS + TRACKING_HOSTS)
 
 
 def matches_keywords(text, keywords):
@@ -185,6 +213,14 @@ def is_valid_name(name):
     return True, ''
 
 
+def is_directory_host(url):
+    """True when the URL is a listing page on a directory, not the tool's site."""
+    host = host_of(url)
+    if not host:
+        return False
+    return any(_host_is(host, d) for d in DIRECTORY_HOSTS)
+
+
 def is_valid_row(name, url=''):
     """Should this row be published? Checks the name AND the host.
 
@@ -197,6 +233,8 @@ def is_valid_row(name, url=''):
         return False, why
     if is_news_host(url):
         return False, 'news/article host'
+    if is_directory_host(url):
+        return False, 'directory page'
     return True, ''
 
 
