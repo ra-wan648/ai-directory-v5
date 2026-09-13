@@ -866,7 +866,7 @@ const handler = {
   async sitemap(env) {
     // Every published slug is read to build this, so a long TTL is worth more
     // than truncating the list: dropping URLs would cost search coverage.
-    return cacheFetch(null, env, 'sitemap-v3', 21600, async () => {
+    return cacheFetch(null, env, 'sitemap-v4', 21600, async () => {
       const [tools, blogs] = await Promise.all([
         env.DB.prepare(
           `SELECT slug, last_updated, created_at FROM tools WHERE status = 'published'`
@@ -883,7 +883,12 @@ const handler = {
 
       for (const t of tools.results) {
         const lastmod = t.last_updated || t.created_at || '';
-        urls += `<url><loc>${baseUrl}/tool/${t.slug}</loc>${lastmod ? `<lastmod>${String(lastmod).split(' ')[0]}</lastmod>` : ''}</url>\n`;
+        const stamp = lastmod ? `<lastmod>${String(lastmod).split(' ')[0]}</lastmod>` : '';
+        urls += `<url><loc>${baseUrl}/tool/${t.slug}</loc>${stamp}</url>\n`;
+        // "Alternatives to X" is the page that matches a real search intent, and
+        // functions/alternatives/[slug].js renders it with real content. Without
+        // an entry here and no inbound links, nothing would ever crawl it.
+        urls += `<url><loc>${baseUrl}/alternatives/${t.slug}</loc>${stamp}</url>\n`;
       }
       for (const b of blogs.results) {
         const lastmod = b.published_at || '';
