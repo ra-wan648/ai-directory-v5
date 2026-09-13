@@ -44,7 +44,8 @@ jobs:
         run: |
           sleep 5
           W=https://ai-directory-v5-worker.radwanislam648.workers.dev
-          fail=0
+          ok=0
+          bad=0
           for p in \
             "/api/stats" \
             "/api/categories" \
@@ -62,9 +63,13 @@ jobs:
             "/rss.xml" ; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
             echo "  $code  $p"
-            [ "$code" = "200" ] || fail=1
+            if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
           done
-          test "$fail" = "0"
+          echo "warmed $ok, not warmed $bad"
+          # Best effort. A blocked D1 read quota makes these 500, which is the
+          # very thing this step exists to soften - it must not turn the deploy
+          # red. Only a deploy where nothing answers at all is a real failure.
+          test "$ok" != "0"
 
   pages:
     name: Publish site
