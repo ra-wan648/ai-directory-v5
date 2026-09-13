@@ -58,10 +58,13 @@ jobs:
           for p in \
             "/api/stats" \
             "/api/categories" \
-            "/api/tools?limit=6" \
             "/api/tools?limit=6&sort=newest&days=7" \
             "/api/tools?limit=6&featured=1" \
             "/api/tools?limit=6&pricing=free" \
+            "/api/tools?limit=6&category=Open+Source" \
+            "/api/tools?limit=6&source=huggingface" \
+            "/api/tools?limit=6&source=producthunt" \
+            "/api/tools?limit=40" \
             "/api/tools/new?limit=8" \
             "/api/tools/trending?limit=6" \
             "/api/free-tools?limit=6" \
@@ -70,6 +73,13 @@ jobs:
             "/api/prompts?limit=12" \
             "/sitemap.xml" \
             "/rss.xml" ; do
+
+      # Bakes what the homepage sections contain into public/data/sections.json,
+      # a static asset, so the front end can show tools instead of "Could not
+      # load this section." when D1's daily read limit is gone. Runs here, before
+      # the scrapers, so it succeeds while the day's allowance is intact.
+      - name: Bake the homepage snapshot
+        run: python3 scripts/snapshot_sections.py
             code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
             echo "  $code  $p"
             if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
@@ -160,6 +170,9 @@ jobs:
           git config user.name  "ai-directory-bot"
           git config user.email "ai-directory-bot@users.noreply.github.com"
           git add .pipeline-heartbeat
+          # Ship the baked snapshot too: this push is what triggers the Deploy
+          # workflow, which publishes the Pages site.
+          git add public/data/sections.json 2>/dev/null || true
           git commit -m "pipeline heartbeat $(date -u +%Y-%m-%d)" || echo "nothing to commit"
           git push || echo "heartbeat push skipped"
         env:

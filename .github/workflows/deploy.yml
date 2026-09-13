@@ -48,10 +48,13 @@ jobs:
           for p in \
             "/api/stats" \
             "/api/categories" \
-            "/api/tools?limit=6" \
             "/api/tools?limit=6&sort=newest&days=7" \
             "/api/tools?limit=6&featured=1" \
             "/api/tools?limit=6&pricing=free" \
+            "/api/tools?limit=6&category=Open+Source" \
+            "/api/tools?limit=6&source=huggingface" \
+            "/api/tools?limit=6&source=producthunt" \
+            "/api/tools?limit=40" \
             "/api/tools/new?limit=8" \
             "/api/tools/trending?limit=6" \
             "/api/free-tools?limit=6" \

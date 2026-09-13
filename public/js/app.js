@@ -164,12 +164,33 @@ function paintStatic() {
   $('#minitools').innerHTML = MINI.map((m) => '<a href="https://www.toolfk.com" target="_blank" rel="noopener">🔧 ' + esc(m) + '</a>').join('');
 }
 
+/* The pipeline bakes /data/sections.json on every run. It is a plain static
+   asset, so it still loads when D1 has hit its daily read limit - which is the
+   only reason a visitor sees an empty section instead of tools. */
+let SNAP = null;
+async function snapshot() {
+  if (SNAP) return SNAP;
+  try {
+    const r = await fetch('/data/sections.json', { cache: 'no-store' });
+    SNAP = r.ok ? await r.json() : {};
+  } catch (e) { SNAP = {}; }
+  return SNAP;
+}
+function snapKey(q) {
+  return Object.keys(q).sort().map((k) => k + '=' + q[k]).join('&');
+}
+
 async function loadStats() {
   try {
     STATS = await api.stats();
   } catch (e) {
-    $('#heroStats').textContent = 'Live data unavailable';
-    return;
+    const snap = await snapshot();
+    if (snap && snap.stats && snap.stats.total_tools) {
+      STATS = snap.stats;
+    } else {
+      $('#heroStats').textContent = 'Live data unavailable';
+      return;
+    }
   }
   const t = num(STATS.total_tools);
   $('#bannerCount').textContent = t;
@@ -228,13 +249,29 @@ function lazySections() {
 
 async function fillSection(cfg, i, el) {
   const grid = el.querySelector('.grid');
-  try {
-    const d = await api.tools(Object.assign({ limit: 6 }, cfg.q));
-    const tools = d.tools || [];
+  const q = Object.assign({ limit: 6 }, cfg.q);
+  const show = (tools, total, stale) => {
     const c = $('#cnt' + i);
-    if (c) c.textContent = '· ' + num(d.total) + ' ' + (cfg.unit || 'tools');
-    grid.innerHTML = tools.length ? tools.map(cardHTML).join('') : '<div class="colcard" style="grid-column:1/-1;text-align:center;padding:32px"><p style="color:var(--muted);font-size:13px">Nothing in this section yet.</p></div>';
+    if (c) c.textContent = '· ' + num(total) + ' ' + (cfg.unit || 'tools');
+    if (!tools.length) {
+      grid.innerHTML = '<div class="colcard" style="grid-column:1/-1;text-align:center;padding:32px"><p style="color:var(--muted);font-size:13px">Nothing in this section yet.</p></div>';
+      return;
+    }
+    grid.innerHTML = tools.map(cardHTML).join('') + (stale
+      ? '<div class="colcard" style="grid-column:1/-1;padding:10px 14px"><p style="color:var(--muted);font-size:12px;margin:0">Showing the last saved copy \u2014 live data is unavailable right now.</p></div>'
+      : '');
+  };
+  try {
+    const d = await api.tools(q);
+    show(d.tools || [], d.total, false);
   } catch (e) {
+    // Almost always an exhausted D1 read quota. Use the copy the pipeline baked.
+    const snap = await snapshot();
+    const baked = ((snap && snap.sections) || {})[snapKey(q)];
+    if (baked && baked.tools && baked.tools.length) {
+      show(baked.tools, baked.total, true);
+      return;
+    }
     grid.innerHTML = '<div class="colcard" style="grid-column:1/-1;padding:24px"><p style="color:var(--muted);font-size:13px">Could not load this section.</p></div>';
   }
 }
