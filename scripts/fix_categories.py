@@ -55,16 +55,19 @@ MERGE = {
 # keyword -> destination, checked against name + short_desc + description.
 # Order matters: the first match wins, so put the specific ones first.
 RULES = [
-    ("Coding & Dev", r"\b(code|coding|developer|programming|ide|compiler|git|api|sdk|docker|kubernetes|database|sql|devops|debug)\b"),
-    ("Voice & Sound", r"\b(voice|audio|speech|music|podcast|tts|text.to.speech|transcri|sound|sing|singer|dubbing|noise)\b"),
-    ("Video & Animation", r"\b(video|animation|animate|movie|film|clips?|subtitles?|avatar video|reels|shorts|editing)\b"),
-    ("Design & Art", r"\b(image|photo|design|art|logos?|illustration|drawing|paint|render|3d|graphic|wallpaper|upscal|background remov)\b"),
-    ("Writing & Content", r"\b(writ|copywrit|blog|articles?|essays?|content|paraphras|summari[sz]|grammar|translat|documents?|resume|lyrics?)\b"),
-    ("Data & Automation", r"\b(automat|workflow|scrap|data|analytics|dashboard|etl|integration|zapier|agent builder|no.code|spreadsheet|report)\b"),
-    ("Business & Productivity", r"\b(business|crm|sales|invoice|meeting|notes?|tasks?|project manag|hr|recruit|calendar|schedul|support|helpdesk|legal)\b"),
-    ("Education & Research", r"\b(learn|course|study|tutor|quiz|exam|research|papers?|academic|library|student|school|university)\b"),
-    ("Finance", r"\b(finance|fintech|invest|trading|stock|crypto|tax|accounting|payment|budget|expense)\b"),
-    ("Assistants & Agents", r"\b(assistant|chatbot|chat|agent|copilot|companion|answer|q&a|search engine|sidekick)\b"),
+    # Order matters: first match wins, so the specific categories come first.
+    # Every noun carries an optional plural, because "Generate images from a
+    # prompt" matched nothing when only "image" was listed.
+    ("Coding & Dev", r"\b(codes?|coding|developer|developers|programming|ides?|compilers?|git|apis?|sdks?|docker|kubernetes|databases?|sql|devops|debug(ger|ging)?)\b"),
+    ("Voice & Sound", r"\b(voices?|audios?|speech|songs?|music|podcasts?|tts|text.to.speech|transcri(be|ption|pt)|sounds?|singers?|singing|dubbing|noise)\b"),
+    ("Video & Animation", r"\b(videos?|animations?|animat(e|ing)|movies?|films?|clips?|subtitles?|reels|shorts|video editing)\b"),
+    ("Design & Art", r"\b(images?|photos?|designs?|designing|arts?|logos?|illustrations?|drawings?|paintings?|renders?|3d|graphics?|wallpapers?|upscal(e|ing)|background remov(al|e))\b"),
+    ("Writing & Content", r"\b(writ(e|er|ing)|copywrit(er|ing)|blogs?|articles?|essays?|contents?|paraphras(e|ing)|summari[sz]e|summaries|grammar|translat(e|ion|or)|documents?|resumes?|lyrics?|captions?)\b"),
+    ("Data & Automation", r"\b(automat(e|ion|ing)|workflows?|scrap(e|er|ing)|data|analytics|dashboards?|etl|integrations?|zapier|no.?code|spreadsheets?|reports?|insights?)\b"),
+    ("Business & Productivity", r"\b(business|crm|sales|invoices?|meetings?|notes?|tasks?|project manag(e|ement)|hr|recruit(ing|ment)?|calendars?|schedul(e|ing)|support|helpdesks?|legal)\b"),
+    ("Education & Research", r"\b(learn(ing)?|courses?|study|tutors?|quizzes?|exams?|research|papers?|academic|librar(y|ies)|students?|schools?|universit(y|ies))\b"),
+    ("Finance", r"\b(finance|fintech|invest(ing|ment)?|trading|stocks?|crypto|tax(es)?|accounting|payments?|budgets?|expenses?)\b"),
+    ("Assistants & Agents", r"\b(assistants?|chatbots?|chats?|agents?|copilots?|companions?|answers?|q&a|search engines?|sidekicks?)\b"),
 ]
 
 
