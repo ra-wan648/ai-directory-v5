@@ -28,6 +28,15 @@ DB = "ai-directory-db"
 BATCH = 200
 APPLY = "--apply" in sys.argv
 
+# Reasons held back for a manual look, as a comma-separated list. This lets a
+# first pass hide only the unambiguous junk and leaves the judgement calls
+# published until someone has read them. Clear the variable to apply everything.
+SKIP_REASONS = {
+    r.strip().lower()
+    for r in os.environ.get("CLEANUP_SKIP_REASONS", "").split(",")
+    if r.strip()
+}
+
 
 def d1_env():
     env = os.environ.copy()
@@ -131,11 +140,14 @@ def main():
               "Nothing changed; this step is safe to re-run.")
         return 0
 
-    bad, reasons, samples = [], {}, []
+    bad, reasons, samples, held = [], {}, [], {}
     for row in rows:
         name = validate.clean_name(row.get("name"))
         ok, why = validate.is_valid_row(name, row.get("url"))
         if ok:
+            continue
+        if why.lower() in SKIP_REASONS:
+            held[why] = held.get(why, 0) + 1
             continue
         bad.append(row["id"])
         reasons[why] = reasons.get(why, 0) + 1
@@ -146,6 +158,10 @@ def main():
     print(f"  scanned {len(rows)} published row(s); {len(bad)} fail validation")
     for why, n in sorted(reasons.items(), key=lambda kv: -kv[1]):
         print(f"    {why}: {n}")
+    if held:
+        print(f"  held back for review ({sum(held.values())} row(s), still published):")
+        for why, n in sorted(held.items(), key=lambda kv: -kv[1]):
+            print(f"    {why}: {n}")
     if samples:
         print("  examples of what would be hidden:")
         for s in samples:

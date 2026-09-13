@@ -39,6 +39,10 @@ jobs:
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
+          # Stage one only. 'too long' and 'sentence not a name' are judgement
+          # calls that need a human read before they are hidden - clear this
+          # line once they have been reviewed.
+          CLEANUP_SKIP_REASONS: "too long,sentence not a name"
 
       - name: Delete synthetic tools
         run: cd scripts && python delete_synthetic.py
