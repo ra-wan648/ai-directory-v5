@@ -140,3 +140,28 @@ if FAILURES:
         print(f"  - {f}")
     sys.exit(1)
 print(f"ALL SECTIONS PASSED ({CHECKS} checks)")
+
+
+# ── Scraped navigation must not look like a product ─────────────────────────
+# These exact strings were published as tools.
+print("\n[8] is_valid_name - scraped artefacts")
+
+from validate import is_valid_name  # noqa: E402
+
+ARTEFACTS = [
+    "Visit Deepl website",
+    "View PDF",
+    "Best AI Tools Directory",
+    "Newsletter Archive",
+    "Merchandise",
+    "Shop",
+]
+for n in ARTEFACTS:
+    ok, why = is_valid_name(n)
+    check(f"hides {n!r}", ok, False)
+
+REAL = ["bika.ai", "Hugo", "Cursor", "OpenAI", "Kaiber", "DeepL", "Runway",
+        "Descript", "Phind", "Perplexity"]
+for n in REAL:
+    ok, why = is_valid_name(n)
+    check(f"keeps {n!r}", ok, True)

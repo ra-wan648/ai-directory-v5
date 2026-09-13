@@ -187,6 +187,17 @@ def clean_name(raw):
     return name.strip(" \t'\"“”‘’;:|,-–—.")
 
 
+# Scraped navigation and page furniture, not product names. Taken from rows that
+# were actually published: "Visit Deepl website", "View PDF", "Best AI Tools
+# Directory", "Newsletter Archive", "Merchandise", "Pricing".
+_SCRAPED_ARTEFACT_RE = re.compile(
+    r"^(visit|view|see|read|open|click|go to)\s+.{0,40}\b(site|website|page|pdf|more|details|link|now)\b"
+    r"|^(best|top)\s+[\w\s]{0,24}(ai\s+)?(tools?|director(y|ies))\b"
+    r"|^(newsletter|newsletters|merchandise|shop|pricing|plans|terms|privacy|cookies?|contact|about us|blog|login|sign ?up)\b"
+    r"|\bdirectory\b$"
+)
+
+
 def is_valid_name(name):
     """Should this row be published? Returns (ok, reason)."""
     n = (name or '').strip()
@@ -199,6 +210,8 @@ def is_valid_name(name):
     low = n.lower()
     if low in NAV_WORDS:
         return False, 'nav word'
+    if _SCRAPED_ARTEFACT_RE.search(low):
+        return False, 'scraped artefact'
     if _URL_RE.search(n):
         return False, 'is a url'
     if _DOMAIN_RE.match(n):

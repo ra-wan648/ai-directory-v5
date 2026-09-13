@@ -231,7 +231,19 @@ function currentParams(page) {
 }
 
 /* ======================= article / card markup ======================= */
-const logoHTML = (t) => '<div class="logo">' + iconOf(t) + '</div>';
+/* The card used to show only a category emoji, so a tool with an unknown
+   category rendered an empty box. Show the site's favicon on top of the emoji:
+   the emoji stays visible until the image loads, and if the image never loads
+   the emoji is still there. */
+function logoHTML(t) {
+  const emoji = iconOf(t);
+  const host = domainOf(t.url || '');
+  if (!t.logo_url && !host) return '<div class="logo">' + emoji + '</div>';
+  const src = t.logo_url || ('https://www.google.com/s2/favicons?domain=' + encodeURIComponent(host) + '&sz=64');
+  return '<div class="logo"><span class="lemoji">' + emoji + '</span>'
+    + '<img src="' + esc(src) + '" alt="" loading="lazy" width="28" height="28" '
+    + 'onload="this.previousElementSibling.style.display=\'none\'" onerror="this.remove()"></div>';
+}
 
 function cardHTML(t) {
   const featured = Number(t.featured) === 1;
@@ -442,9 +454,19 @@ async function loadExtras() {
       + '<p class="catmore"><a href="/tools">Browse all tools →</a></p></section>'
     + (news.length ? '<section class="sec"><div class="sechead"><span class="ic">📰</span><span class="t">Latest News</span>'
       + '<span class="c">· ' + num(news.length) + ' recent</span><a class="all" href="#blog">All posts →</a></div>'
-      + '<div class="cols4 news">' + news.map((x) => '<div class="colcard" data-blog="' + esc(x.slug) + '">'
-        + '<div class="thumb" style="background:var(--amber-soft)">📰</div><div class="nbody"><span class="k">News</span>'
-        + '<h5>' + esc(x.title) + '</h5><time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>').join('') + '</div></section>' : '')
+      // Rows without a title used to render as an empty card with just the NEWS
+      // label, which is what the homepage was showing. Fall back to the meta
+      // description, drop anything still empty, and link the heading so the
+      // article is reachable without JavaScript.
+      + '<div class="cols4 news">' + news.map((x) => {
+          const t = x.title || String(x.meta_description || '').replace(/\s+/g, ' ').slice(0, 70);
+          if (!t) return '';
+          const sl = encodeURIComponent(x.slug || '');
+          return '<div class="colcard" data-blog="' + esc(x.slug) + '">'
+            + '<div class="thumb" style="background:var(--amber-soft)">📰</div><div class="nbody"><span class="k">News</span>'
+            + '<h5><a href="/post/' + sl + '">' + esc(t) + '</a></h5>'
+            + '<time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>';
+        }).join('') + '</div></section>' : '')
     + (prompts.length ? '<section class="sec alt" id="prompts"><div class="sechead"><span class="ic">💬</span><span class="t">Prompts</span>'
       + '<span class="c">· ' + num(STATS ? STATS.total_prompts : prompts.length) + ' saved</span></div>'
       + '<div class="cols4">' + prompts.map((x) => '<div class="pcard" data-prompt-id="' + esc(x.id) + '"><h5>' + esc(x.title) + '</h5>'
