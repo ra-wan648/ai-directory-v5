@@ -74,9 +74,15 @@ jobs:
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
-          # Stage one only - see pipeline.yml. Clear once the held reasons have
-          # been reviewed.
-          CLEANUP_SKIP_REASONS: "too long,sentence not a name,directory page"
+          # Only Product Hunt redirects are still held: they are real products
+          # whose url needs fetching from Product Hunt (it answers 403 to a
+          # server-side request, so it needs a browser). The other held reasons
+          # were reviewed on 13 Sep and are hidden from now on - 907 directory
+          # pages turned out to be 479 real PH products plus 428 navigation
+          # artefacts like "View BlitzReels" and "Newsletter Archive", and the
+          # 629 "too long" and 80 "sentence not a name" rows were headlines and
+          # URL-shaped names.
+          CLEANUP_SKIP_REASONS: "producthunt redirect"
 
       - name: Fill missing descriptions
         run: cd scripts && python llm_fill.py

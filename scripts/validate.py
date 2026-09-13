@@ -105,10 +105,18 @@ TRACKING_HOSTS = (
 # rows are real products with the wrong URL, not junk, and each one needs its
 # real website fetched rather than deleted.
 DIRECTORY_HOSTS = (
-    'producthunt.com', 'futuretools.io', 'toolify.ai', 'theresanaiforthat.com',
+    'futuretools.io', 'toolify.ai', 'theresanaiforthat.com',
     'futurepedia.io', 'aixploria.com', 'allthingsai.com', 'toolfk.com',
     'insidr.ai', 'topai.tools',
 )
+
+# Product Hunt redirect links get their own reason. Reviewed on 13 Sep: of the
+# 907 held "directory page" rows, 479 were producthunt.com/r/... - real products
+# whose url just needs fetching from Product Hunt - while the other 428 were
+# genuine junk such as "View BlitzReels", "Newsletter Archive" and "Merchandise"
+# scraped off directory navigation. Hiding them together would have thrown away
+# 479 real tools, so the two are now distinguishable.
+PRODUCTHUNT_HOSTS = ('producthunt.com',)
 
 
 def _host_is(host, domain):
@@ -221,6 +229,14 @@ def is_directory_host(url):
     return any(_host_is(host, d) for d in DIRECTORY_HOSTS)
 
 
+def is_producthunt_redirect(url):
+    """True when the URL is a Product Hunt page rather than the product's site."""
+    host = host_of(url)
+    if not host:
+        return False
+    return any(_host_is(host, d) for d in PRODUCTHUNT_HOSTS)
+
+
 def is_valid_row(name, url=''):
     """Should this row be published? Checks the name AND the host.
 
@@ -233,6 +249,8 @@ def is_valid_row(name, url=''):
         return False, why
     if is_news_host(url):
         return False, 'news/article host'
+    if is_producthunt_redirect(url):
+        return False, 'producthunt redirect'
     if is_directory_host(url):
         return False, 'directory page'
     return True, ''

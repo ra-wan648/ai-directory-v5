@@ -28,6 +28,10 @@ DB = "ai-directory-db"
 BATCH = 200
 APPLY = "--apply" in sys.argv
 
+# How many held rows to print for review. They go to stdout, which lands in
+# the workflow log, so the review can be done without another D1 read.
+REPORT_HELD = int(os.environ.get("CLEANUP_REPORT_HELD", "150"))
+
 # Reasons held back for a manual look, as a comma-separated list. This lets a
 # first pass hide only the unambiguous junk and leaves the judgement calls
 # published until someone has read them. Clear the variable to apply everything.
@@ -45,6 +49,11 @@ def d1_env():
     )
     env["CLOUDFLARE_ACCOUNT_ID"] = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
     return env
+
+
+class D1Error(RuntimeError):
+    """A D1 call that did not return success. Never swallowed: a write that did
+    not happen must not be reported as one that did."""
 
 
 def _database_id():
@@ -90,11 +99,9 @@ def run_sql_http(sql, timeout=300):
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             data = json.loads(resp.read())
     except Exception as e:
-        print(f"  ! D1 HTTP request failed: {str(e)[:200]}")
-        return []
+        raise D1Error(f"D1 HTTP request failed: {str(e)[:200]}")
     if not data.get("success"):
-        print(f"  ! D1 error: {str(data.get('errors'))[:200]}")
-        return []
+        raise D1Error(f"D1 error: {str(data.get('errors'))[:200]}")
     return (data["result"][0].get("results") or [])
 
 
@@ -110,14 +117,12 @@ def run_sql(sql, timeout=300):
     if raw and raw[0] not in "[{":
         starts = [p for p in (raw.find("["), raw.find("{")) if p >= 0]
         if not starts:
-            print("  ! no JSON from wrangler:", (raw or (r.stderr or ""))[:300])
-            return []
+            raise D1Error(f"no JSON from wrangler: {(raw or (r.stderr or ''))[:300]}")
         raw = raw[min(starts):]
     try:
         data = json.loads(raw)
     except Exception as e:
-        print(f"  ! unparseable wrangler output ({e}): {(r.stderr or '')[:300]}")
-        return []
+        raise D1Error(f"unparseable wrangler output ({e}): {(r.stderr or '')[:300]}")
     if isinstance(data, list) and data and isinstance(data[0], dict):
         return data[0].get("results") or []
     if isinstance(data, dict):
@@ -130,7 +135,11 @@ def main():
 
     # url is selected too: a name-only check let news articles through, because a
     # headline can look like a plausible product name (see validate.is_valid_row).
-    rows = run_sql("SELECT id,name,url FROM tools WHERE status='published'")
+    try:
+        rows = run_sql("SELECT id,name,url FROM tools WHERE status='published'")
+    except D1Error as e:
+        print(f"  ! {e}")
+        rows = []
     if not rows:
         # A blocked read (D1's free tier resets at midnight UTC) reaches here.
         # Deliberately exit 0: nothing was changed, and failing the step would
@@ -141,6 +150,7 @@ def main():
         return 0
 
     bad, reasons, samples, held = [], {}, [], {}
+    held_rows = []
     for row in rows:
         name = validate.clean_name(row.get("name"))
         ok, why = validate.is_valid_row(name, row.get("url"))
@@ -148,6 +158,9 @@ def main():
             continue
         if why.lower() in SKIP_REASONS:
             held[why] = held.get(why, 0) + 1
+            if len(held_rows) < REPORT_HELD:
+                host = validate.host_of(row.get("url")) or "-"
+                held_rows.append(f"{row['id']} [{why}] {name[:60]!r} <{host}>")
             continue
         bad.append(row["id"])
         reasons[why] = reasons.get(why, 0) + 1
@@ -162,6 +175,12 @@ def main():
         print(f"  held back for review ({sum(held.values())} row(s), still published):")
         for why, n in sorted(held.items(), key=lambda kv: -kv[1]):
             print(f"    {why}: {n}")
+        # Printed so the held rows can be reviewed from the run log, without
+        # needing a D1 read of the whole table on a machine that has a quota.
+        if held_rows:
+            print(f"  held rows (first {len(held_rows)} of {sum(held.values())}):")
+            for s in held_rows:
+                print(f"    {s}")
     if samples:
         print("  examples of what would be hidden:")
         for s in samples:
@@ -175,12 +194,26 @@ def main():
         return 0
 
     done = 0
+    failed = 0
     for i in range(0, len(bad), BATCH):
         chunk = bad[i:i + BATCH]
         ids = ",".join(str(x) for x in chunk)
-        run_sql(f"UPDATE tools SET status='rejected' WHERE id IN ({ids});")
+        try:
+            run_sql(f"UPDATE tools SET status='rejected' WHERE id IN ({ids});")
+        except D1Error as e:
+            # Do not count it. The previous version added len(chunk) here no
+            # matter what, so a fully blocked run still printed
+            # "done - 1214 row(s) set to status='rejected'" and looked like it
+            # had cleaned the table.
+            failed += len(chunk)
+            print(f"  ! batch failed, {len(chunk)} row(s) NOT hidden: {e}")
+            continue
         done += len(chunk)
         print(f"  hidden {done}/{len(bad)}")
+    if failed:
+        print(f"  {done} row(s) set to status='rejected'; {failed} row(s) were NOT "
+              f"hidden because D1 refused the write. Re-run on a fresh quota.")
+        return 1
     print(f"  done - {done} row(s) set to status='rejected' (reversible).")
     return 0
 

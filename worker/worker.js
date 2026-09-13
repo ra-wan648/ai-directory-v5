@@ -996,19 +996,27 @@ Sitemap: ${baseUrl}/sitemap.xml`;
     // whole tools table plus the listing. Cache the pair together.
     return cacheFetch(null, env, 'tag-v1?' + hashKey(`${tag.toLowerCase()}|${page}|${limit}`),
                       1800, async () => {
-      const like = `%${tag.toLowerCase()}%`;
+      const t = tag.toLowerCase().trim();
+      // tags is a comma-separated list - "ai tools,free", "ai-tools,insidr",
+      // "ai,futurepedia" - so match a whole token. The old LIKE '%ai%' also
+      // matched any tag that merely contains those letters ("email" matched
+      // /tag/ai), which is why the page advertised almost the whole directory
+      // as carrying the tag.
+      const token = `%,${t},%`;
 
       const countResult = await env.DB.prepare(
         `SELECT COUNT(*) as total FROM tools
-         WHERE (LOWER(tags) LIKE ? OR LOWER(category) = ?) AND status = 'published'`
-      ).bind(like, tag.toLowerCase()).first();
+         WHERE ((',' || LOWER(COALESCE(tags, '')) || ',') LIKE ? OR LOWER(category) = ?)
+           AND status = 'published'`
+      ).bind(token, t).first();
 
       const offset = (page - 1) * limit;
       const result = await env.DB.prepare(
         `SELECT * FROM tools
-         WHERE (LOWER(tags) LIKE ? OR LOWER(category) = ?) AND status = 'published'
+         WHERE ((',' || LOWER(COALESCE(tags, '')) || ',') LIKE ? OR LOWER(category) = ?)
+           AND status = 'published'
          ORDER BY views DESC LIMIT ? OFFSET ?`
-      ).bind(like, tag.toLowerCase(), limit, offset).all();
+      ).bind(token, t, limit, offset).all();
 
       return okResponse({
         tools: result.results,
