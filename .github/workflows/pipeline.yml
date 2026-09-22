@@ -114,7 +114,14 @@ jobs:
       # the same reason.
       - name: Bake the offline dataset
         if: always()
+        # snapshot_offline.py queries D1 directly and exits with "CF_API_TOKEN is
+        # not set" without a token. This step had no env block, so the bake failed
+        # on every run it ever attempted - which is why offline.json on the live
+        # site is still the 11-tool partial seed written on 13 Sep.
         run: python3 scripts/snapshot_offline.py
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
 
       # validate.py keeps new junk out; this hides the rows that got in before
       # those rules existed. Soft-hide (status='rejected'), so it is reversible
