@@ -16,7 +16,13 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 feedparser playwright apify-client python-telegram-bot
+        run: pip install requests beautifulsoup4 feedparser playwright apify-client python-telegram-bot pyyaml
+      # Guards against the failure mode that cost eight nights: a step's shell
+      # block truncated while the YAML stayed valid, so the run started, bash
+      # died inside one step, and every step below it was skipped in silence.
+      # Catches duplicate keys too.
+      - name: Lint the workflow files
+        run: python3 scripts/lint_workflows.py
       - name: Install wrangler
         run: npm install -g wrangler
       # Idempotent: every statement is IF NOT EXISTS. Applying it each pass
@@ -52,6 +58,13 @@ jobs:
       # the day's spending starts. Best effort on purpose: a blocked quota must
       # not turn the run red on top of everything else.
       - name: Warm the public cache
+        # Best effort, as the note above says. On 14 Sep this step lost its loop
+        # body and `done`, so bash died with "syntax error: unexpected end of
+        # file" - and because it sat above the taxonomy, the two bakes, the junk
+        # cleanup, the scrapers and the LLM fill, every one of those silently
+        # stopped running for eight nights. A cache warmer must never be able to
+        # take the pipeline down.
+        continue-on-error: true
         run: |
           W=https://ai-directory-v5-worker.radwanislam648.workers.dev
           ok=0; bad=0
@@ -73,6 +86,11 @@ jobs:
             "/api/prompts?limit=12" \
             "/sitemap.xml" \
             "/rss.xml" ; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
+            echo "  $code  $p"
+            if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
+          done
+          echo "warmed $ok, not warmed $bad"
 
       # Runs before the bakes, so the snapshot already carries the tidied
       # categories. Deterministic and free: no model calls.
@@ -91,11 +109,6 @@ jobs:
       # the same reason.
       - name: Bake the offline dataset
         run: python3 scripts/snapshot_offline.py
-            code=$(curl -s -o /dev/null -w '%{http_code}' "$W$p")
-            echo "  $code  $p"
-            if [ "$code" = "200" ]; then ok=$((ok+1)); else bad=$((bad+1)); fi
-          done
-          echo "warmed $ok, not warmed $bad"
 
       # validate.py keeps new junk out; this hides the rows that got in before
       # those rules existed. Soft-hide (status='rejected'), so it is reversible
