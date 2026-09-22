@@ -29,7 +29,15 @@ ACCOUNT = os.environ.get("CF_ACCOUNT_ID", "2acb9835655d0f4183eb7f899580f6ab")
 DB_ID = os.environ.get("CF_D1_ID", "ff26faf5-3c7c-445a-a249-6c96fedddfdc")
 APPLY = "--apply" in sys.argv
 
-CATCH_ALL = "AI Tools"
+# Buckets to re-examine from their own text. "Assistants & Agents" is here
+# because the first deploy of this script ran the merge before the
+# reclassification, which renamed all 3,769 catch-all rows to that name and left
+# the reclassification with an empty set. On the live database those rows are
+# now indistinguishable from genuine assistant tools, so the whole bucket is
+# re-read from name + description. Genuine assistants match the assistant rule
+# and stay put.
+RECLASSIFY = ["AI Tools", "Assistants & Agents"]
+CATCH_ALL = "AI Tools"  # kept for the merge guard below
 
 # near-duplicates -> one intent-based name
 MERGE = {
@@ -138,25 +146,18 @@ def main():
                   [name, slugify(name), "🧠"])
         print(f"    registered {len(missing)}")
 
-    # 2. merge the near-duplicates
-    merged = 0
-    for old, new in MERGE.items():
-        n = next((r["n"] for r in before if r["category"] == old), 0)
-        if not n or old == new:
-            continue
-        if APPLY:
-            query("UPDATE tools SET category = ? WHERE status='published' AND category = ?", [new, old])
-        merged += n
-        print(f"    {old!r} -> {new!r} ({n} row(s))")
-    print(f"  merged {merged} row(s) onto {len(set(MERGE.values()))} intent-based categories")
-
-    # 3. give the catch-all rows a real category, from their own text
-    rows = query("SELECT id, name, COALESCE(short_desc,'') AS s, COALESCE(description,'') AS d "
-                 "FROM tools WHERE status='published' AND category = ?", [CATCH_ALL])
-    if rows is None:
-        print("  could not read the catch-all rows")
-        return 1
-    print(f"  reclassifying {len(rows)} catch-all row(s)")
+    # 2. give the catch-all rows a real category, from their own text
+    rows = []
+    for bucket in RECLASSIFY:
+        got = query("SELECT id, name, COALESCE(short_desc,'') AS s, COALESCE(description,'') AS d "
+                    "FROM tools WHERE status='published' AND category = ?", [bucket])
+        if got is None:
+            print(f"  could not read the {bucket!r} rows")
+            return 1
+        if got:
+            print(f"    {bucket!r}: {len(got)} row(s) to re-examine")
+        rows.extend(got)
+    print(f"  reclassifying {len(rows)} row(s)")
     counts, samples = Counter(), {}
     for r in rows:
         dest = pick(f"{r['name']} {r['s']} {r['d']}")
@@ -172,6 +173,44 @@ def main():
         print(f"    samples for {dest}:")
         for nm in samples[dest][:8]:
             print(f"      {nm!r}")
+
+    # 3. merge what is left of the near-duplicates onto one intent-based name.
+    #
+    # This runs *after* the catch-all has been reclassified, and the order
+    # matters: "AI Tools" is listed in MERGE, so running the merge first renamed
+    # all 3,769 catch-all rows to "Assistants & Agents" and left step 2 with an
+    # empty set to work on. That would have parked 48% of the directory in one
+    # category - the exact problem this script exists to fix.
+    merged = 0
+    for old, new in MERGE.items():
+        if old == CATCH_ALL:
+            continue  # emptied by the reclassification above
+        n = next((r["n"] for r in before if r["category"] == old), 0)
+        if not n or old == new:
+            continue
+        if APPLY:
+            query("UPDATE tools SET category = ? WHERE status='published' AND category = ?", [new, old])
+        merged += n
+        print(f"    {old!r} -> {new!r} ({n} row(s))")
+    print(f"  merged {merged} row(s) onto {len(set(MERGE.values()))} intent-based categories")
+
+    # 4. reconcile the categories table with the tools table. The endpoint that
+    #    feeds the homepage grid aggregates from tools, but the sitemap reads this
+    #    table, so a name that nothing uses any more has to go and the counts
+    #    have to be recomputed.
+    live = query("SELECT DISTINCT category AS name FROM tools WHERE status='published' "
+                 "AND category IS NOT NULL AND category != ''")
+    if live is not None and APPLY:
+        names = {r["name"] for r in live}
+        for r in (query("SELECT name FROM categories") or []):
+            if r["name"] not in names:
+                query("DELETE FROM categories WHERE name = ?", [r["name"]])
+                print(f"    dropped stale category row {r['name']!r}")
+        for name in names:
+            n = query("SELECT COUNT(*) AS n FROM tools WHERE status='published' AND category = ?", [name])
+            if n:
+                query("UPDATE categories SET tool_count = ? WHERE name = ?", [n[0]["n"], name])
+        print(f"    categories table reconciled ({len(names)} live name(s))")
 
     after = query("SELECT category, COUNT(*) AS n FROM tools WHERE status='published' "
                   "GROUP BY category ORDER BY n DESC")
