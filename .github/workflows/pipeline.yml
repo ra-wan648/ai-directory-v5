@@ -95,25 +95,32 @@ jobs:
       # Runs before the bakes, so the snapshot already carries the tidied
       # categories. Deterministic and free: no model calls.
       - name: Fix the category taxonomy
+        if: always()
         run: python3 scripts/fix_categories.py --apply
+        env:
+          CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
 
       # Bakes what the homepage sections contain into public/data/sections.json,
       # a static asset, so the front end can show tools instead of "Could not
       # load this section." when D1's daily read limit is gone. Runs here, before
       # the scrapers, so it succeeds while the day's allowance is intact.
       - name: Bake the homepage snapshot
+        if: always()
         run: python3 scripts/snapshot_sections.py
 
       # Bakes the whole directory into public/data/offline.json, the static copy
       # the browser falls back to when D1's read limit is gone. Also early, for
       # the same reason.
       - name: Bake the offline dataset
+        if: always()
         run: python3 scripts/snapshot_offline.py
 
       # validate.py keeps new junk out; this hides the rows that got in before
       # those rules existed. Soft-hide (status='rejected'), so it is reversible
       # and the scraped payload stays in the row.
       - name: Hide junk rows
+        if: always()
         # Never fatal: if D1's read limit is exhausted this is a no-op, and the
         # rest of the run should still go ahead.
         continue-on-error: true
@@ -132,6 +139,7 @@ jobs:
           CLEANUP_SKIP_REASONS: "producthunt redirect"
 
       - name: Delete synthetic tools
+        if: always()
         run: cd scripts && python delete_synthetic.py
         env:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
@@ -141,6 +149,7 @@ jobs:
       # more. Keep them gapless: the loader stops at the first missing one, and an
       # unset secret arrives as an empty string, which stops the scan.
       - name: Apify scraper
+        if: always()
         run: cd scripts && python apify_scraper.py
         env:
           APIFY_KEY_1: ${{secrets.APIFY_KEY_1}}
@@ -154,6 +163,7 @@ jobs:
           CF_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
       - name: Fresh data pipeline
+        if: always()
         run: cd scripts && python fresh_data_pipeline.py
         env:
           PRODUCT_HUNT_KEY: ${{secrets.PRODUCT_HUNT_KEY}}
@@ -166,6 +176,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
       # Optional enrichment. Skips itself cleanly when MANIFEST_API_KEY is absent.
       - name: LLM fill missing tool data
+        if: always()
         run: cd scripts && python llm_fill.py
         env:
           MANIFEST_API_KEY: ${{secrets.MANIFEST_API_KEY}}
