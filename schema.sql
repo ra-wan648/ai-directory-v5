@@ -5,7 +5,7 @@ CREATE TABLE tools (
   description TEXT,
   short_desc TEXT,
   category TEXT,
-  pricing TEXT CHECK(pricing IN ('free','freemium','paid')),
+  pricing TEXT CHECK(pricing IN ('free','freemium','paid') OR pricing IS NULL),
   url TEXT,
   logo_url TEXT,
   logo_type TEXT DEFAULT 'favicon',
@@ -17,7 +17,11 @@ CREATE TABLE tools (
   tag TEXT DEFAULT 'regular',
   status TEXT DEFAULT 'published',
   last_updated DATETIME,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  description_full TEXT,
+  features TEXT,
+  pricing_detail TEXT,
+  llm_filled INTEGER DEFAULT 0
 );
 
 CREATE TABLE blogs (
@@ -80,18 +84,18 @@ CREATE TABLE submitted_tools (
 
 -- SEED CATEGORIES
 INSERT INTO categories (name, slug, icon) VALUES
-  ('Writing', 'writing', '✍️'),
-  ('Coding', 'coding', '💻'),
-  ('Image', 'image', '🎨'),
-  ('Video', 'video', '🎬'),
-  ('Marketing', 'marketing', '📣'),
-  ('Productivity', 'productivity', '⚡'),
-  ('Research', 'research', '🔍'),
-  ('Audio', 'audio', '🎵'),
-  ('Chat', 'chat', '💬'),
-  ('Business', 'business', '💼'),
-  ('Automation', 'automation', '🤖'),
-  ('Analytics', 'analytics', '📊');
+  ('Assistants & Agents', 'assistants-agents', '🤖'),
+  ('Coding & Dev', 'coding-dev', '💻'),
+  ('Design & Art', 'design-art', '🎨'),
+  ('Video & Animation', 'video-animation', '🎬'),
+  ('Voice & Sound', 'voice-sound', '🎵'),
+  ('Writing & Content', 'writing-content', '✍️'),
+  ('Business & Productivity', 'business-productivity', '💼'),
+  ('Data & Automation', 'data-automation', '⚙️'),
+  ('Education & Research', 'education-research', '🔍'),
+  ('Finance', 'finance', '💰'),
+  ('Health', 'health', '⚕️'),
+  ('Other', 'other', '🧠');
 
 -- SEED TOOLS (10 real tools)
 INSERT INTO tools (name, slug, short_desc, description, category, pricing, url, logo_type, tags, featured, tag) VALUES

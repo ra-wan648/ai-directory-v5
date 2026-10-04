@@ -128,13 +128,14 @@ def batch_insert(tools_batch):
         slug = escape_sql(tool['slug'])
         desc = escape_sql((tool.get('description', '') or '')[:2000])
         short_desc = escape_sql((tool.get('short_desc', '') or '')[:255])
-        category = escape_sql(tool.get('category', 'AI Tools'))
-        pricing = escape_sql(tool.get('pricing', 'free'))
+        category = escape_sql(validate.canonical_category(tool.get('category')))
+        raw_pricing = str(tool.get('pricing') or '').lower()
+        pricing_sql = "'" + escape_sql(raw_pricing) + "'" if raw_pricing in ('free', 'freemium', 'paid') else 'NULL'
         url = escape_sql(tool['website_url'])
         logo = escape_sql(tool.get('logo_url', ''))
         tags = escape_sql(tool.get('tags', 'ai'))
         created = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-        values.append(f"('{name}', '{slug}', '{desc}', '{short_desc}', '{category}', '{pricing}', '{url}', '{logo}', 'favicon', '{tags}', 'published', '{created}')")
+        values.append(f"('{name}', '{slug}', '{desc}', '{short_desc}', '{category}', {pricing_sql}, '{url}', '{logo}', 'favicon', '{tags}', 'published', '{created}')")
 
     if not values:
         return 0, 0
@@ -207,7 +208,7 @@ def looks_like_tool_text(text):
 
 
 def batch_insert_blogs(blogs_batch):
-    """Batch insert articles into the blogs table."""
+    """Batch insert articles into the blogs table as Telegram-pending rows."""
     if not blogs_batch:
         return 0, 0
     env = d1_env()
@@ -220,7 +221,9 @@ def batch_insert_blogs(blogs_batch):
         meta = escape_sql(blog.get('meta_description', '')[:255])
         cat = escape_sql(blog.get('category', 'news'))
         tool_slug = escape_sql(blog.get('tool_slug', ''))
-        values.append(f"('{title}', '{slug}', '{content}', '{meta}', '{cat}', '{tool_slug}', 'published', '{now}', '{now}')")
+        # Every discovered article enters the Telegram review queue. Publishing is
+        # a deliberate admin action in the Worker webhook, never an ingestion side effect.
+        values.append(f"('{title}', '{slug}', '{content}', '{meta}', '{cat}', '{tool_slug}', 'pending', NULL, '{now}')")
 
     if not values:
         return 0, 0
@@ -1059,6 +1062,7 @@ def main():
                 rejected[why] = rejected.get(why, 0) + 1
                 continue
             t['slug'] = validate.normalize_slug(t['name'], t.get('slug'))
+            t['category'] = validate.canonical_category(t.get('category'))
             # Only insert to tools table if URL is a real tool website.
             if not is_real_tool_url(url):
                 continue

@@ -250,6 +250,36 @@ def is_producthunt_redirect(url):
     return any(_host_is(host, d) for d in PRODUCTHUNT_HOSTS)
 
 
+CANONICAL_CATEGORIES = (
+    'Assistants & Agents', 'Coding & Dev', 'Design & Art',
+    'Video & Animation', 'Voice & Sound', 'Writing & Content',
+    'Business & Productivity', 'Data & Automation',
+    'Education & Research', 'Finance', 'Health', 'Other',
+)
+
+_CATEGORY_ALIASES = {
+    'ai assistant': 'Assistants & Agents', 'assistants': 'Assistants & Agents',
+    'chat': 'Assistants & Agents', 'ai tools': 'Other',
+    'coding': 'Coding & Dev', 'open source': 'Coding & Dev',
+    'image': 'Design & Art', 'design': 'Design & Art',
+    'video': 'Video & Animation', 'audio': 'Voice & Sound',
+    'writing': 'Writing & Content', 'content': 'Writing & Content',
+    'business': 'Business & Productivity', 'productivity': 'Business & Productivity',
+    'marketing': 'Business & Productivity', 'analytics': 'Data & Automation',
+    'automation': 'Data & Automation', 'data': 'Data & Automation',
+    'education': 'Education & Research', 'research': 'Education & Research',
+    'finance': 'Finance', 'health': 'Health',
+}
+
+
+def canonical_category(value):
+    """Return the one category vocabulary used by new ingestion rows."""
+    raw = str(value or '').strip()
+    if raw in CANONICAL_CATEGORIES:
+        return raw
+    return _CATEGORY_ALIASES.get(raw.lower(), 'Other')
+
+
 def is_valid_row(name, url=''):
     """Should this row be published? Checks the name AND the host.
 
@@ -266,6 +296,8 @@ def is_valid_row(name, url=''):
         return False, 'producthunt redirect'
     if is_directory_host(url):
         return False, 'directory page'
+    if not host_of(url):
+        return False, 'missing or invalid url'
     return True, ''
 
 
@@ -290,7 +322,8 @@ def filter_rows(rows, name_key='name', slug_key='slug'):
     kept, reasons = [], {}
     for row in rows:
         cleaned = clean_name(row.get(name_key))
-        ok, why = is_valid_name(cleaned)
+        row_url = row.get('url') or row.get('website_url') or ''
+        ok, why = is_valid_row(cleaned, row_url) if row_url else is_valid_name(cleaned)
         if not ok:
             reasons[why] = reasons.get(why, 0) + 1
             continue

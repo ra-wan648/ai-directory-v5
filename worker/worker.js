@@ -1,7 +1,7 @@
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Headers': 'Content-Type, X-Internal-Key',
   'Content-Type': 'application/json'
 };
 
@@ -28,7 +28,7 @@ const withCors = (response) => {
   const next = new Response(response.body, response);
   next.headers.set('Access-Control-Allow-Origin', '*');
   next.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  next.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  next.headers.set('Access-Control-Allow-Headers', 'Content-Type, X-Internal-Key');
   return next;
 };
 
@@ -42,7 +42,32 @@ async function getJsonBody(request) {
 
 function isInternal(request, env) {
   const key = request.headers.get('X-Internal-Key') || '';
-  return key === env.INTERNAL_API_KEY;
+  return Boolean(env.INTERNAL_API_KEY) && key === env.INTERNAL_API_KEY;
+}
+
+const CANONICAL_CATEGORIES = new Set([
+  'Assistants & Agents', 'Coding & Dev', 'Design & Art', 'Video & Animation',
+  'Voice & Sound', 'Writing & Content', 'Business & Productivity',
+  'Data & Automation', 'Education & Research', 'Finance', 'Health', 'Other'
+]);
+const CATEGORY_ALIASES = {
+  'ai assistant': 'Assistants & Agents', assistants: 'Assistants & Agents', chat: 'Assistants & Agents',
+  'ai tools': 'Other', coding: 'Coding & Dev', 'open source': 'Coding & Dev',
+  image: 'Design & Art', design: 'Design & Art', video: 'Video & Animation', audio: 'Voice & Sound',
+  writing: 'Writing & Content', content: 'Writing & Content', business: 'Business & Productivity',
+  productivity: 'Business & Productivity', marketing: 'Business & Productivity', analytics: 'Data & Automation',
+  automation: 'Data & Automation', data: 'Data & Automation', education: 'Education & Research',
+  research: 'Education & Research', finance: 'Finance', health: 'Health'
+};
+function canonicalCategory(value) {
+  const raw = String(value || '').trim();
+  return CANONICAL_CATEGORIES.has(raw) ? raw : (CATEGORY_ALIASES[raw.toLowerCase()] || 'Other');
+}
+function validToolUrl(value) {
+  try {
+    const u = new URL(String(value || ''));
+    return u.protocol === 'https:' || u.protocol === 'http:';
+  } catch (e) { return false; }
 }
 
 // A second copy of every cached response, kept for a week. It is only ever read
@@ -323,8 +348,8 @@ const handler = {
         return jsonError('Unauthorized', 401);
       }
       switch (pathname) {
-        case '/api/internal/add-tool':
-          return this.addTool(env, await getJsonBody(request));
+          case '/api/internal/add-tool':
+           return this.addTool(env, await getJsonBody(request), 'published');
         case '/api/internal/add-blog':
           return this.addBlog(env, await getJsonBody(request));
         case '/api/internal/add-prompt':
@@ -765,7 +790,15 @@ const handler = {
          GROUP BY category
          ORDER BY tool_count DESC`
       ).all();
-      return okResponse({ categories: result.results });
+      const merged = new Map();
+      for (const row of (result.results || [])) {
+        const category = canonicalCategory(row.category);
+        merged.set(category, (merged.get(category) || 0) + Number(row.tool_count || 0));
+      }
+      const categories = [...merged.entries()]
+        .map(([category, tool_count]) => ({ category, tool_count }))
+        .sort((a, b) => b.tool_count - a.tool_count);
+      return okResponse({ categories });
     });
   },
 
@@ -786,7 +819,19 @@ const handler = {
             `SELECT COUNT(*) as c FROM prompts WHERE status = 'published'`
           ).first(),
           env.DB.prepare(
-            `SELECT COUNT(*) as c FROM categories`
+            `SELECT COUNT(DISTINCT CASE
+              WHEN category IN ('Chat','AI Assistant','Assistants') THEN 'Assistants & Agents'
+              WHEN category IN ('Coding','Open Source') THEN 'Coding & Dev'
+              WHEN category IN ('Image','Design') THEN 'Design & Art'
+              WHEN category = 'Video' THEN 'Video & Animation'
+              WHEN category = 'Audio' THEN 'Voice & Sound'
+              WHEN category IN ('Writing','Content') THEN 'Writing & Content'
+              WHEN category IN ('Business','Productivity','Marketing') THEN 'Business & Productivity'
+              WHEN category IN ('Analytics','Automation','Data') THEN 'Data & Automation'
+              WHEN category IN ('Education','Research') THEN 'Education & Research'
+              WHEN category IN ('AI Tools','') OR category IS NULL THEN 'Other'
+              ELSE category END) AS c
+             FROM tools WHERE status = 'published'`
           ).first(),
           env.DB.prepare(
             `SELECT COUNT(*) as c FROM tools WHERE created_at > date('now')`
@@ -828,16 +873,23 @@ const handler = {
     if (!body || !body.name || !body.url) {
       return jsonError('Name and URL are required', 400);
     }
+    const name = String(body.name).trim().slice(0, 120);
+    const url = String(body.url).trim().slice(0, 500);
+    const description = String(body.short_desc || '').trim().slice(0, 500);
+    const email = String(body.email || '').trim().slice(0, 200);
+    if (!name || !validToolUrl(url) || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+      return jsonError('Please provide a valid name, HTTP(S) URL and email', 400);
+    }
     const result = await env.DB.prepare(
       `INSERT INTO submitted_tools (name, url, category, short_desc, pricing, submitter_email)
        VALUES (?, ?, ?, ?, ?, ?)`
     ).bind(
-      body.name,
-      body.url,
-      body.category || '',
-      body.short_desc || '',
-      body.pricing || '',
-      body.email || ''
+      name,
+      url,
+      canonicalCategory(body.category),
+      description,
+      ['free', 'freemium', 'paid'].includes(String(body.pricing || '').toLowerCase()) ? String(body.pricing).toLowerCase() : null,
+      email
     ).run();
 
     const id = result.meta.last_row_id;
@@ -845,9 +897,9 @@ const handler = {
     if (env.TELEGRAM_BOT_TOKEN && env.ADMIN_TELEGRAM_ID) {
       const text =
         `🔧 New Tool Submitted!\n` +
-        `Name: ${body.name}\n` +
-        `URL: ${body.url}\n` +
-        `Category: ${body.category || 'N/A'}`;
+        `Name: ${name}\n` +
+        `URL: ${url}\n` +
+        `Category: ${canonicalCategory(body.category)}`;
       const replyMarkup = {
         inline_keyboard: [[
           { text: '✅ Approve', callback_data: `approve_tool_${id}` },
@@ -1084,15 +1136,24 @@ Sitemap: ${baseUrl}/sitemap.xml`;
   // ─────────────────────────────
   // ROUTE 22: POST /api/internal/add-tool
   // ─────────────────────────────
-  async addTool(env, body) {
-    if (!body || !body.name || !body.slug) {
-      return jsonError('Name and slug are required', 400);
+  async addTool(env, body, publicationStatus = 'pending') {
+    if (!body || !body.name) {
+      return jsonError('Name is required', 400);
     }
-    const tool = body;
-    if (!tool.slug) tool.slug = slugify(tool.name);
+    const tool = { ...body };
+    tool.name = String(tool.name).trim();
+    tool.slug = slugify(tool.name);
+    tool.url = String(tool.url || tool.website_url || '').trim();
+    if (!tool.slug || tool.slug.length < 2 || !validToolUrl(tool.url)) {
+      return jsonError('A valid tool name and HTTP(S) URL are required', 400);
+    }
+    const pricing = ['free', 'freemium', 'paid'].includes(String(tool.pricing || '').toLowerCase())
+      ? String(tool.pricing).toLowerCase() : null;
+    tool.category = canonicalCategory(tool.category);
+    tool.pricing = pricing;
 
     const existing = await env.DB.prepare(
-      `SELECT id, pricing, description FROM tools WHERE slug = ? OR url = ?`
+      `SELECT id, name, pricing, description, short_desc, category, url, tags, compatible_tools FROM tools WHERE slug = ? OR url = ?`
     ).bind(tool.slug, tool.url || '').first();
 
     if (existing) {
@@ -1127,14 +1188,14 @@ Sitemap: ${baseUrl}/sitemap.xml`;
     const inserted = await env.DB.prepare(
       `INSERT OR IGNORE INTO tools (name, slug, description, short_desc, category, pricing, url,
          logo_url, logo_type, tags, compatible_tools, views, votes, featured, tag, status, last_updated)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', datetime('now'))`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
     ).bind(
       tool.name,
       tool.slug,
       tool.description || '',
       tool.short_desc || '',
       tool.category || '',
-      tool.pricing || 'free',
+      tool.pricing || null,
       tool.url || '',
       tool.logo_url || '',
       tool.logo_type || 'favicon',
@@ -1143,10 +1204,11 @@ Sitemap: ${baseUrl}/sitemap.xml`;
       tool.views || 0,
       tool.votes || 0,
       tool.featured || 0,
-      tag
+      tag,
+      publicationStatus === 'published' ? 'published' : 'pending'
     ).run();
 
-    if (tag === 'regular') {
+    if (publicationStatus === 'published' && tag === 'regular') {
       const createdRow = await env.DB.prepare(
         `SELECT created_at FROM tools WHERE id = ?`
       ).bind(inserted.meta.last_row_id).first();
@@ -1336,10 +1398,10 @@ Sitemap: ${baseUrl}/sitemap.xml`;
             short_desc: submitted.short_desc || '',
             description: submitted.short_desc || '',
             category: submitted.category || '',
-            pricing: submitted.pricing || 'free',
-            url: submitted.url || ''
+             pricing: submitted.pricing || null,
+             url: submitted.url || ''
           };
-          const addResult = await this.addTool(env, tool);
+          const addResult = await this.addTool(env, tool, 'published');
           const addData = await addResult.json();
           await env.DB.prepare(`DELETE FROM submitted_tools WHERE id = ?`).bind(submitted.id).run();
           resultText = `✅ Tool "${submitted.name}" approved (${addData.status})!`;

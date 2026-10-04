@@ -155,9 +155,12 @@ export async function onRequest(context) {
   const shown = data.tools || [];
   const grid = shown.length ? shown.map(card).join('') : '<p class="empty">Nothing matches those filters yet. Try clearing one.</p>';
 
+  const normalizedCats = cats
+    .map((c) => ({ name: String(c.category || c.name || '').trim(), tool_count: Number(c.tool_count || 0) }))
+    .filter((c) => c.name);
   const catChips = [
     chip(params, 'category', '', 'All categories', !category),
-    ...cats.slice(0, 14).map((c) => chip(params, 'category', c.name, `${c.name}`, category === c.name)),
+    ...normalizedCats.slice(0, 14).map((c) => chip(params, 'category', c.name, `${c.name}`, category === c.name)),
   ].join('');
   const priceChips = PRICES.map((p) => chip(params, 'pricing', p, p ? priceOf(p) : 'All prices', pricing === p)).join('');
   const sortOpts = SORTS.map(([v, l]) => `<option value="${esc(v)}"${sort === v ? ' selected' : ''}>${esc(l)}</option>`).join('');
@@ -239,8 +242,8 @@ ${data.offline ? '<p class="note">Showing the last saved copy — live data is u
   </form>
 </div>
 
-<div class="facets">${priceChips}</div>
-<div class="facets">${catChips}${cats.length > 14 ? `<a class="facet" href="/">more…</a>` : ''}</div>
+  <div class="facets">${priceChips}</div>
+<div class="facets">${catChips}${normalizedCats.length > 14 ? `<a class="facet" href="/tools">more…</a>` : ''}</div>
 
 <p class="count">${num(total)} tool${total === 1 ? '' : 's'} · page ${page} of ${pages}</p>
 <div class="results">${grid}</div>

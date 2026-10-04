@@ -121,6 +121,10 @@ def main():
     log("=" * 50)
 
     total, by_tag, by_category, recent = get_stats()
+    pending = query_rows(
+        "SELECT 'blogs' AS kind, COUNT(*) AS c FROM blogs WHERE status='pending' "
+        "UNION ALL SELECT 'submitted_tools', COUNT(*) FROM submitted_tools WHERE status='pending'"
+    )
 
     lines = [
         "AI Directory — Daily Pipeline Report",
@@ -143,6 +147,11 @@ def main():
     lines.append("Latest additions:")
     for row in recent:
         lines.append(f"  • {row.get('name', '?')} ({row.get('category', '?')})")
+    if pending:
+        lines.append("")
+        lines.append("Pending review:")
+        for row in pending:
+            lines.append(f"  • {row.get('kind', '?')}: {row.get('c', 0)}")
 
     health = get_source_health()
     if health:

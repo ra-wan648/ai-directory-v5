@@ -10,7 +10,13 @@
 const WORKER = 'https://ai-directory-v5-worker.radwanislam648.workers.dev';
 const SITE = 'https://ai-directory-v5-radwan648.pages.dev';
 
-const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>\"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const safeHtml = (s) => String(s || '')
+  .replace(/<script[\s\S]*?<\/script>/gi, '')
+  .replace(/<style[\s\S]*?<\/style>/gi, '')
+  .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+  .replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+  .replace(/javascript\s*:/gi, '');
 
 function notFound() {
   return new Response(
@@ -37,7 +43,7 @@ export async function onRequest(context) {
   const title = blog.title || slug;
   const description = blog.meta_description || String(blog.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 155);
   // content is authored HTML from our own database, so it is rendered as-is.
-  const body = blog.content || '<p>This article has no body yet.</p>';
+  const body = safeHtml(blog.content || '<p>This article has no body yet.</p>');
   const date = String(blog.published_at || blog.created_at || '').split(' ')[0];
 
   const html = `<!doctype html>

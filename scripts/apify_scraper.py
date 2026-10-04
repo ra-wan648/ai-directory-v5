@@ -379,13 +379,14 @@ def batch_insert(tools_batch):
         slug = escape_sql(tool['slug'])
         desc = escape_sql((tool.get('description', '') or '')[:2000])
         short_desc = escape_sql((tool.get('short_desc', '') or '')[:255])
-        category = escape_sql(tool.get('category', 'AI Tools'))
-        pricing = escape_sql(tool.get('pricing', 'free'))
+        category = escape_sql(validate.canonical_category(tool.get('category')))
+        raw_pricing = str(tool.get('pricing') or '').lower()
+        pricing_sql = "'" + escape_sql(raw_pricing) + "'" if raw_pricing in ('free', 'freemium', 'paid') else 'NULL'
         url = escape_sql(tool['website_url'])
         logo = escape_sql(tool.get('logo_url', ''))
         tags = escape_sql(tool.get('tags', 'ai'))
         created = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-        values.append(f"('{name}', '{slug}', '{desc}', '{short_desc}', '{category}', '{pricing}', '{url}', '{logo}', 'favicon', '{tags}', 'published', '{created}')")
+        values.append(f"('{name}', '{slug}', '{desc}', '{short_desc}', '{category}', {pricing_sql}, '{url}', '{logo}', 'favicon', '{tags}', 'published', '{created}')")
 
     if not values:
         return 0, 0
@@ -966,6 +967,10 @@ def process_site(site):
     # every rejection carries a reason. The thin checks that stood here let
     # '";> API' and 'cloudflare.com' through onto the live site.
     filtered, rejected = validate.filter_rows(tools)
+    for tool in filtered:
+        tool['category'] = validate.canonical_category(tool.get('category'))
+        if not tool.get('pricing'):
+            tool['pricing'] = 'unknown'
     if rejected:
         log(f"  dropped {sum(rejected.values())} low-quality row(s): "
             + ', '.join(f'{k}={v}' for k, v in sorted(rejected.items())))

@@ -150,7 +150,7 @@ const ICON = {
 const iconOf = (t) => ICON[String(t.category || '').toLowerCase()] || '🧠';
 const priceOf = (t) => {
   const p = String(t.pricing || '').toLowerCase();
-  return p === 'free' ? 'Free' : p === 'paid' ? 'Paid' : p === 'freemium' ? 'Freemium' : '—';
+  return p === 'free' ? 'Free' : p === 'paid' ? 'Paid' : p === 'freemium' ? 'Freemium' : 'Unknown';
 };
 const descOf = (t) => String(t.short_desc || t.description || '').replace(/\s+/g, ' ').trim();
 const domainOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
@@ -347,8 +347,8 @@ async function loadHome() {
 
 function renderSections() {
   $('#sections').innerHTML = SECTIONS.map((s, i) => '<section class="sec' + (s.alt ? ' alt' : '') + '" data-sec="' + i + '">'
-    + '<div class="sechead"><span class="ic">' + s.ic + '</span><span class="t">' + esc(s.t) + '</span>'
-    + '<span class="c" id="cnt' + i + '"></span><a class="all" href="' + toolsUrl(cfg.q) + '">See all →</a></div>'
++ '<div class="sechead"><span class="ic">' + s.ic + '</span><span class="t">' + esc(s.t) + '</span>'
+     + '<span class="c" id="cnt' + i + '"></span><a class="all" href="' + toolsUrl(s.q) + '">See all →</a></div>'
     + '<div class="grid" data-grid="' + i + '">' + skel(6) + '</div></section>').join('');
   lazySections();
 }
