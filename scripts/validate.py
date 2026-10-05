@@ -97,7 +97,7 @@ TRACKING_HOSTS = (
     'adservice.google.com', 'googletagmanager.com', 'google-analytics.com',
     'adnxs.com', 'criteo.com', 'outbrain.com', 'taboola.com', 'shareasale.com',
     'awin1.com', 'clickbank.net', 'bit.ly', 't.co', 'tinyurl.com', 'lnkd.in',
-    'rebrand.ly', 'cutt.ly',
+    'rebrand.ly', 'cutt.ly', 'go.getproton.me', 'link.mail.beehiiv.com',
 )
 
 # Directory and aggregator pages. The tool's own site belongs in url, not the
