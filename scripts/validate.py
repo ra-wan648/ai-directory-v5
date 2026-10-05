@@ -73,6 +73,7 @@ NEWS_HOSTS = (
     'siliconangle.com', 'tomshardware.com', 'infoq.com', 'sdtimes.com',
     'qz.com', 'vice.com', 'semafor.com', 'theatlantic.com', 'politico.com',
     'news.google.com', 'apple.news', 'flipboard.com', 'yahoo.com', 'msn.com',
+    'blog.google', 'techxplore.com', 'theconversation.com', 'technologyreview.com',
     # Personal publishing platforms publish articles, not products.
     'substack.com', 'ghost.io', 'wordpress.com', 'blogspot.com', 'notion.site',
     # Event, ticketing and hackathon pages are not tools.

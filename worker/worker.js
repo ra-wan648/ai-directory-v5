@@ -259,7 +259,7 @@ function buildToolsWhere(params) {
 // and a failure reports 0 instead of taking the page down with a 500.
 async function getToolsTotal(env, params) {
   const { where, binds } = buildToolsWhere(params);
-  const key = 'api-tools-count-v1?' + hashKey(where + '|' + JSON.stringify(binds));
+  const key = 'api-tools-count-v2?' + hashKey(where + '|' + JSON.stringify(binds));
   const res = await cacheFetch(null, env, key, 86400, async () => {
     const row = await env.DB.prepare(
       `SELECT COUNT(*) as total FROM tools WHERE ${where}`
