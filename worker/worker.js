@@ -259,7 +259,7 @@ function buildToolsWhere(params) {
 // and a failure reports 0 instead of taking the page down with a 500.
 async function getToolsTotal(env, params) {
   const { where, binds } = buildToolsWhere(params);
-  const key = 'api-tools-count-v2?' + hashKey(where + '|' + JSON.stringify(binds));
+  const key = 'api-tools-count-v3?' + hashKey(where + '|' + JSON.stringify(binds));
   const res = await cacheFetch(null, env, key, 86400, async () => {
     const row = await env.DB.prepare(
       `SELECT COUNT(*) as total FROM tools WHERE ${where}`
@@ -456,7 +456,7 @@ const handler = {
     const qs = new URLSearchParams([...params.entries()].sort()).toString();
     // An hour, not ten minutes: the directory changes once a day, so the short
     // TTL bought nothing and re-read the whole table six times more often.
-    return cacheFetch(null, env, 'api-tools-v3?' + qs, 3600, async () => {
+    return cacheFetch(null, env, 'api-tools-v4?' + qs, 3600, async () => {
       const data = await getToolsList(env, params);
       return okResponse(data);
     });
