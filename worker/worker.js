@@ -782,7 +782,7 @@ const handler = {
   // ROUTE 11: GET /api/categories
   // ─────────────────────────────
   async apiCategories(env) {
-    return cacheFetch(null, env, 'api-categories-v2', 3600, async () => {
+    return cacheFetch(null, env, 'api-categories-v3', 3600, async () => {
       const result = await env.DB.prepare(
         `SELECT category, COUNT(*) as tool_count
          FROM tools
