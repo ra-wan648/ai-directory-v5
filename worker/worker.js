@@ -281,7 +281,7 @@ async function getToolsList(env, params) {
   ).bind(...binds, limit, offset).all();
 
   return {
-    tools: result.results,
+    tools: (result.results || []).map((tool) => ({ ...tool, category: canonicalCategory(tool.category) })),
     total: await getToolsTotal(env, params),
     page: page,
     limit: limit
