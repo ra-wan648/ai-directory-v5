@@ -1,4 +1,4 @@
 # Pages _redirects cannot proxy to a different zone (workers.dev is another zone),
 # so all worker routes are proxied by functions/[[path]].js instead:
-/submit /submit/index.html 200
+/submit /submit/ 301
 /submit/ /submit/index.html 200
