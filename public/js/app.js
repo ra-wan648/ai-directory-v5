@@ -22,6 +22,7 @@ const api = {
   categories: () => api.get('/api/categories'),
   tools: (p) => api.get('/api/tools?' + new URLSearchParams(p)),
   newTools: (limit) => api.get('/api/tools/new?limit=' + limit),
+  trending: (limit) => api.get('/api/tools/trending?limit=' + limit),
   tool: (slug) => api.get('/api/tools/' + encodeURIComponent(slug)),
   prompts: (limit) => api.get('/api/prompts?limit=' + limit),
   blogs: (p) => api.get('/api/blogs?' + new URLSearchParams(p)),
@@ -245,9 +246,11 @@ function logoHTML(t) {
     + 'onload="this.previousElementSibling.style.display=\'none\'" onerror="this.remove()"></div>';
 }
 
-function cardHTML(t) {
+function cardHTML(t, badge) {
   const featured = Number(t.featured) === 1;
   const price = priceOf(t);
+  let fresh = '';
+  try { fresh = (Date.now() - toDate(t.created_at).getTime() < 7 * 864e5) ? '<span class="tag new">NEW</span>' : ''; } catch (e) {}
   return '<article class="card" data-slug="' + esc(t.slug) + '" tabindex="0">'
     + (featured ? '<span class="ribbon"></span>' : '')
     + '<div class="ctop"><span class="up">' + esc((t.source ? sourceOf(t) : '')) + '</span>'
@@ -256,7 +259,8 @@ function cardHTML(t) {
     + '<div class="crow">' + logoHTML(t)
     + '<div class="cmeta"><h3>' + esc(t.name) + '</h3><span class="cat">' + esc(t.category || '') + '</span></div></div>'
     + '<p>' + esc(descOf(t).slice(0, 150)) + '</p>'
-    + '<div class="tags"><span class="tag ' + price.toLowerCase() + '">' + price + '</span><span class="tag">' + esc(t.category || '') + '</span></div>'
+    + '<div class="tags"><span class="tag ' + price.toLowerCase() + '">' + price + '</span><span class="tag">' + esc(t.category || '') + '</span>' + fresh + '</div>'
+    + (badge ? '<span class="pickbadge">' + esc(badge) + '</span>' : '')
     + '<span class="visit">Visit ↗</span></article>';
 }
 
@@ -282,7 +286,25 @@ async function boot() {
 
 function paintStatic() {
   $('#year').textContent = String(new Date().getFullYear());
-  $('#minitools').innerHTML = MINI.map((m) => '<a href="https://www.toolfk.com" target="_blank" rel="noopener">🔧 ' + esc(m) + '</a>').join('');
+  $('#minitools').innerHTML = MINI_GROUPS.map((g, i) =>
+    '<details class="mt-group"' + (i === 0 ? ' open' : '') + '><summary><span>' + g.icon + ' ' + esc(g.label)
+    + '</span><span class="mt-count">' + g.tools.length + '</span></summary><div class="mt-links">'
+    + g.tools.map((t) => '<a href="/toolhub/tools/' + t[1] + '" data-name="' + esc(t[0].toLowerCase()) + '">🔧 ' + esc(t[0]) + '</a>').join('')
+    + '</div></details>').join('');
+  const mtq = $('#mtq');
+  if (mtq) mtq.addEventListener('input', () => {
+    const q = mtq.value.trim().toLowerCase();
+    document.querySelectorAll('#minitools .mt-group').forEach((gr) => {
+      let vis = 0;
+      gr.querySelectorAll('.mt-links a').forEach((a) => {
+        const hit = !q || a.dataset.name.includes(q);
+        a.style.display = hit ? '' : 'none';
+        if (hit) vis++;
+      });
+      gr.style.display = vis ? '' : 'none';
+      if (q) gr.open = true;
+    });
+  });
 }
 
 /* The pipeline bakes /data/sections.json on every run. It is a plain static
@@ -378,13 +400,13 @@ async function fillSection(cfg, i, el) {
       grid.innerHTML = '<div class="colcard" style="grid-column:1/-1;text-align:center;padding:32px"><p style="color:var(--muted);font-size:13px">Nothing in this section yet.</p></div>';
       return;
     }
-    grid.innerHTML = tools.map(cardHTML).join('') + (stale
+    grid.innerHTML = tools.map((t) => cardHTML(t, cfg.badge)).join('') + (stale
       ? '<div class="colcard" style="grid-column:1/-1;padding:10px 14px"><p style="color:var(--muted);font-size:12px;margin:0">Showing the last saved copy \u2014 live data is unavailable right now.</p></div>'
       : '');
   };
   try {
-    const d = await api.tools(q);
-    show(d.tools || [], d.total, !!(d.offline || OFFLINE_MODE));
+    const d = cfg.fetch ? await cfg.fetch(q.limit) : await api.tools(q);
+    show(d.tools || [], d.total || (d.tools || []).length, !!(d.offline || OFFLINE_MODE));
   } catch (e) {
     // Almost always an exhausted D1 read quota. Use the copy the pipeline baked.
     const snap = await snapshot();
@@ -404,7 +426,13 @@ async function loadNewToday() {
     const d = await api.newTools(8);
     const tools = d.tools || [];
     if (!tools.length) return;
-    box.innerHTML = bentoHTML(tools, d.today || 0);
+    // Tool of the day: deterministic daily pick from the newest tools.
+    const now = new Date();
+    const dayN = Math.floor(now.getTime() / 864e5);
+    const tod = tools[dayN % tools.length];
+    box.innerHTML = '<a class="tod" href="/tool/' + esc(tod.slug) + '"><span class="t">⭐ Tool of the day</span><strong>'
+      + esc(tod.name) + '</strong><span class="m">' + esc(descOf(tod).slice(0, 90)) + '</span><span class="go">Try it →</span></a>'
+      + bentoHTML(tools, d.today || 0);
   } catch (e) { /* leave the strip out */ }
 }
 
@@ -441,7 +469,6 @@ async function loadExtras() {
   // with no extra reads.
   const catCols = CATS.slice();
   box.innerHTML = ''
-    + '<div class="marquee"><div class="mlbl">Sources we index from</div><div class="mtrack" id="mtrack"></div></div>'
     + '<section class="sec alt"><div class="sechead"><span class="ic">📚</span><span class="t">Browse by Category</span>'
       + '<span class="c">· ' + num(CATS.length) + ' categories</span></div>'
       + '<div class="catgrid">' + catCols.map((c) => {
@@ -475,7 +502,14 @@ async function loadExtras() {
       + '<span class="c">· ' + num(STATS ? STATS.total_blogs : blogs.length) + ' posts</span></div>'
       + '<div class="cols4 news">' + blogs.map((x) => '<div class="colcard" data-blog="' + esc(x.slug) + '">'
         + '<div class="thumb" style="background:var(--amber-soft)">📝</div><div class="nbody"><span class="k">' + esc(x.category || 'post') + '</span>'
-        + '<h5>' + esc(x.title) + '</h5><time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>').join('') + '</div></section>' : '')
+        + '<h5>' + esc(x.title) + '</h5><time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>').join('')
+      + '<a class="colcard promo" href="/toolhub/"><div class="thumb" style="background:var(--ok-soft)">⚡</div><div class="nbody"><span class="k">Free mini tools</span>'
+      + '<h5>Do it yourself: 102 free browser tools</h5><time>No signup · runs on your device</time></div></a></div></section>' : '')
+    + '<section class="sec nl"><div class="nl-in"><div><span class="ic">✉️</span><span class="t">Get the best new AI tools weekly</span>'
+      + '<p>One short email. No spam, unsubscribe anytime.</p></div>'
+      + '<form id="nlform"><input id="nlemail" type="email" placeholder="you@example.com" aria-label="Email address" required>'
+      + '<button type="submit">Subscribe</button></form><div class="nlmsg" id="nlmsg"></div></div></section>'
+    + '<div class="marquee"><div class="mlbl">Sources we index from</div><div class="mtrack" id="mtrack"></div></div>'
     + '<section class="sec alt" id="news"><div class="sechead"><span class="ic">🧭</span><span class="t">Explore More</span></div>'
       + '<div class="expl">' + EXP.map(([e, n2, f]) => '<a href="#sections" data-quick="' + esc(f) + '"><span class="e">' + e + '</span>' + esc(n2) + '</a>').join('') + '</div></section>';
 
@@ -510,12 +544,12 @@ async function renderFiltered(reset) {
       const rc = $('#resCount');
       if (rc) rc.textContent = '· ' + num(d.total) + ' tools';
       chip.innerHTML = '<b>' + num(d.total) + '</b> results<button id="reset" title="Clear filters">✕</button>';
-      grid.innerHTML = tools.length ? tools.map(cardHTML).join('')
+      grid.innerHTML = tools.length ? tools.map((t) => cardHTML(t)).join('')
         : '<div class="colcard" style="grid-column:1/-1;text-align:center;padding:44px"><div style="font-size:26px">🫧</div>'
           + '<p style="color:var(--muted);font-size:13px">No tools match this filter.</p>'
           + '<button class="btn s" id="reset2">Reset filters</button></div>';
     } else {
-      grid.insertAdjacentHTML('beforeend', tools.map(cardHTML).join(''));
+      grid.insertAdjacentHTML('beforeend', tools.map((t) => cardHTML(t)).join(''));
     }
     if (tools.length < 40) EXHAUSTED = true;
   } catch (e) {
@@ -857,7 +891,8 @@ function themeInit() {
 }
 
 /* ======================= content constants ======================= */
-const MINI = ['JSON Formatter', 'Base64 Encoder', 'QR Generator', 'Image Compressor', 'Word Counter', 'Color Picker', 'Regex Tester', 'Markdown Editor', 'URL Shortener', 'Timestamp Tool', 'Diff Checker', 'Hash Generator'];
+const MINI_GROUPS = [{"cat":"document","label":"PDF & documents","icon":"📄","tools":[["PDF to Word","pdf-word"],["PDF to Image","pdf-image"],["PDF to Excel","pdf-excel"],["PDF to PPT","pdf-ppt"],["PDF to TXT","pdf-txt"],["Merge PDF","merge-pdf"],["Split PDF","split-pdf"],["Compress PDF","compress-pdf"],["Rotate PDF","rotate-pdf"],["PDF Watermark","pdf-watermark"],["PDF Page Numbers","pdf-pages"],["PDF Metadata Editor","pdf-meta"],["PDF Form Filler","pdf-form"],["HTML to PDF","html-pdf"],["Image to PDF","image-pdf"]]},{"cat":"image","label":"Image tools","icon":"🖼️","tools":[["Gemini Watermark Remover","gemini-watermark"],["Dola Image Cleanup","dola-cleanup"],["Bulk Image Compressor","bulk-image-compressor"],["JPG to PNG","jpg-png"],["PNG to JPG","png-jpg"],["WebP Converter","webp-converter"],["HEIC to JPG","heic-jpg"],["Image Resizer","image-resizer"],["Image Cropper","image-cropper"],["Image Rotate","image-rotate"],["Image Compressor","image-compressor"],["Remove EXIF","remove-exif"],["Favicon Generator","favicon"],["SVG Optimizer","svg-optimizer"],["Color Palette Extractor","palette"],["Image Collage Maker","collage"],["Social Image Resizer","social-resizer"]]},{"cat":"developer","label":"Developer","icon":"💻","tools":[["JSON Formatter","json"],["XML Formatter","xml"],["YAML Formatter","yaml"],["SQL Formatter","sql"],["CSS Formatter","css"],["HTML Formatter","html"],["JavaScript Formatter","javascript"],["Markdown to HTML","markdown"],["CSV Converter","csv"],["Base64 Encoder","base64"],["Base64 Decoder","base64-decode"],["URL Encoder","url-encode"],["URL Decoder","url-decode"],["JWT Decoder","jwt"],["UUID Generator","uuid"],["Hash Generator","hash"],["Regex Tester","regex"],["Text Diff","diff"],["Word Counter","word-counter"],["Slug Generator","slug"],["Case Converter","case"],["Duplicate Line Remover","dedupe"],["Whitespace Cleaner","whitespace"],["Lorem Ipsum Generator","lorem"],["Markdown Table Generator","markdown-table"],["cURL to Code","curl"],["CSS Gradient Generator","gradient"],["CSS Shadow Generator","shadow"],["Color Converter","color"],["HTML Entity Encoder","entities"],["HTTP Status Lookup","http-status"],["chmod Calculator","chmod"]]},{"cat":"utility","label":"Utilities","icon":"🧰","tools":[["YouTube Thumbnail Downloader","youtube-thumbnail"],["QR Code Generator","qr"],["Barcode Generator","barcode"],["Password Generator","password"],["Random Number Generator","random-number"],["Unix Time Converter","unix-time"],["Byte Converter","bytes"],["Percentage Calculator","percentage"],["Age Calculator","age"],["Date Difference","date-diff"],["Time Zone Converter","timezone"],["BMI Calculator","bmi"],["Compound Interest","interest"],["Unit Converter","units"],["Morse Translator","morse"],["Color Contrast Checker","contrast"],["Favicon Preview","favicon-preview"]]},{"cat":"writing","label":"Writing","icon":"✍️","tools":[["Caption File Converter","caption-converter"],["Chinese Text Converter","chinese-text"],["Text Reverser","text-reverser"],["Remove Line Breaks","remove-line-breaks"],["ROT13 Converter","rot13"],["Text to Binary","text-binary"],["Binary to Text","binary-text"],["Text to Hex","text-hex"],["Hex to Text","hex-text"],["Text to Unicode Escapes","text-unicode"],["Unicode Escapes Decoder","unicode-text"]]},{"cat":"code","label":"Code","icon":"⌨️","tools":[["Online JavaScript Runner","js-runner"],["Online HTML Preview","html-preview"],["Online CSS Playground","css-playground"],["Online Regex Builder","regex-builder"],["Mind Mapper","mind-map"],["UML Timing Tool","uml"]]},{"cat":"network","label":"Network","icon":"🌐","tools":[["HTTP Simulator","http-simulator"],["cdnjs CDN Tool","cdnjs"]]},{"cat":"ai","label":"AI & media","icon":"🤖","tools":[["Kokoro TTS","kokoro-tts"],["Qwen3 TTS","qwen3-tts"]]}];
+/* All 102 ToolHub mini tools, grouped by category. Generated from toolhub-site/src/data.js (source of truth). Links stay on-site at /toolhub/tools/<slug>. */
 const SOURCES = ['Toolify', 'Futurepedia', "There's An AI For That", 'TopAI.tools', 'Aixploria', 'AllThingsAI', 'Insidr', 'ToolFK', 'FutureTools', 'TrendShift', 'Product Hunt', 'HuggingFace', 'GitHub', 'Hacker News'];
 const EXP = [
   ['🆓', 'Free Tools', 'Free'], ['🆕', 'New Today', 'new'],
@@ -868,13 +903,29 @@ const EXP = [
   ['📊', 'Analytics', 'all'], ['🤖', 'Automation', 'all'],
 ];
 const SECTIONS = [
+  { ic: '🔥', t: 'Popular AI Tools', fetch: (limit) => api.trending(limit), unit: 'trending this week' },
+  { ic: '⭐', t: "Editor's Choice", q: { featured: '1' }, unit: 'hand-picked', alt: 1, badge: '⭐ Pick' },
   { ic: '🆕', t: 'New This Week', q: { sort: 'newest', days: 7 }, unit: 'added this week', pill: ['status', 'new'] },
-  { ic: '⭐', t: 'Featured', q: { featured: '1' }, unit: 'picks', alt: 1, pill: ['status', 'featured'] },
   { ic: '🆓', t: 'Free Tools', q: { pricing: 'free' }, unit: 'tools', pill: ['status', 'Free'] },
   { ic: '🧩', t: 'Open Source', q: { category: 'Open Source' }, unit: 'projects', alt: 1, pill: ['status', 'open'] },
   { ic: '🤗', t: 'HuggingFace Models', q: { source: 'huggingface' }, unit: 'models' },
   { ic: '🚀', t: 'On Product Hunt', q: { source: 'producthunt' }, unit: 'launches', alt: 1 },
 ];
+
+document.addEventListener('submit', async (e) => {
+  if (e.target.id !== 'nlform') return;
+  e.preventDefault();
+  const input = document.getElementById('nlemail'), msg = document.getElementById('nlmsg');
+  const email = (input.value || '').trim();
+  msg.textContent = 'Subscribing…';
+  try {
+    const r = await fetch('/api/subscribe', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Failed');
+    msg.textContent = '✓ You are subscribed. Welcome!';
+    input.value = '';
+  } catch (err) { msg.textContent = 'Could not subscribe: ' + err.message; }
+});
 
 /* ======================= go ======================= */
 setupFilters();

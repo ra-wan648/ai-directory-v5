@@ -127,6 +127,23 @@ body.hero-gone .nsearch{width:210px;opacity:1;padding:0 11px;border-width:1px;po
 .rv{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:5px 8px;border-radius:8px;cursor:pointer}
 .rv:hover{background:var(--card);color:var(--ink)}
 .rv span.n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Free Mini Tools sidebar (ToolHub, 102 tools) */
+.side-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.side-head h4{margin:0}
+.side-count{font-size:11px;font-weight:700;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 9px}
+.side-filter{margin-bottom:8px}
+.side-filter input{width:100%;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px;background:var(--card);color:var(--ink);outline:0}
+.side-filter input:focus{border-color:var(--amber)}
+.mt-list{max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.mt-group{border-bottom:1px solid var(--line)}
+.mt-group:last-child{border-bottom:0}
+.mt-group summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:12.5px;font-weight:600}
+.mt-group summary::-webkit-details-marker{display:none}
+.mt-group summary:hover{background:var(--bg2)}
+.mt-count{font-size:10.5px;color:var(--soft);background:var(--bg2);border-radius:999px;padding:1px 7px}
+.mt-links a{font-size:12.3px!important;padding:5px 8px 5px 26px!important}
+.side-foot{margin:10px 0 2px}
+.side-foot .all{font-size:12.5px;color:var(--ok);font-weight:700}
 
 /* ===== 6. SECTIONS ===== */
 .sec{margin-bottom:22px}
@@ -212,6 +229,34 @@ body.hero-gone .nsearch{width:210px;opacity:1;padding:0 11px;border-width:1px;po
 .tag.free{background:var(--ok-soft);color:var(--ok)}
 .tag.freemium{background:var(--new-soft);color:var(--new)}
 .tag.paid{background:var(--paid-soft);color:var(--paid)}
+.tag.new{background:var(--new-soft);color:var(--new);font-weight:700}
+.pickbadge{position:absolute;top:-9px;right:10px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 10px}
+.card{position:relative}
+/* hero pricing quick-pills */
+.ppills{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:12px}
+.ppills a{font-size:12.5px;color:var(--muted);border:1px solid var(--line);background:var(--card);padding:6px 13px;border-radius:99px;text-decoration:none}
+.ppills a:hover{border-color:var(--amber);color:var(--ink)}
+/* tool of the day */
+.tod{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-bottom:14px;text-decoration:none;box-shadow:var(--shadow)}
+.tod:hover{border-color:var(--amber)}
+.tod .t{font-size:12px;font-weight:800;color:var(--amber);white-space:nowrap}
+.tod strong{font-size:14px;white-space:nowrap}
+.tod .m{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tod .go{margin-left:auto;font-size:12.5px;color:var(--ok);font-weight:700;white-space:nowrap}
+/* newsletter band */
+.nl{background:var(--ink);border-radius:16px;padding:22px}
+.nl-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.nl-in .t{color:#fff;font-size:16px;font-weight:800}
+.nl-in p{color:#ffffffa6;font-size:13px;margin:4px 0 0}
+.nl-in .ic{font-size:22px}
+#nlform{display:flex;gap:8px;margin-left:auto}
+#nlform input{border:1px solid #ffffff2e;background:#ffffff14;color:#fff;border-radius:10px;padding:10px 14px;font-size:14px;min-width:230px;outline:0}
+#nlform input::placeholder{color:#ffffff73}
+#nlform button{background:var(--amber);color:#fff;border:0;border-radius:10px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:14px}
+.nlmsg{width:100%;font-size:13px;color:var(--ok)}
+/* blog promo card */
+.colcard.promo .thumb{background:var(--ok-soft)!important}
+.colcard.promo:hover{border-color:var(--ok)}
 .visit{display:block;text-align:center;height:0;line-height:26px;opacity:0;margin-top:0;font-size:12px;font-weight:600;
   color:var(--amber);border:1px solid transparent;border-radius:8px;text-decoration:none;overflow:hidden;
   transition:height .16s ease,opacity .16s ease,margin-top .16s ease}

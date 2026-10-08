@@ -2,3 +2,9 @@
 # so all worker routes are proxied by functions/[[path]].js instead:
 /submit /submit/ 301
 /submit/ /submit/index.html 200
+# ToolHub SPA (React) is mounted as a static section under /toolhub/.
+# Deep tool links are served by real static files at
+# public/toolhub/tools/<slug>/index.html (generated at build time —
+# Pages ignores splat->index.html rewrite rules as "infinite loops",
+# verified 2026-10-08), so no fallback rule is needed for them.
+/toolhub/tools /toolhub/index.html 200

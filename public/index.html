@@ -29,6 +29,7 @@
     <nav class="nlinks">
       <a href="/tools">All Tools</a>
       <a href="/tools?pricing=free">Free</a>
+      <a href="/toolhub/">Free Tools</a>
       <a href="/tools?sort=newest&days=7">New</a>
       <a href="/prompts">Prompts</a>
       <a href="/blog">Blog</a>
@@ -48,6 +49,9 @@
   <div class="hsearch" id="hsearch"><span>🔍</span>
     <input id="hs" placeholder="Search by name, task or category…" aria-label="Search AI tools">
     <button onclick="document.getElementById('hs').focus()">Search</button></div>
+  <div class="ppills" id="ppills">
+    <a href="/tools?sort=views">🔥 Popular</a><a href="/tools?pricing=free">🆓 Free</a><a href="/tools?pricing=freemium">⚡ Freemium</a><a href="/tools?pricing=paid">💎 Paid</a>
+  </div>
   <div class="stats" id="heroStats">Loading…</div>
   <div class="pills" id="pills"></div>
 </section>
@@ -66,18 +70,19 @@
 
 <main class="wrap layout" id="layout">
   <aside class="side">
-    <h4>Free Mini Tools</h4>
-    <div id="minitools"></div>
-    <div class="note">All mini tools open in a new tab on <b>toolfk.com</b> — no signup needed.</div>
+    <div class="side-head"><h4>⚡ Free Mini Tools</h4><span class="side-count" id="mtcount">102</span></div>
+    <div class="side-filter"><input id="mtq" placeholder="Filter mini tools…" aria-label="Filter mini tools"></div>
+    <div id="minitools" class="mt-list"></div>
+    <div class="side-foot"><a class="all" href="/toolhub/">View all 102 →</a></div>
+    <div class="note">Runs 100% in your browser — no signup, no upload.</div>
     <div id="rvbox"></div>
   </aside>
   <div>
     <div id="newtoday"></div>
-    <!-- Category grid first: people look for the kind of tool they need before
-         they look for what is new. Extras also carries the news, prompts and
-         blog blocks, which stay below the tool sections. -->
-    <div id="extras"></div>
+    <!-- Tool sections first (Popular, Editor's Choice, New This Week, Free…),
+         then extras: categories, news, prompts, blog, sources, explore. -->
     <div id="sections"></div>
+    <div id="extras"></div>
   </div>
 </main>
 
