@@ -290,7 +290,7 @@ async function getToolsList(env, params) {
 
 // ══════════════════════════════════════════════════════════════
 // ADMIN API + CRON DISPATCH (hidden dashboard backend)
-// All /api/admin/* routes require either a valid Cloudflare Access JWT
+// All /z9-admin/api/* routes require a valid Cloudflare Access session
 // (edge-validated) or the bootstrap key (temporary, deleted after setup).
 // ══════════════════════════════════════════════════════════════
 
@@ -442,7 +442,7 @@ async function adminApi(request, env, url, pathname, method) {
     return new Response(JSON.stringify({ error: 'unauthorized', reason: auth.reason }),
       { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
-  const sub = pathname.replace(/^\/api\/admin\//, '');
+  const sub = pathname.replace(/^\/z9-admin\/api\//, '');
   const json = (obj, status) => new Response(JSON.stringify(obj),
     { status: status || 200, headers: { 'Content-Type': 'application/json' } });
   const body = (method === 'POST' || method === 'PUT')
@@ -583,7 +583,7 @@ function bkey() { return localStorage.getItem('z9_bkey') || ''; }
 async function api(path, method, body) {
   const h = { 'Content-Type': 'application/json' };
   if (bkey()) h['X-Bootstrap-Key'] = bkey();
-  const r = await fetch('/api/admin/' + path, { method: method || 'GET',
+  const r = await fetch('/z9-admin/api/' + path, { method: method || 'GET',
     headers: h, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
@@ -675,7 +675,7 @@ window.addApify = async () => {
   await api('apify-keys', 'POST', { slot: v('nk-slot'), label: v('nk-label'), token: v('nk-token'), monthly_cap_usd: v('nk-cap') });
   log('Key added.'); views.apify();
 };
-window.delApify = async (id) => { if (confirm('Remove this key?')) { await fetch('/api/admin/apify-keys/' + id, { method: 'DELETE' }); log('Removed.'); views.apify(); } };
+window.delApify = async (id) => { if (confirm('Remove this key?')) { await fetch('/z9-admin/api/apify-keys/' + id, { method: 'DELETE' }); log('Removed.'); views.apify(); } };
 window.testApify = async (id) => { log('Testing…'); const r = await api('apify-keys/' + id + '/test', 'POST'); log(r.ok ? 'OK: ' + r.username + ' (' + r.plan + ')' : 'FAILED: HTTP ' + r.status); };
 window.usageApify = async (id) => {
   const r = await api('apify-keys/' + id + '/usage');
@@ -688,13 +688,13 @@ window.addManifest = async () => {
   await api('manifest', 'POST', { label: v('nm-label'), base_url: v('nm-url'), api_key: v('nm-key'), monthly_limit: v('nm-limit') });
   log('Endpoint added.'); views.manifest();
 };
-window.delManifest = async (id) => { if (confirm('Remove this endpoint?')) { await fetch('/api/admin/manifest/' + id, { method: 'DELETE' }); log('Removed.'); views.manifest(); } };
+window.delManifest = async (id) => { if (confirm('Remove this endpoint?')) { await fetch('/z9-admin/api/manifest/' + id, { method: 'DELETE' }); log('Removed.'); views.manifest(); } };
 window.testManifest = async (id) => { log('Testing…'); const r = await api('manifest/' + id + '/test', 'POST'); log(r.ok ? 'OK (' + r.status + ')' : 'FAILED: HTTP ' + r.status + ' ' + (r.sample || '')); };
 window.doDispatch = async () => { const r = await api('pipeline/dispatch', 'POST'); log(r.ok ? 'Dispatched.' : 'Dispatch failed: ' + r.status); };
 window.doTg = async () => { const r = await api('telegram/test', 'POST'); log(r.ok ? 'Telegram test sent.' : 'Telegram failed.'); };
 setInterval(() => { document.getElementById('clock').textContent = new Date().toLocaleString(); }, 1000);
 document.getElementById('bk').value = bkey();
-views.overview().catch((e) => { V.innerHTML = '<div class="card"><span style="color:var(--bad)">Auth required.</span><div class="meta">' + esc(e.message) + '</div><div class="meta">Enter the setup key above (one-time), or protect this page with a Cloudflare Access application.</div></div>'; });
+views.overview().catch((e) => { V.innerHTML = '<div class="card"><span style="color:var(--bad)">Auth required.</span><div class="meta">' + esc(e.message) + '</div><div class="meta">Enter the setup key above (one-time), or reload after logging in via Cloudflare Access.</div></div>'; });
 </script></body></html>`;
 }
 
@@ -724,7 +724,7 @@ const handler = {
       if (!auth.ok) return new Response('Admin: unauthorized (' + auth.reason + ')', { status: 401 });
       return new Response(dashboardHTML(), { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
-    if (pathname.startsWith('/api/admin/')) {
+    if (pathname.startsWith('/z9-admin/api/')) {
       return adminApi(request, env, url, pathname, method);
     }
     // ─── XML/TEXT routes ───
