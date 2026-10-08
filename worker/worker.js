@@ -412,15 +412,52 @@ async function apifyTestToken(token) {
   return { ok: true, username: u.username || '', plan: (u.plan || {}).id || '' };
 }
 
+const APIFY_SVC_NAMES = {
+  ACTOR_COMPUTE_UNITS: ['Compute units', 'CU'],
+  DATA_TRANSFER_EXTERNAL_GBYTES: ['Data transfer', 'GB'],
+  DATA_TRANSFER_INTERNAL_GBYTES: ['Data transfer', 'GB'],
+  DATASET_READS: ['Dataset ops', ''],
+  DATASET_WRITES: ['Dataset ops', ''],
+  KEY_VALUE_STORE_READS: ['KV ops', ''],
+  KEY_VALUE_STORE_WRITES: ['KV ops', ''],
+  REQUEST_QUEUE_READS: ['Queue ops', ''],
+  REQUEST_QUEUE_WRITES: ['Queue ops', ''],
+};
 async function apifyUsage(token) {
   try {
-    const r = await fetch('https://api.apify.com/v2/users/me/usage/monthly', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if (!r.ok) return { available: false };
-    const d = await r.json();
-    return { available: true, usage: d.data || d };
-  } catch (e) { return { available: false }; }
+    const [uRes, mRes] = await Promise.all([
+      fetch('https://api.apify.com/v2/users/me', { headers: { 'Authorization': 'Bearer ' + token } }),
+      fetch('https://api.apify.com/v2/users/me/usage/monthly', { headers: { 'Authorization': 'Bearer ' + token } }),
+    ]);
+    if (!uRes.ok) return { available: false, reason: 'token-invalid' };
+    const u = (await uRes.json()).data || {};
+    if (!mRes.ok) return { available: false, reason: 'usage-unavailable',
+      username: u.username || '', plan: (u.plan || {}).id || '' };
+    const d = (await mRes.json()).data || {};
+    const svc = d.monthlyServiceUsage || {};
+    const byName = {};
+    for (const [k, v] of Object.entries(svc)) {
+      const [label, unit] = APIFY_SVC_NAMES[k] || [k, ''];
+      const q = parseFloat(v.quantity) || 0;
+      const usd = parseFloat(v.baseAmountUsd) || 0;
+      if (!byName[label]) byName[label] = { label, unit, quantity: 0, usd: 0 };
+      byName[label].quantity += q;
+      byName[label].usd += usd;
+    }
+    const services = Object.values(byName)
+      .sort((a, b) => b.usd - a.usd).slice(0, 5)
+      .map((x) => ({ ...x, quantity: Math.round(x.quantity * 10) / 10, usd: Math.round(x.usd * 100) / 100 }));
+    const cyc = d.usageCycle || {};
+    return {
+      available: true,
+      username: u.username || '',
+      plan: (u.plan || {}).id || '',
+      cycle_start: (cyc.startAt || '').slice(0, 10),
+      cycle_end: (cyc.endAt || '').slice(0, 10),
+      total_usd: Math.round((parseFloat(d.totalUsageCreditsUsdAfterVolumeDiscount) || 0) * 100) / 100,
+      services,
+    };
+  } catch (e) { return { available: false, reason: 'error' }; }
 }
 
 // --- Manifest (OpenAI-compatible LLM router) helpers ---
@@ -531,6 +568,34 @@ async function adminApi(request, env, url, pathname, method) {
     return json({ total_tools: total.c, added_24h: today.c, missing_faq: noFaq.c, time: new Date().toISOString() });
   }
 
+  if (sub === 'traffic' && method === 'GET') {
+    const days = Math.min(30, Math.max(1, parseInt(url.searchParams.get('days') || '7')));
+    const since = new Date(Date.now() - days * 864e5).toISOString().slice(0, 10);
+    const gql = async (q) => {
+      const r = await fetch('https://api.cloudflare.com/client/v4/graphql', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + env.CF_ANALYTICS_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q }),
+      });
+      return r.json();
+    };
+    if (!env.CF_ANALYTICS_TOKEN) return json({ enabled: false, hint: 'CF_ANALYTICS_TOKEN not set' });
+    try {
+      const base = `filter: {date_gt: "${since}"}`;
+      const [v, p] = await Promise.all([
+        gql(`{ viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID || ''}"}) { rumPageloadEventsAdaptiveGroups(${base}, limit: 10000) { sum { visits } count } } } }`),
+        gql(`{ viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID || ''}"}) { rumPageloadEventsAdaptiveGroups(${base}, limit: 10, orderBy: [count_DESC]) { dimensions { page } count } } } }`),
+      ]);
+        const grp = (((v.data || {}).viewer || {}).accounts || [])[0];
+        const rows = (grp || {}).rumPageloadEventsAdaptiveGroups || [];
+        const pages = ((((p.data || {}).viewer || {}).accounts || [])[0] || {}).rumPageloadEventsAdaptiveGroups || [];
+      let visits = 0, views = 0;
+      rows.forEach((r) => { visits += (((r || {}).sum || {}).visits || 0); views += (r.count || 0); });
+      return json({ enabled: true, days, visits, pageviews: views,
+        top_pages: pages.map((x) => ({ page: ((x || {}).dimensions || {}).page || '', views: x.count || 0 })) });
+    } catch (e) { return json({ enabled: false, hint: 'query failed' }); }
+  }
+
   return json({ error: 'unknown admin route' }, 404);
 }
 
@@ -571,6 +636,7 @@ button.danger{color:var(--bad);border-color:var(--bad)}
 <button data-t="apify">Apify keys</button>
 <button data-t="manifest">Manifest</button>
 <button data-t="runs">Pipeline runs</button>
+<button data-t="traffic">Traffic</button>
 <button data-t="actions">Actions</button>
 </div>
 <div id="view"></div>
@@ -600,26 +666,37 @@ const views = {
   },
   async apify() {
     const d = await api('apify-keys');
-    let h = '<div class="card"><h3 style="margin-top:0">Apify keys (slots)</h3>';
-    d.keys.forEach((k) => {
-      h += '<div class="slot" data-id="' + k.id + '"><h3>Slot ' + k.slot + ' <span class="pill ' + (k.enabled ? 'ok' : 'bad') + '">' + (k.enabled ? 'active' : 'disabled') + '</span></h3>'
+    const JOBS = ['ai-directory-scrape', 'instagram-competitor', 'other'];
+    let h = '<div class="card"><h3 style="margin-top:0">Apify keys</h3><div class="meta">Pipeline uses enabled keys in slot order. Usage loads automatically.</div>';
+    const renderSlot = (k) => {
+      const opts = JOBS.map((j) => '<option value="' + j + '"' + (k.assigned_job === j ? ' selected' : '') + '>' + j + '</option>').join('');
+      return '<div class="slot" data-id="' + k.id + '">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+        + '<h3 style="margin:0">Slot ' + k.slot + ' <span class="pill ' + (k.enabled ? 'ok' : 'bad') + '">' + (k.enabled ? 'active' : 'disabled') + '</span></h3>'
+        + '<span><span class="pill" style="background:#0e0f12;border:1px solid var(--line);color:var(--ok)">token ...' + esc(k.token.slice(-4)) + '</span> '
+        + '<button class="g danger" style="padding:4px 8px" onclick="delApify(' + k.id + ')">✕</button></span></div>'
         + '<div class="grid"><div><label>Label</label><input data-f="label" value="' + esc(k.label) + '"></div>'
-        + '<div><label>API Token</label><input data-f="token" type="password" placeholder="Stored ' + esc(k.token) + ' — type to replace"></div>'
-        + '<div><label>Assigned job</label><input data-f="assigned_job" value="' + esc(k.assigned_job) + '"></div>'
+        + '<div><label>API Token</label><div style="display:flex;gap:6px"><input data-f="token" type="password" placeholder="Stored — type to replace" style="flex:1"><button class="g" onclick="eye(this)">👁</button></div></div>'
+        + '<div><label>Assigned job</label><select data-f="assigned_job">' + opts + '</select></div>'
         + '<div><label>Monthly cap USD</label><input data-f="monthly_cap_usd" type="number" step="0.5" value="' + k.monthly_cap_usd + '"></div></div>'
-        + '<div class="bar" id="bar-' + k.id + '"><i style="width:0%"></i></div><div class="meta" id="use-' + k.id + '">usage not loaded</div>'
+        + '<div class="bar" id="bar-' + k.id + '"><i style="width:0%"></i></div>'
+        + '<div class="meta" id="use-' + k.id + '">loading usage…</div>'
+        + '<div class="warn" id="warn-' + k.id + '" style="display:none"></div>'
+        + '<div class="meta" id="svc-' + k.id + '"></div>'
         + '<div class="row"><button class="g" onclick="saveApify(' + k.id + ',' + k.slot + ')">Save</button>'
-        + '<button class="g" onclick="testApify(' + k.id + ')">Test</button>'
-        + '<button class="g" onclick="usageApify(' + k.id + ')">Check usage</button>'
-        + '<button class="g danger" onclick="delApify(' + k.id + ')">Remove</button></div></div>';
-    });
+        + '<button class="g" onclick="testApify(' + k.id + ')">Test</button></div></div>';
+    };
+    d.keys.forEach((k) => { h += renderSlot(k); });
     h += '<div class="slot"><h3>+ New slot</h3><div class="grid">'
       + '<div><label>Slot #</label><input id="nk-slot" type="number" value="' + (d.keys.length + 1) + '"></div>'
       + '<div><label>Label</label><input id="nk-label" placeholder="my-key"></div>'
       + '<div><label>API Token</label><input id="nk-token" type="password"></div>'
       + '<div><label>Monthly cap USD</label><input id="nk-cap" type="number" step="0.5" value="5"></div></div>'
+      + '<div><label>Assigned job</label><select id="nk-job"><option>ai-directory-scrape</option><option>instagram-competitor</option><option>other</option></select></div>'
       + '<div class="row"><button class="b" onclick="addApify()">Add key</button></div></div></div>';
     V.innerHTML = h;
+    // auto-load usage for each key
+    d.keys.forEach((k) => { loadUsage(k.id, k.monthly_cap_usd); });
   },
   async manifest() {
     const d = await api('manifest');
@@ -650,6 +727,26 @@ const views = {
     h += '</div>';
     V.innerHTML = h;
   },
+  async traffic() {
+    V.innerHTML = '<div class="card"><h3 style="margin-top:0">Traffic</h3><div class="row">'
+      + '<button class="g" data-d="1">24h</button><button class="g" data-d="7">7d</button><button class="g" data-d="30">30d</button></div>'
+      + '<div id="tdata" class="meta">loading…</div></div>';
+    const load = async (days) => {
+      const el = document.getElementById('tdata');
+      try {
+        const r = await api('traffic?days=' + days);
+        if (!r.enabled) { el.innerHTML = 'Web Analytics not connected yet.<br><br>Enable it: Cloudflare dashboard → Pages → ai-directory-v5-radwan648 → Analytics → <b>Enable Web Analytics</b>. Data appears within a few hours.'; return; }
+        let h = '<div class="grid"><div><label>Visitors (' + r.days + 'd)</label><div style="font-size:26px;font-weight:800">' + r.visits.toLocaleString() + '</div></div>'
+          + '<div><label>Pageviews (' + r.days + 'd)</label><div style="font-size:26px;font-weight:800">' + r.pageviews.toLocaleString() + '</div></div></div>';
+        if (r.top_pages && r.top_pages.length) {
+          h += '<label style="margin-top:12px">Top pages</label>' + r.top_pages.map((x) => '<div class="meta">' + esc(x.page).slice(0, 60) + ' — ' + x.views + '</div>').join('');
+        }
+        el.innerHTML = h;
+      } catch (e) { el.textContent = 'Failed to load.'; }
+    };
+    V.querySelectorAll('[data-d]').forEach((b) => b.onclick = () => load(b.dataset.d));
+    load(7);
+  },
   async actions() {
     V.innerHTML = '<div class="card"><h3 style="margin-top:0">Actions</h3><div class="row">'
       + '<button class="b" onclick="doDispatch()">Dispatch pipeline now</button>'
@@ -672,15 +769,27 @@ window.saveApify = async (id, slot) => {
 window.addApify = async () => {
   const v = (id) => document.getElementById(id).value;
   if (!v('nk-token')) return log('Token required.');
-  await api('apify-keys', 'POST', { slot: v('nk-slot'), label: v('nk-label'), token: v('nk-token'), monthly_cap_usd: v('nk-cap') });
+  await api('apify-keys', 'POST', { slot: v('nk-slot'), label: v('nk-label'), token: v('nk-token'), monthly_cap_usd: v('nk-cap'), assigned_job: v('nk-job') });
   log('Key added.'); views.apify();
 };
 window.delApify = async (id) => { if (confirm('Remove this key?')) { await fetch('/z9-admin/api/apify-keys/' + id, { method: 'DELETE' }); log('Removed.'); views.apify(); } };
 window.testApify = async (id) => { log('Testing…'); const r = await api('apify-keys/' + id + '/test', 'POST'); log(r.ok ? 'OK: ' + r.username + ' (' + r.plan + ')' : 'FAILED: HTTP ' + r.status); };
-window.usageApify = async (id) => {
-  const r = await api('apify-keys/' + id + '/usage');
-  document.getElementById('use-' + id).textContent = r.available ? JSON.stringify(r.usage).slice(0, 200) : 'Live usage unavailable — monthly cap is the source of truth.';
-  log('Usage checked.');
+window.eye = (btn) => { const i = btn.parentElement.querySelector('input'); i.type = i.type === 'password' ? 'text' : 'password'; };
+window.loadUsage = async (id, cap) => {
+  const useEl = document.getElementById('use-' + id), barEl = document.getElementById('bar-' + id),
+        warnEl = document.getElementById('warn-' + id), svcEl = document.getElementById('svc-' + id);
+  try {
+    const r = await api('apify-keys/' + id + '/usage');
+    if (!r.available) { useEl.textContent = 'Usage unavailable (' + (r.reason || '?') + ').'; return; }
+    const used = r.total_usd, c = parseFloat(cap) || 0;
+    const left = Math.max(0, Math.round((c - used) * 100) / 100);
+    const pct = c > 0 ? Math.round(100 * used / c) : 0;
+    barEl.firstElementChild.style.width = Math.min(100, pct) + '%';
+    if (pct >= 100) barEl.classList.add('over');
+    useEl.textContent = '$' + used.toFixed(2) + ' of $' + c.toFixed(2) + ' used · $' + left.toFixed(2) + ' left · ' + pct + '% · ' + r.username + ' (' + r.plan + ') · resets ' + r.cycle_end;
+    if (pct >= 100) { warnEl.style.display = 'block'; warnEl.textContent = 'The Apify allowance for this token is used up — scraping is blocked on it. Add or switch to another token to keep going.'; }
+    svcEl.textContent = (r.services || []).map((x) => x.label + ' ' + x.quantity + (x.unit ? ' ' + x.unit : '') + ' ($' + x.usd.toFixed(2) + ')').join(' · ');
+  } catch (e) { useEl.textContent = 'Usage load failed.'; }
 };
 window.addManifest = async () => {
   const v = (id) => document.getElementById(id).value;

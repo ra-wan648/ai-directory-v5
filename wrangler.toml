@@ -11,6 +11,7 @@ database_id = "ff26faf5-3c7c-445a-a249-6c96fedddfdc"
 [vars]
 ENVIRONMENT = "production"
 SITE_URL = "https://ai-directory-v5-radwan648.pages.dev"
+CF_ACCOUNT_ID = "2acb9835655d0f4183eb7f899580f6ab"
 
 # Secrets are set with `wrangler secret put` and are never stored in this file:
 #   INTERNAL_API_KEY, TELEGRAM_BOT_TOKEN, ADMIN_TELEGRAM_ID
@@ -18,3 +19,4 @@ SITE_URL = "https://ai-directory-v5-radwan648.pages.dev"
 # Cron: dispatch the GitHub pipeline at 6am + 6pm Bangladesh time (00:00/12:00 UTC).
 [triggers]
 crons = ["0 0,12 * * *"]
+
