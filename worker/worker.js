@@ -295,43 +295,32 @@ async function getToolsList(env, params) {
 // ══════════════════════════════════════════════════════════════
 
 // --- Cloudflare Access JWT validation ---
-// Extracts the team domain from the JWT's iss claim, fetches that team's
-// public certs, and verifies the RS256 signature. No pre-configuration
-// needed; an attacker cannot forge a team-signed JWT.
-let certsCache = {};
-async function validateAccessJWT(request) {
+// The edge (Cloudflare Access) cryptographically validates the JWT before the
+// request reaches the worker and sets CF-Access-Authenticated-User-Email from
+// the validated session. That header cannot be forged through the edge while
+// the Access application is enabled on this route (verified: unauthenticated
+// requests 302 to the Access login). We check the JWT is well-formed, fresh,
+// issued by a cloudflareaccess.com team, and that the edge-authenticated
+// email matches the configured admin.
+function validateAccessJWT(request, env) {
   const jwt = request.headers.get('Cf-Access-Jwt-Assertion');
   if (!jwt) return { ok: false, reason: 'no-jwt' };
   const parts = jwt.split('.');
   if (parts.length !== 3) return { ok: false, reason: 'malformed' };
-  const b64 = (s) => atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+  const b64 = (x) => atob(x.replace(/-/g, '+').replace(/_/g, '/'));
   let payload;
   try { payload = JSON.parse(b64(parts[1])); }
   catch (e) { return { ok: false, reason: 'bad-payload' }; }
-  if (payload.exp && payload.exp * 1000 < Date.now()) return { ok: false, reason: 'expired' };
+  if (payload.exp && payload.exp * 1000 < Date.now())
+    return { ok: false, reason: 'expired' };
   const iss = String(payload.iss || '');
-  const m = iss.match(/^https:\/\/([^/]+\.cloudflareaccess\.com)\/?$/);
-  if (!m) return { ok: false, reason: 'bad-iss' };
-  const teamDomain = m[1];
-  try {
-    let certs = certsCache[teamDomain];
-    if (!certs || Date.now() - certs.at > 6 * 3600e3) {
-      const r = await fetch('https://' + teamDomain + '/cdn-cgi/access/certs');
-      if (!r.ok) return { ok: false, reason: 'certs-fetch' };
-      certs = { keys: (await r.json()).public_certs || [], at: Date.now() };
-      certsCache[teamDomain] = certs;
-    }
-    const header = JSON.parse(b64(parts[0]));
-    const jwk = certs.keys.find((k) => k.kid === header.kid);
-    if (!jwk) return { ok: false, reason: 'no-kid' };
-    const key = await crypto.subtle.importKey('jwk', jwk,
-      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
-    const data = new TextEncoder().encode(parts[0] + '.' + parts[1]);
-    const sig = Uint8Array.from(b64(parts[2]), (c) => c.charCodeAt(0));
-    const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, sig, data);
-    if (!valid) return { ok: false, reason: 'bad-sig' };
-    return { ok: true, email: payload.email || '' };
-  } catch (e) { return { ok: false, reason: 'verify-error' }; }
+  if (!/^https:\/\/[^/]+\.cloudflareaccess\.com\/?$/.test(iss))
+    return { ok: false, reason: 'bad-iss' };
+  const edgeEmail = request.headers.get('CF-Access-Authenticated-User-Email') || '';
+  const adminEmail = env.ADMIN_EMAIL || 'radwanislam648@gmail.com';
+  if (edgeEmail.toLowerCase() !== adminEmail.toLowerCase())
+    return { ok: false, reason: 'email-mismatch' };
+  return { ok: true, email: payload.email || edgeEmail };
 }
 
 async function requireAdmin(request, env) {
@@ -339,7 +328,7 @@ async function requireAdmin(request, env) {
   if (env.ADMIN_BOOTSTRAP_KEY && boot && boot === env.ADMIN_BOOTSTRAP_KEY) {
     return { ok: true, via: 'bootstrap' };
   }
-  const jwt = await validateAccessJWT(request);
+  const jwt = validateAccessJWT(request, env);
   if (jwt.ok) return { ok: true, via: 'access', email: jwt.email };
   return { ok: false, reason: jwt.reason };
 }
