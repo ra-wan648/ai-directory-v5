@@ -14,3 +14,7 @@ SITE_URL = "https://ai-directory-v5-radwan648.pages.dev"
 
 # Secrets are set with `wrangler secret put` and are never stored in this file:
 #   INTERNAL_API_KEY, TELEGRAM_BOT_TOKEN, ADMIN_TELEGRAM_ID
+
+# Cron: dispatch the GitHub pipeline at 6am + 6pm Bangladesh time (00:00/12:00 UTC).
+[triggers]
+crons = ["0 0,12 * * *"]

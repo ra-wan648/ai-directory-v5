@@ -288,6 +288,424 @@ async function getToolsList(env, params) {
   };
 }
 
+// ══════════════════════════════════════════════════════════════
+// ADMIN API + CRON DISPATCH (hidden dashboard backend)
+// All /api/admin/* routes require either a valid Cloudflare Access JWT
+// (edge-validated) or the bootstrap key (temporary, deleted after setup).
+// ══════════════════════════════════════════════════════════════
+
+// --- Cloudflare Access JWT validation ---
+// Extracts the team domain from the JWT's iss claim, fetches that team's
+// public certs, and verifies the RS256 signature. No pre-configuration
+// needed; an attacker cannot forge a team-signed JWT.
+let certsCache = {};
+async function validateAccessJWT(request) {
+  const jwt = request.headers.get('Cf-Access-Jwt-Assertion');
+  if (!jwt) return { ok: false, reason: 'no-jwt' };
+  const parts = jwt.split('.');
+  if (parts.length !== 3) return { ok: false, reason: 'malformed' };
+  const b64 = (s) => atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+  let payload;
+  try { payload = JSON.parse(b64(parts[1])); }
+  catch (e) { return { ok: false, reason: 'bad-payload' }; }
+  if (payload.exp && payload.exp * 1000 < Date.now()) return { ok: false, reason: 'expired' };
+  const iss = String(payload.iss || '');
+  const m = iss.match(/^https:\/\/([^/]+\.cloudflareaccess\.com)\/?$/);
+  if (!m) return { ok: false, reason: 'bad-iss' };
+  const teamDomain = m[1];
+  try {
+    let certs = certsCache[teamDomain];
+    if (!certs || Date.now() - certs.at > 6 * 3600e3) {
+      const r = await fetch('https://' + teamDomain + '/cdn-cgi/access/certs');
+      if (!r.ok) return { ok: false, reason: 'certs-fetch' };
+      certs = { keys: (await r.json()).public_certs || [], at: Date.now() };
+      certsCache[teamDomain] = certs;
+    }
+    const header = JSON.parse(b64(parts[0]));
+    const jwk = certs.keys.find((k) => k.kid === header.kid);
+    if (!jwk) return { ok: false, reason: 'no-kid' };
+    const key = await crypto.subtle.importKey('jwk', jwk,
+      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+    const data = new TextEncoder().encode(parts[0] + '.' + parts[1]);
+    const sig = Uint8Array.from(b64(parts[2]), (c) => c.charCodeAt(0));
+    const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, sig, data);
+    if (!valid) return { ok: false, reason: 'bad-sig' };
+    return { ok: true, email: payload.email || '' };
+  } catch (e) { return { ok: false, reason: 'verify-error' }; }
+}
+
+async function requireAdmin(request, env) {
+  const boot = request.headers.get('X-Bootstrap-Key');
+  if (env.ADMIN_BOOTSTRAP_KEY && boot && boot === env.ADMIN_BOOTSTRAP_KEY) {
+    return { ok: true, via: 'bootstrap' };
+  }
+  const jwt = await validateAccessJWT(request);
+  if (jwt.ok) return { ok: true, via: 'access', email: jwt.email };
+  return { ok: false, reason: jwt.reason };
+}
+
+// --- GitHub workflow dispatch ---
+async function dispatchGitHubWorkflow(env, ref) {
+  const r = await fetch(
+    'https://api.github.com/repos/ra-wan648/ai-directory-v5/actions/workflows/pipeline.yml/dispatches',
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + env.GH_DISPATCH_TOKEN,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'ai-directory-worker-cron',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ref: ref || 'main' })
+    });
+  return { ok: r.status === 204, status: r.status };
+}
+
+async function githubRecentRuns(env, perPage) {
+  const r = await fetch(
+    'https://api.github.com/repos/ra-wan648/ai-directory-v5/actions/workflows/pipeline.yml/runs?per_page=' + (perPage || 5),
+    { headers: { 'Authorization': 'Bearer ' + env.GH_DISPATCH_TOKEN, 'Accept': 'application/vnd.github+json', 'User-Agent': 'ai-directory-worker-cron' } });
+  if (!r.ok) return [];
+  const d = await r.json();
+  return (d.workflow_runs || []).map((x) => ({ id: x.id, status: x.status, conclusion: x.conclusion, created_at: x.created_at, head_sha: (x.head_sha || '').slice(0, 8) }));
+}
+
+async function telegramSend(env, text) {
+  if (!env.TELEGRAM_BOT_TOKEN || !env.ADMIN_TELEGRAM_ID) return false;
+  const r = await fetch('https://api.telegram.org/bot' + env.TELEGRAM_BOT_TOKEN + '/sendMessage', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: env.ADMIN_TELEGRAM_ID, text: text, parse_mode: 'HTML' })
+  });
+  return r.ok;
+}
+
+// --- Cron handler: dispatch pipeline + watchdog ---
+async function handleCronTrigger(env) {
+  const started = new Date().toISOString();
+  try {
+    await env.DB.prepare(
+      `INSERT INTO pipeline_runs (started_at, status, trigger) VALUES (?, 'dispatching', 'worker-cron')`
+    ).bind(started).run();
+  } catch (e) {}
+  const disp = await dispatchGitHubWorkflow(env, 'main');
+  if (!disp.ok) {
+    await telegramSend(env, '🚨 <b>Pipeline dispatch FAILED</b>\nGitHub API returned ' + disp.status + '. Check GH_DISPATCH_TOKEN permissions (needs Actions: write).');
+    try {
+      await env.DB.prepare(`UPDATE pipeline_runs SET status='dispatch-failed', finished_at=datetime('now') WHERE started_at=?`).bind(started).run();
+    } catch (e) {}
+    return;
+  }
+  await new Promise((r) => setTimeout(r, 120000));
+  let runs = [];
+  try { runs = await githubRecentRuns(env, 3); } catch (e) {}
+  const fresh = runs.find((x) => Date.now() - new Date(x.created_at).getTime() < 10 * 60e3);
+  if (!fresh) {
+    await telegramSend(env, '⚠️ <b>Pipeline dispatched but no run started</b> within 10 min. Check: https://github.com/ra-wan648/ai-directory-v5/actions');
+    try {
+      await env.DB.prepare(`UPDATE pipeline_runs SET status='no-run', finished_at=datetime('now') WHERE started_at=?`).bind(started).run();
+    } catch (e) {}
+  } else {
+    await telegramSend(env, '▶️ <b>Pipeline started</b> (run #' + fresh.id + '). Watch: https://github.com/ra-wan648/ai-directory-v5/actions');
+    try {
+      await env.DB.prepare(`UPDATE pipeline_runs SET status='running', finished_at=datetime('now') WHERE started_at=?`).bind(started).run();
+    } catch (e) {}
+  }
+}
+
+// --- Apify helpers ---
+async function apifyTestToken(token) {
+  const r = await fetch('https://api.apify.com/v2/users/me', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+  if (!r.ok) return { ok: false, status: r.status };
+  const d = await r.json();
+  const u = d.data || {};
+  return { ok: true, username: u.username || '', plan: (u.plan || {}).id || '' };
+}
+
+async function apifyUsage(token) {
+  try {
+    const r = await fetch('https://api.apify.com/v2/users/me/usage/monthly', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!r.ok) return { available: false };
+    const d = await r.json();
+    return { available: true, usage: d.data || d };
+  } catch (e) { return { available: false }; }
+}
+
+// --- Manifest (OpenAI-compatible LLM router) helpers ---
+async function manifestTest(baseUrl, apiKey) {
+  const url = String(baseUrl || '').replace(/\/$/, '') + '/responses';
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'auto', input: 'ping', store: false, max_output_tokens: 4 })
+  });
+  const text = await r.text();
+  return { ok: r.ok, status: r.status, sample: text.slice(0, 120) };
+}
+
+// --- Admin API router ---
+async function adminApi(request, env, url, pathname, method) {
+  const auth = await requireAdmin(request, env);
+  if (!auth.ok) {
+    return new Response(JSON.stringify({ error: 'unauthorized', reason: auth.reason }),
+      { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+  const sub = pathname.replace(/^\/api\/admin\//, '');
+  const json = (obj, status) => new Response(JSON.stringify(obj),
+    { status: status || 200, headers: { 'Content-Type': 'application/json' } });
+  const body = (method === 'POST' || method === 'PUT')
+    ? await request.json().catch(() => ({})) : {};
+
+  if (sub === 'apify-keys' && method === 'GET') {
+    const rows = await env.DB.prepare(
+      `SELECT id, slot, label, assigned_job, monthly_cap_usd, enabled, created_at, substr(token, -4) AS last4 FROM apify_keys ORDER BY slot`).all();
+    return json({ keys: (rows.results || []).map((k) => ({ ...k, token: '••••••••' + (k.last4 || '') })) });
+  }
+  if (sub === 'apify-keys' && method === 'POST') {
+    const { slot, label, token, assigned_job, monthly_cap_usd } = body;
+    if (!token) return json({ error: 'token required' }, 400);
+    await env.DB.prepare(
+      `INSERT INTO apify_keys (slot, label, token, assigned_job, monthly_cap_usd) VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(slot) DO UPDATE SET label=excluded.label, token=excluded.token, assigned_job=excluded.assigned_job, monthly_cap_usd=excluded.monthly_cap_usd`
+    ).bind(parseInt(slot) || 1, String(label || ''), String(token), String(assigned_job || 'ai-directory-scrape'), parseFloat(monthly_cap_usd) || 5).run();
+    return json({ ok: true });
+  }
+  let m = sub.match(/^apify-keys\/(\d+)\/test$/);
+  if (m && method === 'POST') {
+    const row = await env.DB.prepare(`SELECT token FROM apify_keys WHERE id=?`).bind(m[1]).first();
+    if (!row) return json({ error: 'not found' }, 404);
+    return json(await apifyTestToken(row.token));
+  }
+  m = sub.match(/^apify-keys\/(\d+)\/usage$/);
+  if (m && method === 'GET') {
+    const row = await env.DB.prepare(`SELECT token, monthly_cap_usd FROM apify_keys WHERE id=?`).bind(m[1]).first();
+    if (!row) return json({ error: 'not found' }, 404);
+    return json({ ...(await apifyUsage(row.token)), monthly_cap_usd: row.monthly_cap_usd });
+  }
+  m = sub.match(/^apify-keys\/(\d+)$/);
+  if (m && method === 'DELETE') {
+    await env.DB.prepare(`DELETE FROM apify_keys WHERE id=?`).bind(m[1]).run();
+    return json({ ok: true });
+  }
+
+  if (sub === 'manifest' && method === 'GET') {
+    const rows = await env.DB.prepare(
+      `SELECT id, label, base_url, monthly_limit, used_this_month, reset_day, enabled, created_at, substr(api_key, -4) AS last4 FROM manifest_endpoints ORDER BY id`).all();
+    return json({ endpoints: (rows.results || []).map((k) => ({ ...k, api_key: '••••••••' + (k.last4 || '') })) });
+  }
+  if (sub === 'manifest' && method === 'POST') {
+    const { label, base_url, api_key, monthly_limit } = body;
+    if (!api_key) return json({ error: 'api_key required' }, 400);
+    await env.DB.prepare(
+      `INSERT INTO manifest_endpoints (label, base_url, api_key, monthly_limit) VALUES (?, ?, ?, ?)`
+    ).bind(String(label || ''), String(base_url || 'https://app.manifest.build/v1'), String(api_key), parseInt(monthly_limit) || 1000).run();
+    return json({ ok: true });
+  }
+  m = sub.match(/^manifest\/(\d+)\/test$/);
+  if (m && method === 'POST') {
+    const row = await env.DB.prepare(`SELECT base_url, api_key FROM manifest_endpoints WHERE id=?`).bind(m[1]).first();
+    if (!row) return json({ error: 'not found' }, 404);
+    return json(await manifestTest(row.base_url, row.api_key));
+  }
+  m = sub.match(/^manifest\/(\d+)$/);
+  if (m && method === 'DELETE') {
+    await env.DB.prepare(`DELETE FROM manifest_endpoints WHERE id=?`).bind(m[1]).run();
+    return json({ ok: true });
+  }
+
+  if (sub === 'pipeline/dispatch' && method === 'POST') {
+    const disp = await dispatchGitHubWorkflow(env, 'main');
+    await telegramSend(env, disp.ok ? '▶️ <b>Pipeline manually dispatched</b> from admin dashboard.' : '🚨 Manual dispatch failed: ' + disp.status);
+    return json(disp);
+  }
+  if (sub === 'pipeline/runs' && method === 'GET') {
+    let dbRuns = [];
+    try { dbRuns = (await env.DB.prepare(`SELECT * FROM pipeline_runs ORDER BY started_at DESC LIMIT 20`).all()).results || []; } catch (e) {}
+    let ghRuns = [];
+    try { ghRuns = await githubRecentRuns(env, 5); } catch (e) {}
+    return json({ db_runs: dbRuns, github_runs: ghRuns });
+  }
+
+  if (sub === 'telegram/test' && method === 'POST') {
+    const ok = await telegramSend(env, '✅ <b>Admin dashboard test</b> — Telegram alerts are working.');
+    return json({ ok });
+  }
+
+  if (sub === 'stats' && method === 'GET') {
+    let total = { c: 0 }, today = { c: 0 }, noFaq = { c: 0 };
+    try { total = await env.DB.prepare(`SELECT COUNT(*) AS c FROM tools WHERE status='published'`).first(); } catch (e) {}
+    try { today = await env.DB.prepare(`SELECT COUNT(*) AS c FROM tools WHERE status='published' AND created_at > datetime('now', '-1 day')`).first(); } catch (e) {}
+    try { noFaq = await env.DB.prepare(`SELECT COUNT(*) AS c FROM tools WHERE status='published' AND (faq IS NULL OR faq='')`).first(); } catch (e) {}
+    return json({ total_tools: total.c, added_24h: today.c, missing_faq: noFaq.c, time: new Date().toISOString() });
+  }
+
+  return json({ error: 'unknown admin route' }, 404);
+}
+
+// --- Dashboard HTML (served by the worker, same origin as the API) ---
+function dashboardHTML() {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — AI Directory</title>
+<style>
+:root{--bg:#0e0f12;--card:#17191f;--line:#262a33;--ink:#eef1f6;--muted:#9aa3b2;--amber:#E8940C;--ok:#3FBFA0;--bad:#e5484d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+header{padding:16px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+h1{font-size:18px;margin:0}main{max-width:1100px;margin:0 auto;padding:24px}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tabs button{background:var(--card);color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
+.tabs button.on{color:var(--ink);border-color:var(--amber)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+.slot{border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.slot h3{margin:0 0 10px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
+input,select{width:100%;background:#0e0f12;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 10px;font-size:13px}
+.bar{height:8px;background:#0e0f12;border-radius:99px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar.over i{background:var(--bad)}
+.row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+button.b{background:var(--amber);color:#111;border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
+button.g{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px}
+button.danger{color:var(--bad);border-color:var(--bad)}
+.pill{font-size:11px;font-weight:800;border-radius:99px;padding:3px 10px}
+.pill.ok{background:#12332b;color:var(--ok)}.pill.bad{background:#3a1416;color:var(--bad)}
+.meta{font-size:12px;color:var(--muted)}
+#log{white-space:pre-wrap;font-size:12px;color:var(--muted);max-height:300px;overflow:auto}
+</style></head><body>
+<header><h1>AI Directory — Admin</h1><span class="meta" id="clock"></span></header>
+<main>
+<div class="tabs">
+<button data-t="overview" class="on">Overview</button>
+<button data-t="apify">Apify keys</button>
+<button data-t="manifest">Manifest</button>
+<button data-t="runs">Pipeline runs</button>
+<button data-t="actions">Actions</button>
+</div>
+<div id="view"></div>
+<div class="card"><h3 style="margin-top:0">Log</h3><div id="log"></div></div>
+</main>
+<script>
+const V = document.getElementById('view'), LOG = document.getElementById('log');
+const log = (m) => { LOG.textContent += new Date().toLocaleTimeString() + ' ' + m + '\\n'; LOG.scrollTop = 1e6; };
+async function api(path, method, body) {
+  const r = await fetch('/api/admin/' + path, { method: method || 'GET',
+    headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+  return j;
+}
+const views = {
+  async overview() {
+    const s = await api('stats');
+    V.innerHTML = '<div class="card"><h3 style="margin-top:0">Site</h3><div class="grid">'
+      + '<div><label>Total published tools</label><div style="font-size:26px;font-weight:800">' + s.total_tools + '</div></div>'
+      + '<div><label>Added last 24h</label><div style="font-size:26px;font-weight:800">' + s.added_24h + '</div></div>'
+      + '<div><label>Missing FAQ (enrichment queue)</label><div style="font-size:26px;font-weight:800">' + s.missing_faq + '</div></div>'
+      + '<div><label>Worker time</label><div class="meta">' + s.time + '</div></div></div></div>';
+  },
+  async apify() {
+    const d = await api('apify-keys');
+    let h = '<div class="card"><h3 style="margin-top:0">Apify keys (slots)</h3>';
+    d.keys.forEach((k) => {
+      h += '<div class="slot" data-id="' + k.id + '"><h3>Slot ' + k.slot + ' <span class="pill ' + (k.enabled ? 'ok' : 'bad') + '">' + (k.enabled ? 'active' : 'disabled') + '</span></h3>'
+        + '<div class="grid"><div><label>Label</label><input data-f="label" value="' + esc(k.label) + '"></div>'
+        + '<div><label>API Token</label><input data-f="token" type="password" placeholder="Stored ' + esc(k.token) + ' — type to replace"></div>'
+        + '<div><label>Assigned job</label><input data-f="assigned_job" value="' + esc(k.assigned_job) + '"></div>'
+        + '<div><label>Monthly cap USD</label><input data-f="monthly_cap_usd" type="number" step="0.5" value="' + k.monthly_cap_usd + '"></div></div>'
+        + '<div class="bar" id="bar-' + k.id + '"><i style="width:0%"></i></div><div class="meta" id="use-' + k.id + '">usage not loaded</div>'
+        + '<div class="row"><button class="g" onclick="saveApify(' + k.id + ',' + k.slot + ')">Save</button>'
+        + '<button class="g" onclick="testApify(' + k.id + ')">Test</button>'
+        + '<button class="g" onclick="usageApify(' + k.id + ')">Check usage</button>'
+        + '<button class="g danger" onclick="delApify(' + k.id + ')">Remove</button></div></div>';
+    });
+    h += '<div class="slot"><h3>+ New slot</h3><div class="grid">'
+      + '<div><label>Slot #</label><input id="nk-slot" type="number" value="' + (d.keys.length + 1) + '"></div>'
+      + '<div><label>Label</label><input id="nk-label" placeholder="my-key"></div>'
+      + '<div><label>API Token</label><input id="nk-token" type="password"></div>'
+      + '<div><label>Monthly cap USD</label><input id="nk-cap" type="number" step="0.5" value="5"></div></div>'
+      + '<div class="row"><button class="b" onclick="addApify()">Add key</button></div></div></div>';
+    V.innerHTML = h;
+  },
+  async manifest() {
+    const d = await api('manifest');
+    let h = '<div class="card"><h3 style="margin-top:0">Manifest endpoints (LLM router)</h3><div class="meta">Pipeline uses the enabled endpoint with remaining monthly quota (rollover).</div>';
+    d.endpoints.forEach((e) => {
+      const pct = e.monthly_limit ? Math.round(100 * e.used_this_month / e.monthly_limit) : 0;
+      h += '<div class="slot"><h3>' + esc(e.label || ('Endpoint ' + e.id)) + ' <span class="pill ' + (e.enabled ? 'ok' : 'bad') + '">' + (e.enabled ? 'active' : 'disabled') + '</span></h3>'
+        + '<div class="meta">' + esc(e.base_url) + ' · key ' + esc(e.api_key) + '</div>'
+        + '<div class="bar' + (pct >= 100 ? ' over' : '') + '"><i style="width:' + Math.min(100, pct) + '%"></i></div>'
+        + '<div class="meta">' + e.used_this_month + ' / ' + e.monthly_limit + ' used (' + pct + '%)</div>'
+        + '<div class="row"><button class="g" onclick="testManifest(' + e.id + ')">Test</button>'
+        + '<button class="g danger" onclick="delManifest(' + e.id + ')">Remove</button></div></div>';
+    });
+    h += '<div class="slot"><h3>+ New endpoint</h3><div class="grid">'
+      + '<div><label>Label</label><input id="nm-label" placeholder="main"></div>'
+      + '<div><label>Base URL</label><input id="nm-url" value="https://app.manifest.build/v1"></div>'
+      + '<div><label>API Key</label><input id="nm-key" type="password"></div>'
+      + '<div><label>Monthly limit (requests)</label><input id="nm-limit" type="number" value="1000"></div></div>'
+      + '<div class="row"><button class="b" onclick="addManifest()">Add endpoint</button></div></div></div>';
+    V.innerHTML = h;
+  },
+  async runs() {
+    const d = await api('pipeline/runs');
+    let h = '<div class="card"><h3 style="margin-top:0">Recent runs</h3>';
+    (d.github_runs || []).forEach((r) => {
+      h += '<div class="meta">#' + r.id + ' · ' + r.head_sha + ' · ' + r.status + '/' + (r.conclusion || '…') + ' · ' + r.created_at + '</div>';
+    });
+    h += '</div>';
+    V.innerHTML = h;
+  },
+  async actions() {
+    V.innerHTML = '<div class="card"><h3 style="margin-top:0">Actions</h3><div class="row">'
+      + '<button class="b" onclick="doDispatch()">Dispatch pipeline now</button>'
+      + '<button class="g" onclick="doTg()">Send Telegram test</button></div>'
+      + '<div class="meta" style="margin-top:8px">Dispatch triggers the GitHub Actions pipeline immediately (same as the 6am/6pm cron).</div></div>';
+  }
+};
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+document.querySelectorAll('.tabs button').forEach((b) => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach((x) => x.classList.remove('on'));
+  b.classList.add('on'); views[b.dataset.t]().catch((e) => log('ERR ' + e.message));
+});
+window.saveApify = async (id, slot) => {
+  const sl = document.querySelector('.slot[data-id="' + id + '"]');
+  const g = (f) => sl.querySelector('[data-f="' + f + '"]').value;
+  if (!g('token')) { log('Token unchanged — only label/job/cap saved when a new token is typed.'); return; }
+  await api('apify-keys', 'POST', { slot: slot, label: g('label'), token: g('token'), assigned_job: g('assigned_job'), monthly_cap_usd: g('monthly_cap_usd') });
+  log('Saved slot.'); views.apify();
+};
+window.addApify = async () => {
+  const v = (id) => document.getElementById(id).value;
+  if (!v('nk-token')) return log('Token required.');
+  await api('apify-keys', 'POST', { slot: v('nk-slot'), label: v('nk-label'), token: v('nk-token'), monthly_cap_usd: v('nk-cap') });
+  log('Key added.'); views.apify();
+};
+window.delApify = async (id) => { if (confirm('Remove this key?')) { await fetch('/api/admin/apify-keys/' + id, { method: 'DELETE' }); log('Removed.'); views.apify(); } };
+window.testApify = async (id) => { log('Testing…'); const r = await api('apify-keys/' + id + '/test', 'POST'); log(r.ok ? 'OK: ' + r.username + ' (' + r.plan + ')' : 'FAILED: HTTP ' + r.status); };
+window.usageApify = async (id) => {
+  const r = await api('apify-keys/' + id + '/usage');
+  document.getElementById('use-' + id).textContent = r.available ? JSON.stringify(r.usage).slice(0, 200) : 'Live usage unavailable — monthly cap is the source of truth.';
+  log('Usage checked.');
+};
+window.addManifest = async () => {
+  const v = (id) => document.getElementById(id).value;
+  if (!v('nm-key')) return log('API key required.');
+  await api('manifest', 'POST', { label: v('nm-label'), base_url: v('nm-url'), api_key: v('nm-key'), monthly_limit: v('nm-limit') });
+  log('Endpoint added.'); views.manifest();
+};
+window.delManifest = async (id) => { if (confirm('Remove this endpoint?')) { await fetch('/api/admin/manifest/' + id, { method: 'DELETE' }); log('Removed.'); views.manifest(); } };
+window.testManifest = async (id) => { log('Testing…'); const r = await api('manifest/' + id + '/test', 'POST'); log(r.ok ? 'OK (' + r.status + ')' : 'FAILED: HTTP ' + r.status + ' ' + (r.sample || '')); };
+window.doDispatch = async () => { const r = await api('pipeline/dispatch', 'POST'); log(r.ok ? 'Dispatched.' : 'Dispatch failed: ' + r.status); };
+window.doTg = async () => { const r = await api('telegram/test', 'POST'); log(r.ok ? 'Telegram test sent.' : 'Telegram failed.'); };
+setInterval(() => { document.getElementById('clock').textContent = new Date().toLocaleString(); }, 1000);
+views.overview().catch((e) => { V.innerHTML = '<div class="card"><span style="color:var(--bad)">Auth required.</span><div class="meta">' + esc(e.message) + '</div></div>'; });
+</script></body></html>`;
+}
+
+
 const handler = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -307,6 +725,15 @@ const handler = {
   },
 
   async route(request, env, ctx, url, pathname, method) {
+    // ─── Admin (hidden dashboard + API) ───
+    if (pathname === '/z9-admin' || pathname === '/z9-admin/') {
+      const auth = await requireAdmin(request, env);
+      if (!auth.ok) return new Response('Admin: unauthorized (' + auth.reason + ')', { status: 401 });
+      return new Response(dashboardHTML(), { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    }
+    if (pathname.startsWith('/api/admin/')) {
+      return adminApi(request, env, url, pathname, method);
+    }
     // ─── XML/TEXT routes ───
     if (pathname === '/sitemap.xml') {
       return this.sitemap(env);
@@ -934,117 +1361,6 @@ const handler = {
       urls += `<url><loc>${baseUrl}/prompts</loc></url>\n`;
       urls += `<url><loc>${baseUrl}/blog</loc></url>\n`;
 
-      // ToolHub free mini-tools: browser-only section mounted at /toolhub/.
-      // Slugs come from toolhub-site/src/data.js (the catalog source of truth).
-      urls += `<url><loc>${baseUrl}/toolhub/</loc></url>\n`;
-      const TOOLHUB_SLUGS = [
-  'pdf-word',
-  'pdf-image',
-  'pdf-excel',
-  'pdf-ppt',
-  'pdf-txt',
-  'merge-pdf',
-  'split-pdf',
-  'compress-pdf',
-  'rotate-pdf',
-  'pdf-watermark',
-  'pdf-pages',
-  'pdf-meta',
-  'pdf-form',
-  'html-pdf',
-  'image-pdf',
-  'kokoro-tts',
-  'qwen3-tts',
-  'gemini-watermark',
-  'dola-cleanup',
-  'youtube-thumbnail',
-  'caption-converter',
-  'bulk-image-compressor',
-  'jpg-png',
-  'png-jpg',
-  'webp-converter',
-  'heic-jpg',
-  'image-resizer',
-  'image-cropper',
-  'image-rotate',
-  'image-compressor',
-  'remove-exif',
-  'favicon',
-  'svg-optimizer',
-  'palette',
-  'collage',
-  'social-resizer',
-  'json',
-  'xml',
-  'yaml',
-  'sql',
-  'css',
-  'html',
-  'javascript',
-  'markdown',
-  'csv',
-  'base64',
-  'base64-decode',
-  'url-encode',
-  'url-decode',
-  'jwt',
-  'uuid',
-  'hash',
-  'regex',
-  'diff',
-  'word-counter',
-  'slug',
-  'case',
-  'dedupe',
-  'whitespace',
-  'lorem',
-  'markdown-table',
-  'curl',
-  'gradient',
-  'shadow',
-  'color',
-  'entities',
-  'http-status',
-  'chmod',
-  'qr',
-  'barcode',
-  'password',
-  'random-number',
-  'unix-time',
-  'bytes',
-  'percentage',
-  'age',
-  'date-diff',
-  'timezone',
-  'bmi',
-  'interest',
-  'units',
-  'morse',
-  'contrast',
-  'favicon-preview',
-  'js-runner',
-  'html-preview',
-  'css-playground',
-  'regex-builder',
-  'mind-map',
-  'uml',
-  'chinese-text',
-  'text-reverser',
-  'remove-line-breaks',
-  'rot13',
-  'text-binary',
-  'binary-text',
-  'text-hex',
-  'hex-text',
-  'text-unicode',
-  'unicode-text',
-  'http-simulator',
-  'cdnjs',
-];
-      for (const slug of TOOLHUB_SLUGS) {
-        urls += `<url><loc>${baseUrl}/toolhub/tools/${slug}/</loc></url>\n`;
-      }
-
       // The browse page is the site's main listing, and each category is a
       // landing page in its own right, so both belong in the sitemap.
       try {
@@ -1540,5 +1856,8 @@ Sitemap: ${baseUrl}/sitemap.xml`;
 export default {
   async fetch(request, env, ctx) {
     return handler.fetch(request, env, ctx);
+  },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(handleCronTrigger(env));
   }
 };
