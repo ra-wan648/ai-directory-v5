@@ -6,8 +6,37 @@ from config import load_env
 
 load_env()
 
-MANIFEST_URL = os.environ['MANIFEST_BASE_URL']
-API_KEY = os.environ['MANIFEST_API_KEY']
+# Quota-based rollover across Manifest endpoints (D1 -> env -> legacy).
+# See manifest_router.py. Falls back to the legacy single pair when the
+# router finds nothing, so old setups keep working.
+try:
+    from manifest_router import pick_endpoint, record_use
+    _ROUTER = True
+except ImportError:
+    _ROUTER = False
+
+_LEGACY_URL = os.environ.get('MANIFEST_BASE_URL', '').rstrip('/')
+_LEGACY_KEY = os.environ.get('MANIFEST_API_KEY', '')
+_current_ep = None
+
+
+def _endpoint():
+    global _current_ep
+    if _ROUTER:
+        # Re-pick when the cached endpoint is exhausted.
+        if (_current_ep is None or
+                _current_ep.get('_local_used', 0) >= _current_ep.get('_local_limit', 0)):
+            _current_ep = pick_endpoint()
+            if _current_ep:
+                _current_ep['_local_used'] = 0
+                _current_ep['_local_limit'] = (
+                    _current_ep['monthly_limit'] - _current_ep['used_this_month'])
+        if _current_ep:
+            return _current_ep
+    if _LEGACY_URL and _LEGACY_KEY:
+        return {'base_url': _LEGACY_URL, 'api_key': _LEGACY_KEY,
+                'label': 'legacy', 'source': 'legacy'}
+    return None
 
 
 def call_llm(prompt, use_web_search=False, max_tokens=2000):
@@ -18,14 +47,43 @@ def call_llm(prompt, use_web_search=False, max_tokens=2000):
     }
     if use_web_search:
         body["tools"] = [{"type": "web_search_20250305", "name": "web_search"}]
+    ep = _endpoint()
+    if not ep:
+        print("[ERROR] LLM: no Manifest endpoint with remaining quota")
+        return None
     try:
         r = requests.post(
-            f"{MANIFEST_URL}/v1/chat/completions",
-            headers={"Authorization": f"Bearer {API_KEY}",
+            f"{ep['base_url']}/v1/chat/completions",
+            headers={"Authorization": f"Bearer {ep['api_key']}",
                      "Content-Type": "application/json"},
             json=body, timeout=60
         )
+        # Quota errors -> roll over to the next endpoint and retry once.
+        if r.status_code in (402, 429):
+            print(f"[LLM] {ep['label']} exhausted ({r.status_code}), rolling over")
+            if _ROUTER:
+                global _current_ep
+                _current_ep = None
+                try:
+                    from manifest_router import list_endpoints
+                    eps = [e for e in list_endpoints()
+                           if e['label'] != ep['label']]
+                    if eps:
+                        _current_ep = eps[0]
+                        _current_ep['_local_used'] = 0
+                        _current_ep['_local_limit'] = (
+                            _current_ep['monthly_limit'] - _current_ep['used_this_month'])
+                        return call_llm(prompt, use_web_search, max_tokens)
+                except Exception:
+                    pass
+            return None
         r.raise_for_status()
+        if _ROUTER:
+            try:
+                record_use(ep)
+            except Exception:
+                pass
+            ep['_local_used'] = ep.get('_local_used', 0) + 1
         data = r.json()
         content = data['choices'][0]['message'].get('content', '')
         if isinstance(content, list):

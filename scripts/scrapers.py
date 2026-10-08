@@ -737,14 +737,14 @@ def scrape_all(max_pages_normal=15, max_pages_bulk=50):
     is_bulk = max_pages_normal > 20
     max_pages = max_pages_bulk if is_bulk else max_pages_normal
     all_tools = []
+    # NOTE (2026-10-09): trimmed for quota. Removed: toolify (403 to plain
+    # HTTP; still runs via Apify browser where it is a top producer),
+    # allthingsai (domain dead), aixploria + insidr (heavy overlap, low yield).
+    # BeyondTools runs via the Apify actor (React SPA needs JS rendering).
     scrapers = [
-        ("toolify",     lambda: scrape_toolify(max_pages)),
         ("futurepedia", lambda: scrape_futurepedia(max_pages)),
         ("taaft",       lambda: scrape_taaft(max_pages)),
         ("topaitools",  lambda: scrape_topaitools(max_pages)),
-        ("aixploria",   lambda: scrape_aixploria(max_pages)),
-        ("allthingsai", lambda: scrape_allthingsai(max_pages)),
-        ("insidr",      lambda: scrape_insidr(max_pages)),
         ("toolfk",      lambda: scrape_toolfk(max_pages)),
         ("futuretools", lambda: scrape_futuretools(max_pages)),
         ("hackernews",  scrape_hackernews),

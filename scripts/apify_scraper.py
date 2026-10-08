@@ -75,11 +75,6 @@ SITES = {
         'maxPages': 15,          # was 30
         'scrollForLazyLoad': False,
     },
-    'allthingsai': {
-        'startUrls': ['https://allthingsai.com/'],
-        'maxPages': 5,           # was 10
-        'scrollForLazyLoad': False,
-    },
     'futuretools': {
         'startUrls': ['https://www.futuretools.io/'],
         'maxPages': 10,          # was 20
@@ -90,10 +85,10 @@ SITES = {
         'maxPages': 10,          # was 30
         'scrollForLazyLoad': False,
     },
-    'aixploria': {
-        'startUrls': ['https://www.aixploria.com/en/'],
-        'maxPages': 10,          # was 20
-        'scrollForLazyLoad': False,
+    'beyondtools': {
+        'startUrls': ['https://beyondtools.io/', 'https://beyondtools.io/ai-tools'],
+        'maxPages': 15,
+        'scrollForLazyLoad': True,
     },
     'insidr': {
         'startUrls': ['https://www.insidr.ai/ai-tools/'],
@@ -131,11 +126,10 @@ CADENCE = {
     # trendshift runs free via Source G (GitHub API), so Apify stays off it.
     'trendshift':  'off',
     'toolfk':      'weekly',
-    'aixploria':   'weekly',
     'futuretools': 'weekly',
     'topai':       'weekly',
-    'allthingsai': 'weekly',
     'insidr':      'off',
+    'beyondtools':  'weekly',
 }
 
 
