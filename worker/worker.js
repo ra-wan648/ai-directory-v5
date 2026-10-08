@@ -575,7 +575,7 @@ button.danger{color:var(--bad);border-color:var(--bad)}
 .meta{font-size:12px;color:var(--muted)}
 #log{white-space:pre-wrap;font-size:12px;color:var(--muted);max-height:300px;overflow:auto}
 </style></head><body>
-<header><h1>AI Directory — Admin</h1><span class="meta" id="clock"></span></header>
+<header><h1>AI Directory — Admin</h1><span><input id="bk" type="password" placeholder="Setup key" style="width:140px;display:inline-block" oninput="localStorage.setItem('z9_bkey',this.value)"><span class="meta" id="clock"></span></span></header>
 <main>
 <div class="tabs">
 <button data-t="overview" class="on">Overview</button>
@@ -590,9 +590,12 @@ button.danger{color:var(--bad);border-color:var(--bad)}
 <script>
 const V = document.getElementById('view'), LOG = document.getElementById('log');
 const log = (m) => { LOG.textContent += new Date().toLocaleTimeString() + ' ' + m + '\\n'; LOG.scrollTop = 1e6; };
+function bkey() { return localStorage.getItem('z9_bkey') || ''; }
 async function api(path, method, body) {
+  const h = { 'Content-Type': 'application/json' };
+  if (bkey()) h['X-Bootstrap-Key'] = bkey();
   const r = await fetch('/api/admin/' + path, { method: method || 'GET',
-    headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+    headers: h, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
   return j;
@@ -701,7 +704,8 @@ window.testManifest = async (id) => { log('Testing…'); const r = await api('ma
 window.doDispatch = async () => { const r = await api('pipeline/dispatch', 'POST'); log(r.ok ? 'Dispatched.' : 'Dispatch failed: ' + r.status); };
 window.doTg = async () => { const r = await api('telegram/test', 'POST'); log(r.ok ? 'Telegram test sent.' : 'Telegram failed.'); };
 setInterval(() => { document.getElementById('clock').textContent = new Date().toLocaleString(); }, 1000);
-views.overview().catch((e) => { V.innerHTML = '<div class="card"><span style="color:var(--bad)">Auth required.</span><div class="meta">' + esc(e.message) + '</div></div>'; });
+document.getElementById('bk').value = bkey();
+views.overview().catch((e) => { V.innerHTML = '<div class="card"><span style="color:var(--bad)">Auth required.</span><div class="meta">' + esc(e.message) + '</div><div class="meta">Enter the setup key above (one-time), or protect this page with a Cloudflare Access application.</div></div>'; });
 </script></body></html>`;
 }
 
