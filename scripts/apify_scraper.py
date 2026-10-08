@@ -25,14 +25,50 @@ import validate
 APIFY_KEY_SLOTS = int(os.environ.get('APIFY_KEY_SLOTS', '12'))
 
 
+def _load_d1_apify_keys():
+    """Read enabled Apify keys from the D1 apify_keys table (dashboard-managed).
+
+    Returns {slot_label: token} or {} when D1 is unreachable or the table is
+    empty — the caller then falls back to environment variables.
+    """
+    acct = os.environ.get('CLOUDFLARE_ACCOUNT_ID', '')
+    tok = os.environ.get('CF_API_TOKEN', '')
+    if not (acct and tok):
+        return {}
+    try:
+        import requests
+        r = requests.post(
+            f'https://api.cloudflare.com/client/v4/accounts/{acct}/d1/database/ff26faf5-3c7c-445a-a249-6c96fedddfdc/query',
+            headers={'Authorization': f'Bearer {tok}', 'Content-Type': 'application/json'},
+            json={'sql': 'SELECT slot, label, token FROM apify_keys WHERE enabled=1 ORDER BY slot'},
+            timeout=30)
+        rows = r.json()['result'][0]['results'] or []
+        keys = {}
+        for row in rows:
+            t = (row.get('token') or '').strip()
+            if t:
+                keys[f"d1-slot{row.get('slot')}"] = t
+        if keys:
+            print(f'[keys] loaded {len(keys)} Apify key(s) from D1 dashboard')
+        return keys
+    except Exception as e:
+        print(f'[keys] D1 read failed ({e}), falling back to env vars')
+        return {}
+
+
 def _load_apify_keys():
     """Read APIFY_KEY_1..APIFY_KEY_N from the environment, skipping holes.
 
-    Any number of keys works: one for a solo run, or many when several people
-    pool their Apify quota. Slots may be left empty on purpose — a gap must not
-    hide the keys after it, otherwise one revoked token silently disables the
-    whole rest of the pool and the run quietly shrinks to fewer keys.
+    Dashboard-managed D1 keys take priority when present; env vars are the
+    fallback. Any number of keys works: one for a solo run, or many when
+    several people pool their Apify quota. Slots may be left empty on purpose
+    — a gap must not hide the keys after it, otherwise one revoked token
+    silently disables the whole rest of the pool and the run quietly shrinks
+    to fewer keys.
     """
+    d1_keys = _load_d1_apify_keys()
+    if d1_keys:
+        return d1_keys
     keys = {}
     for i in range(1, APIFY_KEY_SLOTS + 1):
         val = (os.environ.get(f'APIFY_KEY_{i}') or '').strip()
