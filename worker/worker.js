@@ -936,6 +936,7 @@ const handler = {
 
       // ToolHub free mini-tools: browser-only section mounted at /toolhub/.
       // Slugs come from toolhub-site/src/data.js (the catalog source of truth).
+      urls += `<url><loc>${baseUrl}/toolhub/</loc></url>\n`;
       const TOOLHUB_SLUGS = [
   'pdf-word',
   'pdf-image',
