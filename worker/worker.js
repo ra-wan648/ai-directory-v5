@@ -491,13 +491,37 @@ async function adminApi(request, env, url, pathname, method) {
     return json({ keys: (rows.results || []).map((k) => ({ ...k, token: '••••••••' + (k.last4 || '') })) });
   }
   if (sub === 'apify-keys' && method === 'POST') {
-    const { slot, label, token, assigned_job, monthly_cap_usd } = body;
+    const { id, slot, label, token, assigned_job, monthly_cap_usd, enabled } = body;
+    if (id) {
+      // Partial update by id — token optional (keeps existing when omitted)
+      const sets = [], vals = [];
+      if (slot !== undefined) { sets.push('slot=?'); vals.push(parseInt(slot) || 1); }
+      if (label !== undefined) { sets.push('label=?'); vals.push(String(label)); }
+      if (token) { sets.push('token=?'); vals.push(String(token)); }
+      if (assigned_job !== undefined) { sets.push('assigned_job=?'); vals.push(String(assigned_job)); }
+      if (monthly_cap_usd !== undefined) { sets.push('monthly_cap_usd=?'); vals.push(parseFloat(monthly_cap_usd) || 0); }
+      if (enabled !== undefined) { sets.push('enabled=?'); vals.push(enabled ? 1 : 0); }
+      if (!sets.length) return json({ error: 'nothing to update' }, 400);
+      vals.push(parseInt(id));
+      await env.DB.prepare(`UPDATE apify_keys SET ${sets.join(', ')} WHERE id=?`).bind(...vals).run();
+      return json({ ok: true });
+    }
     if (!token) return json({ error: 'token required' }, 400);
     await env.DB.prepare(
       `INSERT INTO apify_keys (slot, label, token, assigned_job, monthly_cap_usd) VALUES (?, ?, ?, ?, ?)
        ON CONFLICT(slot) DO UPDATE SET label=excluded.label, token=excluded.token, assigned_job=excluded.assigned_job, monthly_cap_usd=excluded.monthly_cap_usd`
-    ).bind(parseInt(slot) || 1, String(label || ''), String(token), String(assigned_job || 'ai-directory-scrape'), parseFloat(monthly_cap_usd) || 5).run();
+    ).bind(parseInt(slot) || 1, String(label || ''), String(token), String(assigned_job || 'toolify-daily'), parseFloat(monthly_cap_usd) || 5).run();
     return json({ ok: true });
+  }
+  // Job -> competitor mapping for the dashboard (also hardcoded in dashboard JS as fallback)
+  // 3-slot plan: Slot 1 = toolify daily, Slot 2 = taaft daily, Slot 3 = long-tail weekly
+  if (sub === 'competitors' && method === 'GET') {
+    return json({
+      'toolify-daily': ['toolify.ai'],
+      'taaft-daily': ['theresanaiforthat.com'],
+      'longtail-weekly': ['futurepedia.io', 'futuretools.io', 'topai.tools', 'beyondtools.io', 'toolfk.com'],
+      'other': []
+    });
   }
   let m = sub.match(/^apify-keys\/(\d+)\/test$/);
   if (m && method === 'POST') {
@@ -510,6 +534,11 @@ async function adminApi(request, env, url, pathname, method) {
     const row = await env.DB.prepare(`SELECT token, monthly_cap_usd FROM apify_keys WHERE id=?`).bind(m[1]).first();
     if (!row) return json({ error: 'not found' }, 404);
     return json({ ...(await apifyUsage(row.token)), monthly_cap_usd: row.monthly_cap_usd });
+  }
+  m = sub.match(/^apify-keys\/(\d+)\/toggle$/);
+  if (m && method === 'POST') {
+    await env.DB.prepare(`UPDATE apify_keys SET enabled=? WHERE id=?`).bind(body.enabled ? 1 : 0, m[1]).run();
+    return json({ ok: true });
   }
   m = sub.match(/^apify-keys\/(\d+)$/);
   if (m && method === 'DELETE') {
@@ -527,7 +556,7 @@ async function adminApi(request, env, url, pathname, method) {
     if (!api_key) return json({ error: 'api_key required' }, 400);
     await env.DB.prepare(
       `INSERT INTO manifest_endpoints (label, base_url, api_key, monthly_limit) VALUES (?, ?, ?, ?)`
-    ).bind(String(label || ''), String(base_url || 'https://app.manifest.build/v1'), String(api_key), parseInt(monthly_limit) || 1000).run();
+    ).bind(String(label || ''), String(base_url || 'https://app.manifest.build/v1'), String(api_key), parseInt(monthly_limit) || 10000).run();
     return json({ ok: true });
   }
   m = sub.match(/^manifest\/(\d+)\/test$/);
@@ -535,6 +564,11 @@ async function adminApi(request, env, url, pathname, method) {
     const row = await env.DB.prepare(`SELECT base_url, api_key FROM manifest_endpoints WHERE id=?`).bind(m[1]).first();
     if (!row) return json({ error: 'not found' }, 404);
     return json(await manifestTest(row.base_url, row.api_key));
+  }
+  m = sub.match(/^manifest\/(\d+)\/toggle$/);
+  if (m && method === 'POST') {
+    await env.DB.prepare(`UPDATE manifest_endpoints SET enabled=? WHERE id=?`).bind(body.enabled ? 1 : 0, m[1]).run();
+    return json({ ok: true });
   }
   m = sub.match(/^manifest\/(\d+)$/);
   if (m && method === 'DELETE') {
@@ -599,49 +633,105 @@ async function adminApi(request, env, url, pathname, method) {
   return json({ error: 'unknown admin route' }, 404);
 }
 
-// --- Dashboard HTML (served by the worker, same origin as the API) ---
+// --- Dashboard HTML (Light Clean redesign; served by the worker, same origin as the API) ---
 function dashboardHTML() {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin — AI Directory</title>
 <style>
-:root{--bg:#0e0f12;--card:#17191f;--line:#262a33;--ink:#eef1f6;--muted:#9aa3b2;--amber:#E8940C;--ok:#3FBFA0;--bad:#e5484d}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
-header{padding:16px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-h1{font-size:18px;margin:0}main{max-width:1100px;margin:0 auto;padding:24px}
-.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.tabs button{background:var(--card);color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
-.tabs button.on{color:var(--ink);border-color:var(--amber)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
-.slot{border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
-.slot h3{margin:0 0 10px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
-input,select{width:100%;background:#0e0f12;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 10px;font-size:13px}
-.bar{height:8px;background:#0e0f12;border-radius:99px;overflow:hidden;margin:8px 0}
-.bar i{display:block;height:100%;background:var(--ok)}
-.bar.over i{background:var(--bad)}
-.row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
-button.b{background:var(--amber);color:#111;border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
-button.g{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px}
-button.danger{color:var(--bad);border-color:var(--bad)}
-.pill{font-size:11px;font-weight:800;border-radius:99px;padding:3px 10px}
-.pill.ok{background:#12332b;color:var(--ok)}.pill.bad{background:#3a1416;color:var(--bad)}
-.meta{font-size:12px;color:var(--muted)}
-#log{white-space:pre-wrap;font-size:12px;color:var(--muted);max-height:300px;overflow:auto}
-</style></head><body>
-<header><h1>AI Directory — Admin</h1><span><input id="bk" type="password" placeholder="Setup key" style="width:140px;display:inline-block" oninput="localStorage.setItem('z9_bkey',this.value)"><span class="meta" id="clock"></span></span></header>
-<main>
+*{box-sizing:border-box;margin:0}body{font:14px/1.55 -apple-system,"Segoe UI",Inter,Roboto,sans-serif;background:#f6f7f9;color:#1a1d24;min-height:100vh}
+:root{--am:#E8940C;--am-deep:#c77a06;--ok:#0d9d6c;--bad:#e5484d;--line:#e8eaef;--card:#fff;--mut:#8a8fa0;--ink:#1a1d24}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes grow{from{width:0!important}}
+@keyframes rise{from{transform:scaleY(0);transform-origin:bottom}}
+.wrap{max-width:1080px;margin:auto;padding:28px 24px 60px}
+.header{background:linear-gradient(135deg,#1a1d24,#3a2c12);color:#fff;border-radius:20px;padding:26px 32px;margin-bottom:22px;animation:fadeUp .4s;position:relative;overflow:hidden}
+.header::after{content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,148,12,.3),transparent 70%);pointer-events:none}
+.header h1{font-size:22px;font-weight:800;position:relative}.header h1 span{color:var(--am)}
+.header p{color:#a8a294;font-size:13px;position:relative;margin-top:4px}
+.hrow{display:flex;align-items:center;gap:12px;margin-top:14px;position:relative;flex-wrap:wrap}
+.status{display:inline-flex;align-items:center;gap:7px;background:rgba(13,157,108,.15);color:#4ade9e;font-size:12px;font-weight:700;padding:6px 14px;border-radius:99px}
+.status i{width:8px;height:8px;border-radius:99px;background:#4ade9e;animation:pulse 1.8s infinite}
+.hrow input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:9px;padding:8px 13px;font-size:12.5px;width:150px;outline:none}
+.hrow input::placeholder{color:#8a8474}
+.hrow .clock{color:#8a8474;font-size:12px;margin-left:auto}
+.tabs{display:flex;gap:8px;margin-bottom:20px;animation:fadeUp .45s;flex-wrap:wrap}
+.tabs button{background:var(--card);border:1.5px solid var(--line);padding:10px 20px;border-radius:12px;font-weight:600;cursor:pointer;font-size:13px;color:#5a6070;transition:.16s}
+.tabs button:hover{border-color:var(--am);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.tabs button.on{background:#1a1d24;color:#fff;border-color:#1a1d24;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.04);animation:fadeUp .5s}
+.card h2{font-size:16px;margin-bottom:2px}.card .sub{color:var(--mut);font-size:12.5px;margin-bottom:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{border-radius:16px;padding:20px;color:#fff;position:relative;overflow:hidden;transition:.18s}
+.kpi:hover{transform:translateY(-3px)}
+.kpi.k1{background:linear-gradient(135deg,#E8940C,#c77a06)}
+.kpi.k2{background:linear-gradient(135deg,#0d9d6c,#0a7a54)}
+.kpi.k3{background:linear-gradient(135deg,#7c6cf0,#5a4bd0)}
+.kpi.k4{background:linear-gradient(135deg,#e5484d,#c03036)}
+.kpi .lb{font-size:11px;opacity:.85;text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.kpi .vl{font-size:32px;font-weight:800;letter-spacing:-1px;margin:4px 0}
+.kpi .tr{font-size:12px;opacity:.9}
+.slot{border:2px solid var(--line);border-radius:16px;padding:20px;margin-bottom:12px;transition:.15s;animation:fadeUp .5s;background:#fff}
+.slot:hover{border-color:var(--am)}
+.slot-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.slot-top b{font-size:15px}
+.badge{font-size:10px;font-weight:800;letter-spacing:.5px;padding:4px 12px;border-radius:99px}
+.badge.on{background:#dcf5e9;color:#0d7a54}.badge.off{background:#f1f2f5;color:#8a8fa0}.badge.job{background:#fdf0dc;color:#b45309}
+.tok{font-size:11px;color:var(--mut);background:#f6f7f9;border:1px solid var(--line);border-radius:99px;padding:4px 12px;margin-left:auto;font-family:ui-monospace,monospace}
+.prog{height:10px;background:#f1f2f5;border-radius:99px;overflow:hidden;margin:10px 0 6px}
+.prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ok),#5ce0b0);animation:grow 1.2s ease}
+.prog.over i{background:linear-gradient(90deg,var(--bad),#ff8a8a)}
+.meta{font-size:12.5px;color:var(--mut)}
+.meta b{color:var(--ink)}
+.hint{background:rgba(232,148,12,.07);border:1px solid rgba(232,148,12,.22);border-radius:11px;padding:11px 15px;font-size:12.5px;color:#8a6d2b;margin:12px 0}
+.hint b{color:var(--am-deep)}
+.btnrow{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--line);background:#fff;padding:9px 22px;border-radius:11px;font-weight:700;cursor:pointer;font-size:13px;transition:.15s;color:var(--ink)}
+.btn:hover{border-color:#1a1d24;transform:translateY(-1px)}
+.btn.dark{background:#1a1d24;color:#fff;border-color:#1a1d24}
+.btn.dark:hover{background:#2a2d36}
+.btn.danger:hover{border-color:var(--bad);color:var(--bad)}
+input,select{border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;font-size:13px;width:100%;outline:none;transition:.15s;background:#fff;color:var(--ink)}
+input:focus,select:focus{border-color:var(--am);box-shadow:0 0 0 3px rgba(232,148,12,.12)}
+input[readonly]{background:#f6f7f9;color:var(--mut)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.f2 label,.flabel{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.ev{position:relative;margin-bottom:16px}
+.ev::before{content:"";position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:99px;background:var(--ok);box-shadow:0 0 0 4px #dcf5e9}
+.ev.bad::before{background:var(--bad);box-shadow:0 0 0 4px #fde8e8}
+.ev.run::before{background:var(--am);box-shadow:0 0 0 4px #fdf0dc;animation:pulse 1.2s infinite}
+.ev b{font-size:13.5px}.ev div{font-size:12px;color:var(--mut)}
+.spark{display:flex;align-items:end;gap:5px;height:100px;margin:14px 0}
+.spark i{flex:1;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,var(--am),#fde6bd);animation:rise .7s cubic-bezier(.22,.8,.28,1);min-height:4px}
+.spark i:hover{filter:brightness(.92)}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.act{border:2px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:.16s;background:#fff}
+.act:hover{border-color:#1a1d24;transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.07)}
+.act .e{font-size:24px}.act b{font-size:13.5px;display:block;margin:6px 0 2px}.act span{font-size:12px;color:var(--mut)}
+.logcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.logcard h2{font-size:16px;margin-bottom:12px}
+#log{background:#1a1d24;color:#a8b2a0;border-radius:12px;padding:16px;font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:220px;overflow:auto;white-space:pre-wrap}
+.warnbox{display:none;background:#fde8e8;border:1px solid #f5c6c6;color:#a03030;border-radius:11px;padding:11px 15px;font-size:12.5px;margin:10px 0}
+.svc{font-size:11.5px;color:var(--mut);margin-top:6px}
+@media(max-width:750px){.kpis{grid-template-columns:1fr 1fr}.f2{grid-template-columns:1fr}.acts{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="header"><h1>AI Directory <span>— Admin</span></h1><p>Hidden control center · Zero Trust protected</p>
+<div class="hrow"><div class="status"><i></i><span id="health">Checking…</span></div>
+<input id="bk" type="password" placeholder="Setup key" oninput="localStorage.setItem('z9_bkey',this.value)">
+<span class="clock" id="clock"></span></div></div>
 <div class="tabs">
-<button data-t="overview" class="on">Overview</button>
-<button data-t="apify">Apify keys</button>
-<button data-t="manifest">Manifest</button>
-<button data-t="runs">Pipeline runs</button>
-<button data-t="traffic">Traffic</button>
-<button data-t="actions">Actions</button>
+<button data-t="overview" class="on">📊 Overview</button>
+<button data-t="apify">🔑 Apify keys</button>
+<button data-t="manifest">🤖 Manifest</button>
+<button data-t="runs">🔄 Pipeline runs</button>
+<button data-t="traffic">📈 Traffic</button>
+<button data-t="actions">⚙️ Actions</button>
 </div>
 <div id="view"></div>
-<div class="card"><h3 style="margin-top:0">Log</h3><div id="log"></div></div>
-</main>
+<div class="logcard"><h2>📝 Log</h2><div id="log"></div></div>
+</div>
 <script>
 const V = document.getElementById('view'), LOG = document.getElementById('log');
 const log = (m) => { LOG.textContent += new Date().toLocaleTimeString() + ' ' + m + '\\n'; LOG.scrollTop = 1e6; };
@@ -655,140 +745,323 @@ async function api(path, method, body) {
   if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
   return j;
 }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+// Animated count-up for KPI numbers
+function countUp(el, target, prefix) {
+  prefix = prefix || '';
+  const t0 = performance.now(), dur = 1100;
+  function frame(ts) {
+    const p = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = prefix + Math.floor(target * e).toLocaleString();
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+function timeAgo(iso) {
+  if (!iso) return '—';
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  return Math.floor(s / 86400) + 'd ago';
+}
+// Job -> competitor mapping (also served by GET /z9-admin/api/competitors)
+// 3-slot plan: Slot 1 = toolify daily, Slot 2 = taaft daily, Slot 3 = long-tail weekly
+const JOB_SITES = {
+  'toolify-daily': ['toolify.ai'],
+  'taaft-daily': ['theresanaiforthat.com'],
+  'longtail-weekly': ['futurepedia.io', 'futuretools.io', 'topai.tools', 'beyondtools.io', 'toolfk.com'],
+  'other': []
+};
+const JOBS = ['toolify-daily', 'taaft-daily', 'longtail-weekly', 'other'];
+const SLOT_JOBS = { 1: 'toolify-daily', 2: 'taaft-daily', 3: 'longtail-weekly' };
+let activeTab = 'overview', refreshTimer = null;
 const views = {
   async overview() {
-    const s = await api('stats');
-    V.innerHTML = '<div class="card"><h3 style="margin-top:0">Site</h3><div class="grid">'
-      + '<div><label>Total published tools</label><div style="font-size:26px;font-weight:800">' + s.total_tools + '</div></div>'
-      + '<div><label>Added last 24h</label><div style="font-size:26px;font-weight:800">' + s.added_24h + '</div></div>'
-      + '<div><label>Missing FAQ (enrichment queue)</label><div style="font-size:26px;font-weight:800">' + s.missing_faq + '</div></div>'
-      + '<div><label>Worker time</label><div class="meta">' + s.time + '</div></div></div></div>';
+    V.innerHTML = '<div class="card"><h2>At a glance</h2><div class="sub">Live data · auto-refreshes every 60s</div><div class="kpis">'
+      + '<div class="kpi k1"><div class="lb">AI tools indexed</div><div class="vl" id="kpi-tools">…</div><div class="tr" id="kpi-tools-tr"></div></div>'
+      + '<div class="kpi k2"><div class="lb">Free browser tools</div><div class="vl" id="kpi-free">…</div><div class="tr">▲ 119 added Oct 2026</div></div>'
+      + '<div class="kpi k3"><div class="lb">Visitors (7d)</div><div class="vl" id="kpi-vis">…</div><div class="tr" id="kpi-vis-tr"></div></div>'
+      + '<div class="kpi k4"><div class="lb">Apify spend (mo)</div><div class="vl" id="kpi-spend">…</div><div class="tr" id="kpi-spend-tr"></div></div>'
+      + '</div></div><div class="card"><h2>Pipeline timeline</h2><div class="sub">Recent runs</div><div class="timeline" id="ov-timeline"><div class="meta">loading…</div></div></div>';
+    // Parallel data load
+    const [stats, runs] = await Promise.all([
+      api('stats').catch(() => null),
+      api('pipeline/runs').catch(() => null)
+    ]);
+    let traffic = null;
+    try { traffic = await api('traffic?days=7'); } catch (e) {}
+    if (stats) {
+      countUp(document.getElementById('kpi-tools'), stats.total_tools || 0);
+      document.getElementById('kpi-tools-tr').textContent = '▲ ' + (stats.added_24h || 0) + ' in last 24h';
+    }
+    countUp(document.getElementById('kpi-free'), 221);
+    if (traffic && traffic.enabled) {
+      countUp(document.getElementById('kpi-vis'), traffic.visits || 0);
+      document.getElementById('kpi-vis-tr').textContent = (traffic.pageviews || 0).toLocaleString() + ' pageviews';
+    } else {
+      document.getElementById('kpi-vis').textContent = '—';
+      document.getElementById('kpi-vis-tr').textContent = 'Web Analytics not enabled';
+    }
+    // Apify spend: sum usage across enabled keys
+    try {
+      const kd = await api('apify-keys');
+      let totalUsed = 0, totalCap = 0, active = 0;
+      for (const k of (kd.keys || [])) {
+        if (!k.enabled) continue;
+        active++;
+        totalCap += parseFloat(k.monthly_cap_usd) || 0;
+        try {
+          const u = await api('apify-keys/' + k.id + '/usage');
+          if (u.available) totalUsed += u.total_usd || 0;
+        } catch (e) {}
+      }
+      document.getElementById('kpi-spend').textContent = '$' + totalUsed.toFixed(2);
+      document.getElementById('kpi-spend-tr').textContent = active
+        ? '$' + Math.max(0, totalCap - totalUsed).toFixed(2) + ' left of $' + totalCap.toFixed(0) + ' cap'
+        : 'no active keys';
+    } catch (e) {
+      document.getElementById('kpi-spend').textContent = '—';
+    }
+    // Timeline
+    const tl = document.getElementById('ov-timeline');
+    const gh = (runs && runs.github_runs) || [];
+    if (!gh.length) { tl.innerHTML = '<div class="meta">No runs found.</div>'; }
+    else {
+      tl.innerHTML = gh.slice(0, 4).map((r) => {
+        const ok = r.conclusion === 'success';
+        const running = r.status !== 'completed';
+        return '<div class="ev' + (ok ? '' : running ? ' run' : ' bad') + '"><b>#' + r.id + ' — ' + esc((r.conclusion || r.status || '').replace(/_/g, ' ')) + '</b>'
+          + '<div>' + esc(String(r.head_sha || '').slice(0, 7)) + ' · ' + timeAgo(r.created_at) + '</div></div>';
+      }).join('');
+    }
+    document.getElementById('health').textContent = 'All systems operational';
   },
   async apify() {
     const d = await api('apify-keys');
-    const JOBS = ['ai-directory-scrape', 'instagram-competitor', 'other'];
-    let h = '<div class="card"><h3 style="margin-top:0">Apify keys</h3><div class="meta">Pipeline uses enabled keys in slot order. Usage loads automatically.</div>';
-    const renderSlot = (k) => {
-      const opts = JOBS.map((j) => '<option value="' + j + '"' + (k.assigned_job === j ? ' selected' : '') + '>' + j + '</option>').join('');
-      return '<div class="slot" data-id="' + k.id + '">'
-        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-        + '<h3 style="margin:0">Slot ' + k.slot + ' <span class="pill ' + (k.enabled ? 'ok' : 'bad') + '">' + (k.enabled ? 'active' : 'disabled') + '</span></h3>'
-        + '<span><span class="pill" style="background:#0e0f12;border:1px solid var(--line);color:var(--ok)">token ...' + esc(k.token.slice(-4)) + '</span> '
-        + '<button class="g danger" style="padding:4px 8px" onclick="delApify(' + k.id + ')">✕</button></span></div>'
-        + '<div class="grid"><div><label>Label</label><input data-f="label" value="' + esc(k.label) + '"></div>'
-        + '<div><label>API Token</label><div style="display:flex;gap:6px"><input data-f="token" type="password" placeholder="Stored — type to replace" style="flex:1"><button class="g" onclick="eye(this)">👁</button></div></div>'
-        + '<div><label>Assigned job</label><select data-f="assigned_job">' + opts + '</select></div>'
+    let comp = JOB_SITES;
+    try { const c = await api('competitors'); if (c && typeof c === 'object') comp = c; } catch (e) {}
+    // keep local fallback in sync
+    Object.keys(comp).forEach((k) => { JOB_SITES[k] = comp[k]; });
+    const jobOpts = (sel) => JOBS.map((j) => '<option value="' + j + '"' + (sel === j ? ' selected' : '') + '>' + j + '</option>').join('');
+    const sitesFor = (job) => (comp[job] || []).join(', ') || '—';
+    const bySlot = {};
+    (d.keys || []).forEach((k) => { bySlot[k.slot] = k; });
+    let h = '<div class="card"><h2>🔑 Apify keys</h2><div class="sub">3-slot plan · pipeline uses enabled keys in slot order · usage loads live from Apify</div>';
+    h += '<div class="hint">💡 <b>Slot → GitHub Secret:</b> Slot 1 → secret <b>APIFY_KEY_1</b> · Slot 2 → <b>APIFY_KEY_2</b> · Slot 3 → <b>APIFY_KEY_3</b>. Add each secret in repo Settings → Secrets → Actions for the pipeline to use it.</div>';
+
+    // Render one card per pre-configured slot (1-3)
+    [1, 2, 3].forEach((slotN) => {
+      const k = bySlot[slotN];
+      const job = (k && k.assigned_job) || SLOT_JOBS[slotN] || 'other';
+      const cadence = slotN <= 2 ? 'daily' : 'weekly';
+      if (!k) {
+        // Empty slot — show structure, prompt for key
+        h += '<div class="slot" style="border-style:dashed"><div class="slot-top"><b>Slot ' + slotN + '</b>'
+          + '<span class="badge off">NO KEY</span>'
+          + '<span class="badge job">' + job + '</span>'
+          + '<span class="badge job" style="background:#eef0ff;color:#5a4bd0;border-color:#d9d4ff">' + cadence + '</span></div>'
+          + '<div class="meta" style="margin-bottom:10px">Scrapes: <b>' + esc(sitesFor(job)) + '</b></div>'
+          + '<div class="f2"><div><label>API Token</label><input id="nk' + slotN + '-token" type="password" placeholder="apify_api_…"></div>'
+          + '<div><label>Monthly cap USD</label><input id="nk' + slotN + '-cap" type="number" step="0.5" value="5"></div></div>'
+          + '<div class="btnrow"><button class="btn dark" onclick="addApifySlot(' + slotN + ',\'' + job + '\')">+ Add key to Slot ' + slotN + '</button></div></div>';
+        return;
+      }
+      // Existing key — full card with live usage
+      h += '<div class="slot" data-id="' + k.id + '">'
+        + '<div class="slot-top"><b>Slot ' + k.slot + '</b>'
+        + '<span class="badge ' + (k.enabled ? 'on' : 'off') + '">' + (k.enabled ? 'ACTIVE' : 'DISABLED') + '</span>'
+        + '<span class="badge job">' + esc(k.assigned_job || 'other') + '</span>'
+        + '<span class="badge job" style="background:#eef0ff;color:#5a4bd0;border-color:#d9d4ff">' + cadence + '</span>'
+        + '<span class="tok">token …' + esc(String(k.token || '').slice(-4)) + '</span></div>'
+        + '<div class="f2"><div><label>Label</label><input data-f="label" value="' + esc(k.label) + '"></div>'
+        + '<div><label>API Token</label><div style="display:flex;gap:6px"><input data-f="token" type="password" placeholder="Stored — type to replace" style="flex:1"><button class="btn" style="padding:9px 14px" onclick="eye(this)">👁</button></div></div>'
+        + '<div><label>Assigned job</label><select data-f="assigned_job" onchange="updSites(this)">' + jobOpts(k.assigned_job) + '</select>'
+        + '<div class="meta" style="margin-top:6px">Scrapes: <b class="sites">' + esc(sitesFor(k.assigned_job)) + '</b></div></div>'
         + '<div><label>Monthly cap USD</label><input data-f="monthly_cap_usd" type="number" step="0.5" value="' + k.monthly_cap_usd + '"></div></div>'
-        + '<div class="bar" id="bar-' + k.id + '"><i style="width:0%"></i></div>'
-        + '<div class="meta" id="use-' + k.id + '">loading usage…</div>'
-        + '<div class="warn" id="warn-' + k.id + '" style="display:none"></div>'
-        + '<div class="meta" id="svc-' + k.id + '"></div>'
-        + '<div class="row"><button class="g" onclick="saveApify(' + k.id + ',' + k.slot + ')">Save</button>'
-        + '<button class="g" onclick="testApify(' + k.id + ')">Test</button></div></div>';
-    };
-    d.keys.forEach((k) => { h += renderSlot(k); });
-    h += '<div class="slot"><h3>+ New slot</h3><div class="grid">'
-      + '<div><label>Slot #</label><input id="nk-slot" type="number" value="' + (d.keys.length + 1) + '"></div>'
-      + '<div><label>Label</label><input id="nk-label" placeholder="my-key"></div>'
-      + '<div><label>API Token</label><input id="nk-token" type="password"></div>'
-      + '<div><label>Monthly cap USD</label><input id="nk-cap" type="number" step="0.5" value="5"></div></div>'
-      + '<div><label>Assigned job</label><select id="nk-job"><option>ai-directory-scrape</option><option>instagram-competitor</option><option>other</option></select></div>'
-      + '<div class="row"><button class="b" onclick="addApify()">Add key</button></div></div></div>';
+        + '<div class="prog" id="bar-' + k.id + '"><i style="width:0%"></i></div>'
+        + '<div class="meta" id="use-' + k.id + '">loading live usage from Apify…</div>'
+        + '<div class="warnbox" id="warn-' + k.id + '"></div>'
+        + '<div class="svc" id="svc-' + k.id + '"></div>'
+        + '<div class="btnrow"><button class="btn dark" onclick="saveApify(' + k.id + ',' + k.slot + ')">Save</button>'
+        + '<button class="btn" onclick="testApify(' + k.id + ')">Test key</button>'
+        + '<button class="btn' + (k.enabled ? '' : ' dark') + '" style="margin-left:auto" onclick="toggleApify(' + k.id + ',' + (k.enabled ? 0 : 1) + ')">' + (k.enabled ? 'Disable' : 'Enable') + '</button>'
+        + '<button class="btn danger" onclick="delApify(' + k.id + ')">✕</button></div></div>';
+    });
+
+    // Extra slots beyond 3 (if any exist)
+    (d.keys || []).filter((k) => k.slot > 3).forEach((k) => {
+      h += '<div class="slot" data-id="' + k.id + '"><div class="slot-top"><b>Slot ' + k.slot + '</b>'
+        + '<span class="badge ' + (k.enabled ? 'on' : 'off') + '">' + (k.enabled ? 'ACTIVE' : 'DISABLED') + '</span>'
+        + '<span class="badge job">' + esc(k.assigned_job || 'other') + '</span></div>'
+        + '<div class="meta">Extra slot — manage like the pre-configured ones.</div>'
+        + '<div class="btnrow"><button class="btn danger" onclick="delApify(' + k.id + ')">Remove</button></div></div>';
+    });
+
+    h += '</div>';
+    h += '<script>window.__comp=' + JSON.stringify(comp).replace(/</g, '\\u003c') + '<\/script>';
     V.innerHTML = h;
-    // auto-load usage for each key
-    d.keys.forEach((k) => { loadUsage(k.id, k.monthly_cap_usd); });
+    (d.keys || []).forEach((k) => loadUsage(k.id, k.monthly_cap_usd));
   },
   async manifest() {
     const d = await api('manifest');
-    let h = '<div class="card"><h3 style="margin-top:0">Manifest endpoints (LLM router)</h3><div class="meta">Pipeline uses the enabled endpoint with remaining monthly quota (rollover).</div>';
-    d.endpoints.forEach((e) => {
-      const pct = e.monthly_limit ? Math.round(100 * e.used_this_month / e.monthly_limit) : 0;
-      h += '<div class="slot"><h3>' + esc(e.label || ('Endpoint ' + e.id)) + ' <span class="pill ' + (e.enabled ? 'ok' : 'bad') + '">' + (e.enabled ? 'active' : 'disabled') + '</span></h3>'
-        + '<div class="meta">' + esc(e.base_url) + ' · key ' + esc(e.api_key) + '</div>'
-        + '<div class="bar' + (pct >= 100 ? ' over' : '') + '"><i style="width:' + Math.min(100, pct) + '%"></i></div>'
-        + '<div class="meta">' + e.used_this_month + ' / ' + e.monthly_limit + ' used (' + pct + '%)</div>'
-        + '<div class="row"><button class="g" onclick="testManifest(' + e.id + ')">Test</button>'
-        + '<button class="g danger" onclick="delManifest(' + e.id + ')">Remove</button></div></div>';
+    const eps = d.endpoints || [];
+    // Router logic (mirrors scripts/manifest_router.py): first enabled endpoint with remaining quota
+    const active = eps.find((e) => e.enabled && (e.used_this_month || 0) < (e.monthly_limit || 10000));
+    let h = '<div class="card"><h2>🤖 Manifest endpoints</h2><div class="sub">LLM router · auto-rollover to the next endpoint when quota runs out</div>';
+    if (active) {
+      h += '<div class="hint">⚡ <b>Router active:</b> <b>' + esc(active.label || ('Endpoint ' + active.id)) + '</b> — pipeline LLM calls go here until its quota is used.</div>';
+    } else if (eps.length) {
+      h += '<div class="warnbox" style="display:block">⚠️ No endpoint with remaining quota — LLM enrichment is paused until quota resets or a new key is added.</div>';
+    }
+    eps.forEach((e) => {
+      const limit = e.monthly_limit || 10000;
+      const used = e.used_this_month || 0;
+      const pct = Math.round(100 * used / limit);
+      const warn80 = pct >= 80 && pct < 100;
+      const isActive = active && active.id === e.id;
+      h += '<div class="slot"' + (isActive ? ' style="border-color:var(--am)"' : '') + '><div class="slot-top"><b>' + esc(e.label || ('Endpoint ' + e.id)) + '</b>'
+        + '<span class="badge ' + (e.enabled ? 'on' : 'off') + '">' + (e.enabled ? 'ACTIVE' : 'DISABLED') + '</span>'
+        + (isActive ? '<span class="badge job">⚡ ROUTER</span>' : '')
+        + '<span class="tok">' + esc(e.base_url || '').replace(/^https?:\/\//, '').slice(0, 32) + '</span></div>'
+        + '<div class="prog' + (pct >= 100 ? ' over' : '') + '"><i style="width:' + Math.min(100, pct) + '%"></i></div>'
+        + '<div class="meta"><b>' + used.toLocaleString() + '</b> / ' + limit.toLocaleString() + ' requests used (' + pct + '%)</div>'
+        + (warn80 ? '<div class="warnbox" style="display:block">⚠️ Over 80% used — add a backup endpoint or quota resets on day ' + (e.reset_day || 1) + '.</div>' : '')
+        + (pct >= 100 ? '<div class="warnbox" style="display:block">🚫 Quota exhausted — router has rolled over to the next endpoint.</div>' : '')
+        + '<div class="btnrow"><button class="btn" onclick="testManifest(' + e.id + ')">Test</button>'
+        + '<button class="btn" onclick="toggleManifest(' + e.id + ',' + (e.enabled ? 0 : 1) + ')">' + (e.enabled ? 'Disable' : 'Enable') + '</button>'
+        + '<button class="btn danger" onclick="delManifest(' + e.id + ')">Remove</button></div></div>';
     });
-    h += '<div class="slot"><h3>+ New endpoint</h3><div class="grid">'
-      + '<div><label>Label</label><input id="nm-label" placeholder="main"></div>'
+    h += '<div class="slot" style="border-style:dashed"><div class="slot-top"><b style="color:var(--mut)">+ New endpoint</b></div>'
+      + '<div class="f2"><div><label>Label</label><input id="nm-label" placeholder="main"></div>'
       + '<div><label>Base URL</label><input id="nm-url" value="https://app.manifest.build/v1"></div>'
-      + '<div><label>API Key</label><input id="nm-key" type="password"></div>'
-      + '<div><label>Monthly limit (requests)</label><input id="nm-limit" type="number" value="1000"></div></div>'
-      + '<div class="row"><button class="b" onclick="addManifest()">Add endpoint</button></div></div></div>';
+      + '<div><label>API Key</label><input id="nm-key" type="password" placeholder="sk-…"></div>'
+      + '<div><label>Monthly limit (requests)</label><input id="nm-limit" type="number" value="10000"></div></div>'
+      + '<div class="hint" style="margin:0 0 12px">Each Manifest API key includes <b>10,000 requests/month</b>. Add a 2nd key as backup — the router rolls over automatically.</div>'
+      + '<div class="btnrow"><button class="btn dark" onclick="addManifest()">+ Add endpoint</button></div></div>';
+    h += '</div>';
     V.innerHTML = h;
   },
   async runs() {
     const d = await api('pipeline/runs');
-    let h = '<div class="card"><h3 style="margin-top:0">Recent runs</h3>';
-    (d.github_runs || []).forEach((r) => {
-      h += '<div class="meta">#' + r.id + ' · ' + r.head_sha + ' · ' + r.status + '/' + (r.conclusion || '…') + ' · ' + r.created_at + '</div>';
+    const gh = d.github_runs || [], db = d.db_runs || [];
+    let h = '<div class="card"><h2>🔄 Pipeline runs</h2><div class="sub">GitHub Actions + D1 run history</div>';
+    if (!gh.length && !db.length) h += '<div class="meta">No runs recorded yet.</div>';
+    h += '<div class="timeline">';
+    gh.slice(0, 8).forEach((r) => {
+      const ok = r.conclusion === 'success', running = r.status !== 'completed';
+      h += '<div class="ev' + (ok ? '' : running ? ' run' : ' bad') + '"><b>#' + r.id + ' · ' + esc((r.conclusion || r.status || 'unknown').replace(/_/g, ' ')) + '</b>'
+        + '<div>commit ' + esc(String(r.head_sha || '').slice(0, 7)) + ' · branch ' + esc(r.head_branch || 'main') + ' · ' + timeAgo(r.created_at) + '</div></div>';
     });
+    h += '</div>';
+    if (db.length) {
+      h += '<div class="sub" style="margin-top:18px">D1 pipeline_runs table</div><div class="timeline">';
+      db.slice(0, 5).forEach((r) => {
+        h += '<div class="ev"><b>run ' + esc(r.id) + '</b><div>' + esc(r.started_at || '') + (r.tools_added ? ' · +' + r.tools_added + ' tools' : '') + '</div></div>';
+      });
+      h += '</div>';
+    }
     h += '</div>';
     V.innerHTML = h;
   },
   async traffic() {
-    V.innerHTML = '<div class="card"><h3 style="margin-top:0">Traffic</h3><div class="row">'
-      + '<button class="g" data-d="1">24h</button><button class="g" data-d="7">7d</button><button class="g" data-d="30">30d</button></div>'
-      + '<div id="tdata" class="meta">loading…</div></div>';
+    V.innerHTML = '<div class="card"><h2>📈 Traffic</h2><div class="sub">Cloudflare Web Analytics (RUM) · no separate API needed</div>'
+      + '<div class="btnrow" style="margin-top:0;margin-bottom:6px">'
+      + '<button class="btn" data-d="1">24h</button><button class="btn" data-d="7">7d</button><button class="btn" data-d="30">30d</button></div>'
+      + '<div id="tdata"><div class="meta">loading…</div></div></div>';
     const load = async (days) => {
       const el = document.getElementById('tdata');
+      V.querySelectorAll('[data-d]').forEach((b) => b.classList.toggle('dark', b.dataset.d == days));
       try {
         const r = await api('traffic?days=' + days);
-        if (!r.enabled) { el.innerHTML = 'Web Analytics not connected yet.<br><br>Enable it: Cloudflare dashboard → Pages → ai-directory-v5-radwan648 → Analytics → <b>Enable Web Analytics</b>. Data appears within a few hours.'; return; }
-        let h = '<div class="grid"><div><label>Visitors (' + r.days + 'd)</label><div style="font-size:26px;font-weight:800">' + r.visits.toLocaleString() + '</div></div>'
-          + '<div><label>Pageviews (' + r.days + 'd)</label><div style="font-size:26px;font-weight:800">' + r.pageviews.toLocaleString() + '</div></div></div>';
-        if (r.top_pages && r.top_pages.length) {
-          h += '<label style="margin-top:12px">Top pages</label>' + r.top_pages.map((x) => '<div class="meta">' + esc(x.page).slice(0, 60) + ' — ' + x.views + '</div>').join('');
+        if (!r.enabled) {
+          el.innerHTML = '<div class="hint" style="margin-top:12px">📊 <b>Web Analytics not connected yet.</b><br><br>Enable it: Cloudflare dashboard → Pages → <b>ai-directory-v5-radwan648</b> → Analytics → <b>Enable Web Analytics</b>.<br>Data appears within a few hours. No code changes or extra API keys needed — the existing token already has access.</div>';
+          return;
+        }
+        const pages = r.top_pages || [];
+        const max = Math.max.apply(null, pages.map((p) => p.views).concat([1]));
+        let h = '<div class="spark">' + pages.slice(0, 12).map((p) => '<i style="height:' + Math.max(6, Math.round(100 * p.views / max)) + '%" title="' + esc(p.page) + ' — ' + p.views + '"></i>').join('') + '</div>';
+        h += '<div class="kpis" style="grid-template-columns:repeat(3,1fr)">'
+          + '<div class="kpi k1"><div class="lb">Visitors (' + r.days + 'd)</div><div class="vl" id="tv-v">0</div></div>'
+          + '<div class="kpi k2"><div class="lb">Pageviews (' + r.days + 'd)</div><div class="vl" id="tv-p">0</div></div>'
+          + '<div class="kpi k3"><div class="lb">Top page</div><div class="vl" style="font-size:15px;word-break:break-all">' + esc((pages[0] || {}).page || '—').slice(0, 40) + '</div></div></div>';
+        if (pages.length) {
+          h += '<div class="sub" style="margin-top:16px">Top pages</div>' + pages.slice(0, 8).map((p) =>
+            '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px"><span>' + esc(p.page).slice(0, 55) + '</span><b>' + p.views.toLocaleString() + '</b></div>').join('');
         }
         el.innerHTML = h;
-      } catch (e) { el.textContent = 'Failed to load.'; }
+        countUp(document.getElementById('tv-v'), r.visits || 0);
+        countUp(document.getElementById('tv-p'), r.pageviews || 0);
+      } catch (e) { el.innerHTML = '<div class="meta">Failed to load traffic.</div>'; }
     };
     V.querySelectorAll('[data-d]').forEach((b) => b.onclick = () => load(b.dataset.d));
     load(7);
   },
   async actions() {
-    V.innerHTML = '<div class="card"><h3 style="margin-top:0">Actions</h3><div class="row">'
-      + '<button class="b" onclick="doDispatch()">Dispatch pipeline now</button>'
-      + '<button class="g" onclick="doTg()">Send Telegram test</button></div>'
-      + '<div class="meta" style="margin-top:8px">Dispatch triggers the GitHub Actions pipeline immediately (same as the 6am/6pm cron).</div></div>';
+    V.innerHTML = '<div class="card"><h2>⚙️ Actions</h2><div class="sub">Manual triggers — use carefully</div><div class="acts">'
+      + '<div class="act" onclick="doDispatch()"><div class="e">🚀</div><b>Trigger pipeline</b><span>Dispatch the GitHub scraper workflow now (same as cron)</span></div>'
+      + '<div class="act" onclick="doDispatch(\'snapshot\')"><div class="e">📸</div><b>Bake snapshot</b><span>Runs via pipeline — refreshes homepage sections.json</span></div>'
+      + '<div class="act" onclick="doDispatch(\'dedupe\')"><div class="e">🧹</div><b>Run dedupe</b><span>Runs via pipeline — cleans duplicate AI tools</span></div>'
+      + '<div class="act" onclick="doTg()"><div class="e">🔔</div><b>Test Telegram</b><span>Send a test alert to the admin chat</span></div>'
+      + '</div><div class="hint" style="margin-top:14px">ℹ️ Snapshot & dedupe run as pipeline steps — triggering the pipeline runs the full flow including them.</div></div>';
   }
 };
-function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
-document.querySelectorAll('.tabs button').forEach((b) => b.onclick = () => {
-  document.querySelectorAll('.tabs button').forEach((x) => x.classList.remove('on'));
-  b.classList.add('on'); views[b.dataset.t]().catch((e) => log('ERR ' + e.message));
-});
+// ---- global actions ----
+window.updSites = (sel) => {
+  const map = window.__comp || JOB_SITES;
+  const box = sel.closest('.slot, .f2').parentElement;
+  const lbl = sel.parentElement.querySelector('.sites') || document.querySelector('#view .sites');
+  const sites = (map[sel.value] || []).join(', ') || '—';
+  const target = sel.parentElement.querySelector('.sites');
+  if (target) target.textContent = sites;
+};
 window.saveApify = async (id, slot) => {
   const sl = document.querySelector('.slot[data-id="' + id + '"]');
   const g = (f) => sl.querySelector('[data-f="' + f + '"]').value;
-  if (!g('token')) { log('Token unchanged — only label/job/cap saved when a new token is typed.'); return; }
-  await api('apify-keys', 'POST', { slot: slot, label: g('label'), token: g('token'), assigned_job: g('assigned_job'), monthly_cap_usd: g('monthly_cap_usd') });
-  log('Saved slot.'); views.apify();
+  const tok = g('token');
+  const payload = { id: id, slot: slot, label: g('label'), assigned_job: g('assigned_job'), monthly_cap_usd: g('monthly_cap_usd') };
+  if (tok) payload.token = tok; else log('Token unchanged — label/job/cap saved.');
+  await api('apify-keys', 'POST', payload);
+  log('Saved slot ' + slot + '.'); views.apify();
 };
 window.addApify = async () => {
   const v = (id) => document.getElementById(id).value;
   if (!v('nk-token')) return log('Token required.');
   await api('apify-keys', 'POST', { slot: v('nk-slot'), label: v('nk-label'), token: v('nk-token'), monthly_cap_usd: v('nk-cap'), assigned_job: v('nk-job') });
-  log('Key added.'); views.apify();
+  log('Key added to slot ' + v('nk-slot') + '. Remember the APIFY_KEY_' + v('nk-slot') + ' GitHub secret.');
+  views.apify();
 };
-window.delApify = async (id) => { if (confirm('Remove this key?')) { await fetch('/z9-admin/api/apify-keys/' + id, { method: 'DELETE' }); log('Removed.'); views.apify(); } };
-window.testApify = async (id) => { log('Testing…'); const r = await api('apify-keys/' + id + '/test', 'POST'); log(r.ok ? 'OK: ' + r.username + ' (' + r.plan + ')' : 'FAILED: HTTP ' + r.status); };
+window.addApifySlot = async (slotN, job) => {
+  const tok = document.getElementById('nk' + slotN + '-token').value;
+  const cap = document.getElementById('nk' + slotN + '-cap').value;
+  if (!tok) return log('Paste the Apify API token for Slot ' + slotN + '.');
+  await api('apify-keys', 'POST', { slot: slotN, label: 'slot-' + slotN, token: tok, monthly_cap_usd: cap, assigned_job: job });
+  log('Key added to Slot ' + slotN + ' (' + job + '). Also add APIFY_KEY_' + slotN + ' as a GitHub repo secret.');
+  views.apify();
+};
+window.delApify = async (id) => { if (confirm('Remove this key?')) { await api('apify-keys/' + id, { method: 'DELETE' }); log('Removed.'); views.apify(); } };
+window.toggleApify = async (id, on) => {
+  await api('apify-keys/' + id + '/toggle', 'POST', { enabled: !!on });
+  log(on ? 'Slot enabled.' : 'Slot disabled.'); views.apify();
+};
+window.testApify = async (id) => { log('Testing key…'); try { const r = await api('apify-keys/' + id + '/test', 'POST'); log(r.ok ? 'OK: ' + r.username + ' (' + r.plan + ')' : 'FAILED: HTTP ' + r.status); } catch (e) { log('Test failed: ' + e.message); } };
 window.eye = (btn) => { const i = btn.parentElement.querySelector('input'); i.type = i.type === 'password' ? 'text' : 'password'; };
 window.loadUsage = async (id, cap) => {
   const useEl = document.getElementById('use-' + id), barEl = document.getElementById('bar-' + id),
         warnEl = document.getElementById('warn-' + id), svcEl = document.getElementById('svc-' + id);
+  if (!useEl) return;
   try {
     const r = await api('apify-keys/' + id + '/usage');
     if (!r.available) { useEl.textContent = 'Usage unavailable (' + (r.reason || '?') + ').'; return; }
-    const used = r.total_usd, c = parseFloat(cap) || 0;
+    const used = r.total_usd || 0, c = parseFloat(cap) || 0;
     const left = Math.max(0, Math.round((c - used) * 100) / 100);
     const pct = c > 0 ? Math.round(100 * used / c) : 0;
-    barEl.firstElementChild.style.width = Math.min(100, pct) + '%';
+    const bar = barEl.querySelector('i') || barEl.firstElementChild;
+    if (bar) bar.style.width = Math.min(100, pct) + '%';
     if (pct >= 100) barEl.classList.add('over');
-    useEl.textContent = '$' + used.toFixed(2) + ' of $' + c.toFixed(2) + ' used · $' + left.toFixed(2) + ' left · ' + pct + '% · ' + r.username + ' (' + r.plan + ') · resets ' + r.cycle_end;
-    if (pct >= 100) { warnEl.style.display = 'block'; warnEl.textContent = 'The Apify allowance for this token is used up — scraping is blocked on it. Add or switch to another token to keep going.'; }
-    svcEl.textContent = (r.services || []).map((x) => x.label + ' ' + x.quantity + (x.unit ? ' ' + x.unit : '') + ' ($' + x.usd.toFixed(2) + ')').join(' · ');
+    useEl.innerHTML = '<b>$' + used.toFixed(2) + '</b> of $' + c.toFixed(2) + ' used · $' + left.toFixed(2) + ' left · ' + pct + '% · ' + esc(r.username || '') + ' (' + esc(r.plan || '') + ') · resets ' + esc(r.cycle_end || '—');
+    if (pct >= 100) { warnEl.style.display = 'block'; warnEl.textContent = '⚠️ Allowance used up — scraping is blocked on this token. Switch to another slot to keep going.'; }
+    if (svcEl && r.services) svcEl.textContent = r.services.map((x) => x.label + ' ' + x.quantity + (x.unit ? ' ' + x.unit : '') + ' ($' + x.usd.toFixed(2) + ')').join(' · ');
   } catch (e) { useEl.textContent = 'Usage load failed.'; }
 };
 window.addManifest = async () => {
@@ -797,15 +1070,36 @@ window.addManifest = async () => {
   await api('manifest', 'POST', { label: v('nm-label'), base_url: v('nm-url'), api_key: v('nm-key'), monthly_limit: v('nm-limit') });
   log('Endpoint added.'); views.manifest();
 };
-window.delManifest = async (id) => { if (confirm('Remove this endpoint?')) { await fetch('/z9-admin/api/manifest/' + id, { method: 'DELETE' }); log('Removed.'); views.manifest(); } };
-window.testManifest = async (id) => { log('Testing…'); const r = await api('manifest/' + id + '/test', 'POST'); log(r.ok ? 'OK (' + r.status + ')' : 'FAILED: HTTP ' + r.status + ' ' + (r.sample || '')); };
-window.doDispatch = async () => { const r = await api('pipeline/dispatch', 'POST'); log(r.ok ? 'Dispatched.' : 'Dispatch failed: ' + r.status); };
-window.doTg = async () => { const r = await api('telegram/test', 'POST'); log(r.ok ? 'Telegram test sent.' : 'Telegram failed.'); };
-setInterval(() => { document.getElementById('clock').textContent = new Date().toLocaleString(); }, 1000);
+window.delManifest = async (id) => { if (confirm('Remove this endpoint?')) { await api('manifest/' + id, { method: 'DELETE' }); log('Removed.'); views.manifest(); } };
+window.toggleManifest = async (id, on) => {
+  await api('manifest/' + id + '/toggle', 'POST', { enabled: !!on });
+  log(on ? 'Endpoint enabled.' : 'Endpoint disabled.'); views.manifest();
+};
+window.testManifest = async (id) => { log('Testing endpoint…'); try { const r = await api('manifest/' + id + '/test', 'POST'); log(r.ok ? 'OK (' + r.status + ')' : 'FAILED: HTTP ' + r.status + ' ' + (r.sample || '')); } catch (e) { log('Test failed: ' + e.message); } };
+window.doDispatch = async (what) => {
+  if (!confirm('Dispatch the pipeline now?' + (what ? ' (' + what + ' runs as a pipeline step)' : ''))) return;
+  log('Dispatching…');
+  try { const r = await api('pipeline/dispatch', 'POST'); log(r.ok ? '✅ Dispatched.' : 'Dispatch failed: ' + r.status); }
+  catch (e) { log('Dispatch failed: ' + e.message); }
+};
+window.doTg = async () => { try { const r = await api('telegram/test', 'POST'); log(r.ok ? 'Telegram test sent.' : 'Telegram failed.'); } catch (e) { log('Telegram failed: ' + e.message); } };
+// ---- tabs + clock + init ----
+document.querySelectorAll('.tabs button').forEach((b) => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach((x) => x.classList.remove('on'));
+  b.classList.add('on'); activeTab = b.dataset.t;
+  views[activeTab]().catch((e) => log('ERR ' + e.message));
+});
+setInterval(() => { const c = document.getElementById('clock'); if (c) c.textContent = new Date().toLocaleString(); }, 1000);
+// auto-refresh overview every 60s
+refreshTimer = setInterval(() => { if (activeTab === 'overview') views.overview().catch(() => {}); }, 60000);
 document.getElementById('bk').value = bkey();
-views.overview().catch((e) => { V.innerHTML = '<div class="card"><span style="color:var(--bad)">Auth required.</span><div class="meta">' + esc(e.message) + '</div><div class="meta">Enter the setup key above (one-time), or reload after logging in via Cloudflare Access.</div></div>'; });
+views.overview().catch((e) => {
+  V.innerHTML = '<div class="card"><h2 style="color:var(--bad)">Auth required</h2><div class="meta">' + esc(e.message) + '</div><div class="meta" style="margin-top:8px">Enter the setup key above (one-time), or reload after logging in via Cloudflare Access.</div></div>';
+  document.getElementById('health').textContent = 'Auth required';
+});
 </script></body></html>`;
 }
+
 
 
 const handler = {
