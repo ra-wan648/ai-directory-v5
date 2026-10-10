@@ -595,11 +595,39 @@ async function adminApi(request, env, url, pathname, method) {
   }
 
   if (sub === 'stats' && method === 'GET') {
-    let total = { c: 0 }, today = { c: 0 }, noFaq = { c: 0 };
-    try { total = await env.DB.prepare(`SELECT COUNT(*) AS c FROM tools WHERE status='published'`).first(); } catch (e) {}
-    try { today = await env.DB.prepare(`SELECT COUNT(*) AS c FROM tools WHERE status='published' AND created_at > datetime('now', '-1 day')`).first(); } catch (e) {}
-    try { noFaq = await env.DB.prepare(`SELECT COUNT(*) AS c FROM tools WHERE status='published' AND (faq IS NULL OR faq='')`).first(); } catch (e) {}
-    return json({ total_tools: total.c, added_24h: today.c, missing_faq: noFaq.c, time: new Date().toISOString() });
+    // Single query instead of 3 (saves D1 reads)
+    let r = { total: 0, today: 0, nofaq: 0 };
+    try {
+      r = await env.DB.prepare(`SELECT COUNT(*) AS total,
+        SUM(CASE WHEN created_at > datetime('now', '-1 day') THEN 1 ELSE 0 END) AS today,
+        SUM(CASE WHEN faq IS NULL OR faq='' THEN 1 ELSE 0 END) AS nofaq
+        FROM tools WHERE status='published'`).first() || r;
+    } catch (e) {}
+    return json({ total_tools: r.total || 0, added_24h: r.today || 0, missing_faq: r.nofaq || 0, time: new Date().toISOString() });
+  }
+
+  if (sub === 'd1-usage' && method === 'GET') {
+    // D1 usage overview: table sizes + optimization tips
+    const tables = ['tools', 'blogs', 'prompts', 'apify_keys', 'manifest_endpoints', 'pipeline_runs'];
+    const sizes = {};
+    for (const t of tables) {
+      try {
+        const r = await env.DB.prepare(`SELECT COUNT(*) AS c FROM ${t}`).first();
+        sizes[t] = r ? r.c : 0;
+      } catch (e) { sizes[t] = -1; }
+    }
+    // Free tier limits: 100K reads/day, 100K writes/day, 5GB storage
+    return json({
+      tables: sizes,
+      limits: { reads_per_day: 100000, writes_per_day: 100000, storage_gb: 5 },
+      tips: [
+        'Homepage uses baked sections.json (no D1 reads)',
+        'Stats API uses 1 query instead of 3',
+        'Pipeline batches inserts (50 per batch)',
+        'Dashboard auto-refresh is 60s (not realtime)',
+      ],
+      time: new Date().toISOString(),
+    });
   }
 
   if (sub === 'traffic' && method === 'GET') {
@@ -783,7 +811,7 @@ const views = {
       + '<div class="kpi k2"><div class="lb">Free browser tools</div><div class="vl" id="kpi-free">…</div><div class="tr">▲ 119 added Oct 2026</div></div>'
       + '<div class="kpi k3"><div class="lb">Visitors (7d)</div><div class="vl" id="kpi-vis">…</div><div class="tr" id="kpi-vis-tr"></div></div>'
       + '<div class="kpi k4"><div class="lb">Apify spend (mo)</div><div class="vl" id="kpi-spend">…</div><div class="tr" id="kpi-spend-tr"></div></div>'
-      + '</div></div><div class="card"><h2>Pipeline timeline</h2><div class="sub">Recent runs</div><div class="timeline" id="ov-timeline"><div class="meta">loading…</div></div></div>';
+      + '</div></div><div class="card"><h2>🗄️ D1 Database</h2><div class="sub">Usage & optimization</div><div id="d1-info"><div class="meta">loading…</div></div></div><div class="card"><h2>Pipeline timeline</h2><div class="sub">Recent runs</div><div class="timeline" id="ov-timeline"><div class="meta">loading…</div></div></div>';
     // Parallel data load
     const [stats, runs] = await Promise.all([
       api('stats').catch(() => null),
@@ -796,6 +824,19 @@ const views = {
       document.getElementById('kpi-tools-tr').textContent = '▲ ' + (stats.added_24h || 0) + ' in last 24h';
     }
     countUp(document.getElementById('kpi-free'), 221);
+    // D1 usage
+    try {
+      const d1 = await api('d1-usage');
+      const t = d1.tables || {};
+      let h = '<div class="f2">';
+      const names = {tools:'AI tools', blogs:'Blog posts', prompts:'Prompts', apify_keys:'Apify keys', manifest_endpoints:'Manifest endpoints', pipeline_runs:'Pipeline runs'};
+      for (const k of Object.keys(names)) {
+        if (t[k] >= 0) h += '<div><div class="lb">' + names[k] + '</div><div class="vl" style="font-size:20px">' + t[k].toLocaleString() + '</div><div class="meta">rows</div></div>';
+      }
+      h += '</div><div class="hint" style="margin-top:12px">💡 <b>Saving D1 reads:</b><br>• ' + (d1.tips || []).join('<br>• ') + '</div>';
+      h += '<div class="meta" style="margin-top:8px">Free tier: 100K reads/day · 100K writes/day · 5GB storage</div>';
+      document.getElementById('d1-info').innerHTML = h;
+    } catch (e) { document.getElementById('d1-info').innerHTML = '<div class="meta">Failed to load D1 info.</div>'; }
     if (traffic && traffic.enabled) {
       countUp(document.getElementById('kpi-vis'), traffic.visits || 0);
       document.getElementById('kpi-vis-tr').textContent = (traffic.pageviews || 0).toLocaleString() + ' pageviews';
@@ -864,7 +905,7 @@ const views = {
           + '<div class="meta" style="margin-bottom:10px">Scrapes: <b>' + esc(sitesFor(job)) + '</b></div>'
           + '<div class="f2"><div><label>API Token</label><input id="nk' + slotN + '-token" type="password" placeholder="apify_api_…"></div>'
           + '<div><label>Monthly cap USD</label><input id="nk' + slotN + '-cap" type="number" step="0.5" value="5"></div></div>'
-          + '<div class="btnrow"><button class="btn dark" onclick="addApifySlot(' + slotN + ',\'' + job + '\')">+ Add key to Slot ' + slotN + '</button></div></div>';
+          + '<div class="btnrow"><button class="btn dark" onclick="addApifySlot(' + slotN + ',' + job + ')">+ Add key to Slot ' + slotN + '</button></div></div>';
         return;
       }
       // Existing key — full card with live usage
