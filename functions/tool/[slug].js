@@ -64,7 +64,8 @@ export async function onRequest(context) {
   const name = tool.name;
   const cat = tool.category || 'AI tool';
   const price = priceOf(tool.pricing);
-  const desc = descOf(tool).slice(0, 155) || `${name} is listed in the ${cat} category on AI Directory.`;
+  const desc = (tool.description || descOf(tool)).slice(0, 155) || `${name} is listed in the ${cat} category on AI Directory.`;
+  const pageTitle = tool.seo_title || `${name} — ${cat} AI tool | AI Directory`;
   const tags = String(tool.tags || '').split(',').map((x) => x.trim()).filter(Boolean);
 
   const body = `
@@ -77,6 +78,25 @@ export async function onRequest(context) {
 ${tags.length ? `<h2 style="font-size:17px">Tags</h2><p style="font-size:13px">${tags.map((t) => `<span class="tag">${esc(t)}</span>`).join(' ')}</p>` : ''}
 <h2 style="font-size:17px">Pricing</h2>
 <p style="font-size:14px">Listed as <b>${esc(price)}</b>. Pricing changes often — confirm on the official site.</p>
+${(() => {
+  let faqHtml = '';
+  let faqSchema = null;
+  try {
+    const fq = typeof tool.faq === 'string' ? JSON.parse(tool.faq) : tool.faq;
+    if (Array.isArray(fq) && fq.length) {
+      faqHtml = '<h2 style="font-size:17px;margin-top:26px">Frequently asked questions</h2>'
+        + fq.slice(0, 5).map((x) => '<details style="margin:8px 0;border:1px solid #e8eaf1;border-radius:8px;padding:10px 14px">'
+        + '<summary style="font-weight:600;font-size:14px;cursor:pointer">' + esc(x.q || x.question || '') + '</summary>'
+        + '<p style="font-size:13px;margin:8px 0 0;line-height:1.6">' + esc(x.a || x.answer || '') + '</p></details>').join('');
+      faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: fq.slice(0, 5).map((x) => ({ '@type': 'Question', name: x.q || x.question || '',
+          acceptedAnswer: { '@type': 'Answer', text: x.a || x.answer || '' } })) };
+    }
+  } catch (e) {}
+  // Store for JSON-LD
+  globalThis._faqSchema = faqSchema;
+  return faqHtml;
+})()}
 <h2 style="font-size:17px">Similar ${esc(cat)} tools</h2>
 <div id="sim" style="font-size:13px">Loading…</div>
 <script>
@@ -95,18 +115,33 @@ fetch("/api/tools?category=" + encodeURIComponent(${JSON.stringify(cat)}) + "&li
 <p style="margin-top:10px"><a href="/">← Back to the directory</a></p>`;
 
   return new Response(page({
-    title: `${name} — ${cat} AI tool | AI Directory`,
+    title: pageTitle,
     description: desc,
     canonical: `${SITE}/tool/${encodeURIComponent(tool.slug)}`,
     body,
-    jsonLd: {
-      '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
-      name: name,
-      description: desc,
-      applicationCategory: cat,
-      url: tool.visit_url || tool.url || undefined,
-      offers: { '@type': 'Offer', price: price === 'Free' ? '0' : undefined, priceCurrency: 'USD', description: price },
-    },
+    jsonLd: (() => {
+      const graph = [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: name,
+          description: desc,
+          applicationCategory: cat,
+          url: tool.visit_url || tool.url || undefined,
+          offers: { '@type': 'Offer', price: price === 'Free' ? '0' : undefined, priceCurrency: 'USD', description: price },
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE + '/' },
+            { '@type': 'ListItem', position: 2, name: cat, item: SITE + '/category/' + encodeURIComponent(cat) },
+            { '@type': 'ListItem', position: 3, name: name },
+          ],
+        },
+      ];
+      if (globalThis._faqSchema) graph.push(globalThis._faqSchema);
+      return { '@context': 'https://schema.org', '@graph': graph };
+    })(),
   }), { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'public, max-age=600' } });
 }
