@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>OTP/TOTP Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Generate time-based one-time passwords from a secret key. Use the free online OTP/TOTP Generator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/otp-generator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="OTP/TOTP Generator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Generate time-based one-time passwords from a secret key.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/otp-generator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OTP/TOTP Generator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Generate time-based one-time passwords from a secret key.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"OTP/TOTP Generator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"OTP/TOTP Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"RFC 6238 TOTP generation with WebCrypto, live countdown to next code, random base32 secret generator, otpauth provisioning URI","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/token-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hash/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/uuid/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-number/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to generate a TOTP code","step":[{"@type":"HowToStep","position":1,"name":"Enter your secret","text":"Paste the base32 secret from your service, or generate a fresh random one with the button."},{"@type":"HowToStep","position":2,"name":"Read the current code","text":"The 6-digit code updates automatically every 30 seconds, matching what an authenticator app would show."},{"@type":"HowToStep","position":3,"name":"Copy the code","text":"Click Copy code to put the current OTP on your clipboard before the window expires."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is TOTP?","acceptedAnswer":{"@type":"Answer","text":"TOTP (Time-based One-Time Password, RFC 6238) generates a 6-digit code from a shared secret and the current time in 30-second windows — the same algorithm used by authenticator apps."}},{"@type":"Question","name":"Is my secret sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The secret is processed entirely in your browser with the Web Crypto API and never leaves your device."}},{"@type":"Question","name":"What is the otpauth:// URI for?","acceptedAnswer":{"@type":"Answer","text":"It is the provisioning format authenticator apps use. It encodes the secret, account label, and issuer so you can import this TOTP setup elsewhere."}},{"@type":"Question","name":"Is this OTP generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#fffdf6}
+input:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.btnrow button{margin-top:.8rem}
+.codebox{text-align:center;margin:1.4rem 0 1rem}
+.codebox .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:3rem;font-weight:800;letter-spacing:.18em;color:var(--ink)}
+.codebox .window{color:var(--mut);font-size:.95rem;margin-top:.3rem}
+.barwrap{background:#f3ede0;border-radius:999px;height:10px;overflow:hidden;margin:.6rem 0 0}
+.bar{height:100%;background:var(--amber);width:100%;transition:width .25s linear}
+.uribox{background:#1f2937;color:#e5e7eb;border-radius:8px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;word-break:break-all;margin-top:.6rem}
+.err{color:#b91c1c;font-size:.88rem;margin-top:.4rem;min-height:1.3em}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.codebox .code{font-size:2.2rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>OTP/TOTP Generator</span></nav>
+<main class="wrap">
+<h1>OTP/TOTP Generator</h1>
+<p class="lede">Generate time-based one-time passwords from a secret key. Uses the real RFC 6238 TOTP algorithm in your browser — the same codes your authenticator app produces.</p>
+
+<div class="tool">
+  <label for="secret">Base32 secret</label>
+  <input type="text" id="secret" placeholder="JBSWY3DPEHPK3PXP" autocomplete="off" spellcheck="false">
+  <div class="err" id="err"></div>
+  <div class="btnrow">
+    <button class="ghost" id="genBtn">Generate random secret</button>
+  </div>
+
+  <label for="labelIn">Account label (for the otpauth URI)</label>
+  <input type="text" id="labelIn" placeholder="user@example.com" autocomplete="off" spellcheck="false">
+
+  <div class="codebox">
+    <div class="code" id="codeOut">······</div>
+    <div class="window" id="windowOut">Enter a secret to begin</div>
+    <div class="barwrap"><div class="bar" id="bar"></div></div>
+  </div>
+
+  <div class="btnrow">
+    <button id="copyCode">Copy code</button>
+    <button class="ghost" id="copyUri">Copy otpauth URI</button>
+  </div>
+  <div id="status" aria-live="polite"></div>
+
+  <label>otpauth:// provisioning URI</label>
+  <div class="uribox" id="uriOut">—</div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Paste the base32 secret from your service, or generate a fresh random one with the button.</li>
+    <li>Read the current 6-digit code — it updates automatically every 30 seconds, matching what an authenticator app would show.</li>
+    <li>Click <b>Copy code</b> to put the current OTP on your clipboard before the window expires.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How TOTP works</h2>
+  <p>TOTP combines your secret with the current time (in 30-second windows) through HMAC-SHA1, then truncates the result to 6 digits. This page performs the exact RFC 6238 computation with the Web Crypto API, so codes match Google Authenticator and compatible apps.</p>
+  <h2>Keep your secret safe</h2>
+  <p>Anyone with your secret can generate your codes. This tool never sends it anywhere, but avoid pasting production secrets into a shared or untrusted device.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is TOTP?</summary><p>TOTP (Time-based One-Time Password, RFC 6238) generates a 6-digit code from a shared secret and the current time in 30-second windows — the same algorithm used by authenticator apps.</p></details>
+  <details><summary>Is my secret sent anywhere?</summary><p>No. The secret is processed entirely in your browser with the Web Crypto API and never leaves your device.</p></details>
+  <details><summary>What is the otpauth:// URI for?</summary><p>It is the provisioning format authenticator apps use. It encodes the secret, account label, and issuer so you can import this TOTP setup elsewhere.</p></details>
+  <details><summary>Is this OTP generator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/token-generator/">Token Generator</a></li>
+    <li><a href="/toolhub/tools/hash/">Hash Generator</a></li>
+    <li><a href="/toolhub/tools/uuid/">UUID Generator</a></li>
+    <li><a href="/toolhub/tools/random-number/">Random Number</a></li>
+    <li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var B32="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+var secretEl=document.getElementById("secret"),labelEl=document.getElementById("labelIn"),
+    codeOut=document.getElementById("codeOut"),windowOut=document.getElementById("windowOut"),
+    bar=document.getElementById("bar"),uriOut=document.getElementById("uriOut"),
+    err=document.getElementById("err"),status=document.getElementById("status");
+var lastCounter=-1,lastCode="";
+
+function cleanSecret(s){return s.replace(/[\s-]/g,"").replace(/=+$/,"").toUpperCase();}
+function base32Decode(s){
+  s=cleanSecret(s);
+  if(!s)throw new Error("Secret is empty.");
+  if(/[^A-Z2-7]/.test(s))throw new Error("Secret must be base32 (letters A–Z and digits 2–7).");
+  var bits=0,val=0,out=[];
+  for(var i=0;i<s.length;i++){
+    val=(val<<5)|B32.indexOf(s.charAt(i));bits+=5;
+    if(bits>=8){out.push((val>>>(bits-8))&0xFF);bits-=8;val&= (1<<bits)-1;}
+  }
+  return new Uint8Array(out);
+}
+function base32Encode(bytes){
+  var bits=0,val=0,out="";
+  for(var i=0;i<bytes.length;i++){
+    val=(val<<8)|bytes[i];bits+=8;
+    while(bits>=5){out+=B32[(val>>>(bits-5))&31];bits-=5;}
+  }
+  if(bits>0)out+=B32[(val<<(5-bits))&31];
+  return out;
+}
+
+async function totp(keyBytes,counter){
+  var key=await crypto.subtle.importKey("raw",keyBytes,{name:"HMAC",hash:"SHA-1"},false,["sign"]);
+  var msg=new ArrayBuffer(8),v=new DataView(msg);
+  v.setUint32(0,Math.floor(counter/4294967296));
+  v.setUint32(4,counter>>>0);
+  var sig=new Uint8Array(await crypto.subtle.sign("HMAC",key,msg));
+  var off=sig[sig.length-1]&0x0F;
+  var num=((sig[off]&0x7F)<<24)|((sig[off+1]&0xFF)<<16)|((sig[off+2]&0xFF)<<8)|(sig[off+3]&0xFF);
+  return String(num%1000000).padStart(6,"0");
+}
+
+function updateUri(){
+  var s=cleanSecret(secretEl.value);
+  var label=labelEl.value.trim()||"AI-Directory";
+  if(!s){uriOut.textContent="—";return;}
+  uriOut.textContent="otpauth://totp/"+encodeURIComponent("AI Directory:"+label)+
+    "?secret="+s+"&issuer="+encodeURIComponent("AI Directory")+"&algorithm=SHA1&digits=6&period=30";
+}
+
+async function tick(){
+  var now=Math.floor(Date.now()/1000);
+  var counter=Math.floor(now/30);
+  var remain=30-(now%30);
+  bar.style.width=(remain/30*100)+"%";
+  windowOut.textContent="New code in "+remain+"s";
+  var s=cleanSecret(secretEl.value);
+  if(!s){codeOut.textContent="······";lastCounter=-1;return;}
+  try{
+    var key=base32Decode(secretEl.value);
+    err.textContent="";
+    if(counter!==lastCounter){
+      lastCounter=counter;
+      lastCode=await totp(key,counter);
+      codeOut.textContent=lastCode;
+    }
+  }catch(e){
+    err.textContent=e.message;
+    codeOut.textContent="······";
+    lastCounter=-1;
+  }
+}
+
+document.getElementById("genBtn").addEventListener("click",function(){
+  var bytes=new Uint8Array(20);
+  crypto.getRandomValues(bytes);
+  secretEl.value=base32Encode(bytes);
+  status.textContent="New random 160-bit secret generated.";
+  updateUri();tick();
+});
+secretEl.addEventListener("input",function(){lastCounter=-1;updateUri();tick();});
+labelEl.addEventListener("input",updateUri);
+
+function copyText(txt,okMsg){
+  function done(){status.textContent=okMsg;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done,function(){status.textContent="Copy failed — select the text manually.";});
+  }else{
+    var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){status.textContent="Copy failed — select the text manually.";}
+    document.body.removeChild(ta);
+  }
+}
+document.getElementById("copyCode").addEventListener("click",function(){
+  if(lastCode)copyText(lastCode,"Code copied.");
+  else status.textContent="No valid code yet — enter a secret first.";
+});
+document.getElementById("copyUri").addEventListener("click",function(){
+  if(uriOut.textContent!=="—")copyText(uriOut.textContent,"otpauth URI copied.");
+  else status.textContent="Enter a secret first.";
+});
+
+updateUri();
+tick();
+setInterval(tick,250);
+})();
+</script>
+</body>
+</html>

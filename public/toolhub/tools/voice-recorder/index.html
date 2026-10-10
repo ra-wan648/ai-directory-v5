@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Voice Recorder — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Record audio in your browser and download it. Use the free online Voice Recorder tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/voice-recorder/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Voice Recorder — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Record audio in your browser and download it. Use the free online Voice Recorder tool on AI Directory — no signup, no install, browser-first processing.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/voice-recorder/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Voice Recorder — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Record audio in your browser and download it. Use the free online Voice Recorder tool on AI Directory — no signup, no install, browser-first processing.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Free Mini Tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},
+{"@type":"ListItem","position":2,"name":"Audio tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},
+{"@type":"ListItem","position":3,"name":"Voice Recorder","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/voice-recorder/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Voice Recorder — AI Directory","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Record audio with one click in the browser","Live recording timer and level meter","Play back and download recordings as .webm"],"isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-to-speech/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/subtitle-shifter/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/youtube-thumbnail/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to record audio","step":[
+{"@type":"HowToStep","position":1,"name":"Allow microphone access","text":"Click Record and grant microphone permission when asked."},
+{"@type":"HowToStep","position":2,"name":"Record your audio","text":"Speak while watching the live timer and level meter."},
+{"@type":"HowToStep","position":3,"name":"Save or play back","text":"Click Stop, then play the recording or download it as .webm."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is Voice Recorder free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is completely free with no limits and no hidden costs."}},
+{"@type":"Question","name":"Do I need an account?","acceptedAnswer":{"@type":"Answer","text":"No. No signup or account is required — everything runs directly in your browser."}},
+{"@type":"Question","name":"Is my recording uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Your recordings stay on your device. Nothing is uploaded anywhere."}},
+{"@type":"Question","name":"What is Voice Recorder best used for?","acceptedAnswer":{"@type":"Answer","text":"It is best for quick voice notes, interview clips, podcast test takes, and any audio you want to capture fast and download as a file."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--ink:#1f2937;--muted:#6b7280;--bg:#faf7f2;--card:#ffffff;--line:#e5e7eb}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+header.top{background:var(--card);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:12px}
+header.top a.logo{font-size:1.35rem;font-weight:800;color:var(--ink);text-decoration:none}
+header.top a.logo span{color:var(--amber)}
+header.top .tag{font-size:.85rem;color:var(--muted);border-left:2px solid var(--amber);padding-left:12px}
+main{max-width:900px;margin:0 auto;padding:24px 16px}
+nav.crumb{font-size:.9rem;color:var(--muted);margin-bottom:8px}
+nav.crumb a{color:var(--amber);text-decoration:none}
+h1{margin:0 0 6px;font-size:1.9rem}
+p.lead{color:var(--muted);margin-top:0}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:22px 0}
+.btn{background:var(--amber);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:1rem;cursor:pointer;font-weight:600}
+.btn:hover{filter:brightness(.95)}
+.btn.danger{background:#dc2626}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.timer{font-size:2.4rem;font-weight:800;font-variant-numeric:tabular-nums;margin:12px 0 4px}
+.rec-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#d1d5db;margin-right:8px;vertical-align:middle}
+.rec-dot.on{background:#dc2626;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.35}}
+.meter-wrap{background:#f3f4f6;border-radius:8px;height:22px;overflow:hidden;margin:10px 0}
+#meter{height:100%;width:0%;background:linear-gradient(90deg,var(--amber),#fbbf24);transition:width .06s}
+.status{margin-top:12px;font-size:.95rem}
+.status.ok{color:#15803d}.status.err{color:#b91c1c}
+.note{font-size:.9rem;color:var(--muted)}
+.rec-list{list-style:none;padding:0;margin-top:14px}
+.rec-list li{background:#fffdf8;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.rec-list audio{width:100%;margin:6px 0}
+.rec-list .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rec-list .row .name{font-weight:600;flex:1;min-width:140px}
+.small{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:.9rem}
+.small:hover{border-color:var(--amber)}
+h2{margin-top:34px;font-size:1.4rem}
+ol.steps li{margin-bottom:8px}
+details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:8px 0;padding:10px 14px}
+summary{font-weight:600;cursor:pointer}
+.similar{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.similar a{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 14px;text-decoration:none;color:var(--ink);font-size:.95rem}
+.similar a:hover{border-color:var(--amber)}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:20px;text-align:center;color:var(--muted);font-size:.9rem}
+footer a{color:var(--amber);text-decoration:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/toolhub/">AI <span>Directory</span></a>
+  <span class="tag">Free Mini Tools</span>
+</header>
+<main>
+<nav class="crumb" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / Audio tools / Voice Recorder</nav>
+<h1>Voice Recorder</h1>
+<p class="lead">Record audio in your browser and download it.</p>
+
+<div class="tool">
+  <div class="controls">
+    <button class="btn danger" id="recBtn">● Record</button>
+    <button class="btn" id="stopBtn" disabled>■ Stop</button>
+  </div>
+  <div class="timer"><span class="rec-dot" id="recDot"></span><span id="timeDisplay">00:00</span></div>
+  <div class="meter-wrap" aria-hidden="true"><div id="meter"></div></div>
+  <p class="note">Level meter shows live microphone input while recording.</p>
+  <div class="status" id="status" aria-live="polite"></div>
+
+  <h2 style="font-size:1.15rem;margin-top:22px">Your recordings (this session)</h2>
+  <p class="note" id="emptyNote">No recordings yet. Press Record to start.</p>
+  <ul class="rec-list" id="recList"></ul>
+</div>
+
+<h2>How to use Voice Recorder</h2>
+<ol class="steps">
+  <li>Click "Record" and allow microphone access when your browser asks.</li>
+  <li>Speak while watching the live timer and level meter.</li>
+  <li>Click "Stop", then play the recording in the list or download it as a <code>.webm</code> file.</li>
+</ol>
+
+<section>
+<h2>What is Voice Recorder?</h2>
+<p>Voice Recorder is a free browser-based tool for capturing audio with your device's microphone. It is handy for voice notes, interview clips, narration takes, and any quick audio you want to record and keep as a downloadable file.</p>
+</section>
+<section>
+<h2>How it works</h2>
+<p>The tool uses the browser's MediaRecorder API to capture microphone audio in the WebM format, with an AnalyserNode powering the live level meter. When you stop, the recording is assembled into a file you can play back immediately or download.</p>
+</section>
+<section>
+<h2>Privacy</h2>
+<p>All recording and processing happens locally on your device. Your audio never leaves your browser and nothing is uploaded to any server.</p>
+</section>
+
+<h2>FAQ</h2>
+<details><summary>Is Voice Recorder free?</summary><p>Yes. It is completely free with no limits and no hidden costs.</p></details>
+<details><summary>Do I need an account?</summary><p>No. No signup or account is required — everything runs directly in your browser.</p></details>
+<details><summary>Is my recording uploaded to a server?</summary><p>No. Your recordings stay on your device. Nothing is uploaded anywhere.</p></details>
+<details><summary>What is Voice Recorder best used for?</summary><p>It is best for quick voice notes, interview clips, podcast test takes, and any audio you want to capture fast and download as a file.</p></details>
+
+<nav aria-label="Similar tools">
+<h2>Similar tools</h2>
+<div class="similar">
+  <a href="/toolhub/tools/text-to-speech/">Text to Speech</a>
+  <a href="/toolhub/tools/subtitle-shifter/">Subtitle Shifter</a>
+  <a href="/toolhub/tools/youtube-thumbnail/">YouTube Thumbnail</a>
+</div>
+</nav>
+</main>
+<footer>© AI Directory — <a href="/toolhub/">Free Mini Tools</a></footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var recBtn=$("recBtn"),stopBtn=$("stopBtn"),status=$("status");
+var stream=null,recorder=null,chunks=[],audioCtx=null,analyser=null,meterRAF=0;
+var startTime=0,timerInt=0,recCount=0,recording=false;
+
+function fmtTime(s){var m=Math.floor(s/60),x=Math.floor(s%60);return String(m).padStart(2,"0")+":"+String(x).padStart(2,"0");}
+function setStatus(msg,cls){status.textContent=msg;status.className="status"+(cls?" "+cls:"");}
+
+if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||typeof MediaRecorder==="undefined"){
+  setStatus("Your browser does not support audio recording (MediaRecorder / getUserMedia missing). Try a recent Chrome, Edge, Firefox or Safari.","err");
+  recBtn.disabled=true;
+}
+
+function pickMime(){
+  var cands=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/ogg;codecs=opus","audio/ogg"];
+  for(var i=0;i<cands.length;i++){try{if(MediaRecorder.isTypeSupported(cands[i]))return cands[i];}catch(e){}}
+  return "";
+}
+function extFor(mime){if(mime.indexOf("mp4")>-1)return"mp4";if(mime.indexOf("ogg")>-1)return"ogg";return"webm";}
+
+function updateMeter(){
+  if(!analyser)return;
+  var data=new Uint8Array(analyser.fftSize);
+  analyser.getByteTimeDomainData(data);
+  var sum=0;for(var i=0;i<data.length;i++){var v=(data[i]-128)/128;sum+=v*v;}
+  var level=Math.min(1,Math.sqrt(sum/data.length)*3);
+  $("meter").style.width=Math.round(level*100)+"%";
+  meterRAF=requestAnimationFrame(updateMeter);
+}
+function tick(){$("timeDisplay").textContent=fmtTime((Date.now()-startTime)/1000);}
+
+recBtn.addEventListener("click",function(){
+  if(recording)return;
+  setStatus("Requesting microphone access…");
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+    stream=s;chunks=[];
+    var mime=pickMime();
+    try{recorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);}
+    catch(e){setStatus("Could not start the recorder in this browser.","err");return;}
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    var src=audioCtx.createMediaStreamSource(stream);
+    analyser=audioCtx.createAnalyser();analyser.fftSize=2048;src.connect(analyser);
+    recorder.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
+    recorder.onstop=finishRecording;
+    recorder.start(250);recording=true;startTime=Date.now();
+    recBtn.disabled=true;stopBtn.disabled=false;$("recDot").classList.add("on");
+    timerInt=setInterval(tick,250);updateMeter();
+    setStatus("Recording… speak into your microphone.","ok");
+  }).catch(function(err){
+    var msg="Could not access the microphone.";
+    if(err&&err.name==="NotAllowedError")msg="Microphone permission was denied. Allow microphone access in your browser's site settings, then try again.";
+    else if(err&&err.name==="NotFoundError")msg="No microphone was found on this device.";
+    setStatus(msg,"err");
+  });
+});
+
+stopBtn.addEventListener("click",function(){
+  if(!recording)return;
+  try{recorder.stop();}catch(e){}
+  recording=false;recBtn.disabled=false;stopBtn.disabled=true;$("recDot").classList.remove("on");
+  clearInterval(timerInt);cancelAnimationFrame(meterRAF);$("meter").style.width="0%";
+  if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}
+  setStatus("Processing recording…");
+});
+
+function finishRecording(){
+  var mime=recorder.mimeType||pickMime()||"audio/webm";
+  var blob=new Blob(chunks,{type:mime});
+  var ext=extFor(mime);
+  var url=URL.createObjectURL(blob);
+  recCount++;
+  var dur=fmtTime((Date.now()-startTime)/1000);
+  var name="recording-"+recCount+"-"+dur.replace(":","m")+"s."+ext;
+  var li=document.createElement("li");
+  var row=document.createElement("div");row.className="row";
+  var nm=document.createElement("span");nm.className="name";nm.textContent="Recording "+recCount+" ("+dur+")";
+  var dl=document.createElement("a");dl.href=url;dl.download=name;dl.className="small";dl.textContent="Download";dl.style.textDecoration="none";
+  var del=document.createElement("button");del.className="small";del.textContent="Delete";
+  del.addEventListener("click",function(){URL.revokeObjectURL(url);li.remove();if(!$("recList").children.length)$("emptyNote").style.display="block";});
+  var audio=document.createElement("audio");audio.controls=true;audio.src=url;
+  row.appendChild(nm);row.appendChild(dl);row.appendChild(del);
+  li.appendChild(row);li.appendChild(audio);
+  $("recList").appendChild(li);$("emptyNote").style.display="none";
+  setStatus("Recording "+recCount+" saved ("+dur+"). Play it above or download it.","ok");
+}
+})();
+</script>
+</body>
+</html>

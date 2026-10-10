@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Video Merger — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Join two or more video files into one seamless MP4, re-encoded for compatibility. Use the free online Video Merger tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-merger/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Video Merger — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Join two or more video files into one seamless MP4, re-encoded for compatibility.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-merger/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Video Merger — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Join two or more video files into one seamless MP4, re-encoded for compatibility.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Video tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Video Merger","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-merger/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Video Merger","url":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-merger/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (browser-based)","description":"Join two or more video files into one seamless MP4, re-encoded for compatibility.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isAccessibleForFree":true,"isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-compressor/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-mp3/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-gif/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to merge videos","description":"Join two or more video files into one seamless MP4, re-encoded for compatibility.","totalTime":"PT3M","step":[{"@type":"HowToStep","position":1,"name":"Select your videos","text":"Choose two or more MP4, WebM or MOV files from your device, in the order you want them joined. Nothing is uploaded."},{"@type":"HowToStep","position":2,"name":"Merge","text":"Click Merge videos. The FFmpeg engine (loaded on first use, cached after) concatenates the clips and re-encodes them into one compatible MP4."},{"@type":"HowToStep","position":3,"name":"Download the result","text":"Your merged MP4 is ready — the download starts automatically and a link stays on the page."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the video merger free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Video Merger on AI Directory is completely free — no account, no watermark, and no limit on how many times you merge."}},{"@type":"Question","name":"Do my videos get uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. The FFmpeg engine runs entirely in your browser via WebAssembly. Your video files never leave your device."}},{"@type":"Question","name":"What if my videos have different resolutions or codecs?","acceptedAnswer":{"@type":"Answer","text":"The tool re-encodes every clip to H.264 video and AAC audio, so inputs with different codecs join reliably. For the smoothest result, use clips with the same resolution; the output takes the first clip's resolution."}},{"@type":"Question","name":"How many videos can I merge at once?","acceptedAnswer":{"@type":"Answer","text":"There is no hard limit, but every clip is held in browser memory during the merge. Merging many large files can exhaust memory — if it fails, try fewer or smaller clips."}}]}
+</script>
+<script type="importmap">
+{"imports":{
+"@ffmpeg/ffmpeg":"https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/+esm",
+"@ffmpeg/util":"https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm",
+"@ffmpeg/core":"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/+esm"
+}}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button:disabled{opacity:.6;cursor:wait}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+a.dl{display:inline-block;background:var(--amber);color:#fff;padding:11px 20px;border-radius:8px;font-weight:700;text-decoration:none;margin-top:.5rem}
+a.dl:hover{background:var(--amber-d)}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:1.2rem;text-align:center;background:#fffdf5;margin:.6rem 0}
+input[type=file]{font-size:1rem;max-width:100%}
+.note{font-size:.88rem;color:var(--mut)}
+.status{font-weight:600;margin:.7rem 0;min-height:1.4em}
+.status.err{color:#b91c1c}
+.status.ok{color:#15803d}
+.prog{height:14px;background:#e5e7eb;border-radius:7px;overflow:hidden;margin:.4rem 0}
+.prog>div{height:100%;width:0;background:var(--amber);transition:width .25s;border-radius:7px}
+.warnbox{display:none;background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;border-radius:10px;padding:.7rem 1rem;margin:.7rem 0;font-size:.92rem;font-weight:600}
+.res{background:#fef3c7;border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.filelist{list-style:none;margin:.6rem 0;font-size:.9rem}
+.filelist li{padding:6px 10px;background:#fffdf5;border:1px solid var(--line);border-radius:6px;margin-bottom:4px;color:var(--mut)}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Video tools</a> / <span>Video Merger</span></nav>
+<main class="wrap">
+<h1>Video Merger</h1>
+<p class="lede">Join two or more video files into one seamless MP4, re-encoded for compatibility. The whole merge runs inside your browser with FFmpeg — your videos are never uploaded anywhere.</p>
+
+<div class="tool">
+  <div class="drop">
+    <label for="files">Choose 2 or more video files (MP4, WebM, MOV) — in the order you want them joined</label>
+    <input type="file" id="files" multiple accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov">
+    <p class="note">Tip: hold Ctrl (or Cmd on Mac) to select several files at once. Your files never leave your device.</p>
+  </div>
+  <div class="warnbox" id="warn"></div>
+  <ul class="filelist" id="filelist"></ul>
+  <div class="btnrow"><button id="go">Merge videos</button></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="prog" aria-hidden="true"><div id="bar"></div></div>
+  <p class="note" id="barLabel">0%</p>
+  <div class="res" id="result" hidden></div>
+  <p class="note">The video engine (~30 MB) loads only when you press the button — once. It is cached in your browser after the first run, so later uses start instantly.</p>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li><b>Select your videos</b> — choose two or more MP4, WebM or MOV files from your device, in the order you want them joined. Nothing is uploaded.</li>
+    <li><b>Merge</b> — click <b>Merge videos</b>. The FFmpeg engine concatenates the clips and re-encodes them into one compatible MP4.</li>
+    <li><b>Download the result</b> — your merged MP4 is ready; the download starts automatically and a link stays on the page.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How the merge works</h2>
+  <p>The tool uses FFmpeg's concat demuxer to join your clips end to end, then re-encodes everything to H.264 video and AAC audio (the <code>libx264</code>/<code>aac</code> codecs). Re-encoding — instead of a raw stream copy — is what makes the merge reliable even when the input files use different codecs or settings.</p>
+  <h2>Order matters</h2>
+  <p>Clips are joined in the exact order they appear in the file picker. The output resolution follows the first clip, so for the cleanest result use clips that share the same resolution and orientation.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>Is the video merger free?</summary><p>Yes. The Video Merger on AI Directory is completely free — no account, no watermark, and no limit on how many times you merge.</p></details>
+  <details><summary>Do my videos get uploaded to a server?</summary><p>No. The FFmpeg engine runs entirely in your browser via WebAssembly. Your video files never leave your device.</p></details>
+  <details><summary>What if my videos have different resolutions or codecs?</summary><p>The tool re-encodes every clip to H.264 video and AAC audio, so inputs with different codecs join reliably. For the smoothest result, use clips with the same resolution; the output takes the first clip's resolution.</p></details>
+  <details><summary>How many videos can I merge at once?</summary><p>There is no hard limit, but every clip is held in browser memory during the merge. Merging many large files can exhaust memory — if it fails, try fewer or smaller clips.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/video-trimmer/">Video Trimmer</a></li>
+    <li><a href="/toolhub/tools/video-compressor/">Video Compressor</a></li>
+    <li><a href="/toolhub/tools/video-to-mp3/">Video to MP3 Converter</a></li>
+    <li><a href="/toolhub/tools/video-to-gif/">Video to GIF Converter</a></li>
+    <li><a href="/toolhub/tools/subtitle-shifter/">Subtitle Shifter</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script type="module">
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util';
+
+(function(){
+"use strict";
+
+var CORE_BASE='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+var MAX_WARN=500*1024*1024;
+var GO_LABEL='Merge videos';
+
+function $(id){return document.getElementById(id);}
+var ffmpeg=null, engineReady=false, engineLoading=null;
+
+function fmtSize(b){
+  if(b<1024) return b+' B';
+  var u=['KB','MB','GB'],i=-1;
+  do{b/=1024;i++;}while(b>=1024&&i<u.length-1);
+  return b.toFixed(1)+' '+u[i];
+}
+function setStatus(msg,cls){
+  var el=$('status');
+  el.textContent=msg;
+  el.className='status'+(cls?' '+cls:'');
+}
+function setBusy(b){
+  var go=$('go');
+  go.disabled=b;
+  go.textContent=b?'Working…':GO_LABEL;
+}
+async function loadEngine(){
+  if(engineReady) return;
+  if(engineLoading){await engineLoading;return;}
+  engineLoading=(async function(){
+    setStatus('Loading video engine (~30 MB, first run only)…');
+    ffmpeg=new FFmpeg();
+    ffmpeg.on('progress',function(ev){
+      var p=Math.max(0,Math.min(100,Math.round((ev.progress||0)*100)));
+      $('bar').style.width=p+'%';
+      $('barLabel').textContent=p+'%';
+      setStatus('Merging… '+p+'%');
+    });
+    var coreURL=await toBlobURL(CORE_BASE+'/ffmpeg-core.js','text/javascript');
+    var wasmURL=await toBlobURL(CORE_BASE+'/ffmpeg-core.wasm','application/wasm');
+    await ffmpeg.load({coreURL:coreURL,wasmURL:wasmURL});
+    engineReady=true;
+  })();
+  await engineLoading;
+}
+function cleanExt(name,fallback){
+  var m=String(name||'').split('.').pop().toLowerCase().replace(/[^a-z0-9]/g,'');
+  return m||fallback;
+}
+async function safeDelete(n){
+  try{await ffmpeg.deleteFile(n);}catch(e){/* ignore */}
+}
+function offerDownload(data,filename,mime){
+  var url=URL.createObjectURL(new Blob([data],{type:mime}));
+  var a=document.createElement('a');
+  a.href=url;a.download=filename;a.className='dl';
+  a.textContent='Download '+filename;
+  var r=$('result');
+  r.hidden=false;r.innerHTML='';
+  r.appendChild(a);
+  setTimeout(function(){a.click();},60);
+}
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+$('files').addEventListener('change',function(){
+  var files=Array.prototype.slice.call($('files').files);
+  var ul=$('filelist');
+  ul.innerHTML='';
+  var total=0;
+  files.forEach(function(f,i){
+    total+=f.size;
+    var li=document.createElement('li');
+    li.innerHTML='<b>'+(i+1)+'.</b> '+esc(f.name)+' <span>('+fmtSize(f.size)+')</span>';
+    ul.appendChild(li);
+  });
+  if(total>MAX_WARN){
+    $('warn').style.display='block';
+    $('warn').textContent='Warning: the selected files total over 500 MB. Merging may be very slow or run out of memory in the browser.';
+  }else{$('warn').style.display='none';}
+});
+
+$('go').addEventListener('click',async function(){
+  $('result').innerHTML='';$('result').hidden=true;
+  var files=Array.prototype.slice.call($('files').files);
+  if(files.length<2){setStatus('Please choose at least two video files to merge.','err');return;}
+  setBusy(true);
+  $('bar').style.width='0%';$('barLabel').textContent='0%';
+  var names=[];
+  try{
+    await loadEngine();
+    var listLines=[];
+    for(var i=0;i<files.length;i++){
+      setStatus('Reading clip '+(i+1)+' of '+files.length+'…');
+      var ext=cleanExt(files[i].name,'mp4');
+      var n='part'+i+'.'+ext;
+      names.push(n);
+      await ffmpeg.writeFile(n,await fetchFile(files[i]));
+      listLines.push("file '"+n+"'");
+    }
+    var enc=new TextEncoder();
+    await ffmpeg.writeFile('filelist.txt',enc.encode(listLines.join('\n')));
+    setStatus('Merging '+files.length+' clips…');
+    await ffmpeg.exec(['-f','concat','-safe','0','-i','filelist.txt','-c:v','libx264','-preset','fast','-crf','23','-c:a','aac','merged.mp4']);
+    var data=await ffmpeg.readFile('merged.mp4');
+    for(var j=0;j<names.length;j++){await safeDelete(names[j]);}
+    await safeDelete('filelist.txt');await safeDelete('merged.mp4');
+    offerDownload(data,'merged-video.mp4','video/mp4');
+    setStatus('Done! Merged video ready ('+files.length+' clips, '+fmtSize(data.length)+').','ok');
+  }catch(e){
+    setStatus('Merge failed: '+(e&&e.message?e.message:e),'err');
+  }finally{setBusy(false);}
+});
+
+})();
+</script>
+</body>
+</html>

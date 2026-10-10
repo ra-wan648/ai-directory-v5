@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>PDF Signature Checker — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Check whether a PDF is digitally signed — scan for embedded signatures, byte ranges, and signature fields. Use the free online PDF Signature Checker tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-signature-checker/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="PDF Signature Checker — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Check whether a PDF is digitally signed — scan for embedded signatures, byte ranges, and signature fields.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-signature-checker/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PDF Signature Checker — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Check whether a PDF is digitally signed — scan for embedded signatures, byte ranges, and signature fields.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"PDF & documents","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"PDF Signature Checker"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"PDF Signature Checker","applicationCategory":"BusinessApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Detect embedded digital signatures, count signatures, inspect ByteRange values, detect encrypted PDFs","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-meta/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-txt/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/merge-pdf/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to check if a PDF is digitally signed","step":[{"@type":"HowToStep","position":1,"name":"Upload the PDF","text":"Choose a PDF file from your device — it is read locally and never uploaded."},{"@type":"HowToStep","position":2,"name":"Wait for the scan","text":"The tool scans the raw file bytes for /ByteRange and /Sig entries that mark embedded digital signatures."},{"@type":"HowToStep","position":3,"name":"Read the verdict","text":"See SIGNED or NOT SIGNED plus details: signature count, byte ranges, and whether the file is encrypted."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the signature check work?","acceptedAnswer":{"@type":"Answer","text":"The tool scans the raw PDF bytes for /ByteRange entries and /Type /Sig objects — the markers PDF readers embed when a document is digitally signed. A non-zero byte range means a real signature is present."}},{"@type":"Question","name":"Does this verify the signer's certificate?","acceptedAnswer":{"@type":"Answer","text":"No. This tool detects that signatures exist (detection), but does not validate the certificate chain, expiry, or revocation status (trust validation). For legal validation, open the PDF in Adobe Reader and check the signature panel."}},{"@type":"Question","name":"Is my PDF uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The file is read locally with the FileReader API and scanned entirely in your browser."}},{"@type":"Question","name":"What if the PDF is encrypted or password-protected?","acceptedAnswer":{"@type":"Answer","text":"The tool flags encrypted PDFs — the byte scan may be incomplete, and page metadata may be unavailable. Decrypt the PDF first for a full check."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number],textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=file]{margin-top:.4rem;font-size:.95rem}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+.status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* tool extensions */
+.verdict{font-size:1.25rem;font-weight:800;padding:14px 18px;border-radius:8px;margin:1rem 0;display:none}
+.verdict.show{display:block}
+.verdict.yes{background:#e8f7e9;color:#1a7f2e;border:1px solid #bfe6c3}
+.verdict.no{background:#fdeaea;color:#b3261e;border:1px solid #f3c1c1}
+table.kv{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.92rem}
+table.kv th,table.kv td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.kv th{width:220px;color:var(--mut);font-weight:600}
+table.kv td code{font-family:ui-monospace,Menlo,monospace;font-size:.88em;word-break:break-all}
+.drop{border:2px dashed #e5d9bd;border-radius:10px;padding:26px;text-align:center;background:#fffdf6;margin-top:.6rem}
+.drop input{margin-top:.8rem}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">PDF &amp; documents</a> / <span>PDF Signature Checker</span></nav>
+<main class="wrap">
+<h1>PDF Signature Checker</h1>
+<p class="lede">Upload a PDF to find out whether it carries a real digital signature. The file is scanned locally in your browser — never uploaded anywhere.</p>
+
+<div class="tool">
+  <div class="drop">
+    <label for="pdffile" style="margin-top:0">Choose a PDF file</label>
+    <input type="file" id="pdffile" accept=".pdf,application/pdf">
+  </div>
+  <div class="verdict" id="verdict" aria-live="polite"></div>
+  <div id="detailWrap"></div>
+  <div class="status" id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Choose a PDF file from your device — it is read locally and never uploaded.</li>
+    <li>The tool scans the raw file bytes for <code>/ByteRange</code> and <code>/Sig</code> entries that mark embedded digital signatures.</li>
+    <li>Read the verdict: <b>SIGNED</b> or <b>NOT SIGNED</b>, with signature count, byte ranges, and encryption status.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>Detection, not validation</h2>
+  <p>This tool answers one question: does the PDF contain embedded digital signatures? It does <b>not</b> validate the certificate chain, check expiry, or verify revocation status. For legal or compliance-grade validation, open the PDF in Adobe Reader and inspect the signature panel.</p>
+  <h2>What counts as a signature</h2>
+  <p>A real signature shows a <code>/ByteRange</code> entry with non-zero values (the signed byte ranges of the file). An entry of all zeros is only an empty signature field — a placeholder that was never signed — and is reported as NOT SIGNED.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How does the signature check work?</summary><p>The tool scans the raw PDF bytes for <code>/ByteRange</code> entries and <code>/Type /Sig</code> objects — the markers PDF readers embed when a document is digitally signed. A non-zero byte range means a real signature is present.</p></details>
+  <details><summary>Does this verify the signer's certificate?</summary><p>No. This tool detects that signatures exist (detection), but does not validate the certificate chain, expiry, or revocation status (trust validation). For legal validation, open the PDF in Adobe Reader and check the signature panel.</p></details>
+  <details><summary>Is my PDF uploaded anywhere?</summary><p>No. The file is read locally with the FileReader API and scanned entirely in your browser.</p></details>
+  <details><summary>What if the PDF is encrypted or password-protected?</summary><p>The tool flags encrypted PDFs — the byte scan may be incomplete and page metadata may be unavailable. Decrypt the PDF first for a full check.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/esign-pdf/">eSign PDF</a></li>
+    <li><a href="/toolhub/tools/pdf-meta/">PDF Metadata</a></li>
+    <li><a href="/toolhub/tools/pdf-txt/">PDF to Text</a></li>
+    <li><a href="/toolhub/tools/merge-pdf/">Merge PDF</a></li>
+    <li><a href="/toolhub/tools/compress-pdf/">Compress PDF</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for documents — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var input=document.getElementById("pdffile"),
+    verdict=document.getElementById("verdict"),
+    detailWrap=document.getElementById("detailWrap"),
+    status=document.getElementById("status");
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+function latin1(bytes){
+  var s="",i,CH=0x8000;
+  for(i=0;i<bytes.length;i+=CH){
+    s+=String.fromCharCode.apply(null,bytes.subarray(i,Math.min(i+CH,bytes.length)));
+  }
+  return s;
+}
+
+function render(rows){
+  var html='<table class="kv"><tbody>';
+  for(var i=0;i<rows.length;i++){
+    html+="<tr><th>"+esc(rows[i][0])+"</th><td>"+rows[i][1]+"</td></tr>";
+  }
+  html+="</tbody></table>";
+  detailWrap.innerHTML=html;
+  status.textContent="";
+}
+
+input.addEventListener("change",function(){
+  var f=input.files[0];
+  if(!f)return;
+  verdict.className="verdict";
+  detailWrap.innerHTML="";
+  status.textContent="Scanning "+f.name+" ("+f.size.toLocaleString()+" bytes)…";
+  var reader=new FileReader();
+  reader.onload=function(){
+    try{
+      var bytes=new Uint8Array(reader.result);
+      var txt=latin1(bytes);
+      var encrypted=/\/Encrypt\b/.test(txt);
+      var re=/\/ByteRange\s*\[\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*\]/g,m;
+      var ranges=[];
+      while((m=re.exec(txt))!==null){
+        ranges.push([parseInt(m[1],10),parseInt(m[2],10),parseInt(m[3],10),parseInt(m[4],10)]);
+      }
+      var sigTypes=(txt.match(/\/Type\s*\/Sig/g)||[]).length;
+      var rows=[];
+      rows.push(["File","<code>"+esc(f.name)+"</code> ("+f.size.toLocaleString()+" bytes)"]);
+      rows.push(["Encrypted",encrypted?"Yes — byte scan may be incomplete":"No"]);
+
+      if(ranges.length===0){
+        verdict.className="verdict show no";
+        verdict.textContent="\u2715 NOT SIGNED";
+        rows.push(["Signatures found","0"]);
+        rows.push(["Detail","No /ByteRange entries found — this PDF contains no embedded digital signature."]);
+        finish(rows);
+        return;
+      }
+
+      var signed=0,i;
+      for(i=0;i<ranges.length;i++){
+        var rg=ranges[i];
+        if(rg[0]!==0||rg[1]!==0||rg[2]!==0||rg[3]!==0)signed++;
+      }
+      if(signed>0){
+        verdict.className="verdict show yes";
+        verdict.textContent="\u2713 SIGNED — "+signed+" signature"+(signed>1?"s":"")+" detected";
+      }else{
+        verdict.className="verdict show no";
+        verdict.textContent="\u2715 NOT SIGNED — empty signature field (unsigned placeholder)";
+      }
+      rows.push(["/ByteRange entries",String(ranges.length)]);
+      rows.push(["/Type /Sig objects",String(sigTypes)]);
+      for(i=0;i<ranges.length;i++){
+        var r2=ranges[i];
+        var zero=(r2[0]===0&&r2[1]===0&&r2[2]===0&&r2[3]===0);
+        rows.push(["Signature #"+(i+1),
+          "<code>["+r2.join(", ")+"]</code>"+(zero?" — all zeros (unsigned placeholder)":" — signature data present")]);
+      }
+      rows.push(["Note","Detection only — this tool does not validate the certificate chain, expiry, or revocation status."]);
+      finish(rows);
+    }catch(e){
+      verdict.className="verdict show no";
+      verdict.textContent="Could not scan this file";
+      status.textContent="Error: "+(e&&e.message?e.message:"unreadable file");
+    }
+  };
+  reader.onerror=function(){status.textContent="Could not read the file.";};
+  reader.readAsArrayBuffer(f);
+
+  function finish(rows){
+    /* pdf-lib: best-effort page count for extra context */
+    if(window.PDFLib&&window.PDFLib.PDFDocument){
+      window.PDFLib.PDFDocument.load(new Uint8Array(reader.result),{ignoreEncryption:true}).then(function(doc){
+        rows.splice(1,0,["Pages",String(doc.getPageCount())]);
+        render(rows);
+      },function(){
+        rows.splice(1,0,["Pages","Could not parse — possibly encrypted or corrupt"]);
+        render(rows);
+      });
+    }else{
+      render(rows);
+    }
+  }
+});
+})();
+</script>
+</body>
+</html>

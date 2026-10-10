@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Image Splitter — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Split an image into a rows × cols tile grid and download each tile as PNG. Use the free online Image Splitter tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-splitter/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Image Splitter — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Split an image into a rows × cols tile grid and download each tile as PNG.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-splitter/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Image Splitter — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Split an image into a rows × cols tile grid and download each tile as PNG.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Image tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Image Splitter"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Image Splitter","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Split image into 1-10 rows and columns, tile previews, individual PNG tile downloads, download-all","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-cropper/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/collage-maker/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-resizer/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/png-jpg/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to split an image into tiles","step":[{"@type":"HowToStep","position":1,"name":"Upload an image","text":"Choose a PNG, JPG, or WebP image from your device — it never leaves your browser."},{"@type":"HowToStep","position":2,"name":"Choose rows and columns","text":"Set the grid size from 1 to 10 rows and 1 to 10 columns, then press Split image."},{"@type":"HowToStep","position":3,"name":"Download the tiles","text":"Preview every tile below and download each one as a PNG, or use Download all tiles to grab the whole set."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What image formats can I split?","acceptedAnswer":{"@type":"Answer","text":"Any image your browser can decode — PNG, JPG, WebP, GIF, BMP, and AVIF in most browsers. Tiles are always exported as PNG."}},{"@type":"Question","name":"How are tile sizes calculated?","acceptedAnswer":{"@type":"Answer","text":"The image is divided into equal tiles using floor division — each tile is (width ÷ columns) × (height ÷ rows) pixels. Any leftover edge pixels are cropped from the right and bottom."}},{"@type":"Question","name":"Is my image uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The image is decoded and sliced with the Canvas API entirely in your browser."}},{"@type":"Question","name":"Why does Download all need multiple clicks?","acceptedAnswer":{"@type":"Answer","text":"Browsers download tiles one file at a time and may ask permission for multiple downloads — click Allow in the browser prompt to finish the batch."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number],textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=file]{margin-top:.4rem;font-size:.95rem}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+button:disabled{opacity:.5;cursor:default}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+.status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* tool extensions */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:1.2rem}
+.tilegrid figure{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fffdf6;margin:0}
+.tilegrid img{width:100%;display:block;aspect-ratio:1;object-fit:contain;background:#fff}
+.tilegrid figcaption{font-size:.78rem;font-weight:600;padding:6px 8px 0;color:var(--mut);text-align:center;word-break:break-all}
+.tilegrid a.dl{display:block;text-align:center;font-size:.82rem;padding:8px;color:var(--amber-d);font-weight:700;text-decoration:none}
+.tilegrid a.dl:hover{text-decoration:underline}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Image tools</a> / <span>Image Splitter</span></nav>
+<main class="wrap">
+<h1>Image Splitter</h1>
+<p class="lede">Slice an image into an even grid of tiles — great for Instagram carousels, puzzles, and sprite sheets. Tiles download as PNGs, named by row and column.</p>
+
+<div class="tool">
+  <label for="imgfile">Choose an image</label>
+  <input type="file" id="imgfile" accept="image/*">
+
+  <div class="grid2">
+    <div>
+      <label for="rows">Rows (1–10)</label>
+      <input type="number" id="rows" min="1" max="10" value="2">
+    </div>
+    <div>
+      <label for="cols">Columns (1–10)</label>
+      <input type="number" id="cols" min="1" max="10" value="2">
+    </div>
+  </div>
+
+  <div class="btnrow">
+    <button id="splitBtn">Split image</button>
+    <button class="ghost" id="dlAllBtn" disabled>Download all tiles</button>
+  </div>
+
+  <div class="meta" id="imgMeta" style="display:none">
+    <span>Source: <b id="srcSize">—</b></span>
+    <span>Tiles: <b id="tileCount">—</b></span>
+    <span>Tile size: <b id="tileSize">—</b></span>
+  </div>
+
+  <div class="tilegrid" id="tileGrid"></div>
+  <div class="status" id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Choose a PNG, JPG, or WebP image — it is decoded locally and never uploaded.</li>
+    <li>Set the grid from 1 to 10 rows and 1 to 10 columns, then press <b>Split image</b>.</li>
+    <li>Preview every tile below and download each as a PNG, or use <b>Download all tiles</b> to grab the whole set at once.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How tiles are cut</h2>
+  <p>The image is divided into equal tiles of (width ÷ columns) × (height ÷ rows) pixels. Tiles are named <code>tile-r1-c1.png</code>, <code>tile-r1-c2.png</code>, and so on — row first, then column. Any leftover edge pixels are trimmed from the right and bottom edges.</p>
+  <h2>Private by design</h2>
+  <p>Splitting uses the Canvas API entirely in your browser. Your image never touches a server, so there are no upload limits or privacy worries.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What image formats can I split?</summary><p>Any image your browser can decode — PNG, JPG, WebP, GIF, BMP, and AVIF in most browsers. Tiles are always exported as PNG.</p></details>
+  <details><summary>How are tile sizes calculated?</summary><p>The image is divided into equal tiles using floor division — each tile is (width ÷ columns) × (height ÷ rows) pixels. Any leftover edge pixels are cropped from the right and bottom.</p></details>
+  <details><summary>Is my image uploaded anywhere?</summary><p>No. The image is decoded and sliced with the Canvas API entirely in your browser.</p></details>
+  <details><summary>Why does "Download all" need multiple clicks?</summary><p>Browsers download tiles one file at a time and may ask permission for multiple downloads — click <b>Allow</b> in the browser prompt to finish the batch.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/image-cropper/">Image Cropper</a></li>
+    <li><a href="/toolhub/tools/collage-maker/">Collage Maker</a></li>
+    <li><a href="/toolhub/tools/image-resizer/">Image Resizer</a></li>
+    <li><a href="/toolhub/tools/png-jpg/">PNG to JPG</a></li>
+    <li><a href="/toolhub/tools/ico-converter/">ICO Converter</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for images — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var input=document.getElementById("imgfile"),
+    rowsEl=document.getElementById("rows"),
+    colsEl=document.getElementById("cols"),
+    splitBtn=document.getElementById("splitBtn"),
+    dlAllBtn=document.getElementById("dlAllBtn"),
+    grid=document.getElementById("tileGrid"),
+    meta=document.getElementById("imgMeta"),
+    srcSize=document.getElementById("srcSize"),
+    tileCount=document.getElementById("tileCount"),
+    tileSize=document.getElementById("tileSize"),
+    status=document.getElementById("status");
+var tiles=[];
+
+function clamp(v,lo,hi){v=parseInt(v,10);if(isNaN(v))v=lo;return Math.min(hi,Math.max(lo,v));}
+
+function clearTiles(){
+  grid.innerHTML="";
+  tiles=[];
+  dlAllBtn.disabled=true;
+  meta.style.display="none";
+}
+
+splitBtn.addEventListener("click",function(){
+  var f=input.files[0];
+  if(!f){status.textContent="Choose an image first.";return;}
+  var rows=clamp(rowsEl.value,1,10),cols=clamp(colsEl.value,1,10);
+  rowsEl.value=rows;colsEl.value=cols;
+  status.textContent="Decoding image…";
+  clearTiles();
+  var url=URL.createObjectURL(f);
+  var img=new Image();
+  img.onload=function(){
+    var W=img.naturalWidth,H=img.naturalHeight;
+    var tw=Math.floor(W/cols),th=Math.floor(H/rows);
+    if(tw<1||th<1){
+      status.textContent="Grid too fine for this image — tiles would be smaller than 1 pixel.";
+      URL.revokeObjectURL(url);
+      return;
+    }
+    var r,c;
+    for(r=0;r<rows;r++){
+      for(c=0;c<cols;c++){
+        var cv=document.createElement("canvas");
+        cv.width=tw;cv.height=th;
+        var ctx=cv.getContext("2d");
+        ctx.drawImage(img,c*tw,r*th,tw,th,0,0,tw,th);
+        var name="tile-r"+(r+1)+"-c"+(c+1)+".png";
+        var data=cv.toDataURL("image/png");
+        tiles.push({name:name,url:data});
+        var fig=document.createElement("figure");
+        var timg=document.createElement("img");
+        timg.src=data;timg.alt=name;
+        var cap=document.createElement("figcaption");
+        cap.textContent=name;
+        var a=document.createElement("a");
+        a.className="dl";a.href=data;a.download=name;a.textContent="\u2B07 Download";
+        fig.appendChild(timg);fig.appendChild(cap);fig.appendChild(a);
+        grid.appendChild(fig);
+      }
+    }
+    srcSize.textContent=W+"\u00D7"+H+" px";
+    tileCount.textContent=String(tiles.length)+" ("+rows+"\u00D7"+cols+")";
+    tileSize.textContent=tw+"\u00D7"+th+" px";
+    meta.style.display="flex";
+    dlAllBtn.disabled=false;
+    status.textContent="Split into "+tiles.length+" tiles. Click a tile's Download link, or Download all tiles.";
+    URL.revokeObjectURL(url);
+  };
+  img.onerror=function(){
+    status.textContent="Could not read that file as an image.";
+    URL.revokeObjectURL(url);
+  };
+  img.src=url;
+});
+
+dlAllBtn.addEventListener("click",function(){
+  if(tiles.length===0)return;
+  status.textContent="Downloading "+tiles.length+" tiles — allow multiple downloads if your browser asks.";
+  var i=0;
+  function next(){
+    if(i>=tiles.length){
+      status.textContent="All "+tiles.length+" tiles downloaded.";
+      return;
+    }
+    var t=tiles[i];
+    var a=document.createElement("a");
+    a.href=t.url;a.download=t.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    i++;
+    setTimeout(next,400);
+  }
+  next();
+});
+})();
+</script>
+</body>
+</html>

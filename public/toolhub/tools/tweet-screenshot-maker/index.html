@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Tweet Screenshot Maker — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Design a realistic tweet mockup — display name, handle, text, stats, verified badge, dark/light themes — and export it as a PNG. Use the free online Tweet Screenshot Maker tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/tweet-screenshot-maker/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Tweet Screenshot Maker — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Design a realistic tweet mockup — display name, handle, text, stats, verified badge, dark/light themes — and export it as a PNG.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/tweet-screenshot-maker/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tweet Screenshot Maker — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Design a realistic tweet mockup — display name, handle, text, stats, verified badge, dark/light themes — and export it as a PNG.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Social & business","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Tweet Screenshot Maker"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Tweet Screenshot Maker","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Tweet mockup designer, 280-character text with counter, likes/retweets/replies stats, verified badge toggle, dark and light themes, PNG export","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bio-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hashtag-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/meme-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/caption-converter/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to make a tweet screenshot","step":[{"@type":"HowToStep","position":1,"name":"Fill in the tweet details","text":"Enter the display name, handle, tweet text (up to 280 characters), time, and engagement stats."},{"@type":"HowToStep","position":2,"name":"Style the tweet","text":"Pick the dark or light theme and toggle the verified badge on or off."},{"@type":"HowToStep","position":3,"name":"Download the PNG","text":"Check the live preview, then hit Download PNG to save a 2x-resolution image."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is the PNG generated?","acceptedAnswer":{"@type":"Answer","text":"The preview is serialized into an SVG with an embedded foreignObject, drawn onto a canvas at 2x resolution, and exported with canvas.toDataURL — no external libraries are used. It works in Chrome, Edge, and Firefox."}},{"@type":"Question","name":"What is the character limit?","acceptedAnswer":{"@type":"Answer","text":"Tweet text is limited to 280 characters with a live counter, matching the real platform limit."}},{"@type":"Question","name":"Can I add the verified badge?","acceptedAnswer":{"@type":"Answer","text":"Yes — toggle the verified badge checkbox to show the blue checkmark next to the display name, or hide it for an unverified look."}},{"@type":"Question","name":"Is this Tweet Screenshot Maker free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6;min-height:110px;resize:vertical}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--amber);vertical-align:middle;margin-right:8px}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+.variant{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;background:#fffdf6}
+.variant .vname{font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--amber-d);text-transform:uppercase;margin-bottom:4px}
+.variant .vrow{display:flex;gap:10px;align-items:flex-start}
+.variant .vval{flex:1;font-size:1.25rem;font-weight:700;word-break:break-word;min-height:1.6em}
+.variant .vrow button{margin-top:0;padding:8px 14px;font-size:.85rem;white-space:nowrap}
+.variant .vdesc{font-size:.85rem;color:var(--mut)}
+table.log{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:1rem}
+table.log th,table.log td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-all}
+table.log th{color:var(--amber-d);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+pre.snippet{background:#fdf6e9;border:1px dashed var(--amber);color:#7c4d03;padding:12px 14px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88rem;white-space:pre-wrap;word-break:break-all;margin-top:.6rem}
+.outhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:1.2rem}
+.outhead h3{font-size:1.05rem}
+.outhead button{margin-top:0;padding:7px 14px;font-size:.85rem}
+.declabel{font-size:.85rem;font-weight:700;color:var(--mut);margin-top:.8rem}
+.tag{display:inline-block;background:#fdf0d7;color:#7c4d03;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:700;margin:1px 2px}
+.tag.dup{background:#fde8e8;color:#a33}
+.tag.invalid{background:#fde8e8;color:#a33}
+.tag.ok{background:#e6f6e9;color:#1c6b2a}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:1.2rem}
+.tile{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fffdf6}
+.tile img{width:100%;display:block;aspect-ratio:1/1;object-fit:cover}
+.tile .tnum{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.65);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem}
+.tile button{width:100%;margin-top:0;padding:8px;font-size:.85rem;border-radius:0 0 9px 9px}
+#tileHint{color:var(--mut);font-size:.9rem;margin-top:.8rem}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.formgrid .full{grid-column:1/-1}
+#charLeft{font-size:.85rem;color:var(--mut);text-align:right;margin-top:.2rem}
+#previewBox{overflow-x:auto;margin-top:1rem;padding:16px;background:#f4f1ea;border-radius:10px;display:flex;justify-content:center}
+#tweetCard{width:520px;max-width:520px;flex-shrink:0}
+.checkrow{display:flex;align-items:center;margin-top:1rem;font-weight:600;font-size:.95rem}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.formgrid{grid-template-columns:1fr}.variant .vrow{flex-direction:column}.variant .vrow button{align-self:flex-start}.tiles{gap:8px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Social &amp; business</a> / <span>Tweet Screenshot Maker</span></nav>
+<main class="wrap">
+<h1>Tweet Screenshot Maker</h1>
+<p class="lede">Design a realistic tweet mockup — display name, handle, 280-character text, engagement stats, verified badge, dark or light theme — and export it as a crisp PNG.</p>
+
+<div class="tool">
+  <div class="formgrid">
+    <div class="full">
+      <label for="tName">Display name</label>
+      <input type="text" id="tName" value="AI Directory" maxlength="50">
+    </div>
+    <div>
+      <label for="tHandle">Handle (without @)</label>
+      <input type="text" id="tHandle" value="aidirectory" maxlength="30">
+    </div>
+    <div>
+      <label for="tTime">Time</label>
+      <input type="text" id="tTime" value="2:30 PM · Oct 10, 2026" maxlength="60">
+    </div>
+    <div class="full">
+      <label for="tText">Tweet text</label>
+      <textarea id="tText" maxlength="280" style="min-height:80px">We just launched 102 free mini tools — no signup, no install, everything runs in your browser. Which one should we build next? 🚀</textarea>
+      <div id="charLeft">280 characters left</div>
+    </div>
+    <div>
+      <label for="tReplies">Replies</label>
+      <input type="number" id="tReplies" value="48" min="0">
+    </div>
+    <div>
+      <label for="tRetweets">Reposts</label>
+      <input type="number" id="tRetweets" value="312" min="0">
+    </div>
+    <div>
+      <label for="tLikes">Likes</label>
+      <input type="number" id="tLikes" value="1284" min="0">
+    </div>
+    <div>
+      <label for="tTheme">Theme</label>
+      <select id="tTheme">
+        <option value="dark" selected>Dark</option>
+        <option value="light">Light</option>
+      </select>
+    </div>
+  </div>
+  <div class="checkrow"><input type="checkbox" id="tVerified" checked><label for="tVerified" style="margin:0">Verified badge</label></div>
+
+  <label>Live preview</label>
+  <div id="previewBox"><div id="tweetCard"></div></div>
+
+  <div class="btnrow">
+    <button id="dlPng">Download PNG</button>
+    <button class="ghost" id="resetBtn">Reset</button>
+  </div>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Fill in the tweet details: display name, handle, text (up to 280 characters), time, and engagement stats.</li>
+    <li>Style it: pick the dark or light theme and toggle the verified badge on or off.</li>
+    <li>Check the live preview, then hit <b>Download PNG</b> to save a 2x-resolution image.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How the PNG export works</h2>
+  <p>The styled preview is serialized into an SVG with an embedded <code>foreignObject</code>, drawn onto a canvas at 2x resolution, and exported with <code>canvas.toDataURL</code> — no external libraries. It works in Chrome, Edge, and Firefox.</p>
+  <h2>Made for mockups</h2>
+  <p>This tool creates design mockups and concept screenshots for presentations, portfolios, and product pitches. It is not affiliated with X/Twitter.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How is the PNG generated?</summary><p>The preview is serialized into an SVG with an embedded foreignObject, drawn onto a canvas at 2x resolution, and exported with canvas.toDataURL — no external libraries are used. It works in Chrome, Edge, and Firefox.</p></details>
+  <details><summary>What is the character limit?</summary><p>Tweet text is limited to 280 characters with a live counter, matching the real platform limit.</p></details>
+  <details><summary>Can I add the verified badge?</summary><p>Yes — toggle the verified badge checkbox to show the blue checkmark next to the display name, or hide it for an unverified look.</p></details>
+  <details><summary>Is this Tweet Screenshot Maker free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/bio-generator/">Bio Generator</a></li>
+    <li><a href="/toolhub/tools/hashtag-generator/">Hashtag Generator</a></li>
+    <li><a href="/toolhub/tools/meme-generator/">Meme Generator</a></li>
+    <li><a href="/toolhub/tools/caption-converter/">Caption Converter</a></li>
+    <li><a href="/toolhub/tools/meta-tag-generator/">Meta Tag Generator</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var card=document.getElementById("tweetCard"),
+    status=document.getElementById("status");
+
+var F="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;";
+
+function el(tag,style){
+  var d=document.createElement(tag);
+  d.setAttribute("style",style);
+  return d;
+}
+
+function fmtNum(n){
+  n=Math.max(0,Math.floor(Number(n)||0));
+  if(n>=1000000){var m=(n/1000000);return (m>=10?Math.round(m):Math.round(m*10)/10)+"M";}
+  if(n>=1000){var k=(n/1000);return (k>=10?Math.round(k):Math.round(k*10)/10)+"K";}
+  return String(n);
+}
+
+var BADGE='<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="vertical-align:-3px;margin-left:4px;"><path fill="#1d9bf0" d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.27 3.92.81c.66 1.31 1.9 2.19 3.33 2.19s2.68-.88 3.34-2.19c1.39.46 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"/></svg>';
+
+function render(){
+  var dark=document.getElementById("tTheme").value==="dark";
+  var name=document.getElementById("tName").value||"Name";
+  var handle=(document.getElementById("tHandle").value||"handle").replace(/^@+/,"");
+  var time=document.getElementById("tTime").value||"";
+  var text=document.getElementById("tText").value;
+  var verified=document.getElementById("tVerified").checked;
+  var replies=fmtNum(document.getElementById("tReplies").value);
+  var reposts=fmtNum(document.getElementById("tRetweets").value);
+  var likes=fmtNum(document.getElementById("tLikes").value);
+
+  var bg=dark?"#000000":"#ffffff",
+      fg=dark?"#e7e9ea":"#0f1419",
+      mut=dark?"#71767b":"#536471",
+      border=dark?"#2f3336":"#eff3f4",
+      avBg="#E8940C";
+
+  card.innerHTML="";
+  card.setAttribute("style",F+"background:"+bg+";color:"+fg+";border:1px solid "+border+
+    ";border-radius:16px;padding:16px 18px;width:520px;box-sizing:border-box;");
+
+  var row=el("div","display:flex;gap:12px;");
+  var av=el("div","width:48px;height:48px;border-radius:50%;background:"+avBg+
+    ";color:#fff;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;");
+  av.textContent=(name.trim().charAt(0)||"A").toUpperCase();
+
+  var col=el("div","flex:1;min-width:0;");
+  var namerow=el("div","font-size:15px;line-height:1.4;");
+  var nspan=el("span","font-weight:700;color:"+fg+";");nspan.textContent=name;
+  namerow.appendChild(nspan);
+  if(verified){
+    var bspan=el("span","");
+    bspan.innerHTML=BADGE;
+    namerow.appendChild(bspan);
+  }
+  var hspan=el("div","color:"+mut+";font-size:14px;");
+  hspan.textContent="@"+handle+(time?" · "+time:"");
+  col.appendChild(namerow);col.appendChild(hspan);
+
+  var txt=el("div","font-size:16px;line-height:1.5;margin-top:6px;white-space:pre-wrap;word-break:break-word;color:"+fg+";");
+  var lines=text.split("\n");
+  for(var i=0;i<lines.length;i++){
+    if(i>0)txt.appendChild(document.createElement("br"));
+    txt.appendChild(document.createTextNode(lines[i]));
+  }
+  col.appendChild(txt);
+
+  var stats=el("div","display:flex;gap:36px;margin-top:12px;font-size:14px;color:"+mut+";");
+  var items=[["💬",replies],["🔁",reposts],["♥",likes]];
+  for(var s=0;s<items.length;s++){
+    var it=el("span","");
+    var ic=el("span","margin-right:6px;");ic.textContent=items[s][0];
+    var vl=el("span","");vl.textContent=items[s][1];
+    it.appendChild(ic);it.appendChild(vl);stats.appendChild(it);
+  }
+  col.appendChild(stats);
+
+  row.appendChild(av);row.appendChild(col);
+  card.appendChild(row);
+
+  var left=280-text.length;
+  document.getElementById("charLeft").textContent=left+" characters left";
+  document.getElementById("charLeft").style.color=left<20?"#d11":"";
+}
+
+function downloadPNG(){
+  render();
+  var w=card.offsetWidth,h=card.offsetHeight,scale=2;
+  status.textContent="Rendering PNG…";
+  var inner=card.innerHTML;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'+
+    '<foreignObject width="100%" height="100%">'+
+    '<div xmlns="http://www.w3.org/1999/xhtml" style="margin:0;padding:0;width:'+w+'px;height:'+h+'px;">'+
+    inner+'</div></foreignObject></svg>';
+  var img=new Image();
+  img.onload=function(){
+    try{
+      var c=document.createElement("canvas");
+      c.width=w*scale;c.height=h*scale;
+      var ctx=c.getContext("2d");
+      ctx.scale(scale,scale);
+      ctx.drawImage(img,0,0,w,h);
+      var url=c.toDataURL("image/png");
+      var a=document.createElement("a");
+      a.href=url;a.download="tweet.png";
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      status.textContent="PNG downloaded ("+(w*scale)+" × "+(h*scale)+" px).";
+    }catch(e){
+      status.textContent="Export failed in this browser — try Chrome or Edge.";
+    }
+  };
+  img.onerror=function(){status.textContent="Export failed in this browser — try Chrome or Edge.";};
+  img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+}
+
+var ids=["tName","tHandle","tTime","tText","tReplies","tRetweets","tLikes","tTheme","tVerified"];
+for(var i=0;i<ids.length;i++){
+  document.getElementById(ids[i]).addEventListener("input",render);
+  document.getElementById(ids[i]).addEventListener("change",render);
+}
+document.getElementById("dlPng").addEventListener("click",downloadPNG);
+document.getElementById("resetBtn").addEventListener("click",function(){
+  document.getElementById("tName").value="AI Directory";
+  document.getElementById("tHandle").value="aidirectory";
+  document.getElementById("tTime").value="2:30 PM · Oct 10, 2026";
+  document.getElementById("tText").value="We just launched 102 free mini tools — no signup, no install, everything runs in your browser. Which one should we build next? 🚀";
+  document.getElementById("tReplies").value="48";
+  document.getElementById("tRetweets").value="312";
+  document.getElementById("tLikes").value="1284";
+  document.getElementById("tTheme").value="dark";
+  document.getElementById("tVerified").checked=true;
+  render();status.textContent="";
+});
+
+render();
+})();
+</script>
+</body>
+</html>

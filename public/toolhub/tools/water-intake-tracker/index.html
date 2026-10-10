@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Water Intake Tracker — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Track your daily water intake with quick-add buttons, a live progress bar, and a 7-day history. Use the free online Water Intake Tracker tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/water-intake-tracker/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Water Intake Tracker — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Track your daily water intake with quick-add buttons, a live progress bar, and a 7-day history.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/water-intake-tracker/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Water Intake Tracker — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Track your daily water intake with quick-add buttons, a live progress bar, and a 7-day history.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Health","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Water Intake Tracker"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Water Intake Tracker","applicationCategory":"HealthApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Daily water goal in milliliters, quick-add buttons, custom amounts, live progress bar and percentage, per-day localStorage persistence with midnight auto-reset, 7-day history chart","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/habit-tracker/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bmi/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/calorie-calculator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/sleep-calculator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to track your water intake","step":[{"@type":"HowToStep","position":1,"name":"Set your daily goal","text":"Enter your target in milliliters (2000 ml is the default) and press Save goal."},{"@type":"HowToStep","position":2,"name":"Log each drink","text":"Tap a quick-add button or type a custom amount and press Add every time you drink water."},{"@type":"HowToStep","position":3,"name":"Watch your progress","text":"The progress bar and percentage update live; your 7-day history appears below and resets automatically at midnight."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much water should I drink per day?","acceptedAnswer":{"@type":"Answer","text":"A common guideline is around 2000 ml (about 8 glasses) for an average adult, but needs vary with body size, activity, and climate. The tracker lets you set any goal that suits you — consider asking a health professional for personal advice."}},{"@type":"Question","name":"Does the tracker reset automatically?","acceptedAnswer":{"@type":"Answer","text":"Yes. Intake is stored per calendar day, so a new day starts at zero automatically at midnight while your previous days stay visible in the 7-day history."}},{"@type":"Question","name":"Is my intake data private?","acceptedAnswer":{"@type":"Answer","text":"Yes. Everything is saved in your browser's localStorage on this device only — nothing is uploaded or shared."}},{"@type":"Question","name":"Is this Water Intake Tracker free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* --- tool-specific --- */
+input[type=number]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+input[type=number]:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+.bignum{text-align:center;margin:.6rem 0}
+.bignum .total{font-size:2.6rem;font-weight:800;color:var(--ink)}
+.bignum .goal{font-size:1.1rem;color:var(--mut)}
+.ptrack{background:#f6ecda;border-radius:999px;height:22px;overflow:hidden;margin:.8rem 0}
+.pfill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--amber),#f5b942);transition:width .35s ease}
+.pct{text-align:center;font-weight:800;color:var(--amber-d);font-size:1.15rem}
+.qbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:.4rem}
+.qbtns button{margin-top:0;flex:1;min-width:90px}
+.customrow{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.customrow input{flex:1;min-width:120px}
+.customrow button{margin-top:0}
+.goalrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.goalrow .gfield{flex:1;min-width:140px}
+.goalrow button{margin-top:0}
+.hist{display:flex;gap:8px;align-items:flex-end;margin-top:.8rem;height:130px}
+.hbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.hbar .bar{width:70%;max-width:44px;background:var(--amber);border-radius:6px 6px 0 0;min-height:4px;opacity:.85}
+.hbar.today .bar{background:var(--amber-d);opacity:1}
+.hbar .dl{font-size:.72rem;color:var(--mut);margin-top:5px}
+.hbar .dv{font-size:.68rem;color:var(--mut)}
+.loglist{list-style:none;margin-top:.6rem;font-size:.88rem;color:var(--mut)}
+.loglist li{padding:4px 0;border-bottom:1px dashed var(--line)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Health</a> / <span>Water Intake Tracker</span></nav>
+<main class="wrap">
+<h1>Water Intake Tracker</h1>
+<p class="lede">Log every glass with one tap, watch your daily progress fill up, and keep a 7-day streak. Your data stays on this device and resets automatically at midnight.</p>
+
+<div class="tool">
+  <label>Daily goal</label>
+  <div class="goalrow">
+    <div class="gfield"><input type="number" id="goal" min="250" max="10000" step="50" value="2000" aria-label="Daily goal in milliliters"></div>
+    <button class="ghost" id="saveGoal">Save goal</button>
+  </div>
+
+  <div class="bignum">
+    <div class="total"><span id="total">0</span> <span style="font-size:1.2rem;color:var(--mut)">ml</span></div>
+    <div class="goal">of <span id="goalOut">2000</span> ml goal</div>
+  </div>
+  <div class="ptrack" role="progressbar" aria-label="Daily water progress"><div class="pfill" id="pfill"></div></div>
+  <div class="pct" id="pct">0%</div>
+
+  <label>Quick add</label>
+  <div class="qbtns">
+    <button data-amt="100">+100 ml</button>
+    <button data-amt="250">+250 ml</button>
+    <button data-amt="500">+500 ml</button>
+  </div>
+  <div class="customrow">
+    <input type="number" id="custom" min="1" max="5000" placeholder="Custom amount (ml)" aria-label="Custom amount in milliliters">
+    <button id="addCustom">Add</button>
+  </div>
+  <div class="btnrow">
+    <button class="ghost" id="undoBtn">Undo last</button>
+    <button class="ghost" id="resetBtn">Reset today</button>
+  </div>
+
+  <label>Today's log</label>
+  <ul class="loglist" id="loglist"></ul>
+
+  <label>Last 7 days</label>
+  <div class="hist" id="hist"></div>
+
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Set your daily goal in milliliters (2000 ml is the default) and press <b>Save goal</b>.</li>
+    <li>Every time you drink water, tap a quick-add button or type a custom amount and press <b>Add</b>.</li>
+    <li>Watch the progress bar and percentage fill up; your 7-day history appears below and resets automatically at midnight.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>Why track water intake</h2>
+  <p>Most people underestimate how little they drink until they see the numbers. A visible daily target with one-tap logging turns hydration into a small game you can win — and the 7-day chart makes streaks obvious, which is the strongest motivator for keeping the habit.</p>
+  <h2>How your data is stored</h2>
+  <p>Intake is saved per calendar day in your browser's localStorage, so yesterday's total never leaks into today. Nothing leaves your device, and there is no account to create or sync to manage.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How much water should I drink per day?</summary><p>A common guideline is around 2000 ml (about 8 glasses) for an average adult, but needs vary with body size, activity, and climate. The tracker lets you set any goal that suits you — consider asking a health professional for personal advice.</p></details>
+  <details><summary>Does the tracker reset automatically?</summary><p>Yes. Intake is stored per calendar day, so a new day starts at zero automatically at midnight while your previous days stay visible in the 7-day history.</p></details>
+  <details><summary>Is my intake data private?</summary><p>Yes. Everything is saved in your browser's localStorage on this device only — nothing is uploaded or shared.</p></details>
+  <details><summary>Is this Water Intake Tracker free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/habit-tracker/">Habit Tracker</a></li>
+    <li><a href="/toolhub/tools/bmi/">BMI Calculator</a></li>
+    <li><a href="/toolhub/tools/calorie-calculator/">Calorie Calculator</a></li>
+    <li><a href="/toolhub/tools/sleep-calculator/">Sleep Calculator</a></li>
+    <li><a href="/toolhub/tools/pomodoro-timer/">Pomodoro Timer</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var LS_KEY="water-intake:v1",DEFAULT_GOAL=2000;
+var goalEl=document.getElementById("goal"),totalEl=document.getElementById("total"),
+    goalOut=document.getElementById("goalOut"),pfill=document.getElementById("pfill"),
+    pctEl=document.getElementById("pct"),customEl=document.getElementById("custom"),
+    loglist=document.getElementById("loglist"),histEl=document.getElementById("hist"),
+    status=document.getElementById("status");
+
+function load(){
+  try{var v=JSON.parse(localStorage.getItem(LS_KEY)||"{}");return (v&&typeof v==="object")?v:{};}
+  catch(e){return {};}
+}
+function save(v){try{localStorage.setItem(LS_KEY,JSON.stringify(v));}catch(e){}}
+function dateKey(d){
+  return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+}
+function getGoal(v){
+  return (v.settings&&v.settings.goal)||DEFAULT_GOAL;
+}
+function todayEntry(v){
+  var k=dateKey(new Date());
+  if(!v[k])v[k]={goal:getGoal(v),total:0,log:[]};
+  return v[k];
+}
+
+function render(){
+  var v=load(),e=todayEntry(v);
+  goalEl.value=e.goal;goalOut.textContent=e.goal;totalEl.textContent=e.total;
+  var pct=e.goal>0?Math.round(e.total/e.goal*100):0;
+  pctEl.textContent=pct+"%";
+  pfill.style.width=Math.min(pct,100)+"%";
+  loglist.innerHTML="";
+  if(!e.log.length){
+    var li=document.createElement("li");li.textContent="Nothing logged yet today.";loglist.appendChild(li);
+  }else{
+    e.log.forEach(function(item){
+      var li2=document.createElement("li");
+      var d=new Date(item.t);
+      li2.textContent="+"+item.amt+" ml — "+d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+      loglist.appendChild(li2);
+    });
+  }
+  /* 7-day history */
+  histEl.innerHTML="";
+  var days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var now=new Date();
+  for(var i=6;i>=0;i--){
+    var d2=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+    var k2=dateKey(d2),rec=v[k2];
+    var tot=rec?rec.total:0,g=rec?rec.goal:getGoal(v);
+    var frac=g>0?Math.min(tot/g,1):0;
+    var wrap=document.createElement("div");wrap.className="hbar"+(i===0?" today":"");
+    var bar=document.createElement("div");bar.className="bar";
+    bar.style.height=Math.max(frac*100,3)+"%";
+    bar.title=tot+" ml of "+g+" ml";
+    var dv=document.createElement("div");dv.className="dv";dv.textContent=tot>0?tot:"–";
+    var dl=document.createElement("div");dl.className="dl";dl.textContent=i===0?"Today":days[d2.getDay()];
+    wrap.appendChild(bar);wrap.appendChild(dv);wrap.appendChild(dl);
+    histEl.appendChild(wrap);
+  }
+  save(v);
+}
+
+function add(amount){
+  amount=Math.round(amount);
+  if(!(amount>0)){status.textContent="Enter a positive amount.";return;}
+  if(amount>5000){status.textContent="That seems high — max 5000 ml per entry.";return;}
+  var v=load(),e=todayEntry(v);
+  e.total+=amount;e.log.push({t:Date.now(),amt:amount});
+  save(v);render();
+  status.textContent="Added "+amount+" ml ("+e.total+" ml of "+e.goal+" ml today).";
+}
+
+var qbtns=document.querySelectorAll(".qbtns button");
+for(var qi=0;qi<qbtns.length;qi++){
+  (function(btn){
+    btn.addEventListener("click",function(){add(parseInt(btn.getAttribute("data-amt"),10));});
+  })(qbtns[qi]);
+}
+document.getElementById("addCustom").addEventListener("click",function(){
+  add(parseFloat(customEl.value));customEl.value="";
+});
+customEl.addEventListener("keydown",function(ev){if(ev.key==="Enter")document.getElementById("addCustom").click();});
+document.getElementById("saveGoal").addEventListener("click",function(){
+  var g=Math.round(parseFloat(goalEl.value));
+  if(!(g>=250&&g<=10000)){status.textContent="Goal must be between 250 and 10000 ml.";return;}
+  var v=load();v.settings={goal:g};todayEntry(v).goal=g;save(v);render();
+  status.textContent="Daily goal set to "+g+" ml.";
+});
+document.getElementById("undoBtn").addEventListener("click",function(){
+  var v=load(),e=todayEntry(v);
+  var last=e.log.pop();
+  if(!last){status.textContent="Nothing to undo.";return;}
+  e.total=Math.max(0,e.total-last.amt);save(v);render();
+  status.textContent="Removed the last entry ("+last.amt+" ml).";
+});
+document.getElementById("resetBtn").addEventListener("click",function(){
+  if(!confirm("Reset today's intake to zero?"))return;
+  var v=load();v[dateKey(new Date())]={goal:getGoal(v),total:0,log:[]};
+  save(v);render();status.textContent="Today reset to 0 ml.";
+});
+/* re-render periodically so a midnight rollover picks up the new day */
+setInterval(render,60000);
+render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Camera Photo Capture — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Take a photo with your device camera in the browser — capture, apply filters, and download as PNG. Use the free online Camera Photo Capture tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/camera-photo-capture/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Camera Photo Capture — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Take a photo with your device camera in the browser — capture, apply filters, and download as PNG.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/camera-photo-capture/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Camera Photo Capture — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Take a photo with your device camera in the browser — capture, apply filters, and download as PNG.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Image tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Camera Photo Capture"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Camera Photo Capture","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Live camera preview via getUserMedia, canvas snapshot capture, grayscale/sepia/invert filters, PNG download","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/profile-pic-cropper/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-cropper/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/meme-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/favicon/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to capture a photo with your camera","step":[{"@type":"HowToStep","position":1,"name":"Start the camera","text":"Press Start camera and allow camera access when your browser asks."},{"@type":"HowToStep","position":2,"name":"Capture a frame","text":"When the live preview looks right, press Capture to freeze the frame."},{"@type":"HowToStep","position":3,"name":"Apply a filter and download","text":"Pick a filter — none, grayscale, sepia, or invert — then press Download PNG to save the photo."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why is the camera not starting?","acceptedAnswer":{"@type":"Answer","text":"Camera access requires HTTPS (or localhost) and your permission. If access was denied, click the camera icon in the address bar to allow it, then press Start camera again. Also check no other app is using the camera."}},{"@type":"Question","name":"Is my photo uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The video stream, the captured frame, and the filter processing all stay in your browser. The photo only leaves your device when you download it."}},{"@type":"Question","name":"Can I change the filter after capturing?","acceptedAnswer":{"@type":"Answer","text":"Yes. Changing the filter re-renders the captured frame instantly, so you can compare looks before downloading."}},{"@type":"Question","name":"What resolution is the photo?","acceptedAnswer":{"@type":"Answer","text":"The photo matches your camera's stream resolution as delivered by the browser — typically 640×480 to 1920×1080 depending on the device."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number],textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=file]{margin-top:.4rem;font-size:.95rem}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+button:disabled{opacity:.5;cursor:default}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+.status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* tool extensions */
+.camwrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:1rem}
+.camwrap figure{margin:0}
+.camwrap figcaption{font-size:.85rem;font-weight:600;color:var(--mut);margin-bottom:.4rem}
+video.cam,canvas.shot{width:100%;border-radius:8px;border:1px solid var(--line);background:#141414;display:block;aspect-ratio:4/3;object-fit:cover}
+.notice{background:#fff8ea;border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:.88rem;color:var(--mut);margin-top:1rem}
+@media(max-width:640px){.camwrap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Image tools</a> / <span>Camera Photo Capture</span></nav>
+<main class="wrap">
+<h1>Camera Photo Capture</h1>
+<p class="lede">Snap a photo with your device's camera right in the browser — no app needed. Capture the frame, try a filter, and download it as a PNG.</p>
+
+<div class="tool">
+  <div class="btnrow" style="margin-top:0">
+    <button id="startBtn" style="margin-top:0">Start camera</button>
+    <button class="ghost" id="stopBtn" style="margin-top:0" disabled>Stop camera</button>
+    <button id="capBtn" disabled>Capture</button>
+    <button class="ghost" id="dlBtn" disabled>Download PNG</button>
+  </div>
+
+  <div class="camwrap">
+    <figure>
+      <figcaption>Live preview</figcaption>
+      <video id="video" class="cam" playsinline muted></video>
+    </figure>
+    <figure>
+      <figcaption>Captured photo</figcaption>
+      <canvas id="shot" class="shot"></canvas>
+    </figure>
+  </div>
+
+  <label for="filterSel">Filter (re-applies to the captured photo)</label>
+  <select id="filterSel">
+    <option value="none">None</option>
+    <option value="grayscale">Grayscale</option>
+    <option value="sepia">Sepia</option>
+    <option value="invert">Invert</option>
+  </select>
+
+  <div class="meta">
+    <span>Resolution: <b id="resInfo">—</b></span>
+  </div>
+
+  <div class="status" id="status" aria-live="polite">Press Start camera to begin. Camera access requires HTTPS (or localhost).</div>
+  <div class="notice">Your video stream and photos never leave this browser — nothing is recorded or uploaded.</div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Press <b>Start camera</b> and allow camera access when your browser asks.</li>
+    <li>When the live preview looks right, press <b>Capture</b> to freeze the frame.</li>
+    <li>Pick a filter — none, grayscale, sepia, or invert — then press <b>Download PNG</b> to save the photo.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>Permission denied?</h2>
+  <p>If the camera won't start, click the camera icon in your browser's address bar and allow access for this site, then press <b>Start camera</b> again. Also make sure no other app (Zoom, Teams, another tab) is holding the camera.</p>
+  <h2>Private by design</h2>
+  <p>The video stream, the captured frame, and filter processing all happen locally. Nothing is uploaded, recorded, or sent anywhere — the photo only leaves your device when you choose to download it.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>Why is the camera not starting?</summary><p>Camera access requires HTTPS (or localhost) and your permission. If access was denied, click the camera icon in the address bar to allow it, then press <b>Start camera</b> again. Also check no other app is using the camera.</p></details>
+  <details><summary>Is my photo uploaded anywhere?</summary><p>No. The video stream, the captured frame, and the filter processing all stay in your browser. The photo only leaves your device when you download it.</p></details>
+  <details><summary>Can I change the filter after capturing?</summary><p>Yes. Changing the filter re-renders the captured frame instantly, so you can compare looks before downloading.</p></details>
+  <details><summary>What resolution is the photo?</summary><p>The photo matches your camera's stream resolution as delivered by the browser — typically 640×480 to 1920×1080 depending on the device.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/profile-pic-cropper/">Profile Pic Cropper</a></li>
+    <li><a href="/toolhub/tools/image-cropper/">Image Cropper</a></li>
+    <li><a href="/toolhub/tools/meme-generator/">Meme Generator</a></li>
+    <li><a href="/toolhub/tools/favicon/">Favicon Generator</a></li>
+    <li><a href="/toolhub/tools/image-splitter/">Image Splitter</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for images — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var startBtn=document.getElementById("startBtn"),
+    stopBtn=document.getElementById("stopBtn"),
+    capBtn=document.getElementById("capBtn"),
+    dlBtn=document.getElementById("dlBtn"),
+    video=document.getElementById("video"),
+    canvas=document.getElementById("shot"),
+    filterSel=document.getElementById("filterSel"),
+    resInfo=document.getElementById("resInfo"),
+    status=document.getElementById("status");
+var stream=null,captured=false;
+
+function setStatus(m){status.textContent=m;}
+
+function applyFilter(){
+  var vw=video.videoWidth,vh=video.videoHeight;
+  if(!vw)return;
+  var ctx=canvas.getContext("2d");
+  var f=filterSel.value;
+  ctx.filter=(f==="none")?"none":f+"(1)";
+  ctx.drawImage(video,0,0,vw,vh);
+  ctx.filter="none";
+}
+
+startBtn.addEventListener("click",function(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    setStatus("Camera API is not available — this page needs HTTPS (or localhost) and a modern browser.");
+    return;
+  }
+  setStatus("Requesting camera access…");
+  navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false}).then(function(s){
+    stream=s;
+    video.srcObject=s;
+    if(video.play)video.play();
+    startBtn.disabled=true;
+    stopBtn.disabled=false;
+    capBtn.disabled=false;
+    setStatus("Camera live — frame the shot and press Capture.");
+  }).catch(function(e){
+    var msg="Could not access the camera.";
+    if(e&&e.name==="NotAllowedError"){
+      msg="Camera permission denied — click the camera icon in the address bar, allow access for this site, then press Start camera again.";
+    }else if(e&&e.name==="NotFoundError"){
+      msg="No camera found on this device.";
+    }else if(e&&e.name==="NotReadableError"||e&&e.name==="TrackStartError"){
+      msg="The camera is already in use by another app or tab — close it and try again.";
+    }else if(e&&e.name==="SecurityError"){
+      msg="Camera blocked: this page must be served over HTTPS (or localhost).";
+    }
+    setStatus(msg);
+  });
+});
+
+stopBtn.addEventListener("click",function(){
+  if(stream){
+    stream.getTracks().forEach(function(t){t.stop();});
+    stream=null;
+  }
+  video.removeAttribute("src");
+  video.srcObject=null;
+  startBtn.disabled=false;
+  stopBtn.disabled=true;
+  capBtn.disabled=true;
+  setStatus("Camera stopped. Press Start camera to use it again.");
+});
+
+capBtn.addEventListener("click",function(){
+  var vw=video.videoWidth,vh=video.videoHeight;
+  if(!vw||!vh){
+    setStatus("Video is not ready yet — wait a moment and try again.");
+    return;
+  }
+  canvas.width=vw;
+  canvas.height=vh;
+  applyFilter();
+  captured=true;
+  dlBtn.disabled=false;
+  resInfo.textContent=vw+"\u00D7"+vh+" px";
+  setStatus("Captured "+vw+"\u00D7"+vh+". Change the filter to re-apply, or press Download PNG.");
+});
+
+filterSel.addEventListener("change",function(){
+  if(captured){
+    applyFilter();
+    setStatus("Filter applied: "+filterSel.options[filterSel.selectedIndex].text+".");
+  }
+});
+
+dlBtn.addEventListener("click",function(){
+  if(!captured)return;
+  var a=document.createElement("a");
+  a.href=canvas.toDataURL("image/png");
+  a.download="photo.png";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setStatus("Downloaded photo.png ("+canvas.width+"\u00D7"+canvas.height+").");
+});
+})();
+</script>
+</body>
+</html>

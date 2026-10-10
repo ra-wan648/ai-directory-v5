@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Crontab Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Build cron expressions visually and see the next run times. Use the free online Crontab Generator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/crontab-generator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Crontab Generator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Build cron expressions visually and see the next run times.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/crontab-generator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Crontab Generator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Build cron expressions visually and see the next run times.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Crontab Generator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Crontab Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Visual cron expression builder, human-readable schedule descriptions, next 5 run time calculation, copy to clipboard","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/unix-time/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/date-diff/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/timezone/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-number/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to generate a cron expression","step":[{"@type":"HowToStep","position":1,"name":"Pick a preset","text":"Choose a preset like hourly, daily, or weekly, or keep Custom to build your own schedule."},{"@type":"HowToStep","position":2,"name":"Set the schedule fields","text":"Use the minute, hour, day of month, month, and day of week dropdowns to define exactly when the job runs."},{"@type":"HowToStep","position":3,"name":"Copy the expression","text":"Read the human-readable description, check the next 5 run times, then copy the cron expression into your crontab."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a cron expression?","acceptedAnswer":{"@type":"Answer","text":"A cron expression is a five-field string (minute hour day-of-month month day-of-week) that tells a Unix scheduler when to run a recurring task. For example, 0 9 * * 1-5 runs at 09:00 every weekday."}},{"@type":"Question","name":"Do cron times use my local timezone?","acceptedAnswer":{"@type":"Answer","text":"Yes — the next run times shown here are calculated in your browser's local timezone, which matches how cron behaves on a typical server."}},{"@type":"Question","name":"What does the * character mean in cron?","acceptedAnswer":{"@type":"Answer","text":"The asterisk means 'every possible value' for that field. */15 in the minute field means every 15 minutes."}},{"@type":"Question","name":"Is this Crontab Generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+input[type=text],select,textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:640px){.grid5{grid-template-columns:repeat(2,1fr)}}
+.fname{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:4px}
+.cron-out{margin-top:1.2rem;background:#1f2937;color:#f9fafb;border-radius:8px;padding:18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.cron-out .expr{font-size:1.7rem;font-weight:800;color:#fbbf24;letter-spacing:.06em;word-break:break-all}
+.cron-out .desc{font-family:inherit;color:#e5e7eb;margin-top:.4rem;font-size:1rem}
+.runs{margin-top:1rem;list-style:none}
+.runs li{padding:8px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;background:#fffdf6;font-size:.95rem}
+.runs li b{color:var(--amber-d)}
+.copyrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:.6rem}
+.copyrow button{margin-top:0}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.cron-out .expr{font-size:1.3rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>Crontab Generator</span></nav>
+<main class="wrap">
+<h1>Crontab Generator</h1>
+<p class="lede">Build cron expressions visually and see the next run times. Pick a preset or set each schedule field yourself, then copy the expression into your crontab.</p>
+
+<div class="tool">
+  <label for="preset">Preset</label>
+  <select id="preset">
+    <option value="custom">Custom</option>
+    <option value="* * * * *">Every minute</option>
+    <option value="0 * * * *">Hourly (at minute 0)</option>
+    <option value="0 9 * * *">Daily at 09:00</option>
+    <option value="0 9 * * 1-5">Weekdays at 09:00</option>
+    <option value="0 9 * * 1">Weekly (Monday 09:00)</option>
+    <option value="0 9 1 * *">Monthly (1st at 09:00)</option>
+    <option value="*/15 * * * *">Every 15 minutes</option>
+  </select>
+
+  <label>Schedule fields</label>
+  <div class="grid5">
+    <div><div class="fname">Minute</div><select id="f-min"></select></div>
+    <div><div class="fname">Hour</div><select id="f-hour"></select></div>
+    <div><div class="fname">Day of month</div><select id="f-dom"></select></div>
+    <div><div class="fname">Month</div><select id="f-mon"></select></div>
+    <div><div class="fname">Day of week</div><select id="f-dow"></select></div>
+  </div>
+
+  <label for="exprIn">Or paste a cron expression</label>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <input type="text" id="exprIn" placeholder="0 9 * * 1-5" style="flex:1;min-width:200px">
+    <button class="ghost" id="applyBtn" style="margin-top:0">Apply</button>
+  </div>
+
+  <div class="cron-out" aria-live="polite">
+    <div class="expr" id="exprOut">0 9 * * *</div>
+    <div class="desc" id="descOut"></div>
+  </div>
+
+  <label>Next 5 run times (your local timezone)</label>
+  <ul class="runs" id="runsOut"></ul>
+
+  <div class="copyrow">
+    <button id="copyBtn">Copy cron expression</button>
+  </div>
+  <p id="status" style="margin-top:.6rem;color:var(--mut);font-size:.9rem" aria-live="polite"></p>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Choose a preset like hourly, daily, or weekly — or keep "Custom" to build your own schedule.</li>
+    <li>Use the minute, hour, day of month, month, and day of week dropdowns to define exactly when the job runs.</li>
+    <li>Read the human-readable description, check the next 5 run times, then copy the expression into your crontab.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>Reading a cron expression</h2>
+  <p>A cron expression has five fields: <b>minute (0–59), hour (0–23), day of month (1–31), month (1–12), day of week (0–6, Sunday = 0)</b>. An asterisk (<code>*</code>) means "every value", a slash (<code>*/15</code>) sets a step, commas list values, and dashes define ranges.</p>
+  <h2>Day of month vs day of week</h2>
+  <p>When both day of month and day of week are restricted, cron runs when <b>either</b> matches — not both. For example, <code>0 9 1 * 1</code> runs on the 1st of each month <i>and</i> every Monday.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a cron expression?</summary><p>A cron expression is a five-field string (minute hour day-of-month month day-of-week) that tells a Unix scheduler when to run a recurring task. For example, <code>0 9 * * 1-5</code> runs at 09:00 every weekday.</p></details>
+  <details><summary>Do cron times use my local timezone?</summary><p>Yes — the next run times shown here are calculated in your browser's local timezone, which matches how cron behaves on a typical server.</p></details>
+  <details><summary>What does the * character mean in cron?</summary><p>The asterisk means "every possible value" for that field. <code>*/15</code> in the minute field means every 15 minutes.</p></details>
+  <details><summary>Is this Crontab Generator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/unix-time/">Unix Time Converter</a></li>
+    <li><a href="/toolhub/tools/date-diff/">Date Difference</a></li>
+    <li><a href="/toolhub/tools/timezone/">Timezone Converter</a></li>
+    <li><a href="/toolhub/tools/random-number/">Random Number</a></li>
+    <li><a href="/toolhub/tools/json/">JSON Formatter</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var monNames={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+var dowNames={sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};
+var monFull=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var dowFull=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+function fill(sel,vals,labels){
+  sel.innerHTML="";
+  vals.forEach(function(v,i){
+    var o=document.createElement("option");
+    o.value=v;o.textContent=labels?labels[i]:v;
+    sel.appendChild(o);
+  });
+}
+function range(a,b){var r=[];for(var i=a;i<=b;i++)r.push(String(i));return r;}
+
+var fMin=document.getElementById("f-min"),fHour=document.getElementById("f-hour"),
+    fDom=document.getElementById("f-dom"),fMon=document.getElementById("f-mon"),
+    fDow=document.getElementById("f-dow"),exprIn=document.getElementById("exprIn"),
+    preset=document.getElementById("preset"),exprOut=document.getElementById("exprOut"),
+    descOut=document.getElementById("descOut"),runsOut=document.getElementById("runsOut"),
+    status=document.getElementById("status");
+var selects=[fMin,fHour,fDom,fMon,fDow];
+
+fill(fMin,["*","*/15","*/30"].concat(range(0,59)),["Every","Every 15 min","Every 30 min"].concat(range(0,59)));
+fill(fHour,["*"].concat(range(0,23)),["Every"].concat(range(0,23).map(function(h){return (h<10?"0":"")+h;})));
+fill(fDom,["*"].concat(range(1,31)),["Every"].concat(range(1,31)));
+fill(fMon,["*"].concat(range(1,12)),["Every"].concat(monFull.map(function(m,i){return m+" ("+(i+1)+")";})));
+fill(fDow,["*","1-5","0,6"].concat(range(0,6)),["Every","Weekdays (Mon–Fri)","Weekends"].concat(dowFull.map(function(d,i){return d+" ("+i+")";})));
+
+function fields(){return selects.map(function(s){return s.value;});}
+function currentExpr(){return fields().join(" ");}
+
+function parseField(str,min,max,names){
+  str=String(str).trim().toLowerCase();
+  var set={},parts=str.split(",");
+  for(var p=0;p<parts.length;p++){
+    var part=parts[p].trim();if(!part)continue;
+    var step=1,slash=part.indexOf("/");
+    if(slash>=0){step=parseInt(part.slice(slash+1),10);part=part.slice(0,slash);}
+    var lo,hi;
+    if(part==="*"||part===""){lo=min;hi=max;}
+    else if(part.indexOf("-")>=0){
+      var r=part.split("-");
+      lo=norm(r[0]);hi=norm(r[1]);
+    } else {lo=hi=norm(part);}
+    if(lo===null||hi===null||isNaN(lo)||isNaN(hi)||step<1)continue;
+    if(lo<min)lo=min;if(hi>max)hi=max;
+    for(var v=lo;v<=hi;v+=step)set[v]=1;
+  }
+  function norm(tok){
+    if(/^\d+$/.test(tok))return parseInt(tok,10);
+    if(names&&names[tok]!==undefined)return names[tok];
+    return NaN;
+  }
+  return set;
+}
+function isStarField(s){return /^\*$/.test(s.trim());}
+
+function nextRuns(expr){
+  var f=expr.trim().split(/\s+/);
+  if(f.length!==5)return null;
+  var mn=parseField(f[0],0,59),hr=parseField(f[1],0,23),dm=parseField(f[2],1,31),
+      mo=parseField(f[3],1,12,monNames),dw=parseField(f[4],0,6,dowNames);
+  var dmStar=isStarField(f[2]),dwStar=isStarField(f[4]);
+  var results=[],d=new Date();
+  d.setSeconds(0,0);d.setMinutes(d.getMinutes()+1);
+  var guard=0;
+  while(results.length<5&&guard<525600*4){guard++;
+    var domOk=dm[d.getDate()],dowOk=dw[d.getDay()];
+    var dayOk;
+    if(dmStar&&dwStar)dayOk=true;
+    else if(dmStar)dayOk=dowOk;
+    else if(dwStar)dayOk=domOk;
+    else dayOk=domOk||dowOk;
+    if(mn[d.getMinutes()]&&hr[d.getHours()]&&mo[d.getMonth()+1]&&dayOk){
+      results.push(new Date(d.getTime()));
+    }
+    d.setMinutes(d.getMinutes()+1);
+  }
+  return results;
+}
+
+function describe(f){
+  var mn=f[0],hr=f[1],dm=f[2],mo=f[3],dw=f[4];
+  function timeStr(){
+    var h=(hr.length===1?"0"+hr:hr);
+    if(mn.indexOf("*/")===0)return "every "+mn.slice(2)+" minutes past "+h+":00";
+    return h+":"+(mn.length===1?"0"+mn:mn);
+  }
+  if(mn==="*"&&hr==="*"&&dm==="*"&&mo==="*"&&dw==="*")return"Every minute";
+  if(mn.indexOf("*/")===0&&hr==="*"&&dm==="*"&&mo==="*"&&dw==="*")
+    return"Every "+mn.slice(2)+" minutes";
+  if(hr==="*"&&dm==="*"&&mo==="*"&&dw==="*"&&mn!=="*")
+    return"At "+mn+" minutes past every hour";
+  if(dm==="*"&&mo==="*"&&dw==="*"&&hr!=="*"&&mn!=="*")
+    return"At "+timeStr()+" every day";
+  if(dm==="*"&&mo==="*"&&dw!=="*"){
+    if(dw==="1-5")return"At "+timeStr()+" every weekday (Monday–Friday)";
+    if(dw==="0"||dw==="6")return"At "+timeStr()+" every weekend";
+    var days=dw.split(",").map(function(x){return dowFull[parseInt(x,10)]||x;}).join(", ");
+    return"At "+timeStr()+" every "+days;
+  }
+  if(dw==="*"&&dm!=="*"&&mo==="*")return"At "+timeStr()+" on day "+dm+" of every month";
+  if(dw==="*"&&dm!=="*"&&mo!=="*")return"At "+timeStr()+" on "+monFull[parseInt(mo,10)-1]+" "+dm;
+  return"Runs at minute "+mn+", hour "+hr+", day of month "+dm+", month "+mo+", day of week "+dw;
+}
+
+function update(fromSelects){
+  var expr=currentExpr();
+  if(!fromSelects)expr=exprIn.value.trim()||expr;
+  exprOut.textContent=expr;
+  var f=expr.split(/\s+/);
+  if(f.length===5){
+    descOut.textContent=describe(f);
+    var runs=nextRuns(expr);
+    runsOut.innerHTML="";
+    if(runs&&runs.length){
+      runs.forEach(function(d,i){
+        var li=document.createElement("li");
+        li.innerHTML="<b>#"+(i+1)+"</b> "+d.toLocaleString(undefined,{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"});
+        runsOut.appendChild(li);
+      });
+    }else{
+      runsOut.innerHTML="<li>No upcoming run found within 4 years — check the expression.</li>";
+    }
+  }else{
+    descOut.textContent="Invalid expression — cron needs exactly 5 fields.";
+    runsOut.innerHTML="";
+  }
+  if(fromSelects)exprIn.value=expr;
+}
+
+function setSelects(f){
+  var map=[fMin,fHour,fDom,fMon,fDow];
+  f.forEach(function(tok,i){
+    var sel=map[i],found=false;
+    for(var j=0;j<sel.options.length;j++){
+      if(sel.options[j].value.toLowerCase()===tok.toLowerCase()){sel.selectedIndex=j;found=true;break;}
+    }
+    if(!found){
+      var n=parseInt(tok,10);
+      if(!isNaN(n)){
+        for(var k=0;k<sel.options.length;k++){
+          if(sel.options[k].value===String(n)){sel.selectedIndex=k;break;}
+        }
+      }
+    }
+  });
+}
+
+preset.addEventListener("change",function(){
+  if(this.value!=="custom"){
+    var f=this.value.split(" ");
+    setSelects(f);
+    exprIn.value=this.value;
+    update(true);
+  }
+});
+selects.forEach(function(s){s.addEventListener("change",function(){preset.value="custom";update(true);});});
+document.getElementById("applyBtn").addEventListener("click",function(){
+  var raw=exprIn.value.trim(),f=raw.split(/\s+/);
+  if(f.length===5){
+    setSelects(f);preset.value="custom";
+    if(currentExpr()===raw){update(true);status.textContent="Expression applied.";}
+    else{update(false);status.textContent="Custom expression loaded — some fields are not available in the dropdowns, shown as-is.";}
+  }
+  else{status.textContent="Enter exactly 5 space-separated fields.";}
+});
+document.getElementById("copyBtn").addEventListener("click",function(){
+  var txt=exprOut.textContent;
+  function done(){status.textContent="Copied: "+txt;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done,function(){status.textContent="Copy failed — select the text manually.";});
+  }else{
+    var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){status.textContent="Copy failed — select the text manually.";}
+    document.body.removeChild(ta);
+  }
+});
+
+/* defaults: daily 09:00 */
+fMin.value="0";fHour.value="9";
+preset.value="0 9 * * *";exprIn.value="0 9 * * *";
+update(true);
+})();
+</script>
+</body>
+</html>

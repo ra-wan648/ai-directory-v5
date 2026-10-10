@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Secure Notes — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Encrypt private notes with AES-256-GCM in your browser and store them safely on this device. Use the free online Secure Notes tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/secure-notes/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Secure Notes — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Encrypt private notes with AES-256-GCM in your browser and store them safely on this device.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/secure-notes/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Secure Notes — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Encrypt private notes with AES-256-GCM in your browser and store them safely on this device.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Secure Notes"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Secure Notes","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"AES-256-GCM note encryption via Web Crypto, PBKDF2 password key derivation with 100000 iterations, encrypted localStorage vault, per-note random salt and IV","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password-strength-analyser/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bcrypt-generator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to save an encrypted note","step":[{"@type":"HowToStep","position":1,"name":"Write your note","text":"Give the note a name, type your text, and choose a strong password."},{"@type":"HowToStep","position":2,"name":"Encrypt and save","text":"Press Encrypt and save — the note is encrypted with AES-256-GCM and stored on this device only."},{"@type":"HowToStep","position":3,"name":"Unlock later","text":"Pick the note from your saved list and enter the same password to decrypt and read it."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How secure is the encryption?","acceptedAnswer":{"@type":"Answer","text":"Notes are encrypted with AES-256-GCM using a key derived from your password via PBKDF2 with 100,000 iterations of SHA-256. Each note gets a fresh random salt and IV. Decryption with the wrong password fails because the authentication tag does not verify."}},{"@type":"Question","name":"Where are my notes stored?","acceptedAnswer":{"@type":"Answer","text":"Only in your browser's localStorage on this device, in encrypted form. Nothing is ever sent to a server — there is no account and no cloud copy."}},{"@type":"Question","name":"What happens if I forget my password?","acceptedAnswer":{"@type":"Answer","text":"The note cannot be recovered. There is no backdoor and no reset option — that is exactly what makes the encryption trustworthy, so use a password you will remember."}},{"@type":"Question","name":"Is this Secure Notes tool free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* --- tool-specific --- */
+input[type=password]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+input[type=password]:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6;min-height:140px;resize:vertical}
+.notelist{list-style:none;margin-top:.6rem}
+.notelist li{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fffdf6;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:.5rem}
+.notelist .nname{font-weight:700;flex:1;min-width:120px}
+.notelist .ndate{font-size:.8rem;color:var(--mut)}
+.notelist button{margin-top:0;padding:7px 14px;font-size:.85rem}
+.unlockrow{display:flex;gap:8px;flex-wrap:wrap;width:100%;margin-top:.4rem}
+.unlockrow input{flex:1;min-width:140px}
+pre.plain{background:#fffdf6;color:var(--ink);border:1px solid var(--line);padding:16px;border-radius:8px;white-space:pre-wrap;word-break:break-word;margin-top:1rem;font-family:inherit;font-size:1rem}
+.err{color:#b91c1c;font-weight:600}
+.secttl{font-size:1.05rem;font-weight:800;margin-top:1.6rem;border-top:1px dashed var(--line);padding-top:1.2rem}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>Secure Notes</span></nav>
+<main class="wrap">
+<h1>Secure Notes</h1>
+<p class="lede">Write a private note, lock it with a password using real AES-256-GCM encryption, and keep it on this device only. No account, no server, no one else can read it.</p>
+
+<div class="tool">
+  <label for="nname">Note name</label>
+  <input type="text" id="nname" placeholder="e.g. wifi-passwords" maxlength="60" autocomplete="off">
+  <label for="ntext">Note text</label>
+  <textarea id="ntext" placeholder="Type your secret note here…"></textarea>
+  <label for="npass">Password</label>
+  <input type="password" id="npass" placeholder="Choose a strong password" autocomplete="new-password">
+  <div class="btnrow">
+    <button id="saveBtn">Encrypt &amp; save note</button>
+    <button class="ghost" id="clearForm">Clear form</button>
+  </div>
+
+  <div class="secttl">Saved notes (this device only)</div>
+  <ul class="notelist" id="notelist"></ul>
+  <p id="noNotes" style="color:var(--mut);font-size:.9rem">No saved notes yet.</p>
+
+  <div id="outWrap" hidden>
+    <label>Decrypted note</label>
+    <pre class="plain" id="plainOut"></pre>
+    <div class="btnrow"><button class="ghost" id="hideOut">Hide</button></div>
+  </div>
+
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Give the note a name, type your text, and choose a strong password.</li>
+    <li>Press <b>Encrypt &amp; save note</b> — it is encrypted with AES-256-GCM and stored on this device only.</li>
+    <li>To read it later, pick it from <b>Saved notes</b>, enter the same password, and press <b>Unlock</b>. Delete notes you no longer need.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How the encryption works</h2>
+  <p>Your password never leaves the page. It is stretched into a 256-bit key with PBKDF2 (100,000 iterations of SHA-256 and a fresh 16-byte random salt per note), then the text is sealed with AES-GCM using a random 12-byte IV. The salt, IV, and ciphertext are stored together — everything an attacker would need except your password — and the GCM authentication tag makes tampering or wrong passwords fail loudly.</p>
+  <h2>Security notes</h2>
+  <p>Notes live only in this browser's localStorage, so anyone with access to your unlocked device or browser profile could copy the encrypted vault — a weak password would then be the only barrier. Use a long, unique password, and remember: a forgotten password means a permanently unreadable note.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How secure is the encryption?</summary><p>Notes are encrypted with AES-256-GCM using a key derived from your password via PBKDF2 with 100,000 iterations of SHA-256. Each note gets a fresh random salt and IV. Decryption with the wrong password fails because the authentication tag does not verify.</p></details>
+  <details><summary>Where are my notes stored?</summary><p>Only in your browser's localStorage on this device, in encrypted form. Nothing is ever sent to a server — there is no account and no cloud copy.</p></details>
+  <details><summary>What happens if I forget my password?</summary><p>The note cannot be recovered. There is no backdoor and no reset option — that is exactly what makes the encryption trustworthy, so use a password you will remember.</p></details>
+  <details><summary>Is this Secure Notes tool free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/text-encryption/">Text Encryption</a></li>
+    <li><a href="/toolhub/tools/password/">Password Generator</a></li>
+    <li><a href="/toolhub/tools/password-strength-analyser/">Password Strength Analyser</a></li>
+    <li><a href="/toolhub/tools/bcrypt-generator/">Bcrypt Generator</a></li>
+    <li><a href="/toolhub/tools/hash/">Hash Generator</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var LS_KEY="secure-notes:v1";
+var nameEl=document.getElementById("nname"),textEl=document.getElementById("ntext"),
+    passEl=document.getElementById("npass"),listEl=document.getElementById("notelist"),
+    noNotes=document.getElementById("noNotes"),status=document.getElementById("status"),
+    outWrap=document.getElementById("outWrap"),plainOut=document.getElementById("plainOut");
+var te=new TextEncoder(),td=new TextDecoder();
+
+function b64encode(buf){
+  var b=new Uint8Array(buf),s="";
+  for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);
+  return btoa(s);
+}
+function b64decode(s){
+  var bin=atob(s),b=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);
+  return b.buffer;
+}
+function loadVault(){
+  try{
+    var v=JSON.parse(localStorage.getItem(LS_KEY)||"{}");
+    return (v&&typeof v==="object")?v:{};
+  }catch(e){return {};}
+}
+function saveVault(v){
+  try{localStorage.setItem(LS_KEY,JSON.stringify(v));return true;}
+  catch(e){status.textContent="Could not save — browser storage is unavailable.";return false;}
+}
+function deriveKey(password,salt){
+  return crypto.subtle.importKey("raw",te.encode(password),{name:"PBKDF2"},false,["deriveKey"])
+    .then(function(base){
+      return crypto.subtle.deriveKey(
+        {name:"PBKDF2",salt:salt,iterations:100000,hash:"SHA-256"},
+        base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+    });
+}
+function encryptNote(password,text){
+  var salt=crypto.getRandomValues(new Uint8Array(16));
+  var iv=crypto.getRandomValues(new Uint8Array(12));
+  return deriveKey(password,salt).then(function(key){
+    return crypto.subtle.encrypt({name:"AES-GCM",iv:iv},key,te.encode(text));
+  }).then(function(ct){
+    return {salt:b64encode(salt),iv:b64encode(iv),data:b64encode(ct),created:Date.now()};
+  });
+}
+function decryptNote(password,rec){
+  var salt=b64decode(rec.salt),iv=b64decode(rec.iv),data=b64decode(rec.data);
+  return deriveKey(password,salt).then(function(key){
+    return crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,data);
+  }).then(function(pt){return td.decode(pt);});
+}
+function setStatus(msg,isErr){
+  status.textContent=msg;
+  status.className=isErr?"err":"";
+}
+function escName(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function renderNotes(){
+  var v=loadVault(),names=Object.keys(v).sort();
+  listEl.innerHTML="";
+  noNotes.style.display=names.length?"none":"block";
+  names.forEach(function(n){
+    var li=document.createElement("li");
+    var nm=document.createElement("span");nm.className="nname";nm.textContent=n;
+    var dt=document.createElement("span");dt.className="ndate";
+    var d=new Date(v[n].created||Date.now());
+    dt.textContent="saved "+d.toLocaleDateString()+" "+d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+    var unlock=document.createElement("button");unlock.className="ghost";unlock.textContent="Unlock";
+    var del=document.createElement("button");del.className="ghost";del.textContent="Delete";
+    var row=document.createElement("div");row.className="unlockrow";row.hidden=true;
+    var pw=document.createElement("input");pw.type="password";pw.placeholder="Enter password";
+    pw.setAttribute("aria-label","Password for "+n);
+    var go=document.createElement("button");go.textContent="Decrypt";go.style.marginTop="0";
+    row.appendChild(pw);row.appendChild(go);
+    unlock.addEventListener("click",function(){row.hidden=!row.hidden;if(!row.hidden)pw.focus();});
+    go.addEventListener("click",function(){
+      if(!pw.value){setStatus("Enter the password for \""+n+"\".",true);return;}
+      setStatus("Decrypting…");
+      decryptNote(pw.value,v[n]).then(function(plain){
+        plainOut.textContent=plain;outWrap.hidden=false;pw.value="";
+        setStatus("Note \""+n+"\" unlocked.");
+        outWrap.scrollIntoView({behavior:"smooth",block:"nearest"});
+      },function(){
+        setStatus("Wrong password or corrupted data — decryption failed.",true);
+      });
+    });
+    pw.addEventListener("keydown",function(ev){if(ev.key==="Enter")go.click();});
+    del.addEventListener("click",function(){
+      if(confirm("Delete the encrypted note \""+n+"\" permanently?")){
+        var vv=loadVault();delete vv[n];saveVault(vv);
+        setStatus("Note \""+n+"\" deleted.");renderNotes();
+      }
+    });
+    li.appendChild(nm);li.appendChild(dt);li.appendChild(unlock);li.appendChild(del);li.appendChild(row);
+    listEl.appendChild(li);
+  });
+}
+
+document.getElementById("saveBtn").addEventListener("click",function(){
+  var n=nameEl.value.trim(),t=textEl.value,p=passEl.value;
+  if(!n){setStatus("Give the note a name first.",true);nameEl.focus();return;}
+  if(!t){setStatus("The note text is empty.",true);textEl.focus();return;}
+  if(p.length<4){setStatus("Use a password of at least 4 characters.",true);passEl.focus();return;}
+  setStatus("Encrypting…");
+  encryptNote(p,t).then(function(rec){
+    var v=loadVault();v[n]=rec;
+    if(saveVault(v)){
+      setStatus("Note \""+n+"\" encrypted and saved on this device.");
+      nameEl.value="";textEl.value="";passEl.value="";renderNotes();
+    }
+  },function(){
+    setStatus("Encryption failed — is Web Crypto available in this browser?",true);
+  });
+});
+document.getElementById("clearForm").addEventListener("click",function(){
+  nameEl.value="";textEl.value="";passEl.value="";setStatus("");
+});
+document.getElementById("hideOut").addEventListener("click",function(){
+  plainOut.textContent="";outWrap.hidden=true;
+});
+if(!window.crypto||!crypto.subtle){
+  setStatus("Web Crypto is unavailable in this browser — encryption cannot run here.",true);
+  document.getElementById("saveBtn").disabled=true;
+}
+renderNotes();
+})();
+</script>
+</body>
+</html>

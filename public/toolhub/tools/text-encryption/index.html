@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Text Encryption — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Encrypt text with AES-256-GCM — passwords hardened by PBKDF2 with 250,000 iterations — and decrypt it again, all locally. Use the free online Text Encryption tool on AI Directory — no signup, no install, browser-first processing." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Text Encryption — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Encrypt text with AES-256-GCM — passwords hardened by PBKDF2 with 250,000 iterations — and decrypt it again, all locally. Use the free online Text Encryption tool on AI Directory — no signup, no install, browser-first processing." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Text Encryption — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Encrypt text with AES-256-GCM — passwords hardened by PBKDF2 with 250,000 iterations — and decrypt it again, all locally. Use the free online Text Encryption tool on AI Directory — no signup, no install, browser-first processing." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Developer", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Text Encryption", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Text Encryption \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption/", "applicationCategory": "DeveloperApplication", "operatingSystem": "Any (browser-based)", "description": "Encrypt text with AES-256-GCM \u2014 passwords hardened by PBKDF2 with 250,000 iterations \u2014 and decrypt it again, all locally. Use the free online Text Encryption tool on AI Directory \u2014 no signup, no install, browser-first processing.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Password Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password/"}, {"@type": "SoftwareApplication", "name": "Basic Auth Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/basic-auth-generator/"}, {"@type": "SoftwareApplication", "name": "Hash Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hash/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Text Encryption", "description": "Encrypt text with AES-256-GCM \u2014 passwords hardened by PBKDF2 with 250,000 iterations \u2014 and decrypt it again, all locally. Use the free online Text Encryption tool on AI Directory \u2014 no signup, no install, browser-first processing.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Encrypt", "text": "On the Encrypt tab, type your message and a strong password, then click Encrypt. Copy the single base64 string it produces."}, {"@type": "HowToStep", "position": 2, "name": "Share or store the output", "text": "The output embeds the random salt and IV, so the one string is all you need \u2014 send it however you like, but share the password separately."}, {"@type": "HowToStep", "position": 3, "name": "Decrypt", "text": "On the Decrypt tab, paste the string, enter the same password, and click Decrypt. A wrong password gives a clear failure message, never garbled text."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How strong is this encryption?", "acceptedAnswer": {"@type": "Answer", "text": "Very: AES-256 in GCM mode (authenticated encryption) with keys derived by PBKDF2-HMAC-SHA-256 at 250,000 iterations and a fresh 128-bit salt per message. This matches current industry practice for password-based encryption."}}, {"@type": "Question", "name": "What exactly is the output format?", "acceptedAnswer": {"@type": "Answer", "text": "One base64 string containing 16 bytes of salt, then 12 bytes of IV, then the AES-GCM ciphertext (which includes the authentication tag). Because salt and IV travel with the message, no extra bookkeeping is needed."}}, {"@type": "Question", "name": "What happens if I use the wrong password?", "acceptedAnswer": {"@type": "Answer", "text": "Decryption fails cleanly with a \u201cDecryption failed \u2014 wrong password or corrupted data\u201d message. GCM authentication means tampered or wrong-key data is rejected, never silently decrypted."}}, {"@type": "Question", "name": "Can I decrypt this outside the tool?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The format is standard: base64-decode, split salt (16B) / IV (12B) / ciphertext, run PBKDF2-SHA256 (250k iterations) to get a 256-bit key, then AES-GCM decrypt \u2014 reproducible in Python, OpenSSL or any crypto library."}}]}
+</script>
+
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.danger{background:#dc2626}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+table.data{width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.95rem}
+table.data th,table.data td{border:1px solid var(--line);padding:.5rem .6rem;text-align:right}
+table.data th{background:var(--amber-soft)}
+table.data td:first-child,table.data th:first-child{text-align:left}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.badge{display:inline-block;background:var(--amber);color:#fff;font-size:.75rem;font-weight:800;border-radius:999px;padding:.15rem .6rem;margin-left:.4rem;vertical-align:middle}
+.note{font-size:.88rem;color:var(--muted)}
+pre.out{white-space:pre-wrap;word-break:break-all;background:#111827;color:#f9fafb;border-radius:10px;padding:.9rem 1rem;font-size:.88rem;line-height:1.55;margin:.75rem 0 0}
+textarea.mono,input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.msg{margin-top:.75rem;font-weight:700}
+.msg.err{color:var(--red)}
+.msg.okm{color:var(--green)}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.tabs button{background:#f3f4f6;color:#111827}
+.tabs button.active{background:var(--amber);color:#fff}
+.badge-ok{display:inline-block;background:#dcfce7;color:#15803d;border-radius:999px;padding:.15rem .7rem;font-weight:800;font-size:.85rem}
+.badge-no{display:inline-block;background:#fee2e2;color:#b91c1c;border-radius:999px;padding:.15rem .7rem;font-weight:800;font-size:.85rem}
+.kv td:first-child{font-weight:700;white-space:nowrap;width:9rem}
+.copyrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem}
+.spin{display:inline-block;width:1rem;height:1rem;border:2px solid #f3f4f6;border-top:2px solid var(--amber);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:.4rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+</style>
+</head>
+<body>
+<header class="site no-print"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Developer</span> / <span>Text Encryption</span></nav>
+<h1>Text Encryption</h1>
+<p class="lead">Encrypt text with real AES-256-GCM: your password is stretched with PBKDF2 (250,000 iterations, random salt) and the output is a single portable base64 string. Decrypt it on the matching tab.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<div class="tabs" role="tablist">
+<button id="teTabEnc" class="active">Encrypt</button>
+<button id="teTabDec">Decrypt</button>
+</div>
+<div id="tePaneEnc">
+<label class="f" for="tePlain">Plaintext</label>
+<textarea id="tePlain" rows="4" placeholder="Secret message\u2026"></textarea>
+<label class="f" for="tePw">Password</label>
+<input type="password" id="tePw" class="mono" placeholder="Encryption password" autocomplete="new-password">
+<div class="btnrow"><button id="teEnc">Encrypt</button><button class="ghost" id="teShowPw">Show password</button></div>
+<div class="msg" id="teEncMsg" role="status"></div>
+<label class="f" for="teCipher">Encrypted output <span class="note">\u2014 base64(salt | iv | ciphertext)</span></label>
+<textarea id="teCipher" class="mono" rows="4" readonly placeholder="Encrypted output will appear here\u2026"></textarea>
+<div class="copyrow"><button class="ghost sm" id="teCopy">Copy output</button></div>
+</div>
+<div id="tePaneDec" style="display:none">
+<label class="f" for="teCipherIn">Encrypted input</label>
+<textarea id="teCipherIn" class="mono" rows="4" placeholder="Paste the base64 output here\u2026"></textarea>
+<label class="f" for="tePw2">Password</label>
+<input type="password" id="tePw2" class="mono" placeholder="Decryption password" autocomplete="new-password">
+<div class="btnrow"><button id="teDec">Decrypt</button></div>
+<div class="msg" id="teDecMsg" role="status"></div>
+<label class="f" for="tePlainOut">Decrypted plaintext</label>
+<textarea id="tePlainOut" rows="4" readonly placeholder="Decrypted text will appear here\u2026"></textarea>
+</div>
+<p class="note">Key derivation uses 250,000 PBKDF2 iterations, which takes about a second \u2014 that delay is what makes brute-forcing expensive. A wrong password or corrupted input produces a clear \u201cdecryption failed\u201d error.</p>
+
+</section>
+<h2>How to use Text Encryption</h2>
+<ol><li><strong>Encrypt</strong> — On the Encrypt tab, type your message and a strong password, then click Encrypt. Copy the single base64 string it produces.</li><li><strong>Share or store the output</strong> — The output embeds the random salt and IV, so the one string is all you need — send it however you like, but share the password separately.</li><li><strong>Decrypt</strong> — On the Decrypt tab, paste the string, enter the same password, and click Decrypt. A wrong password gives a clear failure message, never garbled text.</li></ol>
+<div class="infowrap">
+<section><h2>What is Text Encryption?</h2><p>Text Encryption is password-based file-note-style encryption for text: lock a message with a password and get a portable string that only the same password can open.</p></section><section><h2>How this developer tool works</h2><p>Your password goes through PBKDF2 (250,000 iterations, SHA-256, random 16-byte salt) to derive a 256-bit key; the Web Crypto API encrypts with AES-GCM and a random 12-byte IV; salt, IV and ciphertext are concatenated and base64-encoded.</p></section><section><h2>Privacy and limits</h2><p>All crypto runs locally via the Web Crypto API. There is no password recovery — lose the password and the data is unrecoverable by design.</p></section>
+</div>
+<h2>Text Encryption — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>How strong is this encryption?</summary><p>Very: AES-256 in GCM mode (authenticated encryption) with keys derived by PBKDF2-HMAC-SHA-256 at 250,000 iterations and a fresh 128-bit salt per message. This matches current industry practice for password-based encryption.</p></details><details><summary>What exactly is the output format?</summary><p>One base64 string containing 16 bytes of salt, then 12 bytes of IV, then the AES-GCM ciphertext (which includes the authentication tag). Because salt and IV travel with the message, no extra bookkeeping is needed.</p></details><details><summary>What happens if I use the wrong password?</summary><p>Decryption fails cleanly with a “Decryption failed — wrong password or corrupted data” message. GCM authentication means tampered or wrong-key data is rejected, never silently decrypted.</p></details><details><summary>Can I decrypt this outside the tool?</summary><p>Yes. The format is standard: base64-decode, split salt (16B) / IV (12B) / ciphertext, run PBKDF2-SHA256 (250k iterations) to get a 256-bit key, then AES-GCM decrypt — reproducible in Python, OpenSSL or any crypto library.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/password/">Password Generator</a></li><li><a href="/toolhub/tools/basic-auth-generator/">Basic Auth Generator</a></li><li><a href="/toolhub/tools/hash/">Hash Generator</a></li><li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li><li><a href="/toolhub/tools/hex-text/">Hex to Text</a></li><li><a href="/toolhub/tools/otp-generator/">OTP/TOTP Generator</a></li></ul></nav>
+</main>
+<footer class="site no-print"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+
+const $=id=>document.getElementById(id);
+const te=new TextEncoder(),td=new TextDecoder();
+const PBKDF2_ITER=250000;
+function teEncMsg(t,cls){const m=$("teEncMsg");m.textContent=t;m.className="msg"+(cls?" "+cls:"");}
+function teDecMsg(t,cls){const m=$("teDecMsg");m.textContent=t;m.className="msg"+(cls?" "+cls:"");}
+function b64encode(u8){let s="";for(let i=0;i<u8.length;i+=0x8000){s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));}return btoa(s);}
+function b64decode(s){
+  const bin=atob(s.trim().replace(/\s+/g,""));
+  const u8=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+  return u8;
+}
+async function deriveKey(password,salt){
+  const km=await crypto.subtle.importKey("raw",te.encode(password),{name:"PBKDF2"},false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:PBKDF2_ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+$("teEnc").addEventListener("click",async()=>{
+  const pt=$("tePlain").value,pw=$("tePw").value;
+  if(!pt){teEncMsg("Enter some text to encrypt.","err");return;}
+  if(!pw){teEncMsg("Enter a password.","err");return;}
+  const btn=$("teEnc");btn.disabled=true;btn.innerHTML='<span class="spin"></span>Encrypting\u2026';
+  try{
+    const salt=crypto.getRandomValues(new Uint8Array(16));
+    const iv=crypto.getRandomValues(new Uint8Array(12));
+    const key=await deriveKey(pw,salt);
+    const ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},key,te.encode(pt)));
+    const out=new Uint8Array(28+ct.length);
+    out.set(salt,0);out.set(iv,16);out.set(ct,28);
+    $("teCipher").value=b64encode(out);
+    teEncMsg("\u2714 Encrypted with AES-256-GCM (PBKDF2, "+PBKDF2_ITER.toLocaleString()+" iterations).","okm");
+  }catch(e){teEncMsg("Encryption failed: "+e.message,"err");}
+  btn.disabled=false;btn.textContent="Encrypt";
+});
+$("teDec").addEventListener("click",async()=>{
+  const raw=$("teCipherIn").value,pw=$("tePw2").value;
+  if(!raw.trim()){teDecMsg("Paste the encrypted base64 string.","err");return;}
+  if(!pw){teDecMsg("Enter the password.","err");return;}
+  const btn=$("teDec");btn.disabled=true;btn.innerHTML='<span class="spin"></span>Decrypting\u2026';
+  try{
+    let data;
+    try{data=b64decode(raw);}catch(e){throw new Error("input is not valid base64.");}
+    if(data.length<29)throw new Error("input is too short to be a valid encrypted payload.");
+    const salt=data.slice(0,16),iv=data.slice(16,28),ct=data.slice(28);
+    const key=await deriveKey(pw,salt);
+    let pt;
+    try{pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:iv},key,ct);}
+    catch(e){throw new Error("decryption failed \u2014 wrong password or corrupted data.");}
+    $("tePlainOut").value=td.decode(pt);
+    teDecMsg("\u2714 Decrypted successfully.","okm");
+  }catch(e){$("tePlainOut").value="";teDecMsg(e.message,"err");}
+  btn.disabled=false;btn.textContent="Decrypt";
+});
+$("teShowPw").addEventListener("click",()=>{const p=$("tePw");p.type=p.type==="password"?"text":"password";$("teShowPw").textContent=p.type==="password"?"Show password":"Hide password";});
+$("teCopy").addEventListener("click",async()=>{
+  const t=$("teCipher").value;if(!t)return;let ok=false;
+  try{await navigator.clipboard.writeText(t);ok=true;}catch(e){
+    const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();
+    try{ok=document.execCommand("copy");}catch(_){} ta.remove();
+  }
+  $("teCopy").textContent=ok?"Copied!":"Copy failed";
+  setTimeout(()=>{$("teCopy").textContent="Copy output";},1500);
+});
+function teTab(which){
+  const e=which==="enc";
+  $("teTabEnc").classList.toggle("active",e);$("teTabDec").classList.toggle("active",!e);
+  $("tePaneEnc").style.display=e?"block":"none";$("tePaneDec").style.display=e?"none":"block";
+}
+$("teTabEnc").addEventListener("click",()=>teTab("enc"));
+$("teTabDec").addEventListener("click",()=>teTab("dec"));
+
+</script>
+</body>
+</html>

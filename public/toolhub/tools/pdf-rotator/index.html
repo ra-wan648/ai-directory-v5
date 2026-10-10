@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>PDF Rotator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Rotate PDF pages 90, 180 or 270 degrees. Use the free online PDF Rotator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-rotator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="PDF Rotator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Rotate PDF pages 90, 180 or 270 degrees. Use the free online PDF Rotator tool on AI Directory — no signup, no install, browser-first processing.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-rotator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PDF Rotator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Rotate PDF pages 90, 180 or 270 degrees. Use the free online PDF Rotator tool on AI Directory — no signup, no install, browser-first processing.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Free Mini Tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},
+{"@type":"ListItem","position":2,"name":"PDF & documents","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},
+{"@type":"ListItem","position":3,"name":"PDF Rotator","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-rotator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"PDF Rotator — AI Directory","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Rotate pages 90, 180 or 270 degrees","Apply to all pages or a custom page range","Download the rotated PDF instantly"],"isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/merge-pdf/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/compress-pdf/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-page-extractor/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to rotate PDF pages","step":[
+{"@type":"HowToStep","position":1,"name":"Upload your PDF","text":"Choose the PDF file with pages you want to rotate."},
+{"@type":"HowToStep","position":2,"name":"Choose angle and pages","text":"Pick a rotation angle and select all pages or a custom range."},
+{"@type":"HowToStep","position":3,"name":"Rotate and download","text":"Click Rotate to apply the rotation and download the new PDF."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is PDF Rotator free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is completely free with no limits and no hidden costs."}},
+{"@type":"Question","name":"Do I need an account?","acceptedAnswer":{"@type":"Answer","text":"No. No signup or account is required — everything runs directly in your browser."}},
+{"@type":"Question","name":"Is my PDF uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Your PDF is processed entirely on your device with JavaScript. No file ever leaves your browser."}},
+{"@type":"Question","name":"What is PDF Rotator best used for?","acceptedAnswer":{"@type":"Answer","text":"It is best for fixing scanned documents or photos saved sideways, and for rotating individual pages of a PDF without affecting the rest."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--ink:#1f2937;--muted:#6b7280;--bg:#faf7f2;--card:#ffffff;--line:#e5e7eb}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+header.top{background:var(--card);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:12px}
+header.top a.logo{font-size:1.35rem;font-weight:800;color:var(--ink);text-decoration:none}
+header.top a.logo span{color:var(--amber)}
+header.top .tag{font-size:.85rem;color:var(--muted);border-left:2px solid var(--amber);padding-left:12px}
+main{max-width:900px;margin:0 auto;padding:24px 16px}
+nav.crumb{font-size:.9rem;color:var(--muted);margin-bottom:8px}
+nav.crumb a{color:var(--amber);text-decoration:none}
+h1{margin:0 0 6px;font-size:1.9rem}
+p.lead{color:var(--muted);margin-top:0}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:22px 0}
+.btn{background:var(--amber);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:1rem;cursor:pointer;font-weight:600}
+.btn:hover{filter:brightness(.95)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+label{display:block;font-weight:600;margin:14px 0 6px}
+select,input[type=text]{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:1rem}
+input[type=text]{width:100%}
+input[type=radio]{accent-color:var(--amber)}
+.radio-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.radio-row label{margin:0;font-weight:400;display:flex;align-items:center;gap:6px;cursor:pointer}
+.angle-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.angle-card{border:2px solid var(--line);border-radius:10px;padding:10px 16px;cursor:pointer;background:#fff;font-weight:600;user-select:none}
+.angle-card.sel{border-color:var(--amber);background:#fff8ec}
+.note{font-size:.9rem;color:var(--muted)}
+.status{margin-top:12px;font-size:.95rem}
+.status.ok{color:#15803d}.status.err{color:#b91c1c}
+h2{margin-top:34px;font-size:1.4rem}
+ol.steps li{margin-bottom:8px}
+details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:8px 0;padding:10px 14px}
+summary{font-weight:600;cursor:pointer}
+.similar{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.similar a{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 14px;text-decoration:none;color:var(--ink);font-size:.95rem}
+.similar a:hover{border-color:var(--amber)}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:20px;text-align:center;color:var(--muted);font-size:.9rem}
+footer a{color:var(--amber);text-decoration:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/toolhub/">AI <span>Directory</span></a>
+  <span class="tag">Free Mini Tools</span>
+</header>
+<main>
+<nav class="crumb" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / PDF &amp; documents / PDF Rotator</nav>
+<h1>PDF Rotator</h1>
+<p class="lead">Rotate PDF pages 90, 180 or 270 degrees.</p>
+
+<div class="tool">
+  <label for="pdfFile">Upload a PDF</label>
+  <input type="file" id="pdfFile" accept="application/pdf">
+  <div class="status" id="fileStatus" aria-live="polite"></div>
+
+  <div id="workArea" style="display:none">
+    <label>Rotation angle</label>
+    <div class="angle-row" role="radiogroup" aria-label="Rotation angle">
+      <div class="angle-card sel" data-angle="90">↻ 90°</div>
+      <div class="angle-card" data-angle="180">↻ 180°</div>
+      <div class="angle-card" data-angle="270">↻ 270°</div>
+    </div>
+
+    <label>Which pages?</label>
+    <div class="radio-row">
+      <label><input type="radio" name="scope" value="all" checked> All pages</label>
+      <label><input type="radio" name="scope" value="custom"> Custom range</label>
+    </div>
+    <div id="rangeWrap" style="display:none">
+      <input type="text" id="rangeInput" placeholder="e.g. 2-4,7">
+      <p class="note">Use numbers between 1 and <span id="maxPage"></span>, e.g. 2-4,7</p>
+    </div>
+
+    <div style="margin-top:16px"><button class="btn" id="rotateBtn">Rotate and download</button></div>
+    <div class="status" id="status"></div>
+  </div>
+</div>
+
+<h2>How to use PDF Rotator</h2>
+<ol class="steps">
+  <li>Upload your PDF file using the file picker.</li>
+  <li>Pick a rotation angle (90°, 180° or 270°) and choose all pages or a custom page range.</li>
+  <li>Click "Rotate and download" to apply the rotation and save the new PDF.</li>
+</ol>
+
+<section>
+<h2>What is PDF Rotator?</h2>
+<p>PDF Rotator is a free tool that rotates pages of a PDF document clockwise by 90, 180, or 270 degrees. It fixes scanned pages saved sideways and lets you rotate only specific pages while leaving the rest untouched.</p>
+</section>
+<section>
+<h2>How it works</h2>
+<p>Your PDF is opened in the browser with the pdf-lib library. The chosen angle is added to each selected page's existing rotation (normalized to 0–360°), then the document is saved and downloaded as a new file. Your original file is never modified.</p>
+</section>
+<section>
+<h2>Privacy</h2>
+<p>All processing happens locally on your device. Your PDF never leaves your browser and nothing is uploaded to any server.</p>
+</section>
+
+<h2>FAQ</h2>
+<details><summary>Is PDF Rotator free?</summary><p>Yes. It is completely free with no limits and no hidden costs.</p></details>
+<details><summary>Do I need an account?</summary><p>No. No signup or account is required — everything runs directly in your browser.</p></details>
+<details><summary>Is my PDF uploaded to a server?</summary><p>No. Your PDF is processed entirely on your device with JavaScript. No file ever leaves your browser.</p></details>
+<details><summary>What is PDF Rotator best used for?</summary><p>It is best for fixing scanned documents or photos saved sideways, and for rotating individual pages of a PDF without affecting the rest.</p></details>
+
+<nav aria-label="Similar tools">
+<h2>Similar tools</h2>
+<div class="similar">
+  <a href="/toolhub/tools/merge-pdf/">Merge PDF</a>
+  <a href="/toolhub/tools/compress-pdf/">Compress PDF</a>
+  <a href="/toolhub/tools/pdf-page-extractor/">PDF Page Extractor</a>
+  <a href="/toolhub/tools/esign-pdf/">eSign PDF</a>
+</div>
+</nav>
+</main>
+<footer>© AI Directory — <a href="/toolhub/">Free Mini Tools</a></footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var pdfBytes=null,pageCount=0,angle=90;
+var fileStatus=$("fileStatus"),status=$("status");
+
+$("pdfFile").addEventListener("change",async function(e){
+  var f=e.target.files[0];if(!f)return;
+  fileStatus.textContent="Loading PDF…";fileStatus.className="status";
+  try{
+    pdfBytes=await f.arrayBuffer();
+    var doc=await PDFLib.PDFDocument.load(pdfBytes.slice(0));
+    pageCount=doc.getPageCount();
+    $("maxPage").textContent=pageCount;
+    fileStatus.textContent="Loaded: "+f.name+" ("+pageCount+" pages).";fileStatus.className="status ok";
+    $("workArea").style.display="block";
+  }catch(err){fileStatus.textContent="Could not read that PDF. Please try another file.";fileStatus.className="status err";}
+});
+
+var cards=document.querySelectorAll(".angle-card");
+cards.forEach(function(c){
+  c.addEventListener("click",function(){
+    cards.forEach(function(x){x.classList.remove("sel");});
+    c.classList.add("sel");angle=parseInt(c.getAttribute("data-angle"),10);
+  });
+});
+
+var radios=document.querySelectorAll('input[name="scope"]');
+radios.forEach(function(r){
+  r.addEventListener("change",function(){
+    $("rangeWrap").style.display=(document.querySelector('input[name="scope"]:checked').value==="custom")?"block":"none";
+  });
+});
+
+function parseRange(str,max){
+  var set=new Set();var parts=str.split(",");
+  for(var i=0;i<parts.length;i++){
+    var t=parts[i].trim();if(!t)continue;
+    var m=t.match(/^(\d+)-(\d+)$/);
+    if(m){var a=parseInt(m[1],10),b=parseInt(m[2],10);
+      if(a<1||b>max||a>b)return null;
+      for(var p=a;p<=b;p++)set.add(p);
+    }else if(/^\d+$/.test(t)){var n=parseInt(t,10);if(n<1||n>max)return null;set.add(n);}
+    else return null;
+  }
+  return Array.from(set).sort(function(a,b){return a-b;});
+}
+
+$("rotateBtn").addEventListener("click",async function(){
+  if(!pdfBytes)return;
+  var scope=document.querySelector('input[name="scope"]:checked').value;
+  var pages=[];
+  if(scope==="all"){for(var i=1;i<=pageCount;i++)pages.push(i);}
+  else{
+    var v=$("rangeInput").value.trim();
+    if(!v){status.textContent="Type a page range, e.g. 2-4,7.";status.className="status err";return;}
+    pages=parseRange(v,pageCount);
+    if(!pages||!pages.length){status.textContent="Invalid range. Use numbers between 1 and "+pageCount+".";status.className="status err";return;}
+  }
+  status.textContent="Rotating "+pages.length+" page(s) by "+angle+"°…";status.className="status";
+  try{
+    var doc=await PDFLib.PDFDocument.load(pdfBytes.slice(0));
+    pages.forEach(function(p){
+      var page=doc.getPage(p-1);
+      var cur=page.getRotation().angle;
+      page.setRotation(PDFLib.degrees((cur+angle)%360));
+    });
+    var bytes=await doc.save();
+    var blob=new Blob([bytes],{type:"application/pdf"});
+    var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    a.download="rotated.pdf";document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},4000);
+    status.textContent="Done — rotated.pdf downloaded ("+pages.length+" page(s) rotated "+angle+"°).";status.className="status ok";
+  }catch(err){status.textContent="Something went wrong while rotating.";status.className="status err";}
+});
+})();
+</script>
+</body>
+</html>

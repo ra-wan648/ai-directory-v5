@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Image to Text (OCR) — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Extract text from images, photos and screenshots with free in-browser OCR. Use the Image to Text tool on AI Directory — no signup, no install, everything runs locally." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ocr-image-to-text/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Image to Text (OCR) — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Extract text from images, photos and screenshots with free in-browser OCR. Use the Image to Text tool on AI Directory — no signup, no install, everything runs locally." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ocr-image-to-text/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Image to Text (OCR) — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Extract text from images, photos and screenshots with free in-browser OCR. Use the Image to Text tool on AI Directory — no signup, no install, everything runs locally." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Image tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Image to Text (OCR)", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ocr-image-to-text/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Image to Text (OCR) \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ocr-image-to-text/", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (browser-based)", "description": "Extract text from images, photos and screenshots with free in-browser OCR. Use the Image to Text tool on AI Directory \u2014 no signup, no install, everything runs locally.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Image Compressor", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-compressor/"}, {"@type": "SoftwareApplication", "name": "Image Resizer", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-resizer/"}, {"@type": "SoftwareApplication", "name": "Image Cropper", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-cropper/"}, {"@type": "SoftwareApplication", "name": "JPG to PNG", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/jpg-png/"}, {"@type": "SoftwareApplication", "name": "WebP Converter", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/webp-converter/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Image to Text (OCR)", "description": "Extract text from images, photos and screenshots with free in-browser OCR. Use the Image to Text tool on AI Directory \u2014 no signup, no install, everything runs locally.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Choose an image", "text": "Drag and drop a PNG, JPG or WebP image onto the drop zone, or click it to browse your files."}, {"@type": "HowToStep", "position": 2, "name": "Extract the text", "text": "Click Extract Text. The OCR engine runs in your browser \u2014 the first run downloads the engine (~30MB) and caches it for later."}, {"@type": "HowToStep", "position": 3, "name": "Copy or download", "text": "Copy the recognized text to your clipboard or download it as a .txt file. Your image never leaves your device."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the image-to-text OCR tool free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Image to Text tool on AI Directory is completely free with no signup, no watermark and no usage limits."}}, {"@type": "Question", "name": "Which languages can it recognize?", "acceptedAnswer": {"@type": "Answer", "text": "This tool is fixed to English recognition. It works best on clear, high-contrast text such as documents, screenshots and signs."}}, {"@type": "Question", "name": "Does my image leave my browser?", "acceptedAnswer": {"@type": "Answer", "text": "No. The OCR engine (Tesseract.js) runs entirely on your device. Your image is never uploaded to any server."}}, {"@type": "Question", "name": "Why does the first run take longer?", "acceptedAnswer": {"@type": "Answer", "text": "The first extraction downloads the OCR engine (~30MB) and the English language data. They are cached by your browser, so later runs start instantly."}}]}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button:disabled{opacity:.55;cursor:wait}
+button.ghost{background:#f3f4f6;color:#111827}
+button.ghost:hover{background:#e5e7eb}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.meter{height:12px;background:#e5e7eb;border-radius:6px;overflow:hidden;margin-top:.5rem}
+.meter>div{height:100%;border-radius:6px;transition:width .3s;background:var(--amber)}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.note{font-size:.88rem;color:var(--muted)}
+.dropzone{border:2px dashed #d1d5db;border-radius:12px;padding:2rem 1rem;text-align:center;cursor:pointer;background:#fffdf7;transition:border-color .2s,background .2s}
+.dropzone:hover,.dropzone.dragover{border-color:var(--amber);background:var(--amber-soft)}
+.dropzone p{margin:.3rem 0}
+.preview{max-width:100%;max-height:340px;border:1px solid var(--line);border-radius:10px;margin-top:.8rem;display:none}
+.status{font-size:.9rem;color:var(--muted);margin-top:.6rem;min-height:1.4em}
+.msg{font-size:.9rem;margin-top:.6rem;min-height:1.4em}
+.msg.err{color:var(--red);font-weight:600}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Image tools</span> / <span>Image to Text (OCR)</span></nav>
+<h1>Image to Text (OCR)</h1>
+<p class="lead">Extract editable text from images, photos and screenshots with free optical character recognition. Everything runs locally in your browser — your images are never uploaded.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<div class="grid2">
+<div>
+<h2 style="margin-top:0">Your image</h2>
+<div class="dropzone" id="ocrDrop" role="button" tabindex="0" aria-label="Choose an image file">
+<p><strong>Drag &amp; drop an image here</strong></p>
+<p>or <button type="button" class="ghost sm" id="ocrBrowse">Browse files</button></p>
+<p class="note">PNG, JPG or WebP</p>
+<input type="file" id="ocrFile" accept="image/png,image/jpeg,image/webp" hidden>
+</div>
+<img class="preview" id="ocrPreview" alt="Selected image preview">
+<p class="note">Language: <strong>English</strong> (fixed)</p>
+<div class="btnrow">
+<button id="ocrGo">Extract Text</button>
+<button class="ghost" id="ocrClear">Clear</button>
+</div>
+<div class="status" id="ocrStatus" aria-live="polite"></div>
+<div class="meter" id="ocrMeter" style="display:none"><div id="ocrBar" style="width:0%"></div></div>
+<p class="note">First run downloads the OCR engine (~30MB), cached afterwards. Everything runs locally.</p>
+</div>
+<div>
+<h2 style="margin-top:0">Extracted text</h2>
+<textarea id="ocrOut" rows="14" placeholder="Recognized text will appear here…" readonly aria-label="Extracted text"></textarea>
+<div class="btnrow">
+<button class="ghost sm" id="ocrCopy">Copy</button>
+<button class="ghost sm" id="ocrDl">Download .txt</button>
+</div>
+<p class="msg" id="ocrMsg" aria-live="polite"></p>
+</div>
+</div>
+
+</section>
+
+<h2>How to use Image to Text (OCR)</h2>
+<ol><li><strong>Choose an image</strong> — Drag and drop a PNG, JPG or WebP image onto the drop zone, or click it to browse your files.</li><li><strong>Extract the text</strong> — Click Extract Text. The OCR engine runs entirely in your browser; the first run downloads the engine (~30MB) and caches it for later.</li><li><strong>Copy or download</strong> — Copy the recognized text to your clipboard or download it as a .txt file. Your image never leaves your device.</li></ol>
+<div class="infowrap">
+<section><h2>What is Image to Text (OCR)?</h2><p>Image to Text turns pictures of text into editable text you can copy and use: screenshots, scanned pages, photos of signs, receipts and whiteboards. It uses the Tesseract OCR engine running directly in your browser.</p></section>
+<section><h2>How this image tool works</h2><p>The Tesseract.js library loads once on your first extraction (about 30MB, cached by the browser afterwards). When you click Extract Text, a worker is created, the image is recognized locally, and the worker is shut down again to free memory.</p></section>
+<section><h2>Privacy and limits</h2><p>Recognition happens 100% on your device — no image is ever uploaded. Recognition is fixed to English and works best on clear, high-contrast text; handwritten or heavily stylized text may give partial results.</p></section>
+</div>
+<h2>Image to Text (OCR) — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>Is the image-to-text OCR tool free?</summary><p>Yes. The Image to Text tool on AI Directory is completely free — no account, no watermark and no limit on how many images you process.</p></details><details><summary>Which languages can it recognize?</summary><p>This tool is fixed to English recognition. It works best on clear, high-contrast text such as documents, screenshots, receipts and signs.</p></details><details><summary>Does my image leave my browser?</summary><p>No. The OCR engine (Tesseract.js) runs entirely on your device. Your image is never uploaded to any server.</p></details><details><summary>Why does the first run take longer?</summary><p>The first extraction downloads the OCR engine (~30MB) and the English language data. They are cached by your browser, so later runs start instantly.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/image-compressor/">Image Compressor</a></li><li><a href="/toolhub/tools/image-resizer/">Image Resizer</a></li><li><a href="/toolhub/tools/image-cropper/">Image Cropper</a></li><li><a href="/toolhub/tools/jpg-png/">JPG to PNG</a></li><li><a href="/toolhub/tools/webp-converter/">WebP Converter</a></li><li><a href="/toolhub/tools/png-jpg/">PNG to JPG</a></li></ul></nav>
+</main>
+<footer class="site"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</b></a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+
+const $=id=>document.getElementById(id);
+let ocrURL=null, ocrBusy=false;
+
+function ocrSetMsg(t, isErr){
+  const el=$("ocrMsg");
+  el.textContent=t||"";
+  el.classList.toggle("err", !!isErr);
+}
+function ocrSetStatus(t){ $("ocrStatus").textContent=t||""; }
+function ocrSetBar(pct){ $("ocrBar").style.width=Math.max(0,Math.min(100,pct))+"%"; }
+
+function ocrHandleFile(f){
+  if(!f) return;
+  if(!/^image\/(png|jpe?g|webp)$/i.test(f.type)){
+    ocrSetMsg("Please choose a PNG, JPG or WebP image.", true);
+    return;
+  }
+  if(ocrURL) URL.revokeObjectURL(ocrURL);
+  ocrURL=URL.createObjectURL(f);
+  const img=$("ocrPreview");
+  img.src=ocrURL;
+  img.style.display="block";
+  $("ocrOut").value="";
+  ocrSetMsg("");
+  ocrSetStatus("");
+  $("ocrMeter").style.display="none";
+  ocrSetBar(0);
+}
+
+const ocrDrop=$("ocrDrop"), ocrFile=$("ocrFile");
+ocrDrop.addEventListener("click",e=>{
+  if(e.target.closest("button")) { ocrFile.click(); return; }
+  ocrFile.click();
+});
+ocrDrop.addEventListener("keydown",e=>{
+  if(e.key==="Enter"||e.key===" "){ e.preventDefault(); ocrFile.click(); }
+});
+ocrFile.addEventListener("change",()=>ocrHandleFile(ocrFile.files[0]));
+["dragenter","dragover"].forEach(ev=>ocrDrop.addEventListener(ev,e=>{
+  e.preventDefault(); ocrDrop.classList.add("dragover");
+}));
+["dragleave","drop"].forEach(ev=>ocrDrop.addEventListener(ev,e=>{
+  e.preventDefault(); ocrDrop.classList.remove("dragover");
+}));
+ocrDrop.addEventListener("drop",e=>{
+  const f=e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  ocrHandleFile(f);
+});
+
+$("ocrClear").addEventListener("click",()=>{
+  if(ocrURL){ URL.revokeObjectURL(ocrURL); ocrURL=null; }
+  ocrFile.value="";
+  $("ocrPreview").style.display="none";
+  $("ocrPreview").removeAttribute("src");
+  $("ocrOut").value="";
+  ocrSetMsg(""); ocrSetStatus("");
+  $("ocrMeter").style.display="none"; ocrSetBar(0);
+});
+
+$("ocrGo").addEventListener("click",async()=>{
+  if(ocrBusy) return;
+  if(!ocrURL){ ocrSetMsg("Please choose an image first.", true); return; }
+  if(typeof window.Tesseract==="undefined"){
+    ocrSetMsg("The OCR library could not be loaded. Check your internet connection and reload the page.", true);
+    return;
+  }
+  ocrBusy=true;
+  $("ocrGo").disabled=true;
+  ocrSetMsg("");
+  ocrSetStatus("Starting OCR engine…");
+  $("ocrMeter").style.display="block";
+  ocrSetBar(0);
+  try{
+    // Lazy: the worker is created only when the user clicks Extract Text.
+    const worker = await Tesseract.createWorker("eng", 1, {
+      logger: m=>{
+        if(m.status==="recognizing text"){
+          ocrSetStatus("Recognizing text… "+Math.round(m.progress*100)+"%");
+          ocrSetBar(Math.round(m.progress*100));
+        }else{
+          ocrSetStatus("Loading: "+m.status+"…");
+        }
+      }
+    });
+    const { data: { text } } = await worker.recognize($("ocrPreview"));
+    await worker.terminate();
+    ocrSetBar(100);
+    ocrSetStatus("Done.");
+    const clean=(text||"").trim();
+    $("ocrOut").value=clean;
+    if(!clean) ocrSetMsg("No text was detected in this image. Try a clearer, higher-contrast image.", true);
+  }catch(err){
+    console.error(err);
+    ocrSetStatus("");
+    $("ocrMeter").style.display="none";
+    ocrSetMsg("OCR failed: "+(err && err.message ? err.message : err)+". Try a different image or reload the page.", true);
+  }finally{
+    ocrBusy=false;
+    $("ocrGo").disabled=false;
+  }
+});
+
+$("ocrCopy").addEventListener("click",async()=>{
+  const t=$("ocrOut").value;
+  if(!t){ ocrSetMsg("Nothing to copy yet — extract text first.", true); return; }
+  try{
+    await navigator.clipboard.writeText(t);
+    ocrSetMsg("Copied to clipboard.");
+  }catch(err){
+    // Fallback for older browsers / non-secure contexts
+    $("ocrOut").select();
+    try{ document.execCommand("copy"); ocrSetMsg("Copied to clipboard."); }
+    catch(e){ ocrSetMsg("Copy failed — select the text manually.", true); }
+  }
+});
+
+$("ocrDl").addEventListener("click",()=>{
+  const t=$("ocrOut").value;
+  if(!t){ ocrSetMsg("Nothing to download yet — extract text first.", true); return; }
+  const blob=new Blob([t],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="ocr-text.txt";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+});
+
+</script>
+</body>
+</html>

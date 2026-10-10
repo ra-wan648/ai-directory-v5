@@ -1,620 +1,1334 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://toolhub.example/</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-word</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-word</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-image</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-image</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-excel</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-excel</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-ppt</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-ppt</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-txt</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-txt</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/merge-pdf</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/merge-pdf</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/split-pdf</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/split-pdf</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/compress-pdf</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/compress-pdf</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/rotate-pdf</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/rotate-pdf</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-watermark</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-pages</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-pages</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-meta</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-meta</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/pdf-form</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-form</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/html-pdf</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/html-pdf</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/image-pdf</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-pdf</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/kokoro-tts</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/kokoro-tts</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/qwen3-tts</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/qwen3-tts</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/gemini-watermark</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/gemini-watermark</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/dola-cleanup</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/dola-cleanup</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/youtube-thumbnail</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/youtube-thumbnail</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/caption-converter</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/caption-converter</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/bulk-image-compressor</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bulk-image-compressor</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/jpg-png</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/jpg-png</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/png-jpg</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/png-jpg</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/webp-converter</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/webp-converter</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/heic-jpg</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/heic-jpg</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/image-resizer</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-resizer</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/image-cropper</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-cropper</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/image-rotate</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-rotate</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/image-compressor</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-compressor</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/remove-exif</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/remove-exif</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/favicon</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/favicon</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/svg-optimizer</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/svg-optimizer</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/palette</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/palette</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/collage</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/collage</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/social-resizer</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/social-resizer</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/json</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/json</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/xml</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/xml</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/yaml</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/yaml</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/sql</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/sql</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/css</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/css</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/html</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/html</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/javascript</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/javascript</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/markdown</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/markdown</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/csv</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/csv</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/base64</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base64</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/base64-decode</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base64-decode</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/url-encode</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/url-encode</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/url-decode</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/url-decode</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/jwt</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/jwt</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/uuid</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/uuid</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/hash</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hash</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/regex</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/regex</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/diff</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/diff</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/word-counter</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/word-counter</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/slug</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/slug</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/case</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/case</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/dedupe</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/dedupe</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/whitespace</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/whitespace</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/lorem</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/lorem</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/markdown-table</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/markdown-table</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/curl</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/curl</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/gradient</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/gradient</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/shadow</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/shadow</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/color</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/color</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/entities</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/entities</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/http-status</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/http-status</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/chmod</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/chmod</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/qr</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/qr</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/barcode</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/barcode</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/password</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/random-number</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-number</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/unix-time</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/unix-time</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/bytes</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bytes</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/percentage</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/percentage</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/age</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/age</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/date-diff</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/date-diff</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/timezone</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/timezone</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/bmi</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bmi</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/interest</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/interest</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/units</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/units</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/morse</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/morse</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/contrast</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/contrast</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/favicon-preview</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/favicon-preview</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/js-runner</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/js-runner</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/html-preview</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/html-preview</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/css-playground</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/css-playground</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/regex-builder</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/regex-builder</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/mind-map</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/mind-map</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/uml</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/uml</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/chinese-text</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/chinese-text</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/text-reverser</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-reverser</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/remove-line-breaks</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/remove-line-breaks</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/rot13</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/rot13</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/text-binary</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-binary</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/binary-text</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/binary-text</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/text-hex</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-hex</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/hex-text</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hex-text</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/text-unicode</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-unicode</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/unicode-text</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/unicode-text</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/http-simulator</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/http-simulator</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://toolhub.example/tools/cdnjs</loc>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/cdnjs</loc>
     <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-page-extractor</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-rotator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/meme-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/favicon-multi</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/exif-remover</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ico-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/subtitle-shifter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/voice-recorder</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-to-speech</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/crontab-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/json-diff</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/meta-tag-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/otp-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/basic-auth-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/token-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/readability-analyzer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hashtag-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/emoji-picker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/serp-preview</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/social-preview</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/schema-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/robots-txt-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/page-title-analyzer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/invoice-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/salary-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/emi-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/unit-price-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/scientific-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/date-duration-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/math-evaluator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/stopwatch</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password-strength-analyser</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/vcard-qr-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bio-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/profile-pic-cropper</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/typing-speed-test</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pomodoro-timer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/habit-tracker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/spin-the-wheel</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-team-picker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ascii-art-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-to-mp3</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-trimmer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bcrypt-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bg-remover</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bip39-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/business-name-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/calorie-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/collage-maker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/device-info</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/docker-compose-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/flashcard-maker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/freelance-rate-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/gpa-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/heading-checker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hmac-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/iban-validator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/keyword-density-checker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/list-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/markdown-to-pdf</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/meeting-cost-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/mortgage-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ocr-image-to-text</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-to-jpg</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark-adder</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/phone-formatter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/quote-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/rsa-key-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/savings-goal-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/sitemap-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/sleep-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-summarizer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/time-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/totp-authenticator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ulid-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/url-parser</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/user-agent-parser</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-compressor</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-mp3</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/workdays-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/wysiwyg-editor</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-gif</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-speed-changer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-merger</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-rotator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/frame-extractor</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-merger</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/volume-normalizer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/mime-types-lookup</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/mac-address-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ipv6-ula-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/toml-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/git-cheat-sheet</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/keycode-info</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/benchmark-builder</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/safelink-decoder</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/secure-notes</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/acronym-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/nato-alphabet-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/numeronym-generator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/string-obfuscator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/email-normalizer</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/instagram-grid-splitter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/tweet-screenshot-maker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/html-to-pdf</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-signature-checker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/image-splitter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/camera-photo-capture</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/tip-calculator</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/roman-numeral-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/currency-converter</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/git-memo</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/water-intake-tracker</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/dice-roller</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/coin-flip</loc>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

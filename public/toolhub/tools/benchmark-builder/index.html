@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Benchmark Builder — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Paste a JavaScript function body, pass args as JSON, and measure ops/sec, average, min and max time across up to 1M iterations. Use the free online Benchmark Builder tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/benchmark-builder/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Benchmark Builder — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Benchmark any JavaScript snippet — ops/sec, avg, min and max time across up to 1M iterations.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/benchmark-builder/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Benchmark Builder — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Benchmark any JavaScript snippet — ops/sec, avg, min and max time across up to 1M iterations.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Benchmark Builder"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Benchmark Builder","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Custom JS benchmarking, JSON arguments, 1k to 1M iterations, ops/sec measurement, avg/min/max per-op timing, warmup phase","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/js-runner/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/javascript/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/json/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/math-evaluator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to benchmark a JavaScript snippet","step":[{"@type":"HowToStep","position":1,"name":"Paste your function body","text":"Write the code to measure as a function body — args is available as a variable."},{"@type":"HowToStep","position":2,"name":"Provide arguments as JSON","text":"Pass any inputs your snippet needs as a JSON object, e.g. {\"n\": 1000}."},{"@type":"HowToStep","position":3,"name":"Run the benchmark","text":"Choose 1k to 1M iterations and hit Run to get ops/sec plus average, min, and max time per operation."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is the benchmark measured?","acceptedAnswer":{"@type":"Answer","text":"Your snippet runs once per iteration inside a timed loop using performance.now(). A short warmup phase runs first so the JIT compiler settles, then ops/sec, average, min, and max per-operation times are reported."}},{"@type":"Question","name":"Is it safe to run arbitrary code here?","acceptedAnswer":{"@type":"Answer","text":"Your code runs only in your own browser tab via the Function constructor — nothing is sent anywhere. Only benchmark code you wrote or trust, and avoid infinite loops."}},{"@type":"Question","name":"Why does the tab freeze during a run?","acceptedAnswer":{"@type":"Answer","text":"Timing requires the main thread, so large runs briefly block the page. The tool yields between chunks so you see progress, and you can use fewer iterations for a quicker result."}},{"@type":"Question","name":"Is this Benchmark Builder free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+button:disabled{opacity:.55;cursor:wait}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* tool-specific extensions */
+textarea{width:100%;min-height:150px;padding:12px;border:1px solid #e5d9bd;border-radius:8px;font-size:.92rem;font-family:ui-monospace,Menlo,monospace;background:#fffdf6;resize:vertical;line-height:1.5}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=number]{padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6;width:170px}
+input[type=number]:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+.err{background:#fdecea;border:1px solid #f5c2c0;color:#9b1c1c;border-radius:8px;padding:12px 14px;margin-top:1rem;font-size:.9rem;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace}
+.warn{background:#fff8ea;border:1px solid var(--amber);border-radius:8px;padding:12px 14px;margin-top:1rem;font-size:.9rem;color:#7a5203}
+table.res{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.95rem}
+table.res th,table.res td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+table.res th{background:#fff8ea;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+table.res td:last-child{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--amber-d)}
+.prog{height:8px;background:#f5ecd8;border-radius:999px;margin-top:1rem;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--amber);border-radius:999px;transition:width .1s}
+.hint{font-size:.85rem;color:var(--mut);font-weight:400;margin-top:.25rem}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>Benchmark Builder</span></nav>
+<main class="wrap">
+<h1>Benchmark Builder</h1>
+<p class="lede">Paste a JavaScript <b>function body</b> — <code>args</code> is available as a variable — pass arguments as JSON, and get <b>ops/sec</b> plus <b>average, min, and max</b> time per operation across 1k–1M iterations.</p>
+
+<div class="tool">
+  <label for="body">Function body (the code to measure — <code>args</code> is in scope)</label>
+  <textarea id="body" spellcheck="false">let s = 0;
+for (let i = 0; i < args.n; i++) s += Math.sqrt(i);
+return s;</textarea>
+
+  <label for="args">Arguments as JSON</label>
+  <input type="text" id="args" value='{"n": 1000}' spellcheck="false" autocomplete="off">
+
+  <label for="iters">Iterations (1,000 – 1,000,000)</label>
+  <input type="number" id="iters" min="1000" max="1000000" step="1000" value="100000">
+  <div class="hint">A short warmup runs first so the JIT compiler settles before timing starts.</div>
+
+  <div class="warn"><b>Heads up:</b> timing needs the main thread, so large runs can make this tab briefly unresponsive. The tool yields between chunks so you see progress — use fewer iterations for a quick result.</div>
+
+  <div class="btnrow">
+    <button id="run">Run benchmark</button>
+  </div>
+  <div class="prog" id="progWrap" hidden><i id="prog"></i></div>
+
+  <table class="res" id="resTable" hidden>
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Iterations</td><td id="rIters">—</td></tr>
+      <tr><td>Total time</td><td id="rTotal">—</td></tr>
+      <tr><td>Operations / second</td><td id="rOps">—</td></tr>
+      <tr><td>Average per op</td><td id="rAvg">—</td></tr>
+      <tr><td>Min per op</td><td id="rMin">—</td></tr>
+      <tr><td>Max per op</td><td id="rMax">—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="err" id="err" hidden></div>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Paste the code to measure as a <b>function body</b> — <code>args</code> is available as a variable.</li>
+    <li>Provide any inputs your snippet needs as a JSON object, e.g. <code>{"n": 1000}</code>.</li>
+    <li>Choose 1k–1M iterations and hit <b>Run benchmark</b> for ops/sec plus average, min, and max time per operation.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How it is measured</h2>
+  <p>Your snippet runs once per iteration inside a timed loop using <code>performance.now()</code>. A 500-iteration warmup runs first so the JIT compiler settles, then ops/sec, average, min, and max per-operation times are reported from the real run.</p>
+  <h2>Reading the numbers</h2>
+  <p><b>Ops/sec</b> is best for comparing two approaches; <b>average</b> is the typical cost; a large <b>max</b> usually means garbage collection or a slow first iteration slipped in. Re-run to confirm — real machines vary.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How is the benchmark measured?</summary><p>Your snippet runs once per iteration inside a timed loop using <code>performance.now()</code>. A short warmup phase runs first so the JIT compiler settles, then ops/sec, average, min, and max per-operation times are reported.</p></details>
+  <details><summary>Is it safe to run arbitrary code here?</summary><p>Your code runs only in your own browser tab via the Function constructor — nothing is sent anywhere. Only benchmark code you wrote or trust, and avoid infinite loops.</p></details>
+  <details><summary>Why does the tab freeze during a run?</summary><p>Timing requires the main thread, so large runs briefly block the page. The tool yields between chunks so you see progress, and you can use fewer iterations for a quicker result.</p></details>
+  <details><summary>Is this Benchmark Builder free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/js-runner/">JS Runner</a></li>
+    <li><a href="/toolhub/tools/javascript/">JavaScript Tools</a></li>
+    <li><a href="/toolhub/tools/json/">JSON Formatter</a></li>
+    <li><a href="/toolhub/tools/math-evaluator/">Math Evaluator</a></li>
+    <li><a href="/toolhub/tools/stopwatch/">Stopwatch</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var bodyEl=document.getElementById("body"),argsEl=document.getElementById("args"),
+    itersEl=document.getElementById("iters"),runBtn=document.getElementById("run"),
+    errBox=document.getElementById("err"),status=document.getElementById("status"),
+    resTable=document.getElementById("resTable"),progWrap=document.getElementById("progWrap"),
+    prog=document.getElementById("prog");
+
+var CHUNK=25000, WARMUP=500;
+
+function showError(msg){
+  errBox.hidden=false;
+  errBox.textContent=msg;
+  resTable.hidden=true;
+}
+function clearError(){errBox.hidden=true;errBox.textContent="";}
+
+function fmtMs(ms){
+  if(ms<1)return (ms*1000).toFixed(2)+" µs";
+  if(ms<1000)return ms.toFixed(3)+" ms";
+  return (ms/1000).toFixed(3)+" s";
+}
+function fmtInt(n){return n.toLocaleString("en-US");}
+
+function tick(){
+  return new Promise(function(res){setTimeout(res,0);});
+}
+
+function runBenchmark(){
+  clearError();
+  var body=bodyEl.value;
+  if(!body.trim()){
+    showError("Paste a function body first — there is nothing to measure.");
+    return;
+  }
+  var args;
+  try{
+    args=JSON.parse(argsEl.value);
+  }catch(e){
+    showError("Arguments are not valid JSON: "+e.message);
+    return;
+  }
+  var n=parseInt(itersEl.value,10);
+  if(isNaN(n)||n<1000||n>1000000){
+    showError("Iterations must be a number between 1,000 and 1,000,000.");
+    return;
+  }
+
+  var fn;
+  try{
+    /* new Function is used deliberately (never eval): it compiles the user's
+       snippet in its own scope so it cannot see page internals. */
+    fn=new Function("args","\"use strict\";\n"+body);
+  }catch(e){
+    showError("Could not compile your code: "+e.message);
+    return;
+  }
+
+  runBtn.disabled=true;
+  progWrap.hidden=false;
+  prog.style.width="0%";
+  status.textContent="Warming up…";
+
+  /* warmup outside the promise chain so JIT settles before timing */
+  var w;
+  try{
+    for(w=0;w<WARMUP;w++)fn(args);
+  }catch(e){
+    runBtn.disabled=false;progWrap.hidden=true;
+    showError("Your code threw an error during warmup: "+e.message);
+    return;
+  }
+
+  var i=0,total=0,min=Infinity,max=0;
+  function chunk(){
+    var end=Math.min(i+CHUNK,n);
+    var t0,t1,k;
+    try{
+      for(k=i;k<end;k++){
+        t0=performance.now();
+        fn(args);
+        t1=performance.now();
+        var d=t1-t0;
+        total+=d;
+        if(d<min)min=d;
+        if(d>max)max=d;
+      }
+    }catch(e){
+      runBtn.disabled=false;progWrap.hidden=true;
+      showError("Your code threw an error on iteration "+fmtInt(k+1)+": "+e.message);
+      return Promise.resolve();
+    }
+    i=end;
+    prog.style.width=Math.round((i/n)*100)+"%";
+    status.textContent="Running… "+fmtInt(i)+" / "+fmtInt(n);
+    if(i<n)return tick().then(chunk);
+    return Promise.resolve();
+  }
+
+  tick().then(chunk).then(function(){
+    if(errBox.hidden===false&&resTable.hidden)return; /* an error already fired */
+    runBtn.disabled=false;
+    progWrap.hidden=true;
+    var avg=total/n;
+    var ops=n/(total/1000);
+    document.getElementById("rIters").textContent=fmtInt(n);
+    document.getElementById("rTotal").textContent=fmtMs(total);
+    document.getElementById("rOps").textContent=fmtInt(Math.round(ops));
+    document.getElementById("rAvg").textContent=fmtMs(avg);
+    document.getElementById("rMin").textContent=fmtMs(min===Infinity?0:min);
+    document.getElementById("rMax").textContent=fmtMs(max);
+    resTable.hidden=false;
+    status.textContent="Done in "+fmtMs(total)+".";
+  });
+}
+
+runBtn.addEventListener("click",runBenchmark);
+})();
+</script>
+</body>
+</html>

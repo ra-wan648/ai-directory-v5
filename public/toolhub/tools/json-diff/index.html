@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>JSON Diff — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Compare two JSON documents and highlight the differences. Use the free online JSON Diff tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/json-diff/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="JSON Diff — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Compare two JSON documents and highlight the differences.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/json-diff/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JSON Diff — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Compare two JSON documents and highlight the differences.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"JSON Diff"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"JSON Diff","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Side-by-side JSON comparison, recursive nested diff with JSON paths, added/removed/changed color coding, parse error reporting","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/json/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/yaml/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/diff/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/xml/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to compare two JSON documents","step":[{"@type":"HowToStep","position":1,"name":"Paste the first JSON","text":"Paste your original JSON document into the left textarea."},{"@type":"HowToStep","position":2,"name":"Paste the second JSON","text":"Paste the modified JSON document into the right textarea."},{"@type":"HowToStep","position":3,"name":"Compare","text":"Click Compare to see added, removed, and changed values with their JSON paths, color coded for clarity."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the JSON Diff tool detect differences?","acceptedAnswer":{"@type":"Answer","text":"It parses both documents and recursively walks them, comparing keys, array items, and values. Differences are reported with JSON paths like $.user.address.city so you can locate each change."}},{"@type":"Question","name":"What do the colors mean in the diff output?","acceptedAnswer":{"@type":"Answer","text":"Green rows are values added in the second document, red rows were removed from the first, and amber rows changed value between the two."}},{"@type":"Question","name":"What happens if my JSON is invalid?","acceptedAnswer":{"@type":"Answer","text":"The tool validates each document before comparing and shows the exact parse error (with the browser's error message) so you can fix it."}},{"@type":"Question","name":"Is this JSON Diff free and private?","acceptedAnswer":{"@type":"Answer","text":"Yes — it is free, requires no signup, and all comparison happens locally in your browser. Your JSON never leaves your device."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8;--green:#15803d;--greenbg:#f0fdf4;--red:#b91c1c;--redbg:#fef2f2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+textarea{width:100%;min-height:180px;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:.9rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#fffdf6;resize:vertical}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+.collabel{font-weight:700;font-size:.92rem;margin-bottom:6px}
+.err{color:var(--red);font-size:.85rem;min-height:1.4em;margin-top:4px}
+#summary{margin-top:1rem;font-weight:700}
+.diff-list{margin-top:.6rem;list-style:none;max-height:480px;overflow:auto}
+.diff-row{display:flex;gap:10px;align-items:baseline;padding:8px 12px;border-radius:8px;margin-bottom:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85rem;word-break:break-all}
+.diff-row .path{font-weight:700;flex-shrink:0}
+.diff-row .chg{color:var(--mut)}
+.diff-row.added{background:var(--greenbg);border:1px solid #bbf7d0}
+.diff-row.added .path{color:var(--green)}
+.diff-row.removed{background:var(--redbg);border:1px solid #fecaca}
+.diff-row.removed .path{color:var(--red)}
+.diff-row.changed{background:#fffbeb;border:1px solid #fde68a}
+.diff-row.changed .path{color:var(--amber-d)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:.8rem;font-size:.85rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>JSON Diff</span></nav>
+<main class="wrap">
+<h1>JSON Diff</h1>
+<p class="lede">Compare two JSON documents and highlight the differences. Paste both documents below — added, removed, and changed values are listed with their JSON paths.</p>
+
+<div class="tool">
+  <div class="cols">
+    <div>
+      <div class="collabel">Original JSON (A)</div>
+      <textarea id="jsonA" spellcheck="false" placeholder='{"name": "Ada", "age": 30}'></textarea>
+      <div class="err" id="errA"></div>
+    </div>
+    <div>
+      <div class="collabel">Modified JSON (B)</div>
+      <textarea id="jsonB" spellcheck="false" placeholder='{"name": "Ada", "age": 31}'></textarea>
+      <div class="err" id="errB"></div>
+    </div>
+  </div>
+  <button id="compareBtn">Compare</button>
+  <div id="summary"></div>
+  <div class="legend" id="legend" style="display:none">
+    <span><span class="dot" style="background:#16a34a"></span>Added in B</span>
+    <span><span class="dot" style="background:#dc2626"></span>Removed from A</span>
+    <span><span class="dot" style="background:#E8940C"></span>Changed</span>
+  </div>
+  <ul class="diff-list" id="diffOut"></ul>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Paste your original JSON document into the left textarea.</li>
+    <li>Paste the modified JSON document into the right textarea.</li>
+    <li>Click <b>Compare</b> to see added, removed, and changed values with their JSON paths, color coded for clarity.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How differences are reported</h2>
+  <p>Both documents are parsed and walked recursively. Each difference is shown with its JSON path (for example, <code>$.users[0].email</code>), the kind of change, and the old and new values for changed items.</p>
+  <h2>Arrays and nested objects</h2>
+  <p>Arrays are compared index by index, and objects are compared key by key at any depth. A value that changed type (for example, an object becoming a string) is reported as a changed value.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How does the JSON Diff tool detect differences?</summary><p>It parses both documents and recursively walks them, comparing keys, array items, and values. Differences are reported with JSON paths like <code>$.user.address.city</code> so you can locate each change.</p></details>
+  <details><summary>What do the colors mean in the diff output?</summary><p>Green rows are values added in the second document, red rows were removed from the first, and amber rows changed value between the two.</p></details>
+  <details><summary>What happens if my JSON is invalid?</summary><p>The tool validates each document before comparing and shows the exact parse error (with the browser's error message) so you can fix it.</p></details>
+  <details><summary>Is this JSON Diff free and private?</summary><p>Yes — it is free, requires no signup, and all comparison happens locally in your browser. Your JSON never leaves your device.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/json/">JSON Formatter</a></li>
+    <li><a href="/toolhub/tools/yaml/">YAML Converter</a></li>
+    <li><a href="/toolhub/tools/diff/">Text Diff</a></li>
+    <li><a href="/toolhub/tools/xml/">XML Formatter</a></li>
+    <li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var jsonA=document.getElementById("jsonA"),jsonB=document.getElementById("jsonB"),
+    errA=document.getElementById("errA"),errB=document.getElementById("errB"),
+    diffOut=document.getElementById("diffOut"),summary=document.getElementById("summary"),
+    legend=document.getElementById("legend");
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function fmt(v){
+  if(v===undefined)return"—";
+  try{var s=JSON.stringify(v);return s===undefined?String(v):(s.length>300?s.slice(0,300)+"…":s);}
+  catch(e){return String(v);}
+}
+function isObj(v){return v!==null&&typeof v==="object"&&!Array.isArray(v);}
+function childPath(path,key,isArr){
+  if(isArr)return path+"["+key+"]";
+  return path+(/^[A-Za-z_$][\w$]*$/.test(key)?"."+key:'["'+key+'"]');
+}
+
+function walk(a,b,path,rows){
+  if(isObj(a)&&isObj(b)){
+    var keys={};
+    Object.keys(a).forEach(function(k){keys[k]=1;});
+    Object.keys(b).forEach(function(k){keys[k]=1;});
+    Object.keys(keys).forEach(function(k){
+      var p=childPath(path,k,false),ha=Object.prototype.hasOwnProperty.call(a,k),hb=Object.prototype.hasOwnProperty.call(b,k);
+      if(ha&&!hb)rows.push({type:"removed",path:p,old:a[k]});
+      else if(!ha&&hb)rows.push({type:"added",path:p,val:b[k]});
+      else walk(a[k],b[k],p,rows);
+    });
+  }else if(Array.isArray(a)&&Array.isArray(b)){
+    var n=Math.max(a.length,b.length);
+    for(var i=0;i<n;i++){
+      var p2=childPath(path,i,true);
+      if(i>=a.length)rows.push({type:"added",path:p2,val:b[i]});
+      else if(i>=b.length)rows.push({type:"removed",path:p2,old:a[i]});
+      else walk(a[i],b[i],p2,rows);
+    }
+  }else if(!Object.is(a,b)){
+    rows.push({type:"changed",path:path,old:a,val:b});
+  }
+}
+
+document.getElementById("compareBtn").addEventListener("click",function(){
+  errA.textContent="";errB.textContent="";diffOut.innerHTML="";summary.textContent="";legend.style.display="none";
+  var a,b,ok=true;
+  try{a=JSON.parse(jsonA.value);}catch(e){errA.textContent="Invalid JSON: "+e.message;ok=false;}
+  try{b=JSON.parse(jsonB.value);}catch(e){errB.textContent="Invalid JSON: "+e.message;ok=false;}
+  if(!ok)return;
+  var rows=[];
+  walk(a,b,"$",rows);
+  var added=0,removed=0,changed=0;
+  rows.forEach(function(r){
+    var li=document.createElement("li");
+    li.className="diff-row "+r.type;
+    var label=r.type.charAt(0).toUpperCase()+r.type.slice(1);
+    var body;
+    if(r.type==="changed"){changed++;body='<span class="chg">'+esc(fmt(r.old))+' → '+esc(fmt(r.val))+'</span>';}
+    else if(r.type==="added"){added++;body='<span class="chg">'+esc(fmt(r.val))+'</span>';}
+    else{removed++;body='<span class="chg">'+esc(fmt(r.old))+'</span>';}
+    li.innerHTML='<span class="path">'+esc(r.path)+'</span><span>'+esc(label)+'</span>'+body;
+    diffOut.appendChild(li);
+  });
+  legend.style.display="flex";
+  if(rows.length===0){
+    summary.textContent="No differences found — the two documents are identical.";
+  }else{
+    summary.textContent=rows.length+" difference"+(rows.length===1?"":"s")+" found: "+
+      added+" added · "+removed+" removed · "+changed+" changed.";
+  }
+});
+})();
+</script>
+</body>
+</html>

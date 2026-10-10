@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Bcrypt Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Generate real bcrypt password hashes with adjustable cost factor (4–14), and verify passwords against existing hashes. Use the free online Bcrypt Generator on AI Directory — no signup, no install, browser-first processing." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bcrypt-generator/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Bcrypt Generator — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Generate real bcrypt password hashes with adjustable cost factor (4–14), and verify passwords against existing hashes. Use the free online Bcrypt Generator on AI Directory — no signup, no install, browser-first processing." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bcrypt-generator/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Bcrypt Generator — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Generate real bcrypt password hashes with adjustable cost factor (4–14), and verify passwords against existing hashes. Use the free online Bcrypt Generator on AI Directory — no signup, no install, browser-first processing." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Developer", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Bcrypt Generator", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bcrypt-generator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Bcrypt Generator \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/bcrypt-generator/", "applicationCategory": "DeveloperApplication", "operatingSystem": "Any (browser-based)", "description": "Generate real bcrypt password hashes with adjustable cost factor (4\u201314), and verify passwords against existing hashes. Use the free online Bcrypt Generator on AI Directory \u2014 no signup, no install, browser-first processing.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Password Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password/"}, {"@type": "SoftwareApplication", "name": "Password Strength Analyser", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password-strength-analyser/"}, {"@type": "SoftwareApplication", "name": "Hash Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hash/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Bcrypt Generator", "description": "Generate real bcrypt password hashes with adjustable cost factor (4\u201314), and verify passwords against existing hashes. Use the free online Bcrypt Generator on AI Directory \u2014 no signup, no install, browser-first processing.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Enter a password and pick a cost factor", "text": "Type the password, choose a cost factor (10 is the recommended default; each step up doubles the work), then click Generate hash."}, {"@type": "HowToStep", "position": 2, "name": "Copy the resulting hash", "text": "The 60-character $2b$ hash appears below. Use Copy hash to paste it into your database or config file."}, {"@type": "HowToStep", "position": 3, "name": "Verify any time", "text": "Paste an existing bcrypt hash plus a candidate password in the verify section and hit Verify password to get a definitive match or no-match."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is bcrypt still a good choice for password hashing?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. bcrypt with a cost factor of 10\u201312 remains a solid, widely-audited choice for password storage. Newer memory-hard options like Argon2id exist, but bcrypt is still recommended by OWASP when Argon2 is unavailable."}}, {"@type": "Question", "name": "Does my password leave my browser when I generate a hash?", "acceptedAnswer": {"@type": "Answer", "text": "No. This page loads the bcrypt.js library and runs the entire hashing computation locally in your browser. Nothing you type is uploaded, logged, or stored."}}, {"@type": "Question", "name": "What cost factor should I choose?", "acceptedAnswer": {"@type": "Answer", "text": "10 is the safe default and what most frameworks use. Use 12 for production login systems if your server can spare ~250ms per login. Each increment doubles the computation time, which slows attackers the same way."}}, {"@type": "Question", "name": "Which hash formats can the verifier check?", "acceptedAnswer": {"@type": "Answer", "text": "Standard 60-character bcrypt hashes: $2a$, $2b$ and $2y$ prefixes, all interoperable. Paste the full hash string exactly as stored."}}]}
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/bcryptjs@3.0.2/umd/index.min.js"></script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.danger{background:#dc2626}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+table.data{width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.95rem}
+table.data th,table.data td{border:1px solid var(--line);padding:.5rem .6rem;text-align:right}
+table.data th{background:var(--amber-soft)}
+table.data td:first-child,table.data th:first-child{text-align:left}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.badge{display:inline-block;background:var(--amber);color:#fff;font-size:.75rem;font-weight:800;border-radius:999px;padding:.15rem .6rem;margin-left:.4rem;vertical-align:middle}
+.note{font-size:.88rem;color:var(--muted)}
+pre.out{white-space:pre-wrap;word-break:break-all;background:#111827;color:#f9fafb;border-radius:10px;padding:.9rem 1rem;font-size:.88rem;line-height:1.55;margin:.75rem 0 0}
+textarea.mono,input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.msg{margin-top:.75rem;font-weight:700}
+.msg.err{color:var(--red)}
+.msg.okm{color:var(--green)}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.tabs button{background:#f3f4f6;color:#111827}
+.tabs button.active{background:var(--amber);color:#fff}
+.badge-ok{display:inline-block;background:#dcfce7;color:#15803d;border-radius:999px;padding:.15rem .7rem;font-weight:800;font-size:.85rem}
+.badge-no{display:inline-block;background:#fee2e2;color:#b91c1c;border-radius:999px;padding:.15rem .7rem;font-weight:800;font-size:.85rem}
+.kv td:first-child{font-weight:700;white-space:nowrap;width:9rem}
+.copyrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem}
+.spin{display:inline-block;width:1rem;height:1rem;border:2px solid #f3f4f6;border-top:2px solid var(--amber);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:.4rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+</style>
+</head>
+<body>
+<header class="site no-print"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Developer</span> / <span>Bcrypt Generator</span></nav>
+<h1>Bcrypt Generator</h1>
+<p class="lead">Generate and verify real bcrypt password hashes entirely in your browser with the battle-tested bcrypt.js library. Your passwords are never uploaded or stored anywhere.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<h2 style="margin-top:0">Generate a bcrypt hash</h2>
+<label class="f" for="bcPw">Password</label>
+<input type="password" id="bcPw" class="mono" placeholder="Enter the password to hash" autocomplete="new-password">
+<label class="f" for="bcCost">Cost factor (rounds)</label>
+<select id="bcCost">
+<option value="4">4 \u2014 very fast, testing only</option>
+<option value="6">6 \u2014 fast, testing only</option>
+<option value="8">8 \u2014 moderate</option>
+<option value="10" selected>10 \u2014 recommended default</option>
+<option value="12">12 \u2014 strong (production)</option>
+<option value="14">14 \u2014 very strong, slow</option>
+</select>
+<div class="btnrow"><button id="bcGen">Generate hash</button><button class="ghost" id="bcShow">Show password</button></div>
+<div class="msg" id="bcMsg" role="status"></div>
+<pre class="out" id="bcOut" style="display:none"></pre>
+<div class="copyrow" id="bcCopyRow" style="display:none"><button class="ghost sm" id="bcCopy">Copy hash</button></div>
+<p class="note">Higher cost = stronger hash but slower generation. Cost 14 can take several seconds.</p>
+<hr style="border:none;border-top:1px solid var(--line);margin:1.5rem 0">
+<h2 style="margin-top:0">Verify a password against a hash</h2>
+<label class="f" for="bcHash">Existing bcrypt hash</label>
+<textarea id="bcHash" class="mono" rows="2" placeholder="$2b$10$..."></textarea>
+<label class="f" for="bcPw2">Password to check</label>
+<input type="password" id="bcPw2" class="mono" placeholder="Candidate password" autocomplete="new-password">
+<div class="btnrow"><button id="bcVerify">Verify password</button></div>
+<div class="msg" id="bcVMsg" role="status"></div>
+
+</section>
+<h2>How to use Bcrypt Generator</h2>
+<ol><li><strong>Enter a password and pick a cost factor</strong> — Type the password, choose a cost factor (10 is the recommended default; each step up doubles the work), then click Generate hash.</li><li><strong>Copy the resulting hash</strong> — The 60-character $2b$ hash appears below. Use Copy hash to paste it into your database or config file.</li><li><strong>Verify any time</strong> — Paste an existing bcrypt hash plus a candidate password in the verify section and hit Verify password to get a definitive match or no-match.</li></ol>
+<div class="infowrap">
+<section><h2>What is Bcrypt Generator?</h2><p>Bcrypt Generator creates real bcrypt password hashes — the salted, adaptive hashes used by virtually every web framework for storing passwords — and verifies candidate passwords against existing hashes.</p></section><section><h2>How this developer tool works</h2><p>It loads bcrypt.js from a CDN and calls its hash and compare functions directly in your browser, with the cost factor you select (4–14). Verification uses bcrypt's constant-time comparison, exactly like a server would.</p></section><section><h2>Privacy and limits</h2><p>All computation is local; closing the tab erases everything. Very high cost factors (14) can take several seconds and briefly use one CPU core. If the CDN fails to load, the tool shows an error instead of a fake result.</p></section>
+</div>
+<h2>Bcrypt Generator — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>Is bcrypt still a good choice for password hashing?</summary><p>Yes. bcrypt with a cost factor of 10–12 remains a solid, widely-audited choice for password storage. Newer memory-hard options like Argon2id exist, but bcrypt is still recommended by OWASP when Argon2 is unavailable.</p></details><details><summary>Does my password leave my browser when I generate a hash?</summary><p>No. This page loads the bcrypt.js library and runs the entire hashing computation locally in your browser. Nothing you type is uploaded, logged, or stored.</p></details><details><summary>What cost factor should I choose?</summary><p>10 is the safe default and what most frameworks use. Use 12 for production login systems if your server can spare ~250ms per login. Each increment doubles the computation time, which slows attackers the same way.</p></details><details><summary>Which hash formats can the verifier check?</summary><p>Standard 60-character bcrypt hashes: $2a$, $2b$ and $2y$ prefixes, all interoperable. Paste the full hash string exactly as stored.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/password/">Password Generator</a></li><li><a href="/toolhub/tools/password-strength-analyser/">Password Strength Analyser</a></li><li><a href="/toolhub/tools/hash/">Hash Generator</a></li><li><a href="/toolhub/tools/basic-auth-generator/">Basic Auth Generator</a></li><li><a href="/toolhub/tools/token-generator/">Token Generator</a></li><li><a href="/toolhub/tools/otp-generator/">OTP/TOTP Generator</a></li></ul></nav>
+</main>
+<footer class="site no-print"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+
+const $=id=>document.getElementById(id);
+function bcMsg(t,cls){const m=$("bcMsg");m.textContent=t;m.className="msg"+(cls?" "+cls:"");}
+function bcVMsg(t,cls){const m=$("bcVMsg");m.textContent=t;m.className="msg"+(cls?" "+cls:"");}
+function bcReady(){if(typeof bcrypt==="undefined"){bcMsg("Hashing library failed to load \u2014 check your connection and reload the page.","err");return false;}return true;}
+$("bcShow").addEventListener("click",()=>{const p=$("bcPw");p.type=p.type==="password"?"text":"password";$("bcShow").textContent=p.type==="password"?"Show password":"Hide password";});
+$("bcGen").addEventListener("click",()=>{
+  if(!bcReady())return;
+  const pw=$("bcPw").value;
+  if(!pw){bcMsg("Enter a password first.","err");return;}
+  const cost=parseInt($("bcCost").value,10);
+  bcMsg("","");$("bcOut").style.display="none";$("bcCopyRow").style.display="none";
+  const btn=$("bcGen");btn.disabled=true;btn.innerHTML='<span class="spin"></span>Hashing\u2026';
+  setTimeout(()=>{
+    try{
+      bcrypt.hash(pw,cost,(err,hash)=>{
+        btn.disabled=false;btn.textContent="Generate hash";
+        if(err||!hash){bcMsg("Hashing failed: "+(err&&err.message||"unknown error"),"err");return;}
+        $("bcOut").textContent=hash;$("bcOut").style.display="block";$("bcCopyRow").style.display="flex";
+        bcMsg("Hash generated with cost "+cost+".","okm");
+      });
+    }catch(e){btn.disabled=false;btn.textContent="Generate hash";bcMsg("Hashing failed: "+e.message,"err");}
+  },30);
+});
+$("bcCopy").addEventListener("click",async()=>{
+  const t=$("bcOut").textContent;let ok=false;
+  try{await navigator.clipboard.writeText(t);ok=true;}catch(e){
+    const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();
+    try{ok=document.execCommand("copy");}catch(_){} ta.remove();
+  }
+  $("bcCopy").textContent=ok?"Copied!":"Copy failed";
+  setTimeout(()=>{$("bcCopy").textContent="Copy hash";},1500);
+});
+$("bcVerify").addEventListener("click",()=>{
+  if(!bcReady())return;
+  const h=$("bcHash").value.trim(),pw=$("bcPw2").value;
+  if(!h||!pw){bcVMsg("Paste a hash and enter the password to check.","err");return;}
+  if(!/^\$2[aby]\$\d{2}\$[\.\/A-Za-z0-9]{53}$/.test(h)){bcVMsg("That does not look like a valid bcrypt hash (expected $2a$/$2b$/$2y$ + 60 chars).","err");return;}
+  bcVMsg("Verifying\u2026","");
+  setTimeout(()=>{
+    try{
+      bcrypt.compare(pw,h,(err,res)=>{
+        if(err){bcVMsg("Verification error: "+err.message,"err");return;}
+        bcVMsg(res?"\u2714 MATCH \u2014 the password is correct.":"\u2718 NO MATCH \u2014 the password does not match this hash.",res?"okm":"err");
+      });
+    }catch(e){bcVMsg("Verification error: "+e.message,"err");}
+  },30);
+});
+
+</script>
+</body>
+</html>

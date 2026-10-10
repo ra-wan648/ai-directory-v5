@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Email Normalizer — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Clean bulk email lists — lowercase, trim, Gmail dot and plus-tag rules, googlemail.com merging, and dedupe, with a per-line change log. Use the free online Email Normalizer tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/email-normalizer/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Email Normalizer — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Clean bulk email lists — lowercase, trim, Gmail dot and plus-tag rules, googlemail.com merging, and dedupe.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/email-normalizer/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Email Normalizer — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Clean bulk email lists — lowercase, trim, Gmail dot and plus-tag rules, googlemail.com merging, and dedupe.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Writing","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Email Normalizer"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Email Normalizer","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Bulk email normalization, Gmail dot and plus-tag rules, googlemail.com merging, duplicate removal, per-line change log","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/dedupe/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/list-converter/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/csv/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/case/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to normalize a bulk email list","step":[{"@type":"HowToStep","position":1,"name":"Paste your list","text":"Paste one email address per line into the input box."},{"@type":"HowToStep","position":2,"name":"Normalize","text":"Hit Normalize list — addresses are lowercased, trimmed, Gmail dots and +tags are removed, and duplicates are dropped."},{"@type":"HowToStep","position":3,"name":"Review and copy","text":"Check the per-line change log, then copy the clean list for your mail tool."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What Gmail rules are applied?","acceptedAnswer":{"@type":"Answer","text":"For gmail.com addresses (and googlemail.com, which is merged to gmail.com): dots are removed from the local part and everything from the first plus sign is stripped, because Gmail treats first.last+tag@gmail.com as identical to firstlast@gmail.com."}},{"@type":"Question","name":"How are duplicates detected?","acceptedAnswer":{"@type":"Answer","text":"Duplicates are detected after normalization, so First.Last+promo@Gmail.com and firstlast@gmail.com count as the same address. The first occurrence is kept and later ones are listed as duplicates."}},{"@type":"Question","name":"What makes an address invalid?","acceptedAnswer":{"@type":"Answer","text":"A line is invalid if it has no @ sign, more than one @ sign, an empty local part, or a domain without a dot. Invalid lines are skipped and listed in the change log."}},{"@type":"Question","name":"Is this Email Normalizer free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup. Your email list never leaves your device."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6;min-height:110px;resize:vertical}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+.variant{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;background:#fffdf6}
+.variant .vname{font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--amber-d);text-transform:uppercase;margin-bottom:4px}
+.variant .vrow{display:flex;gap:10px;align-items:flex-start}
+.variant .vval{flex:1;font-size:1.25rem;font-weight:700;word-break:break-word;min-height:1.6em}
+.variant .vrow button{margin-top:0;padding:8px 14px;font-size:.85rem;white-space:nowrap}
+.variant .vdesc{font-size:.85rem;color:var(--mut)}
+table.log{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:1rem}
+table.log th,table.log td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-all}
+table.log th{color:var(--amber-d);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+pre.snippet{background:#fdf6e9;border:1px dashed var(--amber);color:#7c4d03;padding:12px 14px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88rem;white-space:pre-wrap;word-break:break-all;margin-top:.6rem}
+.outhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:1.2rem}
+.outhead h3{font-size:1.05rem}
+.outhead button{margin-top:0;padding:7px 14px;font-size:.85rem}
+.declabel{font-size:.85rem;font-weight:700;color:var(--mut);margin-top:.8rem}
+.tag{display:inline-block;background:#fdf0d7;color:#7c4d03;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:700;margin:1px 2px}
+.tag.dup{background:#fde8e8;color:#a33}
+.tag.invalid{background:#fde8e8;color:#a33}
+.tag.ok{background:#e6f6e9;color:#1c6b2a}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.variant .vrow{flex-direction:column}.variant .vrow button{align-self:flex-start}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Writing</a> / <span>Email Normalizer</span></nav>
+<main class="wrap">
+<h1>Email Normalizer</h1>
+<p class="lede">Paste a bulk email list and get a clean one back — lowercased, trimmed, Gmail dots and +tags removed, googlemail.com merged, duplicates dropped — with a per-line change log.</p>
+
+<div class="tool">
+  <label for="emailsIn">Email list (one per line)</label>
+  <textarea id="emailsIn" style="min-height:150px" placeholder="one address per line">First.Last+promo@Gmail.com
+firstlast@gmail.com
+  Jane.Doe@Googlemail.com
+BOB@Example.COM
+bob@example.com
+not-an-email
+user@localhost
+support@example.com </textarea>
+
+  <div class="btnrow">
+    <button id="normBtn">Normalize list</button>
+    <button class="ghost" id="copyClean">Copy clean list</button>
+    <button class="ghost" id="clearBtn">Clear</button>
+  </div>
+
+  <div class="meta" id="stats">
+    <span>Lines: <b id="stLines">0</b></span>
+    <span>Valid unique: <b id="stValid">0</b></span>
+    <span>Duplicates removed: <b id="stDup">0</b></span>
+    <span>Invalid: <b id="stInv">0</b></span>
+  </div>
+
+  <label for="emailsOut">Clean list</label>
+  <textarea id="emailsOut" readonly style="min-height:110px" placeholder="Normalized, deduplicated addresses appear here"></textarea>
+
+  <label>Per-line change log</label>
+  <table class="log">
+    <thead><tr><th>#</th><th>Original</th><th>Result</th><th>Changes</th></tr></thead>
+    <tbody id="logBody"><tr><td colspan="4" style="color:var(--mut)">Hit "Normalize list" to see the change log.</td></tr></tbody>
+  </table>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Paste one email address per line into the input box.</li>
+    <li>Hit <b>Normalize list</b> — addresses are lowercased, trimmed, Gmail dots and +tags removed, and duplicates dropped.</li>
+    <li>Review the per-line change log, then copy the clean list into your mail tool or spreadsheet.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>What normalization does</h2>
+  <p>Every line is trimmed and lowercased. For Gmail addresses (<code>gmail.com</code>, plus <code>googlemail.com</code> which is merged to gmail.com), dots are removed from the local part and everything from the first <code>+</code> is stripped — because Gmail treats <code>first.last+tag@gmail.com</code> as identical to <code>firstlast@gmail.com</code>. Duplicates are detected after normalization, so differently-written variants of the same inbox collapse into one.</p>
+  <h2>Your list stays private</h2>
+  <p>Normalization runs entirely in your browser. Your email list is never uploaded, stored, or sent anywhere.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What Gmail rules are applied?</summary><p>For gmail.com addresses (and googlemail.com, which is merged to gmail.com): dots are removed from the local part and everything from the first plus sign is stripped, because Gmail treats first.last+tag@gmail.com as identical to firstlast@gmail.com.</p></details>
+  <details><summary>How are duplicates detected?</summary><p>Duplicates are detected after normalization, so First.Last+promo@Gmail.com and firstlast@gmail.com count as the same address. The first occurrence is kept and later ones are listed as duplicates.</p></details>
+  <details><summary>What makes an address invalid?</summary><p>A line is invalid if it has no @ sign, more than one @ sign, an empty local part, or a domain without a dot. Invalid lines are skipped and listed in the change log.</p></details>
+  <details><summary>Is this Email Normalizer free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup. Your email list never leaves your device.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/dedupe/">Dedupe Lines</a></li>
+    <li><a href="/toolhub/tools/list-converter/">List Converter</a></li>
+    <li><a href="/toolhub/tools/csv/">CSV Tools</a></li>
+    <li><a href="/toolhub/tools/case/">Case Converter</a></li>
+    <li><a href="/toolhub/tools/diff/">Text Diff</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var inEl=document.getElementById("emailsIn"),outEl=document.getElementById("emailsOut"),
+    logBody=document.getElementById("logBody"),status=document.getElementById("status");
+
+function normalizeLine(raw){
+  var changes=[],v=raw.trim();
+  if(v!==raw)changes.push("trimmed");
+  var low=v.toLowerCase();
+  if(low!==v)changes.push("lowercased");
+  v=low;
+  var atCount=(v.match(/@/g)||[]).length;
+  if(atCount!==1)return{ok:false,changes:["invalid: "+(atCount===0?"no @ sign":"multiple @ signs")]};
+  var parts=v.split("@"),local=parts[0],domain=parts[1];
+  if(!local)return{ok:false,changes:["invalid: empty local part"]};
+  if(domain.indexOf(".")<0)return{ok:false,changes:["invalid: domain has no dot"]};
+  if(domain==="googlemail.com"){domain="gmail.com";changes.push("googlemail.com → gmail.com");}
+  if(domain==="gmail.com"){
+    var noDots=local.replace(/\./g,"");
+    if(noDots!==local)changes.push("removed dots (Gmail)");
+    local=noDots;
+    var plus=local.indexOf("+");
+    if(plus>=0){local=local.slice(0,plus);changes.push("removed +tag (Gmail)");}
+    if(!local)return{ok:false,changes:["invalid: empty local part after +tag removal"]};
+  }
+  return{ok:true,value:local+"@"+domain,changes:changes};
+}
+
+function normalize(){
+  var lines=inEl.value.split(/\r?\n/);
+  var seen={},clean=[],rows=[];
+  var dup=0,inv=0,lineNo=0;
+  logBody.innerHTML="";
+  for(var i=0;i<lines.length;i++){
+    if(!lines[i].trim())continue;
+    lineNo++;
+    var r=normalizeLine(lines[i]);
+    var tr=document.createElement("tr");
+    var tdN=document.createElement("td");tdN.textContent=String(lineNo);
+    var tdO=document.createElement("td");tdO.textContent=lines[i].trim();
+    var tdR=document.createElement("td");
+    var tdC=document.createElement("td");
+    if(!r.ok){
+      inv++;
+      tdR.textContent="—";
+      var tInv=document.createElement("span");tInv.className="tag invalid";tInv.textContent=r.changes[0];
+      tdC.appendChild(tInv);
+    }else if(seen[r.value]){
+      dup++;
+      tdR.textContent=r.value;
+      var tDup=document.createElement("span");tDup.className="tag dup";tDup.textContent="duplicate of line "+seen[r.value];
+      tdC.appendChild(tDup);
+    }else{
+      seen[r.value]=lineNo;
+      clean.push(r.value);
+      tdR.textContent=r.value;
+      if(r.changes.length===0){
+        var tOk=document.createElement("span");tOk.className="tag ok";tOk.textContent="no change";
+        tdC.appendChild(tOk);
+      }else{
+        for(var j=0;j<r.changes.length;j++){
+          var t=document.createElement("span");t.className="tag";t.textContent=r.changes[j];
+          tdC.appendChild(t);
+        }
+      }
+    }
+    tr.appendChild(tdN);tr.appendChild(tdO);tr.appendChild(tdR);tr.appendChild(tdC);
+    logBody.appendChild(tr);
+  }
+  outEl.value=clean.join("\n");
+  document.getElementById("stLines").textContent=String(lineNo);
+  document.getElementById("stValid").textContent=String(clean.length);
+  document.getElementById("stDup").textContent=String(dup);
+  document.getElementById("stInv").textContent=String(inv);
+  status.textContent=lineNo?("Done: "+clean.length+" unique, "+dup+" duplicates, "+inv+" invalid."):"Paste some addresses first.";
+}
+
+function copyClean(){
+  var t=outEl.value;
+  function done(){status.textContent="Clean list copied ("+t.split("\n").length+" addresses).";}
+  function fail(){status.textContent="Copy failed — select the text manually.";}
+  if(!t){status.textContent="Nothing to copy yet — normalize first.";return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,fail);
+  }else{
+    outEl.select();
+    try{document.execCommand("copy");done();}catch(e){fail();}
+  }
+}
+
+document.getElementById("normBtn").addEventListener("click",normalize);
+document.getElementById("copyClean").addEventListener("click",copyClean);
+document.getElementById("clearBtn").addEventListener("click",function(){
+  inEl.value="";outEl.value="";status.textContent="";
+  logBody.innerHTML='<tr><td colspan="4" style="color:var(--mut)">Hit "Normalize list" to see the change log.</td></tr>';
+});
+})();
+</script>
+</body>
+</html>

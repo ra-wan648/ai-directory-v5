@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Basic Auth Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Encode username and password into an HTTP Basic Auth header. Use the free online Basic Auth Generator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/basic-auth-generator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Basic Auth Generator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Encode username and password into an HTTP Basic Auth header.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/basic-auth-generator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Basic Auth Generator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Encode username and password into an HTTP Basic Auth header.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Basic Auth Generator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Basic Auth Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"UTF-8 safe base64 encoding, Authorization header builder, Basic header decoder, copy to clipboard","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base64/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/jwt/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/curl/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/http-status/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to generate a Basic Auth header","step":[{"@type":"HowToStep","position":1,"name":"Enter credentials","text":"Type your username and password (Unicode characters are supported)."},{"@type":"HowToStep","position":2,"name":"Get the header","text":"The Authorization: Basic header is generated live with correct UTF-8 base64 encoding."},{"@type":"HowToStep","position":3,"name":"Copy it","text":"Copy the header and paste it into your HTTP client, curl command, or API test."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is HTTP Basic Auth?","acceptedAnswer":{"@type":"Answer","text":"HTTP Basic Authentication sends a username and password as a base64-encoded 'username:password' pair in the Authorization header. It is simple but should only be used over HTTPS."}},{"@type":"Question","name":"Is base64 encoding the same as encryption?","acceptedAnswer":{"@type":"Answer","text":"No. Base64 is just an encoding — anyone can decode it instantly. Basic Auth must always be used over HTTPS so the credentials cannot be read in transit."}},{"@type":"Question","name":"Does this tool handle non-ASCII characters?","acceptedAnswer":{"@type":"Answer","text":"Yes. Credentials are encoded as UTF-8 bytes before base64, so usernames and passwords with Unicode characters work correctly."}},{"@type":"Question","name":"Is this Basic Auth Generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+input[type=text],input[type=password],textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+input:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+textarea{min-height:90px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;resize:vertical}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+.tabs{display:flex;gap:8px;margin-bottom:.4rem}
+.tabs button{margin-top:0;background:#f3ede0;color:var(--ink);padding:9px 18px}
+.tabs button.active{background:var(--amber);color:#fff}
+pre.code{background:#1f2937;color:#f9fafb;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem}
+pre.code .hl{color:#fbbf24}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:8px;margin-top:1rem;font-size:.95rem}
+.kv dt{font-weight:700;color:var(--mut)}
+.kv dd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+.err{color:#b91c1c;font-size:.88rem;margin-top:.4rem;min-height:1.3em}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.hidden{display:none}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.kv{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>Basic Auth Generator</span></nav>
+<main class="wrap">
+<h1>Basic Auth Generator</h1>
+<p class="lede">Encode username and password into an HTTP Basic Auth header. Switch to decode mode to turn a header back into credentials.</p>
+
+<div class="tool">
+  <div class="tabs">
+    <button id="tabEnc" class="active">Encode</button>
+    <button id="tabDec">Decode</button>
+  </div>
+
+  <div id="paneEnc">
+    <label for="user">Username</label>
+    <input type="text" id="user" placeholder="api-user" autocomplete="off">
+    <label for="pass">Password</label>
+    <input type="password" id="pass" placeholder="s3cr3t" autocomplete="off">
+    <label>Authorization header</label>
+    <pre class="code" id="encOut"><span class="hl">Authorization:</span> Basic </pre>
+    <button id="copyEnc">Copy header</button>
+  </div>
+
+  <div id="paneDec" class="hidden">
+    <label for="decIn">Paste a Basic header (the full header or just the base64 part)</label>
+    <textarea id="decIn" spellcheck="false" placeholder="Authorization: Basic dXNlcjpwYXNz"></textarea>
+    <div class="err" id="decErr"></div>
+    <dl class="kv" id="decKv" style="display:none">
+      <dt>Username</dt><dd id="decUser"></dd>
+      <dt>Password</dt><dd id="decPass"></dd>
+    </dl>
+    <button id="copyDec">Copy username:password</button>
+  </div>
+
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Type your username and password — Unicode characters are supported.</li>
+    <li>The <code>Authorization: Basic</code> header is generated live with correct UTF-8 base64 encoding.</li>
+    <li>Click <b>Copy header</b> and paste it into your HTTP client, curl command, or API test.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How Basic Auth works</h2>
+  <p>The client joins the username and password with a colon (<code>username:password</code>), encodes the result as UTF-8 bytes, base64-encodes those bytes, and sends them in the <code>Authorization</code> header prefixed with <code>Basic</code>.</p>
+  <h2>A note on security</h2>
+  <p>Base64 is an encoding, not encryption — anyone can decode a Basic header instantly. Always use Basic Auth over HTTPS, and prefer API tokens or OAuth for sensitive integrations.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is HTTP Basic Auth?</summary><p>HTTP Basic Authentication sends a username and password as a base64-encoded "username:password" pair in the Authorization header. It is simple but should only be used over HTTPS.</p></details>
+  <details><summary>Is base64 encoding the same as encryption?</summary><p>No. Base64 is just an encoding — anyone can decode it instantly. Basic Auth must always be used over HTTPS so the credentials cannot be read in transit.</p></details>
+  <details><summary>Does this tool handle non-ASCII characters?</summary><p>Yes. Credentials are encoded as UTF-8 bytes before base64, so usernames and passwords with Unicode characters work correctly.</p></details>
+  <details><summary>Is this Basic Auth Generator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li>
+    <li><a href="/toolhub/tools/jwt/">JWT Decoder</a></li>
+    <li><a href="/toolhub/tools/curl/">cURL Builder</a></li>
+    <li><a href="/toolhub/tools/http-status/">HTTP Status Codes</a></li>
+    <li><a href="/toolhub/tools/hash/">Hash Generator</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var userEl=document.getElementById("user"),passEl=document.getElementById("pass"),
+    encOut=document.getElementById("encOut"),status=document.getElementById("status"),
+    decIn=document.getElementById("decIn"),decErr=document.getElementById("decErr"),
+    decKv=document.getElementById("decKv"),decUser=document.getElementById("decUser"),
+    decPass=document.getElementById("decPass");
+var encText="",decPair="";
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function utf8ToB64(str){
+  var bytes=new TextEncoder().encode(str),bin="";
+  for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64ToUtf8(b64){
+  var bin=atob(b64),bytes=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function updateEncode(){
+  encText="Basic "+utf8ToB64(userEl.value+":"+passEl.value);
+  encOut.innerHTML='<span class="hl">Authorization:</span> '+esc(encText);
+}
+function updateDecode(){
+  decErr.textContent="";decKv.style.display="none";decPair="";
+  var raw=decIn.value.trim();
+  if(!raw)return;
+  var m=raw.match(/^\s*(?:Authorization\s*:\s*)?Basic\s+([A-Za-z0-9+/=]+)\s*$/i);
+  if(!m){decErr.textContent="Could not find a base64 token — paste the full header or just the base64 part.";return;}
+  try{
+    var pair=b64ToUtf8(m[1]);
+    var idx=pair.indexOf(":");
+    if(idx<0){decErr.textContent="Decoded value has no username:password separator.";return;}
+    decPair=pair;
+    decUser.textContent=pair.slice(0,idx);
+    decPass.textContent=pair.slice(idx+1);
+    decKv.style.display="grid";
+  }catch(e){
+    decErr.textContent="Invalid base64: "+e.message;
+  }
+}
+
+function copyText(txt,okMsg){
+  function done(){status.textContent=okMsg;}
+  if(!txt){status.textContent="Nothing to copy yet.";return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done,function(){status.textContent="Copy failed — select the text manually.";});
+  }else{
+    var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){status.textContent="Copy failed — select the text manually.";}
+    document.body.removeChild(ta);
+  }
+}
+
+var tabEnc=document.getElementById("tabEnc"),tabDec=document.getElementById("tabDec"),
+    paneEnc=document.getElementById("paneEnc"),paneDec=document.getElementById("paneDec");
+tabEnc.addEventListener("click",function(){
+  tabEnc.classList.add("active");tabDec.classList.remove("active");
+  paneEnc.classList.remove("hidden");paneDec.classList.add("hidden");
+});
+tabDec.addEventListener("click",function(){
+  tabDec.classList.add("active");tabEnc.classList.remove("active");
+  paneDec.classList.remove("hidden");paneEnc.classList.add("hidden");
+});
+
+userEl.addEventListener("input",updateEncode);
+passEl.addEventListener("input",updateEncode);
+decIn.addEventListener("input",updateDecode);
+document.getElementById("copyEnc").addEventListener("click",function(){
+  copyText("Authorization: "+encText,"Header copied.");
+});
+document.getElementById("copyDec").addEventListener("click",function(){
+  copyText(decPair,"username:password copied.");
+});
+
+updateEncode();
+})();
+</script>
+</body>
+</html>

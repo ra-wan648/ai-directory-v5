@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Video to GIF Converter — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Turn any video clip into a high-quality animated GIF with custom start time, duration, frame rate and size. Use the free online Video to GIF Converter tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-gif/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Video to GIF Converter — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Turn any video clip into a high-quality animated GIF with custom start time, duration, frame rate and size.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-gif/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Video to GIF Converter — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Turn any video clip into a high-quality animated GIF with custom start time, duration, frame rate and size.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Video tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Video to GIF Converter","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-gif/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Video to GIF Converter","url":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-gif/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (browser-based)","description":"Turn any video clip into a high-quality animated GIF with custom start time, duration, frame rate and size.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isAccessibleForFree":true,"isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-compressor/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-mp3/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/meme-generator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to convert a video to GIF","description":"Turn any video clip into a high-quality animated GIF with custom start time, duration, frame rate and size.","totalTime":"PT2M","step":[{"@type":"HowToStep","position":1,"name":"Pick a video file","text":"Choose an MP4, WebM or MOV file from your device. Nothing is uploaded — the file stays in your browser."},{"@type":"HowToStep","position":2,"name":"Set the clip options","text":"Enter the start time and duration in seconds, then choose a frame rate (10 or 15 fps) and width (320 or 480 px)."},{"@type":"HowToStep","position":3,"name":"Convert and download","text":"Click Convert to GIF. The FFmpeg engine (loaded on first use, cached after) builds a palette-optimized GIF and your download starts automatically."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the video to GIF converter free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Video to GIF Converter on AI Directory is completely free — no account, no watermark, and no limit on how many clips you convert."}},{"@type":"Question","name":"Does my video get uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. The FFmpeg engine runs entirely in your browser via WebAssembly. Your video file never leaves your device."}},{"@type":"Question","name":"Why does the conversion use two passes?","acceptedAnswer":{"@type":"Answer","text":"The tool first generates a color palette from your exact clip (palettegen), then renders the GIF using that palette (paletteuse). This two-pass method produces noticeably better colors and less banding than a single-pass conversion."}},{"@type":"Question","name":"How long can the GIF be?","acceptedAnswer":{"@type":"Answer","text":"The duration is capped at 30 seconds. GIFs get very large quickly, so for small file sizes use a short duration, 10 fps and 320 px width."}}]}
+</script>
+<script type="importmap">
+{"imports":{
+"@ffmpeg/ffmpeg":"https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/+esm",
+"@ffmpeg/util":"https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm",
+"@ffmpeg/core":"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/+esm"
+}}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus,input:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button:disabled{opacity:.6;cursor:wait}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+a.dl{display:inline-block;background:var(--amber);color:#fff;padding:11px 20px;border-radius:8px;font-weight:700;text-decoration:none;margin-top:.5rem}
+a.dl:hover{background:var(--amber-d)}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:1.2rem;text-align:center;background:#fffdf5;margin:.6rem 0}
+input[type=file]{font-size:1rem;max-width:100%}
+.note{font-size:.88rem;color:var(--mut)}
+.status{font-weight:600;margin:.7rem 0;min-height:1.4em}
+.status.err{color:#b91c1c}
+.status.ok{color:#15803d}
+.prog{height:14px;background:#e5e7eb;border-radius:7px;overflow:hidden;margin:.4rem 0}
+.prog>div{height:100%;width:0;background:var(--amber);transition:width .25s;border-radius:7px}
+.warnbox{display:none;background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;border-radius:10px;padding:.7rem 1rem;margin:.7rem 0;font-size:.92rem;font-weight:600}
+.res{background:#fef3c7;border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.2rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Video tools</a> / <span>Video to GIF Converter</span></nav>
+<main class="wrap">
+<h1>Video to GIF Converter</h1>
+<p class="lede">Turn any video clip into a high-quality animated GIF with custom start time, duration, frame rate and size. The whole conversion runs inside your browser with FFmpeg — your video is never uploaded anywhere.</p>
+
+<div class="tool">
+  <div class="drop">
+    <label for="file">Choose a video file (MP4, WebM, MOV)</label>
+    <input type="file" id="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov">
+    <p class="note">Max recommended size: 500 MB. Your file never leaves your device.</p>
+  </div>
+  <div class="warnbox" id="warn"></div>
+  <div class="grid2">
+    <div>
+      <label for="start">Start time (seconds)</label>
+      <input type="number" id="start" min="0" step="0.1" value="0">
+    </div>
+    <div>
+      <label for="dur">Duration (seconds, max 30)</label>
+      <input type="number" id="dur" min="0.5" max="30" step="0.5" value="3">
+    </div>
+    <div>
+      <label for="fps">Frame rate</label>
+      <select id="fps">
+        <option value="10">10 fps (smaller file)</option>
+        <option value="15" selected>15 fps (smoother)</option>
+      </select>
+    </div>
+    <div>
+      <label for="width">Width</label>
+      <select id="width">
+        <option value="320">320 px (smaller file)</option>
+        <option value="480" selected>480 px (sharper)</option>
+      </select>
+    </div>
+  </div>
+  <div class="btnrow"><button id="go">Convert to GIF</button></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="prog" aria-hidden="true"><div id="bar"></div></div>
+  <p class="note" id="barLabel">0%</p>
+  <div class="res" id="result" hidden></div>
+  <p class="note">The video engine (~30 MB) loads only when you press the button — once. It is cached in your browser after the first run, so later uses start instantly.</p>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li><b>Pick a video file</b> — choose an MP4, WebM or MOV file from your device. Nothing is uploaded.</li>
+    <li><b>Set the clip options</b> — enter the start time and duration in seconds, then choose a frame rate (10 or 15 fps) and width (320 or 480 px).</li>
+    <li><b>Convert and download</b> — click <b>Convert to GIF</b>. The engine builds a palette-optimized GIF and your download starts automatically.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>Why this GIF converter uses two passes</h2>
+  <p>GIFs can only hold 256 colors, so picking the right palette decides the quality. This tool first analyzes your exact clip with <code>palettegen</code>, then renders the GIF with <code>paletteuse</code> against that custom palette — producing noticeably cleaner colors and less banding than a single-pass conversion.</p>
+  <h2>Tips for small, high-quality GIFs</h2>
+  <p>GIF file size grows with duration, frame rate and width. For a GIF that loads fast anywhere, keep clips under 5 seconds at 10 fps and 320 px. Use 15 fps and 480 px when smoothness and sharpness matter more than file size.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>Is the video to GIF converter free?</summary><p>Yes. The Video to GIF Converter on AI Directory is completely free — no account, no watermark, and no limit on how many clips you convert.</p></details>
+  <details><summary>Does my video get uploaded to a server?</summary><p>No. The FFmpeg engine runs entirely in your browser via WebAssembly. Your video file never leaves your device.</p></details>
+  <details><summary>Why does the conversion use two passes?</summary><p>The tool first generates a color palette from your exact clip (palettegen), then renders the GIF using that palette (paletteuse). This two-pass method produces noticeably better colors and less banding than a single-pass conversion.</p></details>
+  <details><summary>How long can the GIF be?</summary><p>The duration is capped at 30 seconds. GIFs get very large quickly, so for small file sizes use a short duration, 10 fps and 320 px width.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/video-compressor/">Video Compressor</a></li>
+    <li><a href="/toolhub/tools/video-trimmer/">Video Trimmer</a></li>
+    <li><a href="/toolhub/tools/video-to-mp3/">Video to MP3 Converter</a></li>
+    <li><a href="/toolhub/tools/meme-generator/">Meme Generator</a></li>
+    <li><a href="/toolhub/tools/youtube-thumbnail/">YouTube Thumbnail Maker</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script type="module">
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util';
+
+(function(){
+"use strict";
+
+var CORE_BASE='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+var MAX_WARN=500*1024*1024;
+var GO_LABEL='Convert to GIF';
+
+function $(id){return document.getElementById(id);}
+var ffmpeg=null, engineReady=false, engineLoading=null;
+
+function fmtSize(b){
+  if(b<1024) return b+' B';
+  var u=['KB','MB','GB'],i=-1;
+  do{b/=1024;i++;}while(b>=1024&&i<u.length-1);
+  return b.toFixed(1)+' '+u[i];
+}
+function setStatus(msg,cls){
+  var el=$('status');
+  el.textContent=msg;
+  el.className='status'+(cls?' '+cls:'');
+}
+function setBusy(b){
+  var go=$('go');
+  go.disabled=b;
+  go.textContent=b?'Working…':GO_LABEL;
+}
+async function loadEngine(){
+  if(engineReady) return;
+  if(engineLoading){await engineLoading;return;}
+  engineLoading=(async function(){
+    setStatus('Loading video engine (~30 MB, first run only)…');
+    ffmpeg=new FFmpeg();
+    ffmpeg.on('progress',function(ev){
+      var p=Math.max(0,Math.min(100,Math.round((ev.progress||0)*100)));
+      $('bar').style.width=p+'%';
+      $('barLabel').textContent=p+'%';
+      setStatus('Processing… '+p+'%');
+    });
+    var coreURL=await toBlobURL(CORE_BASE+'/ffmpeg-core.js','text/javascript');
+    var wasmURL=await toBlobURL(CORE_BASE+'/ffmpeg-core.wasm','application/wasm');
+    await ffmpeg.load({coreURL:coreURL,wasmURL:wasmURL});
+    engineReady=true;
+  })();
+  await engineLoading;
+}
+function cleanExt(name,fallback){
+  var m=String(name||'').split('.').pop().toLowerCase().replace(/[^a-z0-9]/g,'');
+  return m||fallback;
+}
+function baseName(name){
+  return String(name||'output').replace(/\.[^.]+$/,'')||'output';
+}
+async function safeDelete(n){
+  try{await ffmpeg.deleteFile(n);}catch(e){/* ignore */}
+}
+function offerDownload(data,filename,mime){
+  var url=URL.createObjectURL(new Blob([data],{type:mime}));
+  var a=document.createElement('a');
+  a.href=url;a.download=filename;a.className='dl';
+  a.textContent='Download '+filename;
+  var r=$('result');
+  r.hidden=false;r.innerHTML='';
+  r.appendChild(a);
+  setTimeout(function(){a.click();},60);
+}
+function checkFile(file){
+  if(!file){setStatus('Please choose a video file first.','err');return false;}
+  if(file.size>MAX_WARN){
+    $('warn').style.display='block';
+    $('warn').textContent='Warning: this file is over 500 MB. Conversion may be very slow or run out of memory in the browser. Consider a smaller file.';
+  }else{$('warn').style.display='none';}
+  return true;
+}
+
+$('go').addEventListener('click',async function(){
+  $('result').innerHTML='';$('result').hidden=true;
+  var file=$('file').files[0];
+  if(!checkFile(file)) return;
+  var start=parseFloat($('start').value);
+  if(isNaN(start)||start<0) start=0;
+  var dur=parseFloat($('dur').value);
+  if(isNaN(dur)||dur<=0){setStatus('Enter a duration greater than 0 seconds.','err');return;}
+  if(dur>30){dur=30;$('dur').value='30';setStatus('Duration capped at 30 seconds.','err');}
+  var fps=$('fps').value;
+  var width=$('width').value;
+  setBusy(true);
+  $('bar').style.width='0%';$('barLabel').textContent='0%';
+  try{
+    await loadEngine();
+    var ext=cleanExt(file.name,'mp4');
+    var inName='input.'+ext;
+    await ffmpeg.writeFile(inName,await fetchFile(file));
+    var vf='fps='+fps+',scale='+width+':-1:flags=lanczos';
+    setStatus('Pass 1/2 — analyzing colors…');
+    await ffmpeg.exec(['-ss',String(start),'-t',String(dur),'-i',inName,'-vf',vf+',palettegen','palette.png']);
+    setStatus('Pass 2/2 — rendering GIF…');
+    await ffmpeg.exec(['-ss',String(start),'-t',String(dur),'-i',inName,'-i','palette.png','-lavfi',vf+' [x]; [x][1:v] paletteuse','output.gif']);
+    var data=await ffmpeg.readFile('output.gif');
+    await safeDelete(inName);await safeDelete('palette.png');await safeDelete('output.gif');
+    offerDownload(data,baseName(file.name)+'.gif','image/gif');
+    setStatus('Done! GIF ready ('+fmtSize(data.length)+', '+fps+' fps, '+width+' px).','ok');
+  }catch(e){
+    setStatus('Conversion failed: '+(e&&e.message?e.message:e),'err');
+  }finally{setBusy(false);}
+});
+
+})();
+</script>
+</body>
+</html>

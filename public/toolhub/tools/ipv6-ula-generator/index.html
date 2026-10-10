@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>IPv6 ULA Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Generate RFC 4193 IPv6 Unique Local Addresses — fd00::/8 prefixes with a crypto-random 40-bit global ID, plus suggested /64 subnets. Use the free online IPv6 ULA Generator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ipv6-ula-generator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="IPv6 ULA Generator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Generate RFC 4193 IPv6 Unique Local Addresses with a crypto-random 40-bit global ID, plus suggested /64 subnets.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ipv6-ula-generator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IPv6 ULA Generator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Generate RFC 4193 IPv6 Unique Local Addresses with a crypto-random 40-bit global ID, plus suggested /64 subnets.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"IPv6 ULA Generator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"IPv6 ULA Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"RFC 4193 compliant ULA prefixes, 40-bit cryptographically random global ID, /48 site prefix display, suggested /64 subnets, per-row copy buttons","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/uuid/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/token-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-number/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/crontab-generator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to generate an IPv6 ULA prefix","step":[{"@type":"HowToStep","position":1,"name":"Generate a prefix","text":"Hit Generate to draw a fresh 40-bit random global ID from the Web Crypto API and build an fd00::/8 /48 prefix."},{"@type":"HowToStep","position":2,"name":"Copy the /48 site prefix","text":"Use the copy button next to the prefix, e.g. fd12:3456:789a::/48."},{"@type":"HowToStep","position":3,"name":"Pick subnets","text":"Copy any of the suggested /64 subnets for your VLANs, labs, or router advertisements."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is an IPv6 ULA?","acceptedAnswer":{"@type":"Answer","text":"A Unique Local Address (RFC 4193) is IPv6's equivalent of private IPv4 space (like 10.0.0.0/8). ULAs live in fd00::/8, are not routable on the public internet, and are meant for private networks."}},{"@type":"Question","name":"Why must the 40-bit global ID be random?","acceptedAnswer":{"@type":"Answer","text":"RFC 4193 requires a pseudo-random global ID so that two independently generated ULA prefixes are overwhelmingly unlikely to collide — which is what makes them 'unique' when networks merge."}},{"@type":"Question","name":"What is the difference between a /48 and a /64?","acceptedAnswer":{"@type":"Answer","text":"The /48 is your site prefix (16 bits of subnet space follow it). Each /64 is a single link/subnet carved out of that /48 — the standard subnet size for one network segment in IPv6."}},{"@type":"Question","name":"Is this IPv6 ULA Generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* tool-specific extensions */
+.prefix{font-family:ui-monospace,Menlo,monospace;font-size:1.5rem;font-weight:700;color:var(--amber-d);word-break:break-all}
+.subrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.subrow code{font-family:ui-monospace,Menlo,monospace;font-size:1rem;background:#fff8ea;border:1px solid var(--line);border-radius:6px;padding:6px 10px;flex:1;min-width:220px;word-break:break-all}
+.subrow button{margin-top:0;padding:7px 14px;font-size:.85rem}
+.sublabel{font-size:.85rem;color:var(--mut);min-width:150px}
+.bigrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:.6rem}
+.bigrow button{margin-top:0}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>IPv6 ULA Generator</span></nav>
+<main class="wrap">
+<h1>IPv6 ULA Generator</h1>
+<p class="lede">Generate an <b>RFC 4193</b> Unique Local Address prefix: <code>fd</code> plus a cryptographically random 40-bit global ID. You get a <code>/48</code> site prefix and suggested <code>/64</code> subnets for your private network.</p>
+
+<div class="tool">
+  <div class="btnrow">
+    <button id="gen">Generate new prefix</button>
+  </div>
+
+  <label>Your /48 site prefix</label>
+  <div class="bigrow">
+    <span class="prefix" id="prefix">—</span>
+    <button class="ghost" id="copyPrefix">Copy</button>
+  </div>
+  <div class="meta">
+    <span>Global ID (40-bit): <b id="gid">—</b></span>
+    <span>Subnets available: <b>65,536</b> /64s</span>
+  </div>
+
+  <label>Suggested /64 subnets</label>
+  <div id="subs"></div>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Hit <b>Generate new prefix</b> to draw a fresh 40-bit random global ID from the Web Crypto API and build an <code>fd00::/8</code> /48 prefix.</li>
+    <li>Copy the /48 site prefix (e.g. <code>fd12:3456:789a::/48</code>) for your site or lab.</li>
+    <li>Copy any of the suggested /64 subnets for your VLANs, labs, or router advertisements.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>What is a ULA?</h2>
+  <p>A Unique Local Address (RFC 4193) is IPv6's equivalent of private IPv4 space such as <code>10.0.0.0/8</code>. ULAs live in <code>fd00::/8</code>, are never routable on the public internet, and are meant for private networks, labs, and VPNs.</p>
+  <h2>Why the global ID must be random</h2>
+  <p>RFC 4193 requires the 40-bit global ID to be pseudo-random so that two independently generated prefixes are overwhelmingly unlikely to collide — that is what makes them "unique" when companies merge networks or connect VPNs. This tool draws those 40 bits from <code>crypto.getRandomValues()</code>.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is an IPv6 ULA?</summary><p>A Unique Local Address (RFC 4193) is IPv6's equivalent of private IPv4 space (like <code>10.0.0.0/8</code>). ULAs live in <code>fd00::/8</code>, are not routable on the public internet, and are meant for private networks.</p></details>
+  <details><summary>Why must the 40-bit global ID be random?</summary><p>RFC 4193 requires a pseudo-random global ID so that two independently generated ULA prefixes are overwhelmingly unlikely to collide — which is what makes them "unique" when networks merge.</p></details>
+  <details><summary>What is the difference between a /48 and a /64?</summary><p>The /48 is your site prefix (16 bits of subnet space follow it). Each /64 is a single link/subnet carved out of that /48 — the standard subnet size for one network segment in IPv6.</p></details>
+  <details><summary>Is this IPv6 ULA Generator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/uuid/">UUID Generator</a></li>
+    <li><a href="/toolhub/tools/token-generator/">Token Generator</a></li>
+    <li><a href="/toolhub/tools/random-number/">Random Number</a></li>
+    <li><a href="/toolhub/tools/crontab-generator/">Cron Generator</a></li>
+    <li><a href="/toolhub/tools/password/">Password Generator</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var prefixEl=document.getElementById("prefix"),gidEl=document.getElementById("gid"),
+    subsEl=document.getElementById("subs"),status=document.getElementById("status");
+
+function hex2(b){var s=b.toString(16);return s.length<2?"0"+s:s;}
+
+function copyText(text,doneMsg){
+  function done(){status.textContent=doneMsg;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done,function(){status.textContent="Copy failed — select the text manually.";});
+  }else{
+    var ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){status.textContent="Copy failed — select the text manually.";}
+    document.body.removeChild(ta);
+  }
+}
+
+function generate(){
+  /* RFC 4193: 7 bits prefix 1111110 (fd) + 1 bit L=1 + 40-bit random global ID */
+  var b=new Uint8Array(5);
+  crypto.getRandomValues(b);
+  var g1=hex2(b[0]),g2=hex2(b[1])+hex2(b[2]),g3=hex2(b[3])+hex2(b[4]);
+  var base="fd"+g1+":"+g2+":"+g3;
+  var prefix=base+"::/48";
+  prefixEl.textContent=prefix;
+  gidEl.textContent="0x"+g1+g2+g3;
+
+  var labels=["Infrastructure / management","Servers","Workstations","Guest / IoT"];
+  var html="",i;
+  for(i=0;i<4;i++){
+    var sub="000"+i;
+    var net=base+":"+sub+"::/64";
+    html+='<div class="subrow"><span class="sublabel">'+labels[i]+'</span><code>'+net+'</code><button class="ghost" data-copy="'+net+'">Copy</button></div>';
+  }
+  subsEl.innerHTML=html;
+  status.textContent="New ULA prefix generated.";
+}
+
+subsEl.addEventListener("click",function(e){
+  var btn=e.target.closest("button[data-copy]");
+  if(!btn)return;
+  copyText(btn.getAttribute("data-copy"),"Copied: "+btn.getAttribute("data-copy"));
+});
+document.getElementById("copyPrefix").addEventListener("click",function(){
+  copyText(prefixEl.textContent,"Copied: "+prefixEl.textContent);
+});
+document.getElementById("gen").addEventListener("click",generate);
+
+generate();
+})();
+</script>
+</body>
+</html>

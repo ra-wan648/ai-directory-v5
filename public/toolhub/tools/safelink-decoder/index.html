@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Safe Link Decoder — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Decode adfly-style safe links and shortened URLs to reveal the real destination. Use the free online Safe Link Decoder tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/safelink-decoder/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Safe Link Decoder — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Decode adfly-style safe links and shortened URLs to reveal the real destination.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/safelink-decoder/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Safe Link Decoder — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Decode adfly-style safe links and shortened URLs to reveal the real destination.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Safe Link Decoder"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Safe Link Decoder","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Multi-pass decoding of safe links, base64 and base64url layer unwrapping, URL-encoding unwrapping, redirect wrapper detection, decode chain display","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/url-decode/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/url-parser/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base64/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base64-decode/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to decode a safe link","step":[{"@type":"HowToStep","position":1,"name":"Paste the safe link","text":"Copy the shortened or adfly-style link you received and paste it into the input box."},{"@type":"HowToStep","position":2,"name":"Decode the layers","text":"Press Decode — the tool unwraps base64 layers, URL-encoded layers, and redirect wrappers repeatedly until the final URL is stable."},{"@type":"HowToStep","position":3,"name":"Inspect the destination","text":"Review the decode chain to see every layer, then copy the final destination URL."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a safe link?","acceptedAnswer":{"@type":"Answer","text":"A safe link is a shortened or wrapped URL (like adfly-style links or redirect-service URLs) that hides the real destination behind encodings and redirect parameters, often to show ads or track clicks first."}},{"@type":"Question","name":"Why decode a safe link before visiting it?","acceptedAnswer":{"@type":"Answer","text":"Decoding shows you the true destination before you click, so you can spot phishing, malware, or unexpected domains and decide whether the link is trustworthy."}},{"@type":"Question","name":"Can it resolve every short link?","acceptedAnswer":{"@type":"Answer","text":"It unwraps every encoding layer and redirect parameter present in the link itself. Short links that need a server round-trip to resolve (like a plain bit.ly code) cannot be expanded in the browser alone; the tool will say so."}},{"@type":"Question","name":"Is this Safe Link Decoder free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* --- tool-specific --- */
+textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:.95rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#fffdf6;min-height:96px;resize:vertical}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+.chain{margin-top:1rem}
+.chain ol{list-style:none}
+.chain li{background:#fffdf6;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:.5rem;font-size:.9rem}
+.chain .steplabel{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--amber);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.chain code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;color:var(--ink)}
+.finalbox{margin-top:1rem}
+.finalbox pre.code{color:#6ee7b7}
+.warn{background:#fff7e8;border:1px solid var(--amber);border-radius:8px;padding:12px 16px;margin-top:1rem;font-size:.9rem;color:#7a4a00}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>Safe Link Decoder</span></nav>
+<main class="wrap">
+<h1>Safe Link Decoder</h1>
+<p class="lede">Paste an adfly-style "safe link" or shortened URL to peel back every encoding layer — base64, URL-encoding, and redirect wrappers — and reveal the real destination before you visit it.</p>
+
+<div class="tool">
+  <label for="in">Paste the safe link</label>
+  <textarea id="in" placeholder="https://www.google.com/url?q=https%3A%2F%2Fexample.com%2Fpage" spellcheck="false"></textarea>
+  <div class="btnrow">
+    <button id="decodeBtn">Decode link</button>
+    <button class="ghost" id="clearBtn">Clear</button>
+  </div>
+
+  <div class="chain" id="chainWrap" hidden>
+    <label>Decode chain</label>
+    <ol id="chain"></ol>
+  </div>
+
+  <div class="finalbox" id="finalWrap" hidden>
+    <label>Final destination</label>
+    <pre class="code" id="finalOut"></pre>
+    <div class="btnrow">
+      <button class="ghost" id="copyBtn">Copy destination URL</button>
+    </div>
+  </div>
+
+  <div class="warn" id="note" hidden></div>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Copy the shortened or adfly-style link you received and paste it into the box above.</li>
+    <li>Press <b>Decode link</b> — the tool unwraps base64 layers, URL-encoded layers, and redirect wrappers repeatedly until the URL is stable.</li>
+    <li>Review the <b>decode chain</b> to see every layer that was peeled off, then copy the final destination URL.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>How multi-pass decoding works</h2>
+  <p>Each pass tries three unwraps in order: (1) redirect wrappers — known query parameters like <code>q</code>, <code>url</code>, <code>u</code>, <code>target</code>, <code>dest</code>, or <code>redirect</code> found on search-engine and social-media redirect links; (2) percent-encoding via <code>decodeURIComponent</code>; (3) base64/base64url blocks via <code>atob</code>. Passes repeat until nothing changes, up to 12 layers deep, with loop protection.</p>
+  <h2>Limits of browser-only decoding</h2>
+  <p>Everything encoded <i>inside</i> the link itself can be unwrapped. A bare short-link code can only be expanded by asking that service's server, which browsers cannot do without extra permissions — for those, the tool will stop and tell you exactly where it got stuck.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a safe link?</summary><p>A safe link is a shortened or wrapped URL (like adfly-style links or redirect-service URLs) that hides the real destination behind encodings and redirect parameters, often to show ads or track clicks first.</p></details>
+  <details><summary>Why decode a safe link before visiting it?</summary><p>Decoding shows you the true destination before you click, so you can spot phishing, malware, or unexpected domains and decide whether the link is trustworthy.</p></details>
+  <details><summary>Can it resolve every short link?</summary><p>It unwraps every encoding layer and redirect parameter present in the link itself. Short links that need a server round-trip to resolve (like a plain bit.ly code) cannot be expanded in the browser alone; the tool will say so.</p></details>
+  <details><summary>Is this Safe Link Decoder free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/url-decode/">URL Decoder</a></li>
+    <li><a href="/toolhub/tools/url-parser/">URL Parser</a></li>
+    <li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li>
+    <li><a href="/toolhub/tools/base64-decode/">Base64 Decoder</a></li>
+    <li><a href="/toolhub/tools/hash/">Hash Generator</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var inEl=document.getElementById("in"),chainWrap=document.getElementById("chainWrap"),
+    chainEl=document.getElementById("chain"),finalWrap=document.getElementById("finalWrap"),
+    finalOut=document.getElementById("finalOut"),noteEl=document.getElementById("note"),
+    status=document.getElementById("status");
+var REDIR_PARAMS=["q","url","u","target","dest","destination","redirect","to","next","r","ref","link","continue"];
+var MAX_PASSES=12;
+
+function looksLikeUrl(v){
+  return /^(https?:\/\/|www\.)/i.test(v)||/[a-z0-9-]+\.[a-z]{2,}(\/|$|\?)/i.test(v);
+}
+
+function unwrapOnce(s){
+  try{
+    var u=new URL(s);
+    for(var i=0;i<REDIR_PARAMS.length;i++){
+      var v=u.searchParams.get(REDIR_PARAMS[i]);
+      if(v&&looksLikeUrl(v)&&v!==s){
+        return {label:"Redirect wrapper (\""+REDIR_PARAMS[i]+"\" parameter)",value:v};
+      }
+    }
+  }catch(e){}
+  var m=s.match(/(?:^|[?&#;])(?:q|url|u|target|dest|destination|redirect)=(https?%3A%2F%2F[^&;#]+)/i);
+  if(m){
+    try{
+      var dv=decodeURIComponent(m[1]);
+      if(dv!==s)return {label:"Embedded redirect parameter",value:dv};
+    }catch(e2){}
+  }
+  if(/%[0-9A-Fa-f]{2}/.test(s)){
+    try{
+      var d=decodeURIComponent(s);
+      if(d!==s)return {label:"URL-decoding",value:d};
+    }catch(e3){}
+  }
+  var stripped=s.replace(/\s+/g,"");
+  var norm=stripped.replace(/-/g,"+").replace(/_/g,"/");
+  if(/^[A-Za-z0-9+/]+={0,2}$/.test(norm)&&norm.length>=12&&norm.length%4!==1){
+    try{
+      var pad=norm;while(pad.length%4)pad+="=";
+      var bin=atob(pad);
+      if(bin.length>=3){
+        var printable=0;
+        for(var j=0;j<bin.length;j++){
+          var c=bin.charCodeAt(j);
+          if(c===9||c===10||c===13||(c>=32&&c<=126))printable++;
+        }
+        var decoded;
+        try{decoded=decodeURIComponent(escape(bin));}catch(e4){decoded=bin;}
+        if(printable/bin.length>0.85&&decoded!==s){
+          return {label:"Base64 decoding",value:decoded};
+        }
+      }
+    }catch(e5){}
+  }
+  return null;
+}
+
+function decodeAll(raw){
+  var steps=[{label:"Original input",value:raw}];
+  var seen={};seen[raw]=true;
+  var cur=raw;
+  for(var p=0;p<MAX_PASSES;p++){
+    var nxt=unwrapOnce(cur);
+    if(!nxt)break;
+    if(seen[nxt.value])break;
+    seen[nxt.value]=true;
+    cur=nxt.value;
+    steps.push(nxt);
+  }
+  return {steps:steps,final:cur};
+}
+
+function decode(){
+  var raw=inEl.value.trim();
+  chainEl.innerHTML="";noteEl.hidden=true;finalWrap.hidden=true;chainWrap.hidden=true;
+  if(!raw){status.textContent="Paste a link first.";return;}
+  var res=decodeAll(raw);
+  chainWrap.hidden=false;
+  for(var i=0;i<res.steps.length;i++){
+    var li=document.createElement("li");
+    var lab=document.createElement("span");lab.className="steplabel";
+    lab.textContent=(i===0?"Input":("Layer "+i))+" \u00B7 "+res.steps[i].label;
+    var code=document.createElement("code");code.textContent=res.steps[i].value;
+    li.appendChild(lab);li.appendChild(code);chainEl.appendChild(li);
+  }
+  if(res.steps.length===1){
+    status.textContent="No decodable layers found \u2014 showing the input as-is.";
+  }else{
+    status.textContent="Decoded "+(res.steps.length-1)+" layer(s).";
+  }
+  finalWrap.hidden=false;
+  finalOut.textContent=res.final;
+  var shortHost=/^(https?:\/\/)?(bit\.ly|tinyurl\.com|t\.co|goo\.gl|ow\.ly|is\.gd|buff\.ly|adf\.ly|shorte\.st)(\/|$)/i;
+  if(!looksLikeUrl(res.final)||shortHost.test(res.final)){
+    noteEl.hidden=false;
+    noteEl.textContent="Heads up: the final result is still a short-link service host. Expanding it needs a server request, which this browser-only tool cannot make \u2014 paste the full redirect URL (the one with encoded parameters) for a deeper decode.";
+  }
+}
+
+document.getElementById("decodeBtn").addEventListener("click",decode);
+document.getElementById("clearBtn").addEventListener("click",function(){
+  inEl.value="";chainEl.innerHTML="";chainWrap.hidden=true;finalWrap.hidden=true;
+  noteEl.hidden=true;status.textContent="";
+});
+document.getElementById("copyBtn").addEventListener("click",function(){
+  var t=finalOut.textContent;
+  function done(){status.textContent="Destination URL copied ("+t.length+" chars).";}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,function(){status.textContent="Copy failed \u2014 select the text manually.";});
+  }else{
+    var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){status.textContent="Copy failed \u2014 select the text manually.";}
+    document.body.removeChild(ta);
+  }
+});
+})();
+</script>
+</body>
+</html>

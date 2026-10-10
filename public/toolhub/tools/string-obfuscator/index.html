@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>String Obfuscator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Obfuscate JavaScript strings into char-code arrays, hex escapes, unicode escapes, and base64 — each with a ready-to-paste decoder snippet. Use the free online String Obfuscator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/string-obfuscator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="String Obfuscator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Obfuscate JavaScript strings into char-code arrays, hex escapes, unicode escapes, and base64 — each with a ready-to-paste decoder snippet.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/string-obfuscator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="String Obfuscator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Obfuscate JavaScript strings into char-code arrays, hex escapes, unicode escapes, and base64 — each with a ready-to-paste decoder snippet.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Writing","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"String Obfuscator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"String Obfuscator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Char-code array obfuscation, hex escape obfuscation, unicode escape obfuscation, base64 obfuscation, ready-to-paste decoder snippets","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/base64/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hex-text/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-unicode/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/text-encryption/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to obfuscate a JavaScript string","step":[{"@type":"HowToStep","position":1,"name":"Paste your string","text":"Enter the string you want to hide inside your JavaScript code."},{"@type":"HowToStep","position":2,"name":"Pick an obfuscation style","text":"Choose char-code array, hex escapes, unicode escapes, or base64 — each is generated instantly."},{"@type":"HowToStep","position":3,"name":"Copy output and decoder","text":"Copy the obfuscated expression and the matching decoder snippet, then paste both into your code."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is string obfuscation secure?","acceptedAnswer":{"@type":"Answer","text":"No. Obfuscation only hides a string from casual reading — anyone can decode it. Never use it for passwords, API keys, or secrets; use real encryption or server-side storage instead."}},{"@type":"Question","name":"Which obfuscation style should I use?","acceptedAnswer":{"@type":"Answer","text":"Char-code arrays and hex escapes are the most readable to decode and widely supported. Unicode escapes work in any JS string context. Base64 produces the most compact output but needs TextDecoder/atob to decode."}},{"@type":"Question","name":"Does the tool run eval on my string?","acceptedAnswer":{"@type":"Answer","text":"No. The tool never evaluates or executes your input; it only transforms characters into escape sequences and displays the result as text."}},{"@type":"Question","name":"Is this String Obfuscator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6;min-height:110px;resize:vertical}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+.variant{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;background:#fffdf6}
+.variant .vname{font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--amber-d);text-transform:uppercase;margin-bottom:4px}
+.variant .vrow{display:flex;gap:10px;align-items:flex-start}
+.variant .vval{flex:1;font-size:1.25rem;font-weight:700;word-break:break-word;min-height:1.6em}
+.variant .vrow button{margin-top:0;padding:8px 14px;font-size:.85rem;white-space:nowrap}
+.variant .vdesc{font-size:.85rem;color:var(--mut)}
+table.log{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:1rem}
+table.log th,table.log td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-all}
+table.log th{color:var(--amber-d);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+pre.snippet{background:#fdf6e9;border:1px dashed var(--amber);color:#7c4d03;padding:12px 14px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88rem;white-space:pre-wrap;word-break:break-all;margin-top:.6rem}
+.outhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:1.2rem}
+.outhead h3{font-size:1.05rem}
+.outhead button{margin-top:0;padding:7px 14px;font-size:.85rem}
+.declabel{font-size:.85rem;font-weight:700;color:var(--mut);margin-top:.8rem}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.variant .vrow{flex-direction:column}.variant .vrow button{align-self:flex-start}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Writing</a> / <span>String Obfuscator</span></nav>
+<main class="wrap">
+<h1>String Obfuscator</h1>
+<p class="lede">Turn a JavaScript string into a hard-to-read expression — char-code array, hex escapes, unicode escapes, or base64. Each form ships with a ready-to-paste decoder snippet.</p>
+
+<div class="tool">
+  <label for="src">String to obfuscate</label>
+  <textarea id="src">Hello, World! 👋</textarea>
+
+  <div class="outhead"><h3>1. Char-code array</h3><button class="ghost" data-out="o1">Copy</button></div>
+  <pre class="code" id="o1"></pre>
+  <div class="declabel">Decoder snippet (paste into your code):</div>
+  <pre class="snippet" id="d1"></pre>
+
+  <div class="outhead"><h3>2. Hex escapes</h3><button class="ghost" data-out="o2">Copy</button></div>
+  <pre class="code" id="o2"></pre>
+  <div class="declabel">Decoder snippet (paste into your code):</div>
+  <pre class="snippet" id="d2"></pre>
+
+  <div class="outhead"><h3>3. Unicode escapes</h3><button class="ghost" data-out="o3">Copy</button></div>
+  <pre class="code" id="o3"></pre>
+  <div class="declabel">Decoder snippet (paste into your code):</div>
+  <pre class="snippet" id="d3"></pre>
+
+  <div class="outhead"><h3>4. Base64</h3><button class="ghost" data-out="o4">Copy</button></div>
+  <pre class="code" id="o4"></pre>
+  <div class="declabel">Decoder snippet (paste into your code):</div>
+  <pre class="snippet" id="d4"></pre>
+
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Paste the string you want to hide inside your JavaScript code.</li>
+    <li>All four obfuscated forms are generated instantly — char-code array, hex escapes, unicode escapes, and base64.</li>
+    <li>Copy any obfuscated expression plus its matching decoder snippet, and paste both into your code.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>Obfuscation is not encryption</h2>
+  <p>Obfuscation only hides a string from casual reading — anyone can decode it in seconds. Never use it for passwords, API keys, or other secrets; use real encryption or keep secrets on the server.</p>
+  <h2>No eval, no execution</h2>
+  <p>This tool never evaluates or executes your input. It only transforms characters into escape sequences and shows the result as text.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>Is string obfuscation secure?</summary><p>No. Obfuscation only hides a string from casual reading — anyone can decode it. Never use it for passwords, API keys, or secrets; use real encryption or server-side storage instead.</p></details>
+  <details><summary>Which obfuscation style should I use?</summary><p>Char-code arrays and hex escapes are the most readable to decode and widely supported. Unicode escapes work in any JS string context. Base64 produces the most compact output but needs TextDecoder/atob to decode.</p></details>
+  <details><summary>Does the tool run eval on my string?</summary><p>No. The tool never evaluates or executes your input; it only transforms characters into escape sequences and displays the result as text.</p></details>
+  <details><summary>Is this String Obfuscator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li>
+    <li><a href="/toolhub/tools/hex-text/">Hex to Text</a></li>
+    <li><a href="/toolhub/tools/text-unicode/">Unicode Text Converter</a></li>
+    <li><a href="/toolhub/tools/text-encryption/">Text Encryption</a></li>
+    <li><a href="/toolhub/tools/binary-text/">Binary to Text</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var srcEl=document.getElementById("src"),status=document.getElementById("status");
+
+function hex(n,pad){var s=n.toString(16);while(s.length<pad)s="0"+s;return s;}
+
+function obfuscate(s){
+  var cps=Array.from(s).map(function(ch){return ch.codePointAt(0);});
+
+  /* 1. char-code array */
+  var o1="String.fromCodePoint("+cps.join(", ")+")";
+  var d1="// decode the char-code array\nconst str = String.fromCodePoint("+cps.join(", ")+");";
+
+  /* 2. hex escapes */
+  var hexBody=cps.map(function(cp){
+    if(cp<=0xFF)return "\\x"+hex(cp,2);
+    return "\\u{"+cp.toString(16)+"}";
+  }).join("");
+  var o2='"'+hexBody+'"';
+  var d2="// already a valid JS string literal — paste it directly\nconst str = "+o2+";";
+
+  /* 3. unicode escapes */
+  var uniBody=cps.map(function(cp){
+    if(cp<=0xFFFF)return "\\u"+hex(cp,4);
+    var v=cp-0x10000;
+    return "\\u"+hex(0xD800+(v>>10),4)+"\\u"+hex(0xDC00+(v&0x3FF),4);
+  }).join("");
+  var o3='"'+uniBody+'"';
+  var d3="// already a valid JS string literal — paste it directly\nconst str = "+o3+";";
+
+  /* 4. base64 (UTF-8) */
+  var bytes=new TextEncoder().encode(s),bin="";
+  for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
+  var b64=btoa(bin);
+  var o4='"'+b64+'"';
+  var d4="// decode the base64 payload (UTF-8 safe)\nconst str = new TextDecoder().decode(\n  Uint8Array.from(atob("+o4+"), c => c.charCodeAt(0))\n);";
+
+  return {o1:o1,d1:d1,o2:o2,d2:d2,o3:o3,d3:d3,o4:o4,d4:d4};
+}
+
+function render(){
+  var r=obfuscate(srcEl.value);
+  document.getElementById("o1").textContent=r.o1;
+  document.getElementById("d1").textContent=r.d1;
+  document.getElementById("o2").textContent=r.o2;
+  document.getElementById("d2").textContent=r.d2;
+  document.getElementById("o3").textContent=r.o3;
+  document.getElementById("d3").textContent=r.d3;
+  document.getElementById("o4").textContent=r.o4;
+  document.getElementById("d4").textContent=r.d4;
+}
+
+function copyText(t){
+  function done(){status.textContent="Copied ("+t.length+" chars).";}
+  function fail(){status.textContent="Copy failed — select the text manually.";}
+  if(!t){status.textContent="Nothing to copy yet.";return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,fail);
+  }else{
+    var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){fail();}
+    document.body.removeChild(ta);
+  }
+}
+
+srcEl.addEventListener("input",render);
+var btns=document.querySelectorAll("[data-out]");
+for(var i=0;i<btns.length;i++){
+  (function(b){
+    b.addEventListener("click",function(){
+      copyText(document.getElementById(b.getAttribute("data-out")).textContent);
+    });
+  })(btns[i]);
+}
+
+render();
+})();
+</script>
+</body>
+</html>

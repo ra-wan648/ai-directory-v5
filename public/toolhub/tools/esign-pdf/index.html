@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>eSign PDF — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Draw your signature and place it on any PDF. Use the free online eSign PDF tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="eSign PDF — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Draw your signature and place it on any PDF. Use the free online eSign PDF tool on AI Directory — no signup, no install, browser-first processing.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="eSign PDF — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Draw your signature and place it on any PDF. Use the free online eSign PDF tool on AI Directory — no signup, no install, browser-first processing.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Free Mini Tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},
+{"@type":"ListItem","position":2,"name":"PDF & documents","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},
+{"@type":"ListItem","position":3,"name":"eSign PDF","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"eSign PDF — AI Directory","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Draw a signature with mouse or touch","Place signature at exact coordinates on any page","Export a signed PDF instantly"],"isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/merge-pdf/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/compress-pdf/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-page-extractor/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-rotator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to eSign a PDF","step":[
+{"@type":"HowToStep","position":1,"name":"Upload your PDF","text":"Choose a PDF file from your device."},
+{"@type":"HowToStep","position":2,"name":"Draw your signature","text":"Draw your signature on the signature pad with mouse or touch."},
+{"@type":"HowToStep","position":3,"name":"Place and download","text":"Position the signature on the page and download the signed PDF."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is eSign PDF free?","acceptedAnswer":{"@type":"Answer","text":"Yes. eSign PDF is completely free with no limits and no hidden costs."}},
+{"@type":"Question","name":"Do I need an account?","acceptedAnswer":{"@type":"Answer","text":"No. No signup or account is required — everything runs directly in your browser."}},
+{"@type":"Question","name":"Is my PDF uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Your PDF is processed entirely on your device with JavaScript. No file ever leaves your browser."}},
+{"@type":"Question","name":"What is eSign PDF best used for?","acceptedAnswer":{"@type":"Answer","text":"It is best for quickly signing contracts, forms, and documents when you need a fast electronic signature without installing software."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--ink:#1f2937;--muted:#6b7280;--bg:#faf7f2;--card:#ffffff;--line:#e5e7eb}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+header.top{background:var(--card);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:12px}
+header.top a.logo{font-size:1.35rem;font-weight:800;color:var(--ink);text-decoration:none}
+header.top a.logo span{color:var(--amber)}
+header.top .tag{font-size:.85rem;color:var(--muted);border-left:2px solid var(--amber);padding-left:12px}
+main{max-width:900px;margin:0 auto;padding:24px 16px}
+nav.crumb{font-size:.9rem;color:var(--muted);margin-bottom:8px}
+nav.crumb a{color:var(--amber);text-decoration:none}
+h1{margin:0 0 6px;font-size:1.9rem}
+p.lead{color:var(--muted);margin-top:0}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:22px 0}
+.btn{background:var(--amber);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:1rem;cursor:pointer;font-weight:600}
+.btn:hover{filter:brightness(.95)}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+input[type=file]{margin:8px 0}
+label{display:block;font-weight:600;margin:14px 0 6px}
+input[type=range]{width:100%}
+select,input[type=number],input[type=text]{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:1rem}
+.pad-wrap{border:2px dashed var(--line);border-radius:10px;background:#fffdf8;touch-action:none;position:relative}
+#sigpad{display:block;width:100%;height:180px;cursor:crosshair}
+.page-frame{border:1px solid var(--line);border-radius:10px;background:#f9fafb;position:relative;margin:14px auto;max-width:520px;cursor:crosshair;overflow:hidden}
+.page-frame .sig-placed{position:absolute;pointer-events:none}
+.note{font-size:.9rem;color:var(--muted)}
+.status{margin-top:12px;font-size:.95rem}
+.status.ok{color:#15803d}.status.err{color:#b91c1c}
+h2{margin-top:34px;font-size:1.4rem}
+ol.steps li{margin-bottom:8px}
+details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:8px 0;padding:10px 14px}
+summary{font-weight:600;cursor:pointer}
+.similar{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.similar a{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 14px;text-decoration:none;color:var(--ink);font-size:.95rem}
+.similar a:hover{border-color:var(--amber)}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:20px;text-align:center;color:var(--muted);font-size:.9rem}
+footer a{color:var(--amber);text-decoration:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/toolhub/">AI <span>Directory</span></a>
+  <span class="tag">Free Mini Tools</span>
+</header>
+<main>
+<nav class="crumb" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / PDF &amp; documents / eSign PDF</nav>
+<h1>eSign PDF</h1>
+<p class="lead">Draw your signature and place it on any PDF.</p>
+
+<div class="tool">
+  <label for="pdfFile">1. Upload a PDF</label>
+  <input type="file" id="pdfFile" accept="application/pdf">
+  <div class="status" id="fileStatus" aria-live="polite"></div>
+
+  <label>2. Draw your signature</label>
+  <div class="pad-wrap"><canvas id="sigpad"></canvas></div>
+  <div class="controls">
+    <button class="btn secondary" id="clearSig">Clear</button>
+    <label style="margin:0">Pen color <input type="color" id="penColor" value="#111827"></label>
+    <label style="margin:0">Size <input type="range" id="penSize" min="1" max="10" value="3" style="width:120px"></label>
+  </div>
+
+  <div id="placeSection" style="display:none">
+    <label>3. Choose page and place signature</label>
+    <div class="controls">
+      <label style="margin:0">Page <select id="pageSel"></select></label>
+      <label style="margin:0">Signature width (pt) <input type="number" id="sigWidth" value="140" min="20" max="500" style="width:90px"></label>
+    </div>
+    <p class="note">Click anywhere on the page outline to place your signature there, or use the sliders below. Click "Add signature" to confirm the position — you can add several.</p>
+    <div class="page-frame" id="pageFrame" title="Click to position signature"></div>
+    <div class="two">
+      <div><label>Horizontal position <input type="range" id="xPos" min="0" max="100" value="50"></label></div>
+      <div><label>Vertical position <input type="range" id="yPos" min="0" max="100" value="80"></label></div>
+    </div>
+    <div class="controls">
+      <button class="btn" id="addSig">Add signature to page</button>
+      <button class="btn secondary" id="clearPlacements">Remove all placements</button>
+    </div>
+    <div class="status" id="placeStatus"></div>
+
+    <label>4. Download</label>
+    <button class="btn" id="downloadBtn" disabled>Download signed PDF</button>
+    <div class="status" id="dlStatus"></div>
+  </div>
+</div>
+
+<h2>How to use eSign PDF</h2>
+<ol class="steps">
+  <li>Upload your PDF file using the file picker.</li>
+  <li>Draw your signature on the signature pad with your mouse or finger.</li>
+  <li>Select a page, click on the page outline (or use the sliders) to position the signature, add it, then download the signed PDF.</li>
+</ol>
+
+<section>
+<h2>What is eSign PDF?</h2>
+<p>eSign PDF is a free browser-based tool that lets you draw a handwritten-style signature and stamp it onto any PDF document. It is ideal for signing contracts, agreements, and forms without printing, scanning, or installing dedicated e-signature software.</p>
+</section>
+<section>
+<h2>How it works</h2>
+<p>Your signature drawing is captured from the on-screen pad as a transparent PNG. The PDF is opened with the pdf-lib library directly in your browser, and your signature image is embedded at the exact coordinates you choose on each selected page. You can place multiple signatures on different pages before exporting the final document.</p>
+</section>
+<section>
+<h2>Privacy</h2>
+<p>All processing happens locally on your device. Your PDF and signature never leave your browser — nothing is uploaded to any server.</p>
+</section>
+
+<h2>FAQ</h2>
+<details><summary>Is eSign PDF free?</summary><p>Yes. It is completely free with no limits and no hidden costs.</p></details>
+<details><summary>Do I need an account?</summary><p>No. No signup or account is required — everything runs directly in your browser.</p></details>
+<details><summary>Is my PDF uploaded to a server?</summary><p>No. Your PDF is processed entirely on your device with JavaScript. No file ever leaves your browser.</p></details>
+<details><summary>What is eSign PDF best used for?</summary><p>It is best for quickly signing contracts, forms, and documents when you need a fast electronic signature without installing software.</p></details>
+
+<nav aria-label="Similar tools">
+<h2>Similar tools</h2>
+<div class="similar">
+  <a href="/toolhub/tools/merge-pdf/">Merge PDF</a>
+  <a href="/toolhub/tools/compress-pdf/">Compress PDF</a>
+  <a href="/toolhub/tools/pdf-page-extractor/">PDF Page Extractor</a>
+  <a href="/toolhub/tools/pdf-rotator/">PDF Rotator</a>
+</div>
+</nav>
+</main>
+<footer>© AI Directory — <a href="/toolhub/">Free Mini Tools</a></footer>
+
+<script>
+(function(){
+"use strict";
+var pdfBytes=null,pdfDoc=null,placements={},pageSizes={},sigDataUrl=null;
+var $=function(id){return document.getElementById(id);};
+var fileStatus=$("fileStatus"),placeStatus=$("placeStatus"),dlStatus=$("dlStatus");
+
+/* ---------- Signature pad ---------- */
+var pad=$("sigpad"),pctx=pad.getContext("2d"),drawing=false,last=null,hasDrawn=false;
+function fitPad(){var r=pad.getBoundingClientRect();pad.width=r.width*2;pad.height=180*2;pctx.scale(2,2);}
+fitPad();window.addEventListener("resize",fitPad);
+function pos(e){var r=pad.getBoundingClientRect();var t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};}
+function start(e){e.preventDefault();drawing=true;last=pos(e);}
+function move(e){if(!drawing)return;e.preventDefault();var p=pos(e);pctx.strokeStyle=$("penColor").value;pctx.lineWidth=parseInt($("penSize").value,10);pctx.lineCap="round";pctx.lineJoin="round";pctx.beginPath();pctx.moveTo(last.x,last.y);pctx.lineTo(p.x,p.y);pctx.stroke();last=p;hasDrawn=true;}
+function stop(){drawing=false;}
+pad.addEventListener("mousedown",start);pad.addEventListener("mousemove",move);window.addEventListener("mouseup",stop);
+pad.addEventListener("touchstart",start,{passive:false});pad.addEventListener("touchmove",move,{passive:false});pad.addEventListener("touchend",stop);
+$("clearSig").addEventListener("click",function(){pctx.clearRect(0,0,pad.width,pad.height);hasDrawn=false;});
+function captureSig(){
+  if(!hasDrawn)return null;
+  var tmp=document.createElement("canvas");tmp.width=pad.width;tmp.height=pad.height;
+  var c=tmp.getContext("2d");c.clearRect(0,0,tmp.width,tmp.height);c.drawImage(pad,0,0);
+  var img=c.getImageData(0,0,tmp.width,tmp.height),minX=tmp.width,minY=tmp.height,maxX=-1,maxY=-1;
+  for(var y=0;y<tmp.height;y+=2){for(var x=0;x<tmp.width;x+=2){var a=img.data[(y*tmp.width+x)*4+3];if(a>8){if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y;}}}
+  if(maxX<0)return null;
+  var padm=10;minX=Math.max(0,minX-padm);minY=Math.max(0,minY-padm);maxX=Math.min(tmp.width-1,maxX+padm);maxY=Math.min(tmp.height-1,maxY+padm);
+  var crop=document.createElement("canvas");crop.width=maxX-minX+1;crop.height=maxY-minY+1;
+  crop.getContext("2d").drawImage(tmp,minX,minY,crop.width,crop.height,0,0,crop.width,crop.height);
+  return crop.toDataURL("image/png");
+}
+
+/* ---------- PDF load ---------- */
+$("pdfFile").addEventListener("change",async function(e){
+  var f=e.target.files[0];if(!f)return;
+  fileStatus.textContent="Loading PDF…";fileStatus.className="status";
+  try{
+    pdfBytes=await f.arrayBuffer();
+    pdfDoc=await PDFLib.PDFDocument.load(pdfBytes.slice(0));
+    placements={};pageSizes={};
+    var sel=$("pageSel");sel.innerHTML="";
+    for(var i=0;i<pdfDoc.getPageCount();i++){var p=pdfDoc.getPage(i);var s=p.getSize();pageSizes[i]={w:s.width,h:s.height};
+      var o=document.createElement("option");o.value=i;o.textContent="Page "+(i+1);sel.appendChild(o);}
+    fileStatus.textContent="Loaded: "+f.name+" ("+pdfDoc.getPageCount()+" pages).";fileStatus.className="status ok";
+    $("placeSection").style.display="block";renderFrame();updateDlBtn();
+  }catch(err){fileStatus.textContent="Could not read that PDF. Please try another file.";fileStatus.className="status err";}
+});
+$("pageSel").addEventListener("change",renderFrame);
+
+/* ---------- Page outline preview + placement ---------- */
+function renderFrame(){
+  var idx=parseInt($("pageSel").value||"0",10);var sz=pageSizes[idx];if(!sz)return;
+  var frame=$("pageFrame");frame.innerHTML="";
+  var aspect=sz.h/sz.w;frame.style.aspectRatio=sz.w+"/"+sz.h;
+  var inner=document.createElement("div");inner.style.cssText="position:absolute;inset:0;background:linear-gradient(180deg,#fff,#f3f4f6);display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:.8rem;";
+  inner.textContent="Page "+(idx+1)+" · "+Math.round(sz.w)+"×"+Math.round(sz.h)+" pt (outline to scale)";
+  frame.appendChild(inner);drawPlacements(idx,frame);
+  var ghost=document.createElement("div");ghost.id="ghostSig";
+  var gImg=captureSigPreview();
+  ghost.style.cssText="position:absolute;pointer-events:none;border:2px dashed #E8940C;opacity:.7;";
+  if(gImg)ghost.appendChild(gImg);
+  frame.appendChild(ghost);moveGhost();
+}
+function captureSigPreview(){if(!hasDrawn)return null;var img=new Image();img.src=pad.toDataURL("image/png");img.style.cssText="width:100%;height:100%;object-fit:contain";return img;}
+function drawPlacements(idx,frame){
+  (placements[idx]||[]).forEach(function(pl){
+    var d=document.createElement("div");d.className="sig-placed";
+    d.style.left=pl.x+"%";d.style.top=pl.y+"%";d.style.width=pl.wPct+"%";d.style.transform="translate(-50%,-50%)";
+    var img=new Image();img.src=pl.dataUrl;img.style.width="100%";img.style.display="block";d.appendChild(img);frame.appendChild(d);
+  });
+}
+function moveGhost(){
+  var g=$("ghostSig");if(!g)return;
+  g.style.left=$("xPos").value+"%";g.style.top=$("yPos").value+"%";
+  g.style.transform="translate(-50%,-50%)";
+  var wPx=Math.max(30,parseInt($("sigWidth").value||"140",10)*0.5);g.style.width=wPx+"px";g.style.height=(wPx*0.35)+"px";
+}
+$("xPos").addEventListener("input",moveGhost);$("yPos").addEventListener("input",moveGhost);$("sigWidth").addEventListener("input",moveGhost);
+$("pageFrame").addEventListener("click",function(e){
+  var r=this.getBoundingClientRect();
+  $("xPos").value=Math.round(((e.clientX-r.left)/r.width)*100);
+  $("yPos").value=Math.round(((e.clientY-r.top)/r.height)*100);
+  moveGhost();
+});
+$("addSig").addEventListener("click",function(){
+  sigDataUrl=captureSig();
+  if(!sigDataUrl){placeStatus.textContent="Please draw your signature first.";placeStatus.className="status err";return;}
+  var idx=parseInt($("pageSel").value||"0",10);
+  var frame=$("pageFrame");var fw=frame.getBoundingClientRect().width;
+  var wPts=Math.min(500,Math.max(20,parseInt($("sigWidth").value||"140",10)));
+  var sz=pageSizes[idx];var wPct=(wPts/sz.w)*100;
+  if(!placements[idx])placements[idx]=[];
+  placements[idx].push({x:parseFloat($("xPos").value),y:parseFloat($("yPos").value),wPct:wPct,wPts:wPts,dataUrl:sigDataUrl});
+  placeStatus.textContent="Signature added to page "+(idx+1)+" ("+placements[idx].length+" on this page).";placeStatus.className="status ok";
+  renderFrame();updateDlBtn();
+});
+$("clearPlacements").addEventListener("click",function(){placements={};renderFrame();updateDlBtn();placeStatus.textContent="All placements removed.";placeStatus.className="status";});
+function totalCount(){var n=0;Object.keys(placements).forEach(function(k){n+=placements[k].length;});return n;}
+function updateDlBtn(){$("downloadBtn").disabled=!(totalCount()>0&&pdfBytes);}
+
+/* ---------- Export ---------- */
+$("downloadBtn").addEventListener("click",async function(){
+  dlStatus.textContent="Building signed PDF…";dlStatus.className="status";
+  try{
+    var doc=await PDFLib.PDFDocument.load(pdfBytes.slice(0));
+    var cache={};
+    for(var key in placements){
+      var idx=parseInt(key,10);var page=doc.getPage(idx);var sz=page.getSize();
+      for(var i=0;i<placements[key].length;i++){
+        var pl=placements[key][i];
+        var dataUrl=pl.dataUrl;
+        if(!cache[dataUrl]){var pngBytes=await (await fetch(dataUrl)).arrayBuffer();cache[dataUrl]=await doc.embedPng(pngBytes);}
+        var img=cache[dataUrl];var scale=pl.wPts/img.width;var w=pl.wPts,h=img.height*scale;
+        var x=(pl.x/100)*sz.width-w/2;var y=(1-pl.y/100)*sz.height-h/2;
+        page.drawImage(img,{x:x,y:y,width:w,height:h});
+      }
+    }
+    var out=await doc.save();
+    var blob=new Blob([out],{type:"application/pdf"});
+    var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="signed.pdf";document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},4000);
+    dlStatus.textContent="Done — signed.pdf downloaded ("+totalCount()+" signature(s)).";dlStatus.className="status ok";
+  }catch(err){dlStatus.textContent="Something went wrong while building the PDF.";dlStatus.className="status err";}
+});
+})();
+</script>
+</body>
+</html>

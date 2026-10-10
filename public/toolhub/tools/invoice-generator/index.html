@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Invoice Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Create professional invoices and download as PDF. Use the free online Invoice Generator tool on AI Directory — no signup, no install, browser-first processing." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/invoice-generator/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Invoice Generator — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Create professional invoices and download as PDF. Use the free online Invoice Generator tool on AI Directory — no signup, no install, browser-first processing." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/invoice-generator/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Invoice Generator — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Create professional invoices and download as PDF. Use the free online Invoice Generator tool on AI Directory — no signup, no install, browser-first processing." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Utilities", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Invoice Generator", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/invoice-generator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Invoice Generator \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/invoice-generator/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (browser-based)", "description": "Create professional invoices and download as PDF. Use the free online Invoice Generator tool on AI Directory \u2014 no signup, no install, browser-first processing.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Salary Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/salary-calculator/"}, {"@type": "SoftwareApplication", "name": "Loan EMI Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/emi-calculator/"}, {"@type": "SoftwareApplication", "name": "Unit Price Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/unit-price-calculator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Invoice Generator", "description": "Create professional invoices and download as PDF. Use the free online Invoice Generator tool on AI Directory \u2014 no signup, no install, browser-first processing.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Fill in the invoice details", "text": "Enter your business name, the client name, invoice number, dates and pick a currency."}, {"@type": "HowToStep", "position": 2, "name": "Add line items", "text": "Add one row per service or product with a description, quantity and rate \u2014 the preview totals update as you type."}, {"@type": "HowToStep", "position": 3, "name": "Download or print", "text": "Hit Download PDF for a real PDF file, or Print to use a paper copy. Your data never leaves your device."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the invoice generator free to use?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Invoice Generator on AI Directory is completely free \u2014 no account, no watermark, and no limit on how many invoices you create."}}, {"@type": "Question", "name": "Does my invoice data leave my browser?", "acceptedAnswer": {"@type": "Answer", "text": "No. The live preview and the PDF are both generated locally in your browser with JavaScript (the PDF uses the pdf-lib library). Your client and business details are never uploaded anywhere."}}, {"@type": "Question", "name": "Which currencies are supported?", "acceptedAnswer": {"@type": "Answer", "text": "USD, EUR, GBP, BDT, INR, PKR, AUD, CAD, AED and SAR. The symbol you pick is used in the preview and the PDF."}}, {"@type": "Question", "name": "Can I edit the invoice after downloading the PDF?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 keep the page open, change any field or line item, and the preview updates instantly. Just hit Download PDF again. Nothing is saved when you close the tab, so keep your own copy of the PDF."}}]}
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.danger{background:#dc2626}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+table.data{width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.95rem}
+table.data th,table.data td{border:1px solid var(--line);padding:.5rem .6rem;text-align:right}
+table.data th{background:var(--amber-soft)}
+table.data td:first-child,table.data th:first-child{text-align:left}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+.meter{height:12px;background:#e5e7eb;border-radius:6px;overflow:hidden;margin-top:.5rem}
+.meter>div{height:100%;border-radius:6px;transition:width .3s}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.badge{display:inline-block;background:var(--amber);color:#fff;font-size:.75rem;font-weight:800;border-radius:999px;padding:.15rem .6rem;margin-left:.4rem;vertical-align:middle}
+.note{font-size:.88rem;color:var(--muted)}
+.checklist{list-style:none;padding:0}
+.checklist li{margin:.3rem 0}
+.checklist .ok{color:var(--green);font-weight:700}
+.checklist .no{color:var(--red);font-weight:700}
+@media print{body *{visibility:hidden}#invPreview,#invPreview *{visibility:visible}#invPreview{position:absolute;left:0;top:0;width:100%;border:none}}</style>
+</head>
+<body>
+<header class="site no-print"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Utilities</span> / <span>Invoice Generator</span></nav>
+<h1>Invoice Generator</h1>
+<p class="lead">Create professional invoices and download as PDF. Everything runs locally in your browser — nothing is uploaded or stored.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<div class="grid2">
+<div>
+<h2 style="margin-top:0">Invoice details</h2>
+<label class="f">Your business name</label><input type="text" id="invBiz" placeholder="Acme Studio">
+<label class="f">Your email</label><input type="email" id="invBizEmail" placeholder="you@business.com">
+<label class="f">Client name</label><input type="text" id="invClient" placeholder="Client Co.">
+<label class="f">Client email</label><input type="email" id="invClientEmail" placeholder="client@example.com">
+<div class="grid2">
+<div><label class="f">Invoice #</label><input type="text" id="invNo" value="INV-001"></div>
+<div><label class="f">Currency</label><select id="invCurr"><option value="$" data-c="USD">USD ($)</option><option value="€" data-c="EUR">EUR (€)</option><option value="£" data-c="GBP">GBP (£)</option><option value="৳" data-c="BDT">BDT (৳)</option><option value="₹" data-c="INR">INR (₹)</option><option value="Rs" data-c="PKR">PKR (Rs)</option><option value="A$" data-c="AUD">AUD (A$)</option><option value="C$" data-c="CAD">CAD (C$)</option><option value="DH" data-c="AED">AED (DH)</option><option value="SR" data-c="SAR">SAR (SR)</option></select></div>
+<div><label class="f">Issue date</label><input type="date" id="invIssue"></div>
+<div><label class="f">Due date</label><input type="date" id="invDue"></div>
+</div>
+<h3>Line items</h3>
+<table class="data" id="invItems"><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th><th></th></tr></thead><tbody></tbody></table>
+<div class="btnrow"><button class="ghost" id="invAdd">+ Add item</button></div>
+<div class="grid2">
+<div><label class="f">Tax %</label><input type="number" id="invTax" value="0" min="0" step="0.01"></div>
+<div><label class="f">Discount (flat)</label><input type="number" id="invDisc" value="0" min="0" step="0.01"></div>
+</div>
+<label class="f">Notes</label><textarea id="invNotes" rows="2" placeholder="Payment terms, bank details..."></textarea>
+<div class="btnrow">
+<button id="invPdf">Download PDF</button>
+<button class="ghost" id="invPrint">Print</button>
+</div>
+<p class="note">The PDF is generated locally in your browser. Nothing is uploaded.</p>
+</div>
+<div>
+<h2 style="margin-top:0">Live preview</h2>
+<div id="invPreview" style="border:1px solid var(--line);border-radius:10px;padding:1.4rem;background:#fff"></div>
+</div>
+</div>
+
+</section>
+
+<h2>How to use Invoice Generator</h2>
+<ol><li><strong>Fill in the invoice details</strong> — Enter your business name, the client name, invoice number, dates and pick a currency.</li><li><strong>Add line items</strong> — Add one row per service or product with a description, quantity and rate — the preview totals update as you type.</li><li><strong>Download or print</strong> — Hit Download PDF for a real PDF file, or Print to use a paper copy. Your data never leaves your device.</li></ol>
+<div class="infowrap">
+<section><h2>What is Invoice Generator?</h2><p>The Invoice Generator builds clean, professional invoices right in your browser: add unlimited line items, apply tax and discounts, and see an exact live preview of the document you will send.</p></section>
+<section><h2>How this utilitie tool works</h2><p>Everything is computed instantly with plain JavaScript as you type, and the Download PDF button renders a real multi-page PDF using the pdf-lib library — no server round-trip, no signup, no watermark.</p></section>
+<section><h2>Privacy and limits</h2><p>All form data lives only in the page's memory. Close the tab and it is gone — save the PDF to keep your copy. Very long invoices are split across multiple PDF pages automatically.</p></section>
+</div>
+<h2>Invoice Generator — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>Is the invoice generator free to use?</summary><p>Yes. The Invoice Generator on AI Directory is completely free — no account, no watermark, and no limit on how many invoices you create.</p></details><details><summary>Does my invoice data leave my browser?</summary><p>No. The live preview and the PDF are both generated locally in your browser with JavaScript (the PDF uses the pdf-lib library). Your client and business details are never uploaded anywhere.</p></details><details><summary>Which currencies are supported?</summary><p>USD, EUR, GBP, BDT, INR, PKR, AUD, CAD, AED and SAR. The symbol you pick is used in the preview and the PDF.</p></details><details><summary>Can I edit the invoice after downloading the PDF?</summary><p>Yes — keep the page open, change any field or line item, and the preview updates instantly. Just hit Download PDF again. Nothing is saved when you close the tab, so keep your own copy of the PDF.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/salary-calculator/">Salary Calculator</a></li><li><a href="/toolhub/tools/emi-calculator/">Loan EMI Calculator</a></li><li><a href="/toolhub/tools/unit-price-calculator/">Unit Price Calculator</a></li><li><a href="/toolhub/tools/interest/">Compound Interest</a></li><li><a href="/toolhub/tools/percentage/">Percentage Calculator</a></li><li><a href="/toolhub/tools/random-number/">Random Number Generator</a></li></ul></nav>
+</main>
+<footer class="site no-print"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</b></a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+
+const invTbody=document.querySelector("#invItems tbody");
+const $=id=>document.getElementById(id);
+function invRows(){return Array.from(invTbody.querySelectorAll("tr"));}
+function invAddRow(d,q,r){
+  const tr=document.createElement("tr");
+  tr.innerHTML='<td><input type="text" class="id" placeholder="Service description"></td>'+
+   '<td><input type="number" class="iq" min="0" step="0.01" style="width:70px"></td>'+
+   '<td><input type="number" class="ir" min="0" step="0.01" style="width:90px"></td>'+
+   '<td class="ia" style="white-space:nowrap">0.00</td>'+
+   '<td><button class="danger sm" title="Remove">&#10005;</button></td>';
+  if(d)tr.querySelector(".id").value=d;
+  tr.querySelector(".iq").value=q==null?1:q;
+  tr.querySelector(".ir").value=r==null?0:r;
+  tr.querySelectorAll("input").forEach(i=>i.addEventListener("input",invUpdate));
+  tr.querySelector("button").addEventListener("click",()=>{tr.remove();invUpdate();});
+  invTbody.appendChild(tr);invUpdate();
+}
+function curSym(){return $("invCurr").value;}
+function invTotals(){
+  let sub=0;
+  invRows().forEach(tr=>{
+    const qv=parseFloat(tr.querySelector(".iq").value)||0;
+    const rv=parseFloat(tr.querySelector(".ir").value)||0;
+    const amt=qv*rv;sub+=amt;
+    tr.querySelector(".ia").textContent=curSym()+" "+amt.toFixed(2);
+  });
+  const tax=sub*(parseFloat($("invTax").value)||0)/100;
+  const disc=parseFloat($("invDisc").value)||0;
+  const total=Math.max(0,sub+tax-disc);
+  return{sub,tax,disc,total};
+}
+function invUpdate(){
+  const t=invTotals(),s=curSym(),m=v=>s+" "+v.toFixed(2);
+  const rows=invRows().map(tr=>({
+    d:tr.querySelector(".id").value||"—",
+    q:parseFloat(tr.querySelector(".iq").value)||0,
+    r:parseFloat(tr.querySelector(".ir").value)||0
+  }));
+  $("invPreview").innerHTML=
+   '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #E8940C;padding-bottom:.6rem;margin-bottom:.8rem">'+
+   '<div><div style="font-size:1.4rem;font-weight:800">'+esc($("invBiz").value||"Your Business")+'</div>'+
+   '<div style="color:#6b7280;font-size:.9rem">'+esc($("invBizEmail").value)+'</div></div>'+
+   '<div style="text-align:right"><div style="font-size:1.1rem;font-weight:800;letter-spacing:.1em">INVOICE</div>'+
+   '<div style="color:#6b7280;font-size:.9rem">'+esc($("invNo").value)+'</div></div></div>'+
+   '<div style="display:flex;justify-content:space-between;margin-bottom:.8rem">'+
+   '<div><div style="font-weight:700">Bill to</div><div>'+esc($("invClient").value||"Client")+'</div><div style="color:#6b7280;font-size:.9rem">'+esc($("invClientEmail").value)+'</div></div>'+
+   '<div style="text-align:right;font-size:.9rem"><div>Issued: '+esc($("invIssue").value||"—")+'</div><div>Due: '+esc($("invDue").value||"—")+'</div></div></div>'+
+   '<table class="data"><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+
+   rows.map(x=>'<tr><td>'+esc(x.d)+'</td><td>'+x.q+'</td><td>'+m(x.r)+'</td><td>'+m(x.q*x.r)+'</td></tr>').join("")+
+   '</tbody></table>'+
+   '<div style="text-align:right;margin-top:.6rem;font-size:.95rem">'+
+   '<div>Subtotal: <b>'+m(t.sub)+'</b></div>'+
+   '<div>Tax: <b>'+m(t.tax)+'</b></div>'+
+   '<div>Discount: <b>− '+m(t.disc)+'</b></div>'+
+   '<div style="font-size:1.25rem;margin-top:.3rem">Total due: <b style="color:#92400e">'+m(t.total)+'</b></div></div>'+
+   ($("invNotes").value?'<div style="margin-top:.8rem;font-size:.9rem;color:#4b5563"><b>Notes:</b> '+esc($("invNotes").value)+'</div>':"");
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+$("invAdd").addEventListener("click",()=>invAddRow());
+["invBiz","invBizEmail","invClient","invClientEmail","invNo","invCurr","invIssue","invTax","invDisc","invNotes"].forEach(id=>$(id).addEventListener("input",invUpdate));
+["invIssue","invDue"].forEach(id=>$(id).addEventListener("change",invUpdate));
+$("invIssue").value=new Date().toISOString().slice(0,10);
+invAddRow("Design services",1,500);invAddRow();
+$("invPrint").addEventListener("click",()=>window.print());
+function latin1(s){return String(s).replace(/[^\x20-\x7E]/g,"?");}
+$("invPdf").addEventListener("click",async()=>{
+  if(!window.PDFLib){alert("PDF library is still loading — check your connection and try again.");return;}
+  const{PDFDocument,StandardFonts,rgb}=PDFLib;
+  const doc=await PDFDocument.create();
+  const font=await doc.embedFont(StandardFonts.Helvetica);
+  const bold=await doc.embedFont(StandardFonts.HelveticaBold);
+  const s=curSym(),m=v=>s+" "+v.toFixed(2);
+  const t=invTotals();
+  const rows=invRows().map(tr=>({d:tr.querySelector(".id").value||"-",q:parseFloat(tr.querySelector(".iq").value)||0,r:parseFloat(tr.querySelector(".ir").value)||0}));
+  const W=595,H=842,M=50;let page,y,pgn=0;const pages=rows.length||1;
+  const per=22;const totalPages=Math.max(1,Math.ceil(rows.length/per));
+  for(let p=0;p<totalPages;p++){
+    page=doc.addPage([W,H]);y=H-60;pgn=p+1;
+    page.drawText("INVOICE",{x:M,y:y,font:bold,size:26,color:rgb(0.91,0.58,0.05)});
+    page.drawText(latin1($("invNo").value||"INV-001"),{x:M,y:y-22,font,size:12,color:rgb(.42,.45,.5)});
+    y-=52;
+    page.drawText("From: "+latin1($("invBiz").value||"Your Business"),{x:M,y:y,font:bold,size:11});y-=16;
+    if($("invBizEmail").value){page.drawText(latin1($("invBizEmail").value),{x:M,y:y,font,size:10,color:rgb(.42,.45,.5)});y-=16;}
+    page.drawText("Bill to: "+latin1($("invClient").value||"Client"),{x:M,y:y,font:bold,size:11});y-=16;
+    if($("invClientEmail").value){page.drawText(latin1($("invClientEmail").value),{x:M,y:y,font,size:10,color:rgb(.42,.45,.5)});y-=16;}
+    page.drawText("Issued: "+latin1($("invIssue").value||"-")+"    Due: "+latin1($("invDue").value||"-"),{x:M,y:y,font,size:10});y-=26;
+    const colX=[M,M+300,M+370,M+440];const cw=[300,70,70,105];
+    page.drawRectangle({x:M-6,y:y-8,width:W-2*M+12,height:20,color:rgb(0.99,0.95,0.79)});
+    ["Description","Qty","Rate","Amount"].forEach((h,i)=>page.drawText(h,{x:colX[i],y:y,font:bold,size:10}));
+    y-=22;
+    const slice=rows.slice(p*per,(p+1)*per);
+    slice.forEach(rw=>{
+      page.drawText(latin1(rw.d).slice(0,52),{x:colX[0],y:y,font,size:10});
+      page.drawText(String(rw.q),{x:colX[1],y:y,font,size:10});
+      page.drawText(m(rw.r),{x:colX[2],y:y,font,size:10});
+      page.drawText(m(rw.q*rw.r),{x:colX[3],y:y,font,size:10});
+      page.drawLine({start:{x:M,y:y-6},end:{x:W-M,y:y-6},thickness:.5,color:rgb(.88,.85,.75)});
+      y-=20;
+    });
+    if(p===totalPages-1){
+      y-=8;
+      const tx=W-M-170;
+      page.drawText("Subtotal: "+m(t.sub),{x:tx,y:y,font,size:11});y-=18;
+      page.drawText("Tax: "+m(t.tax),{x:tx,y:y,font,size:11});y-=18;
+      page.drawText("Discount: - "+m(t.disc),{x:tx,y:y,font,size:11});y-=22;
+      page.drawText("TOTAL DUE: "+m(t.total),{x:tx,y:y,font:bold,size:14,color:rgb(0.57,0.32,0.04)});
+      y-=30;
+      if($("invNotes").value){page.drawText("Notes: "+latin1($("invNotes").value).slice(0,110),{x:M,y:y,font,size:10});y-=16;}
+    }
+    page.drawText("Page "+pgn+" of "+totalPages,{x:W-M-80,y:30,font,size:9,color:rgb(.6,.6,.6)});
+  }
+  const bytes=await doc.save();
+  const blob=new Blob([bytes],{type:"application/pdf"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=latin1($("invNo").value||"invoice").replace(/[^A-Za-z0-9_-]/g,"_")+".pdf";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+});
+
+</script>
+</body>
+</html>

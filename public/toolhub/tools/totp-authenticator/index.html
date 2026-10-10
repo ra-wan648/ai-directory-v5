@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>TOTP Authenticator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="A free in-browser TOTP authenticator: add accounts with base32 secrets, get live 6-digit codes with a 30-second countdown, and verify codes. RFC 6238, works offline, no signup." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/totp-authenticator/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="TOTP Authenticator — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="A free in-browser TOTP authenticator: add accounts with base32 secrets, get live 6-digit codes with a 30-second countdown, and verify codes. RFC 6238, works offline, no signup." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/totp-authenticator/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="TOTP Authenticator — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="A free in-browser TOTP authenticator: add accounts with base32 secrets, get live 6-digit codes with a 30-second countdown, and verify codes. RFC 6238, works offline, no signup." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Developer", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "TOTP Authenticator", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/totp-authenticator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "TOTP Authenticator \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/totp-authenticator/", "applicationCategory": "DeveloperApplication", "operatingSystem": "Any (browser-based)", "description": "A free in-browser TOTP authenticator: add accounts with base32 secrets, get live 6-digit codes with a 30-second countdown, and verify codes. RFC 6238, works offline, no signup.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "OTP/TOTP Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/otp-generator/"}, {"@type": "SoftwareApplication", "name": "Password Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/password/"}, {"@type": "SoftwareApplication", "name": "Hash Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hash/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use TOTP Authenticator", "description": "A free in-browser TOTP authenticator: add accounts with base32 secrets, get live 6-digit codes with a 30-second countdown, and verify codes. RFC 6238, works offline, no signup.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Add an account", "text": "Paste the base32 secret from your service (spaces are fine), give it a label, and press Add account."}, {"@type": "HowToStep", "position": 2, "name": "Read live codes", "text": "Each account shows its current 6-digit code with a 30-second countdown ring. Click a code to copy it."}, {"@type": "HowToStep", "position": 3, "name": "Verify a code", "text": "Switch to the Verify tab, enter a secret and a 6-digit code, and get an instant valid/invalid verdict."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is TOTP and how does this tool generate codes?", "acceptedAnswer": {"@type": "Answer", "text": "TOTP (RFC 6238) derives a 6-digit code from your secret and the current time: HMAC-SHA1(secret, 30-second counter), then dynamic truncation. This page implements that pipeline by hand \u2014 base32 decoding and HMAC-SHA1 via WebCrypto \u2014 with no libraries."}}, {"@type": "Question", "name": "Are my secrets uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Secrets are stored only in this browser's localStorage and codes are computed locally. They never touch a server. Anyone with access to this browser profile could read them, so treat saved secrets like passwords."}}, {"@type": "Question", "name": "Why does verification allow a small time window?", "acceptedAnswer": {"@type": "Answer", "text": "Real-world clocks drift. The verifier accepts the current 30-second period plus one period before and after (\u00b130 s), which matches what most services do."}}, {"@type": "Question", "name": "My secret has spaces or lowercase letters \u2014 will it work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Spaces are stripped, letters are uppercased, and padding is optional before decoding, so pasted secrets work as-is."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.danger{background:#dc2626}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+table.data{width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.95rem}
+table.data th,table.data td{border:1px solid var(--line);padding:.5rem .6rem;text-align:right}
+table.data th{background:var(--amber-soft)}
+table.data td:first-child,table.data th:first-child{text-align:left}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+.meter{height:12px;background:#e5e7eb;border-radius:6px;overflow:hidden;margin-top:.5rem}
+.meter>div{height:100%;border-radius:6px;transition:width .3s}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.badge{display:inline-block;background:var(--amber);color:#fff;font-size:.75rem;font-weight:800;border-radius:999px;padding:.15rem .6rem;margin-left:.4rem;vertical-align:middle}
+.note{font-size:.88rem;color:var(--muted)}
+.checklist{list-style:none;padding:0}
+.checklist li{margin:.3rem 0}
+.checklist .ok{color:var(--green);font-weight:700}
+.checklist .no{color:var(--red);font-weight:700}
+.acct{display:flex;align-items:center;gap:1rem;border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;margin:.6rem 0;background:#fff}
+.acct .lbl{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.acct .code{font-size:2rem;font-weight:800;letter-spacing:.15em;font-variant-numeric:tabular-nums;color:#92400e;cursor:pointer;background:none;border:none;padding:0}
+.acct .grow{flex:1;min-width:0}
+.ring{width:52px;height:52px;flex:none}
+.ring .track{stroke:#e5e7eb}
+.ring .prog{stroke:var(--amber);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.ring text{font-size:.62rem;font-weight:800;fill:#92400e;text-anchor:middle}
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem}
+.tabs button.on{background:var(--amber);color:#fff}
+.vok{color:var(--green);font-weight:800;font-size:1.2rem}
+.vno{color:var(--red);font-weight:800;font-size:1.2rem}
+@media print{.no-print{display:none!important}}</style>
+</head>
+<body>
+<header class="site no-print"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Developer</span> / <span>TOTP Authenticator</span></nav>
+<h1>TOTP Authenticator</h1>
+<p class="lead">Real RFC 6238 time-based one-time passwords in your browser — add accounts, read live 6-digit codes, verify codes. No signup, works offline.</p>
+<section class="tool-ui" aria-label="Tool">
+<div class="tabs no-print">
+<button class="ghost on" id="taTabAuth">Authenticator</button>
+<button class="ghost" id="taTabVerify">Verify a code</button>
+</div>
+
+<div id="taPaneAuth">
+<div class="grid2">
+<div><label class="f" for="taLabel">Account label</label><input type="text" id="taLabel" placeholder="e.g. GitHub" maxlength="40"></div>
+<div><label class="f" for="taSecret">Base32 secret</label><input type="text" id="taSecret" placeholder="e.g. JBSW Y3DP EHPK 3PXP" autocomplete="off" spellcheck="false"></div>
+</div>
+<div class="btnrow"><button id="taAdd">Add account</button></div>
+<p class="note" id="taMsg">Secrets are stored only in this browser's localStorage.</p>
+<div id="taList"></div>
+</div>
+
+<div id="taPaneVerify" style="display:none">
+<div class="grid2">
+<div><label class="f" for="tvSecret">Base32 secret</label><input type="text" id="tvSecret" placeholder="Paste the account secret" autocomplete="off" spellcheck="false"></div>
+<div><label class="f" for="tvCode">6-digit code</label><input type="text" id="tvCode" placeholder="123456" maxlength="6" inputmode="numeric"></div>
+</div>
+<div class="btnrow"><button id="tvGo">Verify</button></div>
+<p id="tvOut" class="note" style="margin-top:.8rem"></p>
+</div>
+
+<p class="note" id="taSelftest">RFC 6238 self-test: running…</p>
+</section>
+
+<h2>How to use TOTP Authenticator</h2>
+<ol><li><strong>Add an account</strong> — Paste the base32 secret from your service (spaces are fine), give it a label, and press Add account.</li><li><strong>Read live codes</strong> — Each account shows its current 6-digit code with a 30-second countdown ring. Click a code to copy it.</li><li><strong>Verify a code</strong> — Switch to the Verify tab, enter a secret and a 6-digit code, and get an instant valid/invalid verdict.</li></ol>
+<div class="infowrap">
+<section><h2>What is TOTP Authenticator?</h2><p>TOTP Authenticator generates the 6-digit rotating codes used by two-factor authentication, exactly as defined in RFC 6238: HMAC-SHA1 over a 30-second counter, then dynamic truncation to 6 digits.</p></section>
+<section><h2>How this developer tool works</h2><p>The crypto pipeline is hand-written — a manual base32 decoder plus HMAC-SHA1 through the Web Crypto API, no libraries. A timer refreshes every code at each 30-second boundary, and the verify tab checks the current period plus one on either side for clock drift. Accounts persist in localStorage.</p></section>
+<section><h2>Privacy and limits</h2><p>Secrets never leave your browser, but they are stored in plain text in localStorage — anyone with access to this browser profile can read them. Keep this for testing and low-stakes use; prefer a dedicated authenticator app for critical accounts.</p></section>
+</div>
+<h2>TOTP Authenticator — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>What is TOTP and how does this tool generate codes?</summary><p>TOTP (RFC 6238) derives a 6-digit code from your secret and the current time: HMAC-SHA1(secret, 30-second counter), then dynamic truncation. This page implements that pipeline by hand — base32 decoding and HMAC-SHA1 via WebCrypto — with no libraries.</p></details><details><summary>Are my secrets uploaded anywhere?</summary><p>No. Secrets are stored only in this browser's localStorage and codes are computed locally. They never touch a server. Anyone with access to this browser profile could read them, so treat saved secrets like passwords.</p></details><details><summary>Why does verification allow a small time window?</summary><p>Real-world clocks drift. The verifier accepts the current 30-second period plus one period before and after (±30 s), which matches what most services do.</p></details><details><summary>My secret has spaces or lowercase letters — will it work?</summary><p>Yes. Spaces are stripped, letters are uppercased, and padding is optional before decoding, so pasted secrets work as-is.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/otp-generator/">OTP/TOTP Generator</a></li><li><a href="/toolhub/tools/password/">Password Generator</a></li><li><a href="/toolhub/tools/basic-auth-generator/">Basic Auth Generator</a></li><li><a href="/toolhub/tools/hash/">Hash Generator</a></li><li><a href="/toolhub/tools/token-generator/">Token Generator</a></li><li><a href="/toolhub/tools/password-strength-analyser/">Password Strength Analyser</a></li></ul></nav>
+</main>
+<footer class="site no-print"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+(function(){
+"use strict";
+/* ===== TOTP-CORE-BEGIN ===== */
+function base32Decode(s){
+  const ALPH="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  s=String(s).toUpperCase().replace(/[\s=]/g,"");
+  let bits="",out=[];
+  for(const ch of s){
+    const v=ALPH.indexOf(ch);
+    if(v<0)throw new Error("Invalid base32 character: "+ch);
+    bits+=v.toString(2).padStart(5,"0");
+  }
+  for(let i=0;i+8<=bits.length;i+=8)out.push(parseInt(bits.substr(i,8),2));
+  return new Uint8Array(out);
+}
+function hotpTruncate(h){
+  const o=h[h.length-1]&0x0f;
+  const p=((h[o]&0x7f)<<24)|((h[o+1]&0xff)<<16)|((h[o+2]&0xff)<<8)|(h[o+3]&0xff);
+  return String(p%1000000).padStart(6,"0");
+}
+/* ===== TOTP-CORE-END ===== */
+async function hmacSha1(keyBytes,msgBytes){
+  const k=await crypto.subtle.importKey("raw",keyBytes,{name:"HMAC",hash:"SHA-1"},false,["sign"]);
+  return new Uint8Array(await crypto.subtle.sign("HMAC",k,msgBytes));
+}
+async function totp(secret,timeMs){
+  const key=base32Decode(secret);
+  const counter=Math.floor(timeMs/1000/30);
+  const msg=new Uint8Array(8);
+  let c=counter;
+  for(let i=7;i>=0;i--){msg[i]=c&0xff;c=Math.floor(c/256);}
+  return hotpTruncate(await hmacSha1(key,msg));
+}
+
+const $=id=>document.getElementById(id);
+const LS="totp_accounts_v1";
+function loadAccts(){try{const a=JSON.parse(localStorage.getItem(LS));return Array.isArray(a)?a.filter(x=>x&&x.secret):[];}catch(e){return[];}}
+function saveAccts(a){try{localStorage.setItem(LS,JSON.stringify(a));}catch(e){}}
+let accounts=loadAccts();
+let codeCache={};
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+const CIRC=2*Math.PI*19;
+
+function renderList(){
+  const list=$("taList");list.innerHTML="";
+  if(!accounts.length){list.innerHTML='<p class="note">No accounts yet — add your first secret above.</p>';return;}
+  accounts.forEach((a,i)=>{
+    const div=document.createElement("div");div.className="acct";
+    const grow=document.createElement("div");grow.className="grow";
+    const lbl=document.createElement("div");lbl.className="lbl";lbl.textContent=a.label||"Account "+(i+1);
+    const code=document.createElement("button");code.className="code";code.id="taCode"+i;code.textContent="······";code.title="Click to copy";
+    code.addEventListener("click",()=>{
+      const v=code.textContent.trim();
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v);
+    });
+    grow.appendChild(lbl);grow.appendChild(code);
+    const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+    svg.setAttribute("class","ring");svg.setAttribute("viewBox","0 0 44 44");
+    svg.innerHTML='<circle class="track" cx="22" cy="22" r="19" fill="none" stroke-width="5"/>'+
+      '<circle class="prog" id="taRing'+i+'" cx="22" cy="22" r="19" fill="none" stroke-width="5" stroke-dasharray="'+CIRC.toFixed(2)+'" stroke-dashoffset="0" transform="rotate(-90 22 22)"/>'+
+      '<text x="22" y="26" id="taSecs'+i+'">30</text>';
+    const del=document.createElement("button");del.className="danger sm";del.textContent="Delete";
+    del.addEventListener("click",()=>{if(confirm("Delete account “"+(a.label||"")+"”?")){accounts.splice(i,1);saveAccts(accounts);renderList();}});
+    div.appendChild(svg);div.appendChild(grow);div.appendChild(del);
+    list.appendChild(div);
+  });
+}
+
+$("taAdd").addEventListener("click",()=>{
+  const label=$("taLabel").value.trim();
+  const secret=$("taSecret").value.trim();
+  if(!secret){alert("Please paste a base32 secret.");return;}
+  try{base32Decode(secret);}catch(e){alert("That doesn't look like a valid base32 secret ("+e.message+").");return;}
+  accounts.push({label:label,secret:secret});
+  saveAccts(accounts);
+  $("taLabel").value="";$("taSecret").value="";
+  $("taMsg").textContent="Account added — "+accounts.length+" saved.";
+  renderList();refreshCodes(true);
+});
+
+function periodNow(){return Math.floor(Date.now()/1000/30);}
+let lastPeriod=-1;
+async function refreshCodes(force){
+  const p=periodNow();
+  if(p===lastPeriod&&!force)return;
+  lastPeriod=p;
+  const jobs=accounts.map((a,i)=>totp(a.secret,Date.now()).then(c=>({i:i,code:c})).catch(()=>({i:i,code:"ERR"})));
+  const res=await Promise.all(jobs);
+  res.forEach(r=>{
+    codeCache[r.i]=r.code;
+    const el=$("taCode"+r.i);
+    if(el)el.textContent=r.code;
+  });
+}
+function tickRings(){
+  const secs=30-Math.floor(Date.now()/1000)%30;
+  accounts.forEach((a,i)=>{
+    const ring=$("taRing"+i),tx=$("taSecs"+i);
+    if(ring){ring.style.strokeDashoffset=(CIRC*(1-secs/30)).toFixed(2);}
+    if(tx)tx.textContent=secs;
+  });
+}
+setInterval(()=>{refreshCodes(false);tickRings();},250);
+
+/* tabs */
+$("taTabAuth").addEventListener("click",()=>{$("taPaneAuth").style.display="";$("taPaneVerify").style.display="none";$("taTabAuth").classList.add("on");$("taTabVerify").classList.remove("on");});
+$("taTabVerify").addEventListener("click",()=>{$("taPaneVerify").style.display="";$("taPaneAuth").style.display="none";$("taTabVerify").classList.add("on");$("taTabAuth").classList.remove("on");});
+
+/* verify tab */
+$("tvGo").addEventListener("click",async()=>{
+  const out=$("tvOut");
+  const secret=$("tvSecret").value.trim();
+  const code=$("tvCode").value.trim();
+  if(!secret||!/^\d{6}$/.test(code)){out.innerHTML='<span class="vno">✗</span> Enter a secret and a 6-digit code.';return;}
+  out.textContent="Checking…";
+  try{
+    const now=Date.now();
+    const cands=await Promise.all([-30000,0,30000].map(d=>totp(secret,now+d)));
+    if(cands.indexOf(code)>=0)out.innerHTML='<span class="vok">✓ Valid</span> — code matches (allowed ±1 period for clock drift).';
+    else out.innerHTML='<span class="vno">✗ Invalid</span> — code does not match the current, previous or next period.';
+  }catch(e){out.innerHTML='<span class="vno">✗</span> '+esc(e.message);}
+});
+
+/* RFC 6238 self-test on load: key = ASCII "12345678901234567890", T=59s -> 287082 */
+(async()=>{
+  try{
+    const key=new TextEncoder().encode("12345678901234567890");
+    const counter=1;
+    const msg=new Uint8Array(8);
+    let c=counter;for(let i=7;i>=0;i--){msg[i]=c&0xff;c=Math.floor(c/256);}
+    const code=hotpTruncate(await hmacSha1(key,msg));
+    const ok=code==="287082";
+    $("taSelftest").innerHTML="RFC 6238 self-test: <b class='"+(ok?"vok":"vno")+"'>"+(ok?"PASS":"FAIL")+"</b> (vector key 12345678901234567890 @ T=59s → "+code+", expected 287082).";
+  }catch(e){
+    $("taSelftest").textContent="RFC 6238 self-test: could not run ("+e.message+") — WebCrypto needs a secure context.";
+  }
+})();
+
+renderList();
+refreshCodes(true);
+tickRings();
+})();
+</script>
+</body>
+</html>

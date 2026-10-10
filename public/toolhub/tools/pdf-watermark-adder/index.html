@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>PDF Watermark Adder — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Add a text watermark to every page of a PDF — diagonal repeat, centered or footer, with opacity, size, rotation and color controls. Free on AI Directory, no signup, browser-only." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark-adder/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="PDF Watermark Adder — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Add a text watermark to every page of a PDF — diagonal repeat, centered or footer, with opacity, size, rotation and color controls. Free on AI Directory, no signup, browser-only." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark-adder/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="PDF Watermark Adder — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Add a text watermark to every page of a PDF — diagonal repeat, centered or footer, with opacity, size, rotation and color controls. Free on AI Directory, no signup, browser-only." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "PDF & documents", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "PDF Watermark Adder", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark-adder/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "PDF Watermark Adder \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark-adder/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (browser-based)", "description": "Add a text watermark to every page of a PDF \u2014 diagonal repeat, centered or footer, with opacity, size, rotation and color controls. Free on AI Directory \u2014 no signup, browser-only.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "PDF Watermark", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/pdf-watermark/"}, {"@type": "SoftwareApplication", "name": "Merge PDF", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/merge-pdf/"}, {"@type": "SoftwareApplication", "name": "Split PDF", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/split-pdf/"}, {"@type": "SoftwareApplication", "name": "Compress PDF", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/compress-pdf/"}, {"@type": "SoftwareApplication", "name": "eSign PDF", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/esign-pdf/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use PDF Watermark Adder", "description": "Add a text watermark to every page of a PDF \u2014 diagonal repeat, centered or footer, with opacity, size, rotation and color controls. Free on AI Directory \u2014 no signup, browser-only.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Upload your PDF", "text": "Choose the PDF you want to stamp. It stays in your browser \u2014 nothing is uploaded."}, {"@type": "HowToStep", "position": 2, "name": "Design the watermark", "text": "Type the watermark text and set opacity, font size, rotation, color and position (diagonal repeat, center or footer)."}, {"@type": "HowToStep", "position": 3, "name": "Download the stamped PDF", "text": "Hit Download and get a new PDF with the watermark embedded on every page."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the PDF watermark adder free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The PDF Watermark Adder on AI Directory is completely free \u2014 no account, no watermark added to your file by us, and no usage limits."}}, {"@type": "Question", "name": "Is my PDF uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. The watermark is embedded with the pdf-lib library directly in your browser. Your document never leaves your device."}}, {"@type": "Question", "name": "What is \u201cdiagonal repeat\u201d watermarking?", "acceptedAnswer": {"@type": "Answer", "text": "Diagonal repeat tiles your watermark text across the whole page at a 45\u00b0 angle, so it appears behind the content everywhere \u2014 the classic \u201cCONFIDENTIAL\u201d or \u201cDRAFT\u201d look used on official documents."}}, {"@type": "Question", "name": "Can I make the watermark subtle?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 lower the opacity slider (10\u201330% works well), pick a light gray color, and use a large font size with the diagonal repeat position for a professional \u201cbehind the text\u201d effect."}}]}
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=color]{width:64px;height:40px;padding:2px;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer}
+input[type=range]{width:100%}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button:disabled{opacity:.55;cursor:not-allowed}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.err{background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:10px;padding:.8rem 1rem;margin-top:1rem}
+.note{font-size:.88rem;color:var(--muted)}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.prevbox{border:1px dashed var(--line);border-radius:10px;background:#fff;padding:1rem;margin-top:1rem;position:relative;overflow:hidden;min-height:150px;display:flex;align-items:center;justify-content:center}
+#wmPrev{font-weight:800;white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>PDF &amp; documents</span> / <span>PDF Watermark Adder</span></nav>
+<h1>PDF Watermark Adder</h1>
+<p class="lead">Stamp every page of a PDF with a custom text watermark — diagonal repeat, centered or footer — with full control of opacity, size, rotation and color. All processing happens in your browser.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<label class="f">1. Choose a PDF file</label>
+<input type="file" id="wmFile" accept="application/pdf,.pdf">
+<div class="grid2">
+<div>
+<label class="f">2. Watermark text</label>
+<input type="text" id="wmText" placeholder="CONFIDENTIAL" maxlength="80">
+<label class="f">Position</label>
+<select id="wmPos">
+<option value="diagonal">Diagonal repeat (classic stamp)</option>
+<option value="center">Centered (single)</option>
+<option value="footer">Footer (single, bottom)</option>
+</select>
+<label class="f">Color</label>
+<input type="color" id="wmColor" value="#808080">
+</div>
+<div>
+<label class="f">Opacity <span id="wmOpVal" class="note">35%</span></label>
+<input type="range" id="wmOp" min="5" max="100" value="35">
+<label class="f">Font size <span id="wmSizeVal" class="note">64px</span></label>
+<input type="range" id="wmSize" min="12" max="200" value="64">
+<label class="f">Rotation <span id="wmRotVal" class="note">45°</span></label>
+<input type="range" id="wmRot" min="-90" max="90" value="45">
+</div>
+</div>
+<div class="prevbox"><span id="wmPrev">CONFIDENTIAL</span></div>
+<p class="note" style="margin:.4rem 0 0">Live preview of your watermark style (diagonal repeat is tiled across the whole page in the PDF).</p>
+<div class="btnrow"><button id="wmGo">Add watermark &amp; download PDF</button></div>
+<div id="wmMsg"></div>
+
+</section>
+
+<h2>How to use PDF Watermark Adder</h2>
+<ol><li><strong>Upload your PDF</strong> — Choose the PDF you want to stamp. It stays in your browser — nothing is uploaded.</li><li><strong>Design the watermark</strong> — Type the watermark text and set opacity, font size, rotation, color and position (diagonal repeat, center or footer).</li><li><strong>Download the stamped PDF</strong> — Hit Download and get a new PDF with the watermark embedded on every page.</li></ol>
+<div class="infowrap">
+<section><h2>What is PDF Watermark Adder?</h2><p>The PDF Watermark Adder embeds a text stamp — "CONFIDENTIAL", "DRAFT", a company name, a copyright line — onto every page of a PDF. Unlike image overlays pasted by hand, the watermark is written into the PDF itself with real font embedding.</p></section>
+<section><h2>How this PDF tool works</h2><p>The pdf-lib library opens your PDF and draws your text on every page: as a full-page diagonal repeat (the classic official-document look), as a single centered stamp, or as a footer line. Opacity, size, rotation and color are applied exactly as you set them.</p></section>
+<section><h2>Privacy and limits</h2><p>Everything runs in your browser — your PDF is never uploaded or stored anywhere. Password-protected PDFs need the password removed before watermarking, and very large files may take a few seconds to process.</p></section>
+</div>
+<h2>PDF Watermark Adder — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>Is the PDF watermark adder free?</summary><p>Yes. The PDF Watermark Adder on AI Directory is completely free — no account, no watermark added to your file by us, and no usage limits.</p></details><details><summary>Is my PDF uploaded anywhere?</summary><p>No. The watermark is embedded with the pdf-lib library directly in your browser. Your document never leaves your device.</p></details><details><summary>What is "diagonal repeat" watermarking?</summary><p>Diagonal repeat tiles your watermark text across the whole page at a 45° angle, so it appears behind the content everywhere — the classic "CONFIDENTIAL" or "DRAFT" look used on official documents.</p></details><details><summary>Can I make the watermark subtle?</summary><p>Yes — lower the opacity slider (10–30% works well), pick a light gray color, and use a large font size with the diagonal repeat position for a professional "behind the text" effect.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/pdf-watermark/">PDF Watermark</a></li><li><a href="/toolhub/tools/merge-pdf/">Merge PDF</a></li><li><a href="/toolhub/tools/split-pdf/">Split PDF</a></li><li><a href="/toolhub/tools/compress-pdf/">Compress PDF</a></li><li><a href="/toolhub/tools/esign-pdf/">eSign PDF</a></li><li><a href="/toolhub/tools/rotate-pdf/">Rotate PDF</a></li></ul></nav>
+</main>
+<footer class="site"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+
+(function(){
+const $=id=>document.getElementById(id);
+const msg=(html,cls)=>{$("wmMsg").innerHTML=html?'<div class="'+(cls||"res")+'">'+html+"</div>":"";};
+function updPrev(){
+  const t=$("wmText").value.trim()||"CONFIDENTIAL";
+  const el=$("wmPrev");
+  el.textContent=t;
+  el.style.color=$("wmColor").value;
+  el.style.opacity=($("wmOp").value/100).toFixed(2);
+  el.style.fontSize=$("wmSize").value+"px";
+  el.style.transform="rotate("+(-$("wmRot").value)+"deg)";
+  $("wmOpVal").textContent=$("wmOp").value+"%";
+  $("wmSizeVal").textContent=$("wmSize").value+"px";
+  $("wmRotVal").textContent=$("wmRot").value+"°";
+}
+["wmText","wmColor","wmOp","wmSize","wmRot"].forEach(id=>{
+  $(id).addEventListener("input",updPrev);
+});
+updPrev();
+function hexRgb(hex){
+  const h=hex.replace("#","");
+  const r=parseInt(h.slice(0,2),16)/255,g=parseInt(h.slice(2,4),16)/255,b=parseInt(h.slice(4,6),16)/255;
+  return[r,g,b];
+}
+$("wmGo").addEventListener("click",async()=>{
+  msg("");
+  if(!window.PDFLib){msg("The PDF library is still loading from the CDN. Check your connection and try again in a moment.","err");return;}
+  const f=$("wmFile").files[0];
+  if(!f){msg("Please choose a PDF file first.","err");return;}
+  const text=$("wmText").value.trim();
+  if(!text){msg("Please type some watermark text.","err");return;}
+  $("wmGo").disabled=true;
+  try{
+    const{PDFDocument,StandardFonts,rgb,degrees}=PDFLib;
+    const buf=await f.arrayBuffer();
+    let doc;
+    try{doc=await PDFDocument.load(buf,{ignoreEncryption:false});}
+    catch(e){
+      const m=String(e&&e.message||e);
+      if(/password|encrypt/i.test(m))throw new Error("This PDF is password-protected. Remove the password first, then try again.");
+      throw new Error("Couldn't read that PDF. It may be corrupted.");
+    }
+    const font=await doc.embedFont(StandardFonts.HelveticaBold);
+    const size=parseInt($("wmSize").value,10);
+    const opacity=parseInt($("wmOp").value,10)/100;
+    const angle=parseInt($("wmRot").value,10);
+    const[r,g,b]=hexRgb($("wmColor").value);
+    const col=rgb(r,g,b);
+    const pos=$("wmPos").value;
+    const textW=font.widthOfTextAtSize(text,size);
+    const pages=doc.getPages();
+    pages.forEach(page=>{
+      const{width:w,height:h}=page.getSize();
+      if(pos==="center"){
+        page.drawText(text,{x:w/2-textW/2,y:h/2-size/3,font,size,rotate:degrees(angle),opacity,color:col});
+      }else if(pos==="footer"){
+        page.drawText(text,{x:w/2-textW/2,y:50,font,size:Math.min(size,20),rotate:degrees(0),opacity,color:col});
+      }else{
+        // diagonal repeat: tile across the page, overscan so rotation covers corners
+        const stepX=textW+90;
+        const stepY=size*2.6;
+        const diag=Math.sqrt(w*w+h*h);
+        for(let x=-diag;x<w+diag;x+=stepX){
+          for(let y=-diag;y<h+diag;y+=stepY){
+            page.drawText(text,{x:x,y:y,font,size,rotate:degrees(angle),opacity,color:col});
+          }
+        }
+      }
+    });
+    const bytes=await doc.save();
+    const blob=new Blob([bytes],{type:"application/pdf"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    const bn=(f.name.replace(/\.pdf$/i,"")||"document").replace(/[^\w.-]+/g,"_");
+    a.download=bn+"-watermarked.pdf";
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    msg("Done — watermark added to <b>"+pages.length+"</b> page"+(pages.length>1?"s":"")+".");
+  }catch(err){
+    msg("Error: "+(err&&err.message||err),"err");
+  }finally{
+    $("wmGo").disabled=false;
+  }
+});
+})();
+</script>
+</body>
+</html>

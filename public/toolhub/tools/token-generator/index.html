@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Token Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Generate cryptographically secure random tokens and keys. Use the free online Token Generator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/token-generator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Token Generator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Generate cryptographically secure random tokens and keys.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/token-generator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Token Generator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Generate cryptographically secure random tokens and keys.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Developer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Token Generator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Token Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Cryptographically secure random tokens, hex/base64/base64url/alphanumeric formats, UUIDv4 generation, entropy display","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/uuid/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/otp-generator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/hash/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-number/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to generate a secure token","step":[{"@type":"HowToStep","position":1,"name":"Choose a format","text":"Pick hex, base64, base64url, alphanumeric, or UUIDv4 depending on what your system expects."},{"@type":"HowToStep","position":2,"name":"Set the length","text":"Drag the slider to choose the token size — longer tokens carry more entropy."},{"@type":"HowToStep","position":3,"name":"Copy the token","text":"A new token is generated automatically; copy it or hit Regenerate for a fresh one."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are the generated tokens cryptographically secure?","acceptedAnswer":{"@type":"Answer","text":"Yes. All randomness comes from the Web Crypto API (crypto.getRandomValues), which is suitable for generating API keys, session tokens, and secrets."}},{"@type":"Question","name":"What does the entropy value mean?","acceptedAnswer":{"@type":"Answer","text":"Entropy, measured in bits, describes how hard a token is to guess. A 128-bit token (e.g. 16 random bytes) is considered safe against brute-force guessing."}},{"@type":"Question","name":"Which format should I choose?","acceptedAnswer":{"@type":"Answer","text":"Hex is simplest and URL-safe; base64url is the most compact URL-safe option; alphanumeric works where only letters and digits are allowed; UUIDv4 is the standard identifier format for databases."}},{"@type":"Question","name":"Is this Token Generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Developer</a> / <span>Token Generator</span></nav>
+<main class="wrap">
+<h1>Token Generator</h1>
+<p class="lede">Generate cryptographically secure random tokens and keys. All randomness comes from the Web Crypto API — suitable for API keys, session tokens, and secrets.</p>
+
+<div class="tool">
+  <label for="type">Token format</label>
+  <select id="type">
+    <option value="hex">Hex (0–9, a–f)</option>
+    <option value="base64">Base64</option>
+    <option value="base64url">Base64 URL-safe</option>
+    <option value="alphanum">Alphanumeric (A–Z, a–z, 0–9)</option>
+    <option value="uuid">UUIDv4</option>
+  </select>
+
+  <label for="len">Size</label>
+  <div class="lenrow">
+    <input type="range" id="len" min="8" max="128" value="32" step="1">
+    <output id="lenOut" for="len">32 bytes</output>
+  </div>
+
+  <div class="btnrow">
+    <button id="regen">Regenerate</button>
+    <button class="ghost" id="copyBtn">Copy token</button>
+  </div>
+
+  <label>Generated token</label>
+  <pre class="code" id="out"></pre>
+  <div class="meta">
+    <span>Entropy: <b id="entropy">—</b></span>
+    <span>Length: <b id="chlen">—</b> characters</span>
+  </div>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Pick a format — hex, base64, base64url, alphanumeric, or UUIDv4 — depending on what your system expects.</li>
+    <li>Drag the slider to choose the token size; longer tokens carry more entropy.</li>
+    <li>A new token is generated automatically; copy it or hit <b>Regenerate</b> for a fresh one.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>What "cryptographically secure" means</h2>
+  <p>Tokens are drawn from <code>crypto.getRandomValues()</code>, the browser's cryptographically secure random number generator — not <code>Math.random()</code>, which is predictable and must never be used for secrets.</p>
+  <h2>Picking a size</h2>
+  <p>128 bits of entropy (16 random bytes) is the standard minimum for secrets. The slider maxes out at 128 bytes (1024 bits) for keys that need extra margin.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>Are the generated tokens cryptographically secure?</summary><p>Yes. All randomness comes from the Web Crypto API (<code>crypto.getRandomValues</code>), which is suitable for generating API keys, session tokens, and secrets.</p></details>
+  <details><summary>What does the entropy value mean?</summary><p>Entropy, measured in bits, describes how hard a token is to guess. A 128-bit token (e.g. 16 random bytes) is considered safe against brute-force guessing.</p></details>
+  <details><summary>Which format should I choose?</summary><p>Hex is simplest and URL-safe; base64url is the most compact URL-safe option; alphanumeric works where only letters and digits are allowed; UUIDv4 is the standard identifier format for databases.</p></details>
+  <details><summary>Is this Token Generator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/uuid/">UUID Generator</a></li>
+    <li><a href="/toolhub/tools/otp-generator/">OTP/TOTP Generator</a></li>
+    <li><a href="/toolhub/tools/hash/">Hash Generator</a></li>
+    <li><a href="/toolhub/tools/random-number/">Random Number</a></li>
+    <li><a href="/toolhub/tools/base64/">Base64 Encoder</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for developers — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var typeEl=document.getElementById("type"),lenEl=document.getElementById("len"),
+    lenOut=document.getElementById("lenOut"),out=document.getElementById("out"),
+    entropyEl=document.getElementById("entropy"),chlenEl=document.getElementById("chlen"),
+    status=document.getElementById("status");
+var ALPHA="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+var token="";
+
+function randBytes(n){var b=new Uint8Array(n);crypto.getRandomValues(b);return b;}
+function bytesToHex(b){var s="";for(var i=0;i<b.length;i++)s+=(b[i]<16?"0":"")+b[i].toString(16);return s;}
+function bytesToB64(b){var bin="";for(var i=0;i<b.length;i++)bin+=String.fromCharCode(b[i]);return btoa(bin);}
+function bytesToB64u(b){return bytesToB64(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function bytesToAlpha(b){
+  var s="",x=new Uint8Array(1);
+  for(var i=0;i<b.length;i++){
+    var v=b[i];
+    /* rejection sampling on 248 (largest multiple of 62 below 256) to avoid modulo bias */
+    while(v>=248){crypto.getRandomValues(x);v=x[0];}
+    s+=ALPHA[v%62];
+  }
+  return s;
+}
+function makeUuid(){
+  var b=randBytes(16);
+  b[6]=(b[6]&0x0F)|0x40; /* version 4 */
+  b[8]=(b[8]&0x3F)|0x80; /* variant 10 */
+  var h=bytesToHex(b);
+  return h.slice(0,8)+"-"+h.slice(8,12)+"-"+h.slice(12,16)+"-"+h.slice(16,20)+"-"+h.slice(20);
+}
+
+function generate(){
+  var type=typeEl.value;
+  if(type==="uuid"){
+    token=makeUuid();
+    entropyEl.textContent="122 bits";
+  }else{
+    var n=parseInt(lenEl.value,10);
+    var b=randBytes(n);
+    if(type==="hex"){token=bytesToHex(b);entropyEl.textContent=(n*8)+" bits";}
+    else if(type==="base64"){token=bytesToB64(b);entropyEl.textContent=(n*8)+" bits";}
+    else if(type==="base64url"){token=bytesToB64u(b);entropyEl.textContent=(n*8)+" bits";}
+    else{token=bytesToAlpha(b);entropyEl.textContent=(n*Math.log2(62)).toFixed(1)+" bits";}
+  }
+  out.textContent=token;
+  chlenEl.textContent=String(token.length);
+  status.textContent="";
+}
+
+function updateLenLabel(){
+  var type=typeEl.value;
+  if(type==="uuid"){lenOut.textContent="fixed (122-bit)";lenEl.disabled=true;}
+  else{lenEl.disabled=false;lenOut.textContent=lenEl.value+" "+(type==="alphanum"?"characters":"bytes");}
+}
+
+typeEl.addEventListener("change",function(){updateLenLabel();generate();});
+lenEl.addEventListener("input",function(){updateLenLabel();generate();});
+document.getElementById("regen").addEventListener("click",generate);
+document.getElementById("copyBtn").addEventListener("click",function(){
+  function done(){status.textContent="Token copied ("+token.length+" chars).";}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(token).then(done,function(){status.textContent="Copy failed — select the text manually.";});
+  }else{
+    var ta=document.createElement("textarea");ta.value=token;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){status.textContent="Copy failed — select the text manually.";}
+    document.body.removeChild(ta);
+  }
+});
+
+updateLenLabel();
+generate();
+})();
+</script>
+</body>
+</html>

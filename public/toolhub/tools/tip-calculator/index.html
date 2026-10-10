@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Tip Calculator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Calculate tips, totals, and per-person splits instantly. Use the free online Tip Calculator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/tip-calculator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Tip Calculator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Calculate tips, totals, and per-person splits instantly.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/tip-calculator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tip Calculator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Calculate tips, totals, and per-person splits instantly.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Utilities","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Tip Calculator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Tip Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Tip percentage slider, bill splitting, per-person breakdown, live recalculation","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/percentage/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/emi-calculator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/salary-calculator/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/unit-price-calculator/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to calculate a tip","step":[{"@type":"HowToStep","position":1,"name":"Enter the bill amount","text":"Type the pre-tip bill total into the bill amount field."},{"@type":"HowToStep","position":2,"name":"Choose the tip percentage","text":"Drag the slider from 0% to 50% to set how generous the tip is."},{"@type":"HowToStep","position":3,"name":"Split if needed","text":"Set the number of people to split between — the per-person share updates instantly."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is the tip calculated?","acceptedAnswer":{"@type":"Answer","text":"Tip = bill × (tip % ÷ 100). The total is bill + tip, and the per-person share is total ÷ number of people."}},{"@type":"Question","name":"What is a standard tip percentage?","acceptedAnswer":{"@type":"Answer","text":"In the US, 15–20% is standard for sit-down restaurants, 18–22% for great service. Elsewhere, local customs vary — 10% is common in many countries."}},{"@type":"Question","name":"Is the tip calculated before or after tax?","acceptedAnswer":{"@type":"Answer","text":"Customarily the tip is calculated on the pre-tax subtotal. This calculator tips on whatever amount you enter, so enter the pre-tax total if you want the standard convention."}},{"@type":"Question","name":"Is this Tip Calculator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number],textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=file]{margin-top:.4rem;font-size:.95rem}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+.status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}}
+/* tool extensions */
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:1.4rem}
+.result-card{background:#fffdf6;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.result-card .k{font-size:.82rem;color:var(--mut);font-weight:600}
+.result-card .v{font-size:1.6rem;font-weight:800;color:var(--amber-d);margin-top:2px}
+.result-card.total{border:2px solid var(--amber);background:#fff8ea}
+.result-card.total .v{color:var(--ink)}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper input{width:90px;text-align:center}
+.stepper button{margin-top:0;padding:8px 16px;font-size:1.1rem;line-height:1}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Utilities</a> / <span>Tip Calculator</span></nav>
+<main class="wrap">
+<h1>Tip Calculator</h1>
+<p class="lede">Work out the tip, the total bill, and everyone's share in seconds. Drag the slider, set the split — everything updates live.</p>
+
+<div class="tool">
+  <label for="bill">Bill amount ($)</label>
+  <input type="number" id="bill" min="0" step="0.01" value="50" placeholder="e.g. 50.00">
+
+  <label for="tipPct">Tip percentage</label>
+  <div class="lenrow">
+    <input type="range" id="tipPct" min="0" max="50" value="15" step="1">
+    <output id="tipPctOut" for="tipPct">15%</output>
+  </div>
+
+  <label for="split">Split between (people)</label>
+  <div class="stepper">
+    <button type="button" id="minusBtn" aria-label="Fewer people">−</button>
+    <input type="number" id="split" min="1" max="50" value="1">
+    <button type="button" id="plusBtn" aria-label="More people">+</button>
+  </div>
+
+  <div class="result-grid">
+    <div class="result-card">
+      <div class="k">Tip amount</div>
+      <div class="v" id="tipAmt">—</div>
+    </div>
+    <div class="result-card total">
+      <div class="k">Total bill</div>
+      <div class="v" id="totalAmt">—</div>
+    </div>
+    <div class="result-card">
+      <div class="k">Per person</div>
+      <div class="v" id="perPerson">—</div>
+    </div>
+    <div class="result-card">
+      <div class="k">Tip per person</div>
+      <div class="v" id="tipPerPerson">—</div>
+    </div>
+  </div>
+  <div class="status" id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Enter the bill amount (pre-tip total).</li>
+    <li>Drag the <b>tip percentage</b> slider from 0% to 50%.</li>
+    <li>Set the number of people with the stepper — the tip, total, and per-person shares update instantly.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>The math</h2>
+  <p>Tip = bill × (tip % ÷ 100). Total = bill + tip. Per-person share = total ÷ people. All figures are rounded to the nearest cent.</p>
+  <h2>Pre-tax convention</h2>
+  <p>Tip is customarily calculated on the pre-tax subtotal, not the final total. Enter the pre-tax amount in the bill field to follow that convention.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>How is the tip calculated?</summary><p>Tip = bill × (tip % ÷ 100). The total is bill + tip, and the per-person share is total ÷ number of people.</p></details>
+  <details><summary>What is a standard tip percentage?</summary><p>In the US, 15–20% is standard for sit-down restaurants and 18–22% for great service. In many other countries 10% is common — when in doubt, follow local custom.</p></details>
+  <details><summary>Is the tip calculated before or after tax?</summary><p>Customarily the tip is calculated on the pre-tax subtotal. This calculator tips on whatever amount you enter, so enter the pre-tax total to follow the standard convention.</p></details>
+  <details><summary>Is this Tip Calculator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/percentage/">Percentage Calculator</a></li>
+    <li><a href="/toolhub/tools/emi-calculator/">EMI Calculator</a></li>
+    <li><a href="/toolhub/tools/salary-calculator/">Salary Calculator</a></li>
+    <li><a href="/toolhub/tools/unit-price-calculator/">Unit Price Calculator</a></li>
+    <li><a href="/toolhub/tools/savings-goal-calculator/">Savings Goal Calculator</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyday math — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var billEl=document.getElementById("bill"),
+    tipEl=document.getElementById("tipPct"),
+    tipOut=document.getElementById("tipPctOut"),
+    splitEl=document.getElementById("split"),
+    tipAmt=document.getElementById("tipAmt"),
+    totalAmt=document.getElementById("totalAmt"),
+    perPerson=document.getElementById("perPerson"),
+    tipPerPerson=document.getElementById("tipPerPerson"),
+    status=document.getElementById("status");
+
+function money(n){
+  return "$"+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+}
+
+function calc(){
+  var bill=parseFloat(billEl.value);
+  var pct=parseInt(tipEl.value,10);
+  var people=parseInt(splitEl.value,10);
+  tipOut.textContent=pct+"%";
+  if(isNaN(bill)||bill<0){
+    tipAmt.textContent="—";totalAmt.textContent="—";
+    perPerson.textContent="—";tipPerPerson.textContent="—";
+    status.textContent="Enter a valid bill amount (0 or more).";
+    return;
+  }
+  if(isNaN(people)||people<1){people=1;splitEl.value="1";}
+  if(people>50){people=50;splitEl.value="50";}
+  var tip=bill*pct/100;
+  var total=bill+tip;
+  tipAmt.textContent=money(tip);
+  totalAmt.textContent=money(total);
+  perPerson.textContent=money(total/people);
+  tipPerPerson.textContent=money(tip/people);
+  status.textContent="";
+}
+
+billEl.addEventListener("input",calc);
+tipEl.addEventListener("input",calc);
+splitEl.addEventListener("input",calc);
+document.getElementById("minusBtn").addEventListener("click",function(){
+  var v=parseInt(splitEl.value,10);
+  splitEl.value=String(isNaN(v)?1:Math.max(1,v-1));
+  calc();
+});
+document.getElementById("plusBtn").addEventListener("click",function(){
+  var v=parseInt(splitEl.value,10);
+  splitEl.value=String(isNaN(v)?1:Math.min(50,v+1));
+  calc();
+});
+
+calc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>ULID Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Generate spec-compliant ULIDs — 48-bit timestamp plus 80-bit cryptographic randomness, lexicographically sortable and monotonic. Use the free online ULID Generator on AI Directory — no signup, no install, browser-first processing." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ulid-generator/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="ULID Generator — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Generate spec-compliant ULIDs — 48-bit timestamp plus 80-bit cryptographic randomness, lexicographically sortable and monotonic. Use the free online ULID Generator on AI Directory — no signup, no install, browser-first processing." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ulid-generator/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="ULID Generator — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Generate spec-compliant ULIDs — 48-bit timestamp plus 80-bit cryptographic randomness, lexicographically sortable and monotonic. Use the free online ULID Generator on AI Directory — no signup, no install, browser-first processing." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Developer", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "ULID Generator", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ulid-generator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "ULID Generator \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/ulid-generator/", "applicationCategory": "DeveloperApplication", "operatingSystem": "Any (browser-based)", "description": "Generate spec-compliant ULIDs \u2014 48-bit timestamp plus 80-bit cryptographic randomness, lexicographically sortable and monotonic. Use the free online ULID Generator on AI Directory \u2014 no signup, no install, browser-first processing.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "UUID Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/uuid/"}, {"@type": "SoftwareApplication", "name": "Token Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/token-generator/"}, {"@type": "SoftwareApplication", "name": "Random Number Generator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/random-number/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use ULID Generator", "description": "Generate spec-compliant ULIDs \u2014 48-bit timestamp plus 80-bit cryptographic randomness, lexicographically sortable and monotonic. Use the free online ULID Generator on AI Directory \u2014 no signup, no install, browser-first processing.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Pick how many you need", "text": "Click Generate 1 for a single identifier, or 10 / 100 for a batch \u2014 for example to seed test data."}, {"@type": "HowToStep", "position": 2, "name": "Copy the ULIDs", "text": "Use Copy all to grab every generated ID, or select individual lines from the output box."}, {"@type": "HowToStep", "position": 3, "name": "Use them as sortable IDs", "text": "ULIDs sort lexicographically by creation time, so they work as database keys, filenames and log correlation IDs without a separate timestamp column."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a ULID?", "acceptedAnswer": {"@type": "Answer", "text": "A Universally Unique Lexicographically Sortable Identifier: 26 characters in Crockford base32. The first 10 encode a 48-bit millisecond timestamp; the last 16 encode 80 bits of randomness."}}, {"@type": "Question", "name": "ULID vs UUID \u2014 which should I use?", "acceptedAnswer": {"@type": "Answer", "text": "Use ULIDs when you want IDs that sort by creation time and stay URL-safe (no special characters). Use UUIDv4 when you need the widest ecosystem compatibility. ULIDs also avoid UUIDv1's privacy leak of MAC addresses."}}, {"@type": "Question", "name": "Are these ULIDs really random?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The 80-bit random component comes from crypto.getRandomValues, the browser's cryptographic random source \u2014 the same quality of randomness used for TLS keys."}}, {"@type": "Question", "name": "What does \u201cmonotonic\u201d mean here?", "acceptedAnswer": {"@type": "Answer", "text": "If several ULIDs are generated within the same millisecond, the random component is incremented instead of re-randomized, guaranteeing the sequence never goes backwards. This implementation follows that part of the ULID spec."}}]}
+</script>
+
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.danger{background:#dc2626}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+table.data{width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.95rem}
+table.data th,table.data td{border:1px solid var(--line);padding:.5rem .6rem;text-align:right}
+table.data th{background:var(--amber-soft)}
+table.data td:first-child,table.data th:first-child{text-align:left}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.badge{display:inline-block;background:var(--amber);color:#fff;font-size:.75rem;font-weight:800;border-radius:999px;padding:.15rem .6rem;margin-left:.4rem;vertical-align:middle}
+.note{font-size:.88rem;color:var(--muted)}
+pre.out{white-space:pre-wrap;word-break:break-all;background:#111827;color:#f9fafb;border-radius:10px;padding:.9rem 1rem;font-size:.88rem;line-height:1.55;margin:.75rem 0 0}
+textarea.mono,input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.msg{margin-top:.75rem;font-weight:700}
+.msg.err{color:var(--red)}
+.msg.okm{color:var(--green)}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.tabs button{background:#f3f4f6;color:#111827}
+.tabs button.active{background:var(--amber);color:#fff}
+.badge-ok{display:inline-block;background:#dcfce7;color:#15803d;border-radius:999px;padding:.15rem .7rem;font-weight:800;font-size:.85rem}
+.badge-no{display:inline-block;background:#fee2e2;color:#b91c1c;border-radius:999px;padding:.15rem .7rem;font-weight:800;font-size:.85rem}
+.kv td:first-child{font-weight:700;white-space:nowrap;width:9rem}
+.copyrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem}
+.spin{display:inline-block;width:1rem;height:1rem;border:2px solid #f3f4f6;border-top:2px solid var(--amber);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:.4rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+</style>
+</head>
+<body>
+<header class="site no-print"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Developer</span> / <span>ULID Generator</span></nav>
+<h1>ULID Generator</h1>
+<p class="lead">Generate real, spec-compliant ULIDs (Universally Unique Lexicographically Sortable Identifiers) — 26 Crockford-base32 characters combining a millisecond timestamp with 80 bits of cryptographic randomness.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<div class="btnrow" style="margin-top:0">
+<button id="ulGen1">Generate 1</button>
+<button class="ghost" id="ulGen10">Generate 10</button>
+<button class="ghost" id="ulGen100">Generate 100</button>
+</div>
+<label class="f" for="ulOut">Generated ULIDs</label>
+<textarea id="ulOut" class="mono" rows="8" readonly placeholder="Your ULIDs will appear here\u2026"></textarea>
+<div class="copyrow"><button class="ghost sm" id="ulCopy">Copy all</button><button class="ghost sm" id="ulClear">Clear</button></div>
+<p class="note">Monotonic: ULIDs generated within the same millisecond have their random part incremented, so output stays strictly sortable. Timestamp part covers ~108 years of milliseconds.</p>
+
+</section>
+<h2>How to use ULID Generator</h2>
+<ol><li><strong>Pick how many you need</strong> — Click Generate 1 for a single identifier, or 10 / 100 for a batch — for example to seed test data.</li><li><strong>Copy the ULIDs</strong> — Use Copy all to grab every generated ID, or select individual lines from the output box.</li><li><strong>Use them as sortable IDs</strong> — ULIDs sort lexicographically by creation time, so they work as database keys, filenames and log correlation IDs without a separate timestamp column.</li></ol>
+<div class="infowrap">
+<section><h2>What is ULID Generator?</h2><p>ULID Generator produces identifiers that are unique, time-ordered and URL-safe — the modern alternative to UUIDs for database primary keys, distributed systems and event streams.</p></section><section><h2>How this developer tool works</h2><p>Date.now() supplies the 48-bit timestamp, encoded as 10 Crockford-base32 characters; crypto.getRandomValues supplies 80 random bits encoded as 16 more. Same-millisecond calls increment the random part for monotonicity.</p></section><section><h2>Privacy and limits</h2><p>Generation is fully local; no IDs are logged or transmitted. ULIDs embed a timestamp — do not use them where creation time must stay secret.</p></section>
+</div>
+<h2>ULID Generator — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>What is a ULID?</summary><p>A Universally Unique Lexicographically Sortable Identifier: 26 characters in Crockford base32. The first 10 encode a 48-bit millisecond timestamp; the last 16 encode 80 bits of randomness.</p></details><details><summary>ULID vs UUID — which should I use?</summary><p>Use ULIDs when you want IDs that sort by creation time and stay URL-safe (no special characters). Use UUIDv4 when you need the widest ecosystem compatibility. ULIDs also avoid UUIDv1's privacy leak of MAC addresses.</p></details><details><summary>Are these ULIDs really random?</summary><p>Yes. The 80-bit random component comes from crypto.getRandomValues, the browser's cryptographic random source — the same quality of randomness used for TLS keys.</p></details><details><summary>What does “monotonic” mean here?</summary><p>If several ULIDs are generated within the same millisecond, the random component is incremented instead of re-randomized, guaranteeing the sequence never goes backwards. This implementation follows that part of the ULID spec.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/uuid/">UUID Generator</a></li><li><a href="/toolhub/tools/token-generator/">Token Generator</a></li><li><a href="/toolhub/tools/random-number/">Random Number Generator</a></li><li><a href="/toolhub/tools/hash/">Hash Generator</a></li><li><a href="/toolhub/tools/password/">Password Generator</a></li><li><a href="/toolhub/tools/password-strength-analyser/">Password Strength Analyser</a></li></ul></nav>
+</main>
+<footer class="site no-print"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+
+const $=id=>document.getElementById(id);
+const CROCK="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+let lastMs=0,lastRand=null;
+function encTime(ms){let t="",v=ms;for(let i=0;i<10;i++){t=CROCK[v%32]+t;v=Math.floor(v/32);}return t;}
+function encRand(r){let out="",acc=0,bits=0;for(let i=0;i<10;i++){acc=(acc<<8)|r[i];bits+=8;while(bits>=5){bits-=5;out+=CROCK[(acc>>bits)&31];}}if(bits>0){out+=CROCK[(acc<<(5-bits))&31];}return out;}
+function ulid(){
+  let ms=Date.now();
+  const r=new Uint8Array(10);crypto.getRandomValues(r);
+  if(ms===lastMs&&lastRand){
+    for(let i=0;i<10;i++)r[i]=lastRand[i];
+    let carry=1;
+    for(let i=9;i>=0&&carry;i--){const v=r[i]+carry;r[i]=v&255;carry=v>255?1:0;}
+    if(carry){ms=lastMs+1;crypto.getRandomValues(r);}
+  }
+  lastMs=ms;lastRand=Array.from(r);
+  return encTime(ms)+encRand(r);
+}
+function ulGen(n){
+  const out=[];
+  for(let i=0;i<n;i++)out.push(ulid());
+  const ta=$("ulOut");
+  ta.value=(ta.value?ta.value.replace(/\n+$/,"")+"\n":"")+out.join("\n");
+  ta.scrollTop=ta.scrollHeight;
+}
+$("ulGen1").addEventListener("click",()=>ulGen(1));
+$("ulGen10").addEventListener("click",()=>ulGen(10));
+$("ulGen100").addEventListener("click",()=>ulGen(100));
+$("ulClear").addEventListener("click",()=>{$("ulOut").value="";});
+$("ulCopy").addEventListener("click",async()=>{
+  const t=$("ulOut").value;if(!t.trim())return;let ok=false;
+  try{await navigator.clipboard.writeText(t);ok=true;}catch(e){
+    const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();
+    try{ok=document.execCommand("copy");}catch(_){} ta.remove();
+  }
+  $("ulCopy").textContent=ok?"Copied!":"Copy failed";
+  setTimeout(()=>{$("ulCopy").textContent="Copy all";},1500);
+});
+
+</script>
+</body>
+</html>

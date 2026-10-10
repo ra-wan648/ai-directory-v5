@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Video Trimmer — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Trim MP4 videos online free — set start and end times (mm:ss) and cut your clip in seconds. Fast keyframe trim with no re-encoding on AI Directory — no signup, your file never leaves your browser." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Video Trimmer — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Trim MP4 videos online free — set start and end times (mm:ss) and cut your clip in seconds. Fast keyframe trim with no re-encoding on AI Directory — no signup, your file never leaves your browser." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Video Trimmer — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Trim MP4 videos online free — set start and end times (mm:ss) and cut your clip in seconds. Fast keyframe trim with no re-encoding on AI Directory — no signup, your file never leaves your browser." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Video tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Video Trimmer", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Video Trimmer \u2014 AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-trimmer/", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (browser-based)", "description": "Trim MP4 videos online free \u2014 set start and end times (mm:ss) and cut your clip in seconds. Fast keyframe trim with no re-encoding on AI Directory \u2014 no signup, your file never leaves your browser.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Video to MP3 Converter", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-to-mp3/"}, {"@type": "SoftwareApplication", "name": "Video Compressor", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/video-compressor/"}, {"@type": "SoftwareApplication", "name": "Audio to MP3 Converter", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-to-mp3/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Video Trimmer", "description": "Trim MP4 videos online free \u2014 set start and end times (mm:ss) and cut your clip in seconds. Fast keyframe trim with no re-encoding on AI Directory \u2014 no signup, your file never leaves your browser.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Pick a video and preview it", "text": "Choose an MP4 file. It plays right on the page so you can note the start and end times \u2014 the full duration is shown for reference."}, {"@type": "HowToStep", "position": 2, "name": "Enter start and end times", "text": "Type mm:ss timestamps (for example 0:30 and 1:45). The end time must be after the start time."}, {"@type": "HowToStep", "position": 3, "name": "Trim and download", "text": "Click “Trim video”. The cut happens in seconds with no re-encoding, and your clip downloads as MP4."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the trim exact to the frame?", "acceptedAnswer": {"@type": "Answer", "text": "Nearly. The fast trim copies the video stream without re-encoding (ffmpeg -c copy), so the cut snaps to the nearest keyframe \u2014 usually within a second of your mark. The upside: it is instant and quality is completely untouched."}}, {"@type": "Question", "name": "Which formats can I trim?", "acceptedAnswer": {"@type": "Answer", "text": "MP4 is the primary format and the output is always MP4. MOV and WebM files may also work when their streams are compatible with the MP4 container."}}, {"@type": "Question", "name": "Does my video get uploaded to a server?", "acceptedAnswer": {"@type": "Answer", "text": "No. The FFmpeg engine runs entirely in your browser via WebAssembly. Your video file never leaves your device."}}, {"@type": "Question", "name": "Why is the first trim slow?", "acceptedAnswer": {"@type": "Answer", "text": "The video engine (~30 MB) downloads the first time you press trim. After that it is cached in your browser, and trimming itself takes only seconds since there is no re-encoding."}}]}
+</script>
+<script type="importmap">
+{"imports":{
+"@ffmpeg/ffmpeg":"https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/+esm",
+"@ffmpeg/util":"https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm",
+"@ffmpeg/core":"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/+esm"
+}}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:var(--amber-d)}
+button:disabled{opacity:.6;cursor:wait}
+button.ghost{background:#f3f4f6;color:#111827}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.status{font-weight:600;margin:.7rem 0;min-height:1.4em}
+.status.err{color:var(--red)}
+.status.ok{color:var(--green)}
+.prog{height:14px;background:#e5e7eb;border-radius:7px;overflow:hidden;margin:.4rem 0}
+.prog>div{height:100%;width:0;background:var(--amber);transition:width .25s;border-radius:7px}
+.warnbox{display:none;background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;border-radius:10px;padding:.7rem 1rem;margin:.7rem 0;font-size:.92rem;font-weight:600}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:1.2rem;text-align:center;background:#fffdf5;margin:.6rem 0}
+input[type=file]{font-size:1rem;max-width:100%}
+.size-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin:.6rem 0;font-size:1rem}
+.size-row b{font-size:1.15rem}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.note{font-size:.88rem;color:var(--muted)}
+video.prev{max-width:100%;border-radius:10px;border:1px solid var(--line);margin-top:.6rem}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Video tools</span> / <span>Video Trimmer</span></nav>
+<h1>Video Trimmer</h1>
+<p class="lead">Cut a section out of your MP4 in seconds — enter start and end times, preview the video, and get your clip with zero quality loss. No re-encoding, nothing uploaded.</p>
+<section class="tool-ui" aria-label="Tool">
+<div class="drop">
+<label class="f" for="file">Choose a video file (MP4)</label>
+<input type="file" id="file" accept="video/mp4,.mp4" />
+<p class="note">Max recommended size: 500 MB. Your file never leaves your device.</p>
+</div>
+<div class="grid2">
+<div><label class="f" for="start">Start time (mm:ss)</label><input type="text" id="start" placeholder="0:30" /></div>
+<div><label class="f" for="end">End time (mm:ss)</label><input type="text" id="end" placeholder="1:45" /></div>
+</div>
+<p class="note">Tip: preview the video below to find your times. Full duration: <b id="dur">—</b></p>
+<video class="prev" id="prev" controls style="display:none"></video>
+<div class="warnbox" id="warn"></div>
+<div class="btnrow"><button id="go">Trim video</button></div>
+<div class="status" id="status"></div>
+<div class="prog" aria-hidden="true"><div id="bar"></div></div>
+<p class="note" id="barLabel">0%</p>
+<div class="result" id="result"></div>
+<p class="note">The video engine (~30 MB) loads only when you press the button — once. It is cached in your browser after the first run, so later uses start instantly.</p><p class="note">Fast trim uses stream copy (no re-encoding), so quality is untouched — the cut snaps to the nearest keyframe, usually within a second of your mark.</p>
+</section>
+
+<h2>How to use Video Trimmer</h2>
+<ol><li><strong>Pick a video and preview it</strong> — Choose an MP4 file. It plays right on the page so you can note the start and end times — the full duration is shown for reference.</li><li><strong>Enter start and end times</strong> — Type mm:ss timestamps (for example 0:30 and 1:45). The end time must be after the start time.</li><li><strong>Trim and download</strong> — Click “Trim video”. The cut happens in seconds with no re-encoding, and your clip downloads as MP4.</li></ol>
+<div class="infowrap">
+<section><h2>What is Video Trimmer?</h2><p>The Video Trimmer cuts a segment out of your MP4 between two timestamps you enter (mm:ss, e.g. 0:30 to 1:45). A built-in preview player helps you find the right times, and the result downloads as an MP4 clip.</p></section>
+<section><h2>How this video tool works</h2><p>This tool runs real FFmpeg compiled to WebAssembly in your browser. Trimming uses stream copy — the equivalent of <code>ffmpeg -ss start -to end -i input -c copy output.mp4</code> — so there is no re-encoding: it is fast and the quality is 100% untouched.</p></section>
+<section><h2>Privacy and limits</h2><p>Your video never leaves your device: the FFmpeg engine downloads (~30 MB, cached after first use) and runs locally. Because trimming is a stream copy, even large files process quickly — but files over ~500 MB may still strain browser memory.</p></section>
+</div>
+<h2>Video Trimmer — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>Is the trim exact to the frame?</summary><p>Nearly. The fast trim copies the video stream without re-encoding (ffmpeg -c copy), so the cut snaps to the nearest keyframe — usually within a second of your mark. The upside: it is instant and quality is completely untouched.</p></details><details><summary>Which formats can I trim?</summary><p>MP4 is the primary format and the output is always MP4. MOV and WebM files may also work when their streams are compatible with the MP4 container.</p></details><details><summary>Does my video get uploaded to a server?</summary><p>No. The FFmpeg engine runs entirely in your browser via WebAssembly. Your video file never leaves your device.</p></details><details><summary>Why is the first trim slow?</summary><p>The video engine (~30 MB) downloads the first time you press trim. After that it is cached in your browser, and trimming itself takes only seconds since there is no re-encoding.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/video-to-mp3/">Video to MP3 Converter</a></li><li><a href="/toolhub/tools/video-compressor/">Video Compressor</a></li><li><a href="/toolhub/tools/audio-to-mp3/">Audio to MP3 Converter</a></li><li><a href="/toolhub/tools/youtube-thumbnail/">YouTube Thumbnail Downloader</a></li><li><a href="/toolhub/tools/image-cropper/">Image Cropper</a></li><li><a href="/toolhub/tools/meme-generator/">Meme Generator</a></li></ul></nav>
+</main>
+<footer class="site"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</b></a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script type="module">
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util';
+
+const CORE_BASE = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+const MAX_WARN = 500 * 1024 * 1024;
+const $ = id => document.getElementById(id);
+
+let ffmpeg = null, engineReady = false, engineLoading = null;
+
+function fmtSize(b){
+  if (b < 1024) return b + ' B';
+  const u = ['KB','MB','GB'];
+  let i = -1;
+  do { b /= 1024; i++; } while (b >= 1024 && i < u.length - 1);
+  return b.toFixed(1) + ' ' + u[i];
+}
+function setStatus(msg, cls){
+  const el = $('status');
+  el.textContent = msg;
+  el.className = 'status' + (cls ? ' ' + cls : '');
+}
+function setBusy(b, label){
+  const go = $('go');
+  go.disabled = b;
+  go.textContent = b ? 'Working\u2026' : label;
+}
+async function loadEngine(){
+  if (engineReady) return;
+  if (engineLoading){ await engineLoading; return; }
+  engineLoading = (async () => {
+    setStatus('Loading video engine (~30 MB, first run only)\u2026');
+    ffmpeg = new FFmpeg();
+    ffmpeg.on('progress', ({ progress }) => {
+      const pct = Math.max(0, Math.min(100, Math.round((progress || 0) * 100)));
+      $('bar').style.width = pct + '%';
+      $('barLabel').textContent = pct + '%';
+      setStatus('Processing\u2026 ' + pct + '%');
+    });
+    const coreURL = await toBlobURL(CORE_BASE + '/ffmpeg-core.js', 'text/javascript');
+    const wasmURL = await toBlobURL(CORE_BASE + '/ffmpeg-core.wasm', 'application/wasm');
+    await ffmpeg.load({ coreURL, wasmURL });
+    engineReady = true;
+  })();
+  await engineLoading;
+}
+function cleanExt(name, fallback){
+  const m = String(name || '').split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
+  return m || fallback;
+}
+async function safeDelete(n){
+  try { await ffmpeg.deleteFile(n); } catch (e) { /* ignore */ }
+}
+function offerDownload(data, filename, mime, extra){
+  const url = URL.createObjectURL(new Blob([data], { type: mime }));
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.className = 'btn';
+  a.textContent = 'Download ' + filename;
+  const r = $('result');
+  r.innerHTML = '';
+  if (extra) r.appendChild(extra);
+  r.appendChild(a);
+  setTimeout(() => a.click(), 60);
+}
+function baseName(name){
+  return String(name || 'output').replace(/\.[^.]+$/, '') || 'output';
+}
+function checkFile(file){
+  if (!file){ setStatus('Please choose a file first.', 'err'); return false; }
+  if (file.size > MAX_WARN){
+    $('warn').style.display = 'block';
+    $('warn').textContent = 'Warning: this file is over 500 MB. Conversion may be very slow or run out of memory in the browser. Consider a smaller file.';
+  }
+  return true;
+}
+
+const GO_LABEL = 'Trim video';
+let videoDur = NaN;
+function parseT(s){
+  s = String(s || '').trim();
+  if (!s) return NaN;
+  if (s.indexOf(':') !== -1){
+    const parts = s.split(':').map(Number);
+    if (parts.some(isNaN)) return NaN;
+    let t = 0;
+    for (const p of parts) t = t * 60 + p;
+    return t;
+  }
+  return parseFloat(s);
+}
+function fmtT(sec){
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return m + ':' + String(s).padStart(2, '0');
+}
+$('file').addEventListener('change', () => {
+  const file = $('file').files[0];
+  const v = $('prev');
+  if (!file){ v.style.display = 'none'; return; }
+  if (v.src) URL.revokeObjectURL(v.src);
+  v.src = URL.createObjectURL(file);
+  v.style.display = 'block';
+  v.onloadedmetadata = () => {
+    videoDur = v.duration;
+    $('dur').textContent = fmtT(videoDur) + ' (' + Math.round(videoDur) + 's)';
+  };
+});
+$('go').addEventListener('click', async () => {
+  $('result').innerHTML = '';
+  const file = $('file').files[0];
+  if (!checkFile(file)) return;
+  const start = parseT($('start').value), end = parseT($('end').value);
+  if (isNaN(start) || start < 0){ setStatus('Enter a valid start time (mm:ss).', 'err'); return; }
+  if (isNaN(end) || end <= start){ setStatus('End time must be after the start time.', 'err'); return; }
+  if (!isNaN(videoDur) && end > videoDur){
+    setStatus('End time (' + fmtT(end) + ') is past the video length (' + fmtT(videoDur) + ').', 'err'); return;
+  }
+  setBusy(true, GO_LABEL);
+  $('bar').style.width = '0%'; $('barLabel').textContent = '0%';
+  try {
+    await loadEngine();
+    const inName = 'input.mp4';
+    await ffmpeg.writeFile(inName, await fetchFile(file));
+    await ffmpeg.exec(['-ss', String(start), '-to', String(end), '-i', inName, '-c', 'copy', 'output.mp4']);
+    const data = await ffmpeg.readFile('output.mp4');
+    await safeDelete(inName); await safeDelete('output.mp4');
+    offerDownload(data, baseName(file.name) + '-trimmed.mp4', 'video/mp4');
+    setStatus('Done! Trimmed clip ready (' + fmtSize(data.length) + ').', 'ok');
+  } catch (e) {
+    setStatus('Trim failed: ' + (e && e.message ? e.message : e), 'err');
+  } finally { setBusy(false, GO_LABEL); }
+});
+
+</script>
+</body>
+</html>

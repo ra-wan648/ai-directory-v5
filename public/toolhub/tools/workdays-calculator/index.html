@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Workdays Calculator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Count workdays between dates with custom weekends and holidays, or add workdays to a date. Use the free online Workdays Calculator on AI Directory — no signup, no install." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/workdays-calculator/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Workdays Calculator — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Count workdays between dates with custom weekends and holidays, or add workdays to a date. Use the free online Workdays Calculator on AI Directory — no signup, no install." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/workdays-calculator/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Workdays Calculator — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Count workdays between dates with custom weekends and holidays, or add workdays to a date. Use the free online Workdays Calculator on AI Directory — no signup, no install." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Utilities", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Workdays Calculator", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/workdays-calculator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Workdays Calculator - AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/workdays-calculator/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (browser-based)", "description": "Count workdays between dates with custom weekends and holidays, or add workdays to a date. Free online tool, no signup, browser-first processing.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Date Difference Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/date-diff/"}, {"@type": "SoftwareApplication", "name": "Date Duration Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/date-duration-calculator/"}, {"@type": "SoftwareApplication", "name": "Timezone Converter", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/timezone/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Workdays Calculator", "description": "Count workdays between dates or add workdays to a date.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Set your weekend", "text": "Pick Saturday-Sunday, Friday-Saturday (Middle East) or Friday only (Bangladesh)."}, {"@type": "HowToStep", "position": 2, "name": "Add holidays", "text": "List holidays as YYYY-MM-DD, one per line — they are excluded from the count."}, {"@type": "HowToStep", "position": 3, "name": "Calculate", "text": "Count workdays between two dates, or add N workdays to a start date."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which weekend options are supported?", "acceptedAnswer": {"@type": "Answer", "text": "Saturday-Sunday (most of the world), Friday-Saturday (many Middle East countries), Friday only (Bangladesh), Sunday only, and Thursday-Friday. Pick the one that matches your country."}}, {"@type": "Question", "name": "How do holidays work?", "acceptedAnswer": {"@type": "Answer", "text": "Type each holiday as YYYY-MM-DD, one per line. Holidays that fall on a workday are excluded from the count; holidays on weekends are ignored since those days are already excluded."}}, {"@type": "Question", "name": "Is the start date included when adding workdays?", "acceptedAnswer": {"@type": "Answer", "text": "No. 'Add N workdays' moves forward N workdays starting after the start date — so adding 1 workday to a Friday lands on the next workday (e.g. Monday with a Sat-Sun weekend). The count mode includes both the start and end dates."}}, {"@type": "Question", "name": "Is my data stored anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. All calculations run in JavaScript in your browser — nothing is uploaded or stored."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+button.active{background:var(--amber-d);color:#fff}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.note{font-size:.88rem;color:var(--muted)}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Utilities</span> / <span>Workdays Calculator</span></nav>
+<h1>Workdays Calculator</h1>
+<p class="lead">Count workdays between two dates — with your country's weekend (including Fri–Sat and Friday-only options) and custom holidays — or add N workdays to a start date.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<div class="btnrow" id="wdModes">
+<button class="sm active" data-m="count">Count workdays</button>
+<button class="sm ghost" data-m="add">Add N workdays</button>
+</div>
+<div class="grid2">
+<div>
+<div id="wdCountWrap">
+<label class="f" for="wdStart">Start date</label><input type="date" id="wdStart">
+<label class="f" for="wdEnd">End date</label><input type="date" id="wdEnd">
+</div>
+<div id="wdAddWrap" style="display:none">
+<label class="f" for="wdStartA">Start date</label><input type="date" id="wdStartA">
+<label class="f" for="wdN">Workdays to add</label><input type="number" id="wdN" value="10" min="1" max="1000" step="1">
+</div>
+<label class="f" for="wdWeekend">Weekend</label>
+<select id="wdWeekend">
+<option value="0,6">Saturday – Sunday</option>
+<option value="5,6">Friday – Saturday (Middle East)</option>
+<option value="5">Friday only (Bangladesh)</option>
+<option value="0">Sunday only</option>
+<option value="4,5">Thursday – Friday</option>
+</select>
+<label class="f" for="wdHol">Holidays (YYYY-MM-DD, one per line)</label>
+<textarea id="wdHol" rows="5" placeholder="2026-12-25&#10;2026-12-16"></textarea>
+</div>
+<div>
+<div class="res" aria-live="polite">
+<div id="wdLbl">Workdays between dates</div>
+<div class="big" id="wdAns">—</div>
+<div id="wdDetail" class="note" style="margin-top:.5rem"></div>
+</div>
+<p class="note">Count mode includes both start and end dates. Add mode moves forward from (not including) the start date.</p>
+</div>
+</div>
+
+</section>
+
+<h2>How to use Workdays Calculator</h2>
+<ol><li><strong>Set your weekend</strong> — Pick Saturday–Sunday, Friday–Saturday (Middle East) or Friday only (Bangladesh).</li><li><strong>Add holidays</strong> — List holidays as YYYY-MM-DD, one per line — they are excluded from the count.</li><li><strong>Calculate</strong> — Count workdays between two dates, or add N workdays to a start date.</li></ol>
+<div class="infowrap">
+<section><h2>What is Workdays Calculator?</h2><p>The Workdays Calculator answers two practical questions: how many working days fall between two dates, and what date you land on after adding N workdays — respecting weekends and holidays you define.</p></section>
+<section><h2>How this math tool works</h2><p>Each date in the range is checked against your weekend definition and holiday list with plain JavaScript date math. Holidays falling on weekends are ignored since those days are already excluded.</p></section>
+<section><h2>Privacy and limits</h2><p>All calculations run locally in your browser — nothing is uploaded or stored. Holiday lists are per-session; paste your own each time.</p></section>
+</div>
+<h2>Workdays Calculator — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>Which weekend options are supported?</summary><p>Saturday–Sunday (most of the world), Friday–Saturday (many Middle East countries), Friday only (Bangladesh), Sunday only, and Thursday–Friday. Pick the one that matches your country.</p></details><details><summary>How do holidays work?</summary><p>Type each holiday as YYYY-MM-DD, one per line. Holidays that fall on a workday are excluded from the count; holidays on weekends are ignored since those days are already excluded.</p></details><details><summary>Is the start date included when adding workdays?</summary><p>No. 'Add N workdays' moves forward N workdays starting after the start date — so adding 1 workday to a Friday lands on the next workday (e.g. Monday with a Sat–Sun weekend). The count mode includes both the start and end dates.</p></details><details><summary>Is my data stored anywhere?</summary><p>No. All calculations run in JavaScript in your browser — nothing is uploaded or stored.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/date-diff/">Date Difference Calculator</a></li><li><a href="/toolhub/tools/date-duration-calculator/">Date Duration Calculator</a></li><li><a href="/toolhub/tools/timezone/">Timezone Converter</a></li><li><a href="/toolhub/tools/unix-time/">Unix Time Converter</a></li><li><a href="/toolhub/tools/habit-tracker/">Habit Tracker</a></li><li><a href="/toolhub/tools/pomodoro-timer/">Pomodoro Timer</a></li></ul></nav>
+</main>
+<footer class="site"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+let mode="count";
+function parseD(v){const p=v.split("-");return new Date(p[0],p[1]-1,p[2]);}
+function fmt(d){return d.toLocaleDateString("en-US",{weekday:"short",year:"numeric",month:"short",day:"numeric"});}
+function weekendSet(){return new Set($("wdWeekend").value.split(",").map(Number));}
+function holidays(){
+  const s=new Set();
+  $("wdHol").value.split("\n").forEach(l=>{
+    l=l.trim();
+    if(/^\d{4}-\d{2}-\d{2}$/.test(l)){
+      const d=parseD(l);
+      if(!isNaN(d))s.add(d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate());
+    }
+  });
+  return s;
+}
+function isWork(d,ws,hs){
+  if(ws.has(d.getDay()))return false;
+  if(hs.has(d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()))return false;
+  return true;
+}
+function calc(){
+  const ws=weekendSet(),hs=holidays();
+  if(mode==="count"){
+    $("wdLbl").textContent="Workdays between dates";
+    const a=$("wdStart").value,b=$("wdEnd").value;
+    if(!a||!b){$("wdAns").textContent="—";$("wdDetail").textContent="Pick both dates.";return;}
+    let d0=parseD(a),d1=parseD(b);
+    if(d0>d1){const t=d0;d0=d1;d1=t;}
+    let work=0,hol=0,wknd=0;
+    const cur=new Date(d0);
+    while(cur<=d1){
+      if(ws.has(cur.getDay()))wknd++;
+      else if(hs.has(cur.getFullYear()+"-"+cur.getMonth()+"-"+cur.getDate()))hol++;
+      else work++;
+      cur.setDate(cur.getDate()+1);
+    }
+    const total=Math.round((d1-d0)/86400000)+1;
+    $("wdAns").textContent=work+(work===1?" workday":" workdays");
+    $("wdDetail").textContent=total+" calendar days: "+wknd+" weekend, "+hol+" holiday(s) excluded.";
+  }else{
+    $("wdLbl").textContent="Date after adding workdays";
+    const a=$("wdStartA").value,n=Math.max(1,parseInt($("wdN").value,10)||1);
+    if(!a){$("wdAns").textContent="—";$("wdDetail").textContent="Pick a start date.";return;}
+    const d=parseD(a);let added=0;let guard=0;
+    while(added<n&&guard<10000){d.setDate(d.getDate()+1);guard++;if(isWork(d,ws,hs))added++;}
+    $("wdAns").textContent=fmt(d);
+    $("wdDetail").textContent=n+(n===1?" workday":" workdays")+" after "+fmt(parseD(a))+", skipping weekends and "+hs.size+" holiday(s).";
+  }
+}
+$("wdModes").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+  $("wdModes").querySelectorAll("button").forEach(x=>{x.classList.remove("active");x.classList.add("ghost");});
+  b.classList.add("active");b.classList.remove("ghost");
+  mode=b.dataset.m;
+  $("wdCountWrap").style.display=mode==="count"?"":"none";
+  $("wdAddWrap").style.display=mode==="add"?"":"none";
+  calc();
+}));
+["wdStart","wdEnd","wdStartA","wdN","wdWeekend","wdHol"].forEach(id=>$(id).addEventListener("input",calc));
+$("wdWeekend").addEventListener("change",calc);
+calc();
+</script>
+</body>
+</html>

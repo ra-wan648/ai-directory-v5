@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E8940C" />
+<title>Savings Goal Calculator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Find the monthly deposit needed to reach a savings goal, or how long savings take. Use the free online Savings Goal Calculator on AI Directory — no signup, no install." />
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/savings-goal-calculator/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AI Directory" />
+<meta property="og:title" content="Savings Goal Calculator — Free Online Tool (No Signup) | AI Directory" />
+<meta property="og:description" content="Find the monthly deposit needed to reach a savings goal, or how long savings take. Use the free online Savings Goal Calculator on AI Directory — no signup, no install." />
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/savings-goal-calculator/" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Savings Goal Calculator — Free Online Tool (No Signup) | AI Directory" />
+<meta name="twitter:description" content="Find the monthly deposit needed to reach a savings goal, or how long savings take. Use the free online Savings Goal Calculator on AI Directory — no signup, no install." />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "All tools", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/"}, {"@type": "ListItem", "position": 2, "name": "Utilities", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/#catalog"}, {"@type": "ListItem", "position": 3, "name": "Savings Goal Calculator", "item": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/savings-goal-calculator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Savings Goal Calculator - AI Directory", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/savings-goal-calculator/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (browser-based)", "description": "Find the monthly deposit needed to reach a savings goal, or how long savings take. Free online tool, no signup, browser-first processing.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "isRelatedTo": [{"@type": "SoftwareApplication", "name": "Compound Interest Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/interest/"}, {"@type": "SoftwareApplication", "name": "Loan EMI Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/emi-calculator/"}, {"@type": "SoftwareApplication", "name": "Salary Calculator", "url": "https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/salary-calculator/"}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "How to use Savings Goal Calculator", "description": "Plan monthly deposits toward a savings goal.", "totalTime": "PT2M", "step": [{"@type": "HowToStep", "position": 1, "name": "Pick a mode", "text": "Choose 'monthly deposit needed' or 'time to reach goal'."}, {"@type": "HowToStep", "position": 2, "name": "Enter your numbers", "text": "Type the goal amount, current savings, interest rate and timeframe or deposit."}, {"@type": "HowToStep", "position": 3, "name": "Read the plan", "text": "See the required deposit or timeline, plus how much comes from interest."}]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How is the required monthly deposit calculated?", "acceptedAnswer": {"@type": "Answer", "text": "With the future-value-of-annuity formula, assuming deposits at the end of each month and monthly compounding: PMT = (Goal - Current x (1+r)^n) x r / ((1+r)^n - 1). For example, to reach $12,000 in one year at 6% starting from zero, you need about $972.80 per month."}}, {"@type": "Question", "name": "What does the reverse mode do?", "acceptedAnswer": {"@type": "Answer", "text": "Reverse mode answers the opposite question: given a fixed monthly deposit, how many months until you reach the goal? It solves the same compound-interest equation for time instead of payment."}}, {"@type": "Question", "name": "Is the interest rate nominal or effective?", "acceptedAnswer": {"@type": "Answer", "text": "Enter the nominal annual rate; the tool compounds it monthly (rate / 12 per month), which matches how most savings accounts accrue interest."}}, {"@type": "Question", "name": "Is my data stored anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. All calculations run in JavaScript in your browser — nothing is uploaded or stored."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b56f00;--amber-soft:#fef3c7;--bg:#fffaf0;--ink:#1f2937;--muted:#6b7280;--card:#fff;--line:#e8e0cc;--green:#15803d}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+a{color:var(--amber-d)}
+header.site{background:#111827;color:#f9fafb;padding:.85rem 1rem;position:sticky;top:0;z-index:50}
+header.site .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:.8rem}
+.brand{font-weight:800;font-size:1.3rem;color:#fff;text-decoration:none}
+.brand b{color:var(--amber)}
+.tagline{font-size:.85rem;color:#9ca3af}
+main{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 3rem}
+nav.crumbs{font-size:.9rem;color:var(--muted);margin:.6rem 0 1rem}
+nav.crumbs a{color:var(--amber-d);text-decoration:none}
+nav.crumbs a:hover{text-decoration:underline}
+h1{font-size:1.9rem;margin:.2rem 0 .5rem;line-height:1.25}
+.lead{color:#374151;font-size:1.05rem;max-width:62rem}
+.tool-ui{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.25rem;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=email],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+button,.btn{cursor:pointer;border:none;border-radius:8px;padding:.65rem 1.15rem;font-size:1rem;font-weight:700;background:var(--amber);color:#fff}
+button:hover,.btn:hover{background:var(--amber-d)}
+button.ghost{background:#f3f4f6;color:#111827}
+button.sm{padding:.35rem .7rem;font-size:.85rem}
+button.active{background:var(--amber-d);color:#fff}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+details{border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;background:#fff}
+details summary{font-weight:700;cursor:pointer}
+ul.similar{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;list-style:none;padding:0}
+ul.similar a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:var(--ink);font-weight:600}
+ul.similar a:hover{border-color:var(--amber)}
+footer.site{background:#111827;color:#9ca3af;padding:1.6rem 1rem;margin-top:2.5rem}
+footer.site .wrap{max-width:1100px;margin:0 auto;font-size:.9rem}
+footer.site a{color:var(--amber);text-decoration:none}
+.note{font-size:.88rem;color:var(--muted)}
+.res{background:var(--amber-soft);border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.res .big{font-size:1.7rem;font-weight:800;color:#92400e}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem;margin-top:.75rem}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem;text-align:center}
+.stat .v{font-size:1.25rem;font-weight:800;color:#92400e}
+.stat .k{font-size:.8rem;color:var(--muted)}
+.bar{margin:.4rem 0}
+.bar .lbl{display:flex;justify-content:space-between;font-size:.88rem;font-weight:600}
+.bar .track{height:14px;background:#e5e7eb;border-radius:7px;overflow:hidden;margin-top:.25rem}
+.bar .fill{height:100%;border-radius:7px}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><a class="brand" href="/toolhub/"><b>AI</b> Directory</a><span class="tagline">Free mini tools — no signup, right in your browser</span></div></header>
+<main>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/toolhub/">Free Mini Tools</a> / <span>Utilities</span> / <span>Savings Goal Calculator</span></nav>
+<h1>Savings Goal Calculator</h1>
+<p class="lead">How much must you save each month to hit a goal — or, given a monthly deposit, how long until you get there? Real compound-interest math, instantly, in your browser.</p>
+<section class="tool-ui" aria-label="Tool">
+
+<div class="btnrow" id="svModes">
+<button class="sm active" data-m="pmt">Monthly deposit needed</button>
+<button class="sm ghost" data-m="time">Time to reach goal</button>
+</div>
+<div class="grid2">
+<div>
+<label class="f" for="svGoal">Goal amount ($)</label><input type="number" id="svGoal" value="12000" min="0" step="100">
+<label class="f" for="svCur">Current savings ($)</label><input type="number" id="svCur" value="0" min="0" step="100">
+<label class="f" for="svRate">Annual interest rate (%)</label><input type="number" id="svRate" value="6" min="0" max="30" step="0.05">
+<div id="svTimeWrap">
+<label class="f" for="svYears">Timeframe (years)</label><input type="number" id="svYears" value="1" min="0.1" step="0.5">
+</div>
+<div id="svPmtWrap" style="display:none">
+<label class="f" for="svPmt">Monthly deposit ($)</label><input type="number" id="svPmt" value="500" min="0" step="10">
+</div>
+</div>
+<div>
+<div class="res" aria-live="polite">
+<div id="svLbl">Required monthly deposit</div>
+<div class="big" id="svAns">—</div>
+<div class="statgrid">
+<div class="stat"><div class="v" id="svContrib">—</div><div class="k">Your deposits</div></div>
+<div class="stat"><div class="v" id="svInterest">—</div><div class="k">Interest earned</div></div>
+</div>
+<div style="margin-top:.8rem">
+<div class="bar"><div class="lbl"><span>Deposits</span><span id="svPctC"></span></div><div class="track"><div class="fill" id="svBarC" style="background:#E8940C"></div></div></div>
+<div class="bar"><div class="lbl"><span>Interest</span><span id="svPctI"></span></div><div class="track"><div class="fill" id="svBarI" style="background:#15803d"></div></div></div>
+</div>
+</div>
+<p class="note">Monthly compounding. Deposits assumed at the end of each month.</p>
+</div>
+</div>
+
+</section>
+
+<h2>How to use Savings Goal Calculator</h2>
+<ol><li><strong>Pick a mode</strong> — Choose "monthly deposit needed" or "time to reach goal".</li><li><strong>Enter your numbers</strong> — Type the goal amount, current savings, interest rate and timeframe or deposit.</li><li><strong>Read the plan</strong> — See the required deposit or timeline, plus how much comes from interest.</li></ol>
+<div class="infowrap">
+<section><h2>What is Savings Goal Calculator?</h2><p>The Savings Goal Calculator turns a savings target into a concrete monthly plan — or tells you how long a fixed monthly deposit will take to reach the goal, with interest doing part of the work.</p></section>
+<section><h2>How this finance tool works</h2><p>It uses the future-value-of-annuity formula with monthly compounding, solving for the payment or for the number of periods depending on the mode. The bar chart splits the final balance into your deposits versus earned interest.</p></section>
+<section><h2>Privacy and limits</h2><p>All math runs locally in your browser — nothing is uploaded or stored. Results are estimates for planning, not financial advice.</p></section>
+</div>
+<h2>Savings Goal Calculator — frequently asked questions</h2>
+<div class="faqwrap"><details><summary>How is the required monthly deposit calculated?</summary><p>With the future-value-of-annuity formula, assuming deposits at the end of each month and monthly compounding: PMT = (Goal - Current x (1+r)^n) x r / ((1+r)^n - 1). For example, to reach $12,000 in one year at 6% starting from zero, you need about $972.80 per month.</p></details><details><summary>What does the reverse mode do?</summary><p>Reverse mode answers the opposite question: given a fixed monthly deposit, how many months until you reach the goal? It solves the same compound-interest equation for time instead of payment.</p></details><details><summary>Is the interest rate nominal or effective?</summary><p>Enter the nominal annual rate; the tool compounds it monthly (rate / 12 per month), which matches how most savings accounts accrue interest.</p></details><details><summary>Is my data stored anywhere?</summary><p>No. All calculations run in JavaScript in your browser — nothing is uploaded or stored.</p></details></div>
+<nav class="simwrap" aria-label="Similar tools"><h2>Similar tools</h2><ul class="similar"><li><a href="/toolhub/tools/interest/">Compound Interest Calculator</a></li><li><a href="/toolhub/tools/emi-calculator/">Loan EMI Calculator</a></li><li><a href="/toolhub/tools/salary-calculator/">Salary Calculator</a></li><li><a href="/toolhub/tools/percentage/">Percentage Calculator</a></li><li><a href="/toolhub/tools/math-evaluator/">Math Evaluator</a></li><li><a href="/toolhub/tools/scientific-calculator/">Scientific Calculator</a></li></ul></nav>
+</main>
+<footer class="site"><div class="wrap"><p><a href="/toolhub/"><b>AI</b> Directory</a> — free mini tools that run in your browser. No signup, no install.</p></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+const money=v=>"$"+Number(v).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+let mode="pmt";
+function calc(){
+  const goal=parseFloat($("svGoal").value)||0;
+  const cur=Math.max(0,parseFloat($("svCur").value)||0);
+  const r=(parseFloat($("svRate").value)||0)/100/12;
+  let n,pmt,ansHtml;
+  if(mode==="pmt"){
+    n=Math.max(1,Math.round((parseFloat($("svYears").value)||1)*12));
+    $("svLbl").textContent="Required monthly deposit";
+    if(r===0){pmt=Math.max(0,(goal-cur)/n);}
+    else{
+      const g=Math.pow(1+r,n);
+      pmt=Math.max(0,(goal-cur*g)*r/(g-1));
+    }
+    $("svAns").textContent=money(pmt)+"/mo";
+    $("svTimeWrap").style.display="";$("svPmtWrap").style.display="none";
+  }else{
+    pmt=Math.max(0,parseFloat($("svPmt").value)||0);
+    $("svLbl").textContent="Time to reach goal";
+    $("svTimeWrap").style.display="none";$("svPmtWrap").style.display="";
+    if(goal<=cur){n=0;}
+    else if(pmt<=0){n=Infinity;}
+    else if(r===0){n=(goal-cur)/pmt;}
+    else{n=Math.log((goal*r+pmt)/(cur*r+pmt))/Math.log(1+r);}
+    if(!isFinite(n)||n<0){$("svAns").textContent="Never at this rate";n=0;}
+    else{
+      const months=Math.ceil(n);
+      const y=Math.floor(months/12),m=months%12;
+      $("svAns").textContent=months+(months===1?" month":" months")+(y?" ("+y+"y "+m+"m)":"");
+      n=months;
+    }
+  }
+  const contrib=pmt*n;
+  const interest=Math.max(0,goal-contrib-cur);
+  $("svContrib").textContent=money(contrib);
+  $("svInterest").textContent=money(interest);
+  const tot=contrib+interest;
+  const pc=tot?contrib/tot*100:0,pi=tot?interest/tot*100:0;
+  $("svBarC").style.width=pc+"%";$("svBarI").style.width=pi+"%";
+  $("svPctC").textContent=money(contrib)+" ("+pc.toFixed(1)+"%)";
+  $("svPctI").textContent=money(interest)+" ("+pi.toFixed(1)+"%)";
+}
+$("svModes").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+  $("svModes").querySelectorAll("button").forEach(x=>{x.classList.remove("active");x.classList.add("ghost");});
+  b.classList.add("active");b.classList.remove("ghost");
+  mode=b.dataset.m;calc();
+}));
+["svGoal","svCur","svRate","svYears","svPmt"].forEach(id=>$(id).addEventListener("input",calc));
+calc();
+</script>
+</body>
+</html>

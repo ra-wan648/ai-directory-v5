@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Numeronym Generator — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Turn long words into numeronyms like i18n and a11y — control how many first and last letters to keep. Use the free online Numeronym Generator tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/numeronym-generator/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Numeronym Generator — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Turn long words into numeronyms like i18n and a11y — control how many first and last letters to keep.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/numeronym-generator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Numeronym Generator — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Turn long words into numeronyms like i18n and a11y — control how many first and last letters to keep.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Writing","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Numeronym Generator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Numeronym Generator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Numeronym generation (i18n style), adjustable first/last letters 1-3, multi-word batch input, original-to-numeronym pairs","isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/word-counter/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/case/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/lorem/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/keyword-density-checker/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to make a numeronym","step":[{"@type":"HowToStep","position":1,"name":"Enter your words","text":"Type one or more words, separated by spaces or line breaks."},{"@type":"HowToStep","position":2,"name":"Choose first and last letters","text":"Pick how many leading and trailing letters to keep (1 to 3 each) — the classic i18n style keeps 1 and 1."},{"@type":"HowToStep","position":3,"name":"Copy the pairs","text":"Each word is shown next to its numeronym; copy a single pair or the whole list."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a numeronym?","acceptedAnswer":{"@type":"Answer","text":"A numeronym is a word shortened to its first N letters, the count of the removed middle letters, and its last N letters. Examples: internationalization becomes i18n, accessibility becomes a11y, and localization becomes l10n."}},{"@type":"Question","name":"What does 'too short — unchanged' mean?","acceptedAnswer":{"@type":"Answer","text":"A numeronym only makes sense when the word is longer than the kept letters plus at least one middle letter. If the word is too short, the tool leaves it unchanged instead of producing a misleading result."}},{"@type":"Question","name":"Can I process several words at once?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enter any number of words separated by spaces or line breaks; each one is converted independently and shown as an original → numeronym pair."}},{"@type":"Question","name":"Is this Numeronym Generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is completely free, runs entirely in your browser, and requires no signup."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+select,input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6}
+select:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+textarea{width:100%;padding:10px 12px;border:1px solid #e5d9bd;border-radius:8px;font-size:1rem;font-family:inherit;background:#fffdf6;min-height:110px;resize:vertical}
+textarea:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+pre.code{background:#1f2937;color:#fbbf24;padding:16px;border-radius:8px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all;margin-top:1rem;min-height:64px}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+#status{color:var(--mut);font-size:.9rem;margin-top:.6rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+.variant{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;background:#fffdf6}
+.variant .vname{font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--amber-d);text-transform:uppercase;margin-bottom:4px}
+.variant .vrow{display:flex;gap:10px;align-items:flex-start}
+.variant .vval{flex:1;font-size:1.25rem;font-weight:700;word-break:break-word;min-height:1.6em}
+.variant .vrow button{margin-top:0;padding:8px 14px;font-size:.85rem;white-space:nowrap}
+.variant .vdesc{font-size:.85rem;color:var(--mut)}
+table.log{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:1rem}
+table.log th,table.log td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-all}
+table.log th{color:var(--amber-d);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+.optrow{display:flex;gap:16px;flex-wrap:wrap}
+.optrow>div{flex:1;min-width:180px}
+.pair{font-weight:700;color:var(--amber-d)}
+.unchanged{color:var(--mut);font-style:italic}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.variant .vrow{flex-direction:column}.variant .vrow button{align-self:flex-start}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Writing</a> / <span>Numeronym Generator</span></nav>
+<main class="wrap">
+<h1>Numeronym Generator</h1>
+<p class="lede">Turn long words into numeronyms — <i>internationalization</i> becomes <b>i18n</b>, <i>accessibility</i> becomes <b>a11y</b>. Control how many first and last letters to keep, and batch-process whole word lists.</p>
+
+<div class="tool">
+  <label for="words">Words (spaces or line breaks)</label>
+  <textarea id="words" placeholder="e.g. internationalization&#10;accessibility&#10;localization">internationalization
+accessibility
+localization</textarea>
+
+  <div class="optrow">
+    <div>
+      <label for="firstN">Keep first N letters</label>
+      <select id="firstN"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select>
+    </div>
+    <div>
+      <label for="lastN">Keep last N letters</label>
+      <select id="lastN"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select>
+    </div>
+  </div>
+
+  <div class="btnrow">
+    <button class="ghost" id="copyAll">Copy all pairs</button>
+    <button class="ghost" id="copyNums">Copy numeronyms only</button>
+  </div>
+
+  <table class="log" id="pairTable">
+    <thead><tr><th>Original</th><th>Numeronym</th><th></th></tr></thead>
+    <tbody id="pairBody"></tbody>
+  </table>
+  <div id="status" aria-live="polite"></div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li>Type one or more words, separated by spaces or line breaks.</li>
+    <li>Pick how many leading and trailing letters to keep (1–3 each). The classic i18n style keeps 1 and 1.</li>
+    <li>Each word is shown next to its numeronym — copy a single pair or the whole list.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>What is a numeronym?</h2>
+  <p>A numeronym compresses a word to its first N letters, the number of letters removed from the middle, and its last N letters. Tech classics include <b>i18n</b> (internationalization), <b>a11y</b> (accessibility), <b>l10n</b> (localization), and <b>k8s</b> (kubernetes).</p>
+  <h2>Character counting</h2>
+  <p>Length is counted in Unicode code points, so emoji and accented characters each count as one letter. A word must be longer than the kept letters plus at least one middle letter — shorter words are left unchanged.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a numeronym?</summary><p>A numeronym is a word shortened to its first N letters, the count of the removed middle letters, and its last N letters. Examples: internationalization becomes i18n, accessibility becomes a11y, and localization becomes l10n.</p></details>
+  <details><summary>What does "too short — unchanged" mean?</summary><p>A numeronym only makes sense when the word is longer than the kept letters plus at least one middle letter. If the word is too short, the tool leaves it unchanged instead of producing a misleading result.</p></details>
+  <details><summary>Can I process several words at once?</summary><p>Yes. Enter any number of words separated by spaces or line breaks; each one is converted independently and shown as an original → numeronym pair.</p></details>
+  <details><summary>Is this Numeronym Generator free?</summary><p>Yes, it is completely free, runs entirely in your browser, and requires no signup.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/word-counter/">Word Counter</a></li>
+    <li><a href="/toolhub/tools/case/">Case Converter</a></li>
+    <li><a href="/toolhub/tools/text-reverser/">Text Reverser</a></li>
+    <li><a href="/toolhub/tools/lorem/">Lorem Ipsum Generator</a></li>
+    <li><a href="/toolhub/tools/keyword-density-checker/">Keyword Density Checker</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var wordsEl=document.getElementById("words"),
+    firstEl=document.getElementById("firstN"),
+    lastEl=document.getElementById("lastN"),
+    body=document.getElementById("pairBody"),
+    status=document.getElementById("status");
+var pairs=[];
+
+function numeronym(word,fn,ln){
+  var cps=Array.from(word),n=cps.length;
+  if(n<=fn+ln+1)return null;
+  return cps.slice(0,fn).join("")+(n-fn-ln)+cps.slice(n-ln).join("");
+}
+
+function render(){
+  var fn=parseInt(firstEl.value,10),ln=parseInt(lastEl.value,10);
+  var words=wordsEl.value.split(/\s+/).filter(function(w){return w.length>0;});
+  body.innerHTML="";
+  pairs=[];
+  for(var i=0;i<words.length;i++){
+    var w=words[i],num=numeronym(w,fn,ln);
+    pairs.push({orig:w,num:num});
+    var tr=document.createElement("tr");
+    var tdO=document.createElement("td");tdO.textContent=w;
+    var tdN=document.createElement("td");
+    var tdC=document.createElement("td");
+    if(num===null){
+      tdN.innerHTML='<span class="unchanged">too short — unchanged</span>';
+    }else{
+      var sp=document.createElement("span");sp.className="pair";sp.textContent=num;tdN.appendChild(sp);
+      var btn=document.createElement("button");btn.className="ghost";btn.style.marginTop="0";
+      btn.style.padding="6px 12px";btn.style.fontSize=".85rem";btn.textContent="Copy";
+      (function(val){btn.addEventListener("click",function(){copyText(val);});})(num);
+      tdC.appendChild(btn);
+    }
+    tr.appendChild(tdO);tr.appendChild(tdN);tr.appendChild(tdC);
+    body.appendChild(tr);
+  }
+  status.textContent=words.length?words.length+" word"+(words.length===1?"":"s")+" processed.":"Enter some words to begin.";
+}
+
+function copyText(t){
+  function done(){status.textContent="Copied: "+t;}
+  function fail(){status.textContent="Copy failed — select the text manually.";}
+  if(!t){status.textContent="Nothing to copy yet.";return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,fail);
+  }else{
+    var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);
+    ta.select();try{document.execCommand("copy");done();}catch(e){fail();}
+    document.body.removeChild(ta);
+  }
+}
+
+wordsEl.addEventListener("input",render);
+firstEl.addEventListener("change",render);
+lastEl.addEventListener("change",render);
+document.getElementById("copyAll").addEventListener("click",function(){
+  if(!pairs.length){status.textContent="Nothing to copy yet.";return;}
+  copyText(pairs.map(function(p){return p.orig+" → "+(p.num===null?p.orig+" (unchanged)":p.num);}).join("\n"));
+});
+document.getElementById("copyNums").addEventListener("click",function(){
+  var nums=pairs.filter(function(p){return p.num!==null;}).map(function(p){return p.num;});
+  if(!nums.length){status.textContent="No numeronyms to copy yet.";return;}
+  copyText(nums.join("\n"));
+});
+
+render();
+})();
+</script>
+</body>
+</html>

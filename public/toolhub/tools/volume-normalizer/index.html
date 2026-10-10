@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8940C">
+<title>Volume Normalizer — Free Online Tool (No Signup) | AI Directory</title>
+<meta name="description" content="Normalize audio volume to a target peak level with before/after waveform preview. Use the free online Volume Normalizer tool on AI Directory — no signup, no install, browser-first processing.">
+<link rel="canonical" href="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/volume-normalizer/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AI Directory">
+<meta property="og:title" content="Volume Normalizer — Free Online Tool (No Signup) | AI Directory">
+<meta property="og:description" content="Normalize audio volume to a target peak level with before/after waveform preview.">
+<meta property="og:url" content="https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/volume-normalizer/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Volume Normalizer — Free Online Tool (No Signup) | AI Directory">
+<meta name="twitter:description" content="Normalize audio volume to a target peak level with before/after waveform preview.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"All tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":2,"name":"Audio tools","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/"},{"@type":"ListItem","position":3,"name":"Volume Normalizer","item":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/volume-normalizer/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Volume Normalizer","url":"https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/volume-normalizer/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (browser-based)","description":"Normalize audio volume to a target peak level with before/after waveform preview.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isAccessibleForFree":true,"isRelatedTo":["https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-trimmer/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-to-mp3/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/voice-recorder/","https://ai-directory-v5-radwan648.pages.dev/toolhub/tools/audio-merger/"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"How to normalize audio volume","description":"Normalize audio volume to a target peak level with before/after waveform preview.","totalTime":"PT2M","step":[{"@type":"HowToStep","position":1,"name":"Pick an audio file","text":"Choose an MP3, WAV, OGG or M4A file from your device. Nothing is uploaded — the file stays in your browser."},{"@type":"HowToStep","position":2,"name":"Set the target peak","text":"Drag the slider to choose the target peak level (default −1 dBFS). Lower targets leave more headroom against clipping."},{"@type":"HowToStep","position":3,"name":"Normalize and download","text":"Click Normalize volume. The tool scans the true peak, applies one uniform gain, shows before/after waveforms, and your WAV download starts automatically."}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the volume normalizer free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Volume Normalizer on AI Directory is completely free — no account, no watermark, and no limit on how many files you normalize."}},{"@type":"Question","name":"Does my audio get uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Decoding, peak scanning and gain are all done with the Web Audio API in your own browser. Your audio file never leaves your device."}},{"@type":"Question","name":"What does −1 dBFS mean?","acceptedAnswer":{"@type":"Answer","text":"0 dBFS is the loudest level digital audio can represent — anything above it clips. Targeting −1 dBFS makes the audio as loud as possible while keeping 1 dB of safety headroom against clipping in later encoding."}},{"@type":"Question","name":"Does normalization change the sound's character?","acceptedAnswer":{"@type":"Answer","text":"No. Peak normalization applies a single uniform gain to the whole track, so the balance between loud and quiet parts is preserved exactly. It only makes everything louder or quieter together."}}]}
+</script>
+<style>
+:root{--amber:#E8940C;--amber-d:#b96f05;--ink:#1f2937;--mut:#6b7280;--line:#f1e7d3;--bg:#fffdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:2px solid var(--amber);padding:14px 0}
+header .wrap{display:flex;align-items:center;gap:10px}
+.brand{font-size:1.4rem;font-weight:800;color:var(--ink);text-decoration:none}
+.brand span{color:var(--amber)}
+.ftag{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--amber);padding:3px 10px;border-radius:999px}
+.crumb{padding:14px 20px;font-size:.85rem;color:var(--mut)}
+.crumb a{color:var(--amber-d);text-decoration:none}
+h1{font-size:2rem;margin:.2rem 0 .5rem}
+.lede{color:var(--mut);margin-bottom:1.5rem;max-width:680px}
+.tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:2rem;box-shadow:0 2px 10px rgba(232,148,12,.08)}
+label{display:block;font-weight:600;margin:.9rem 0 .35rem;font-size:.92rem}
+input[type=range]{width:100%;accent-color:var(--amber);margin-top:.4rem}
+.lenrow{display:flex;align-items:center;gap:14px;margin-top:.3rem}
+.lenrow output{font-weight:800;color:var(--amber-d);min-width:110px;text-align:right}
+button{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1rem}
+button:hover{background:var(--amber-d)}
+button:disabled{opacity:.6;cursor:wait}
+button.ghost{background:#fff;color:var(--amber-d);border:1px solid var(--amber)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+a.dl{display:inline-block;background:var(--amber);color:#fff;padding:11px 20px;border-radius:8px;font-weight:700;text-decoration:none;margin-top:.5rem}
+a.dl:hover{background:var(--amber-d)}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:1.2rem;text-align:center;background:#fffdf5;margin:.6rem 0}
+input[type=file]{font-size:1rem;max-width:100%}
+.note{font-size:.88rem;color:var(--mut)}
+.status{font-weight:600;margin:.7rem 0;min-height:1.4em}
+.status.err{color:#b91c1c}
+.status.ok{color:#15803d}
+.res{background:#fef3c7;border:1px solid #f0d48a;border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:.8rem;font-size:.92rem;color:var(--mut)}
+.meta b{color:var(--ink)}
+.waverow{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+canvas.wave{width:100%;height:130px;border:1px solid var(--line);border-radius:8px;background:#fff;display:block}
+.wavelabel{font-size:.85rem;font-weight:700;color:var(--mut);margin-bottom:.3rem}
+.howto,.info{margin-bottom:2rem}
+.howto ol{padding-left:1.4rem}
+.howto h2,.info h2,.faq h2,.sim h2{font-size:1.3rem;margin-bottom:.6rem}
+.info p{color:var(--mut);margin-bottom:.8rem}
+details{border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem;background:#fff}
+details summary{padding:12px 16px;font-weight:600;cursor:pointer}
+details p{padding:0 16px 14px;color:var(--mut)}
+.sim ul{list-style:none;display:flex;flex-wrap:wrap;gap:.6rem}
+.sim a{border:1px solid var(--amber);color:var(--amber-d);padding:8px 14px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600}
+footer{background:#fff;border-top:1px solid var(--line);padding:20px 0;margin-top:2rem;color:var(--mut);font-size:.9rem}
+footer a{color:var(--amber-d);text-decoration:none;font-weight:700}
+@media(max-width:640px){.tool{padding:16px}h1{font-size:1.6rem}.waverow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/toolhub/">AI <span>Directory</span></a><span class="ftag">FREE TOOLS</span></div></header>
+<nav class="crumb wrap"><a href="/toolhub/">Free Mini Tools</a> / <a href="/toolhub/">Audio tools</a> / <span>Volume Normalizer</span></nav>
+<main class="wrap">
+<h1>Volume Normalizer</h1>
+<p class="lede">Normalize audio volume to a target peak level with before/after waveform preview. No engine download, no upload — the Web Audio API decodes, scans and re-levels everything locally.</p>
+
+<div class="tool">
+  <div class="drop">
+    <label for="file">Choose an audio file (MP3, WAV, OGG, M4A)</label>
+    <input type="file" id="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.flac">
+    <p class="note">Your file never leaves your device.</p>
+  </div>
+  <label for="target">Target peak level</label>
+  <div class="lenrow">
+    <input type="range" id="target" min="-12" max="0" step="0.5" value="-1">
+    <output id="targetOut" for="target">−1 dBFS</output>
+  </div>
+  <div class="btnrow"><button id="go">Normalize volume</button></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="waverow" id="wavewrap" hidden>
+    <div><p class="wavelabel">Before</p><canvas class="wave" id="waveBefore" width="640" height="130"></canvas></div>
+    <div><p class="wavelabel">After</p><canvas class="wave" id="waveAfter" width="640" height="130"></canvas></div>
+  </div>
+  <div class="res" id="result" hidden></div>
+  <div class="meta" id="meta" hidden>
+    <span>Original peak: <b id="mPeak">—</b></span>
+    <span>Target peak: <b id="mTarget">—</b></span>
+    <span>Gain applied: <b id="mGain">—</b></span>
+  </div>
+</div>
+
+<div class="howto">
+  <h2>How to use</h2>
+  <ol>
+    <li><b>Pick an audio file</b> — choose an MP3, WAV, OGG or M4A file from your device. Nothing is uploaded.</li>
+    <li><b>Set the target peak</b> — drag the slider to choose the target peak level (default −1 dBFS). Lower targets leave more headroom against clipping.</li>
+    <li><b>Normalize and download</b> — click <b>Normalize volume</b>. The tool scans the true peak, applies one uniform gain, shows before/after waveforms, and your WAV download starts automatically.</li>
+  </ol>
+</div>
+
+<div class="info">
+  <h2>What normalization does</h2>
+  <p>The tool decodes your audio to raw samples, finds the single loudest sample across all channels, and multiplies every sample by one fixed gain so that peak lands exactly on your target. The balance between loud and quiet parts is preserved perfectly — the whole track just gets louder or quieter together.</p>
+  <h2>Reading the waveforms</h2>
+  <p>The <b>Before</b> waveform shows your original recording; the <b>After</b> waveform shows the normalized result. If the original already peaked near your target, the two waveforms will look identical — the tool correctly found nothing to change.</p>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>Is the volume normalizer free?</summary><p>Yes. The Volume Normalizer on AI Directory is completely free — no account, no watermark, and no limit on how many files you normalize.</p></details>
+  <details><summary>Does my audio get uploaded to a server?</summary><p>No. Decoding, peak scanning and gain are all done with the Web Audio API in your own browser. Your audio file never leaves your device.</p></details>
+  <details><summary>What does −1 dBFS mean?</summary><p>0 dBFS is the loudest level digital audio can represent — anything above it clips. Targeting −1 dBFS makes the audio as loud as possible while keeping 1 dB of safety headroom against clipping in later encoding.</p></details>
+  <details><summary>Does normalization change the sound's character?</summary><p>No. Peak normalization applies a single uniform gain to the whole track, so the balance between loud and quiet parts is preserved exactly. It only makes everything louder or quieter together.</p></details>
+</div>
+
+<div class="sim">
+  <h2>Similar tools</h2>
+  <ul>
+    <li><a href="/toolhub/tools/audio-trimmer/">Audio Trimmer</a></li>
+    <li><a href="/toolhub/tools/audio-to-mp3/">Audio to MP3 Converter</a></li>
+    <li><a href="/toolhub/tools/voice-recorder/">Voice Recorder</a></li>
+    <li><a href="/toolhub/tools/audio-merger/">Audio Merger</a></li>
+    <li><a href="/toolhub/tools/text-to-speech/">Text to Speech</a></li>
+  </ul>
+</div>
+</main>
+<footer><div class="wrap"><a href="/toolhub/">AI Directory</a> · Free mini tools for everyone — no signup, no install. All processing happens in your browser.</div></footer>
+
+<script>
+(function(){
+"use strict";
+
+var GO_LABEL='Normalize volume';
+
+function $(id){return document.getElementById(id);}
+function setStatus(msg,cls){
+  var el=$('status');
+  el.textContent=msg;
+  el.className='status'+(cls?' '+cls:'');
+}
+function setBusy(b){
+  var go=$('go');
+  go.disabled=b;
+  go.textContent=b?'Working…':GO_LABEL;
+}
+function fmtSize(b){
+  if(b<1024) return b+' B';
+  var u=['KB','MB','GB'],i=-1;
+  do{b/=1024;i++;}while(b>=1024&&i<u.length-1);
+  return b.toFixed(1)+' '+u[i];
+}
+function fmtDb(x){
+  var s=(Math.round(x*10)/10).toString();
+  if(s.charAt(0)!=='-'){s='+'+s;}
+  return s.replace('-','\u2212')+' dBFS';
+}
+function fmtGainDb(x){
+  var s=(Math.round(x*10)/10).toString();
+  if(s.charAt(0)!=='-'){s='+'+s;}
+  return s.replace('-','\u2212')+' dB';
+}
+
+$('target').addEventListener('input',function(){
+  $('targetOut').textContent=fmtDb(parseFloat($('target').value));
+});
+
+function findPeak(buffer){
+  var peak=0;
+  for(var ch=0;ch<buffer.numberOfChannels;ch++){
+    var d=buffer.getChannelData(ch);
+    for(var i=0;i<d.length;i++){
+      var v=Math.abs(d[i]);
+      if(v>peak)peak=v;
+    }
+  }
+  return peak;
+}
+
+function drawWave(canvas,data){
+  var ctx=canvas.getContext('2d');
+  var w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#fffdf8';
+  ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle='#E8940C';
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  var step=Math.max(1,Math.floor(data.length/w));
+  var mid=h/2;
+  for(var x=0;x<w;x++){
+    var start=x*step,end=Math.min(data.length,start+step);
+    var mn=1,mx=-1;
+    for(var i=start;i<end;i++){
+      var v=data[i];
+      if(v<mn)mn=v;
+      if(v>mx)mx=v;
+    }
+    ctx.moveTo(x+0.5,mid-mx*mid);
+    ctx.lineTo(x+0.5,mid-mn*mid+1);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='#e5d9bd';
+  ctx.beginPath();ctx.moveTo(0,mid+0.5);ctx.lineTo(w,mid+0.5);ctx.stroke();
+}
+
+function bufferToWav(buffer){
+  var numCh=Math.min(buffer.numberOfChannels,2);
+  var sr=buffer.sampleRate;
+  var len=buffer.length;
+  var blockAlign=numCh*2;
+  var dataSize=len*blockAlign;
+  var ab=new ArrayBuffer(44+dataSize);
+  var dv=new DataView(ab);
+  function str(off,s){for(var i=0;i<s.length;i++)dv.setUint8(off+i,s.charCodeAt(i));}
+  str(0,'RIFF');dv.setUint32(4,36+dataSize,true);str(8,'WAVE');str(12,'fmt ');
+  dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,numCh,true);
+  dv.setUint32(24,sr,true);dv.setUint32(28,sr*blockAlign,true);
+  dv.setUint16(32,blockAlign,true);dv.setUint16(34,16,true);
+  str(36,'data');dv.setUint32(40,dataSize,true);
+  var off=44;
+  for(var i=0;i<len;i++){
+    for(var ch=0;ch<numCh;ch++){
+      var v=buffer.getChannelData(ch)[i];
+      v=Math.max(-1,Math.min(1,v));
+      dv.setInt16(off,v<0?v*0x8000:v*0x7FFF,true);
+      off+=2;
+    }
+  }
+  return new Blob([ab],{type:'audio/wav'});
+}
+
+$('go').addEventListener('click',async function(){
+  var file=$('file').files[0];
+  if(!file){setStatus('Please choose an audio file first.','err');return;}
+  $('result').innerHTML='';$('result').hidden=true;
+  $('meta').hidden=true;$('wavewrap').hidden=true;
+  setBusy(true);
+  try{
+    if(!window.AudioContext&&!window.webkitAudioContext){throw new Error('Web Audio is not supported in this browser.');}
+    var AC=window.AudioContext||window.webkitAudioContext;
+    var actx=new AC();
+    setStatus('Decoding audio…');
+    var ab=await file.arrayBuffer();
+    var buf;
+    try{buf=await actx.decodeAudioData(ab.slice(0));}
+    catch(de){throw new Error('Could not decode this file. Use MP3, WAV, OGG or M4A audio.');}
+    setStatus('Scanning peak…');
+    var peak=findPeak(buf);
+    if(peak<=0.000001){throw new Error('This audio appears to be silent — nothing to normalize.');}
+    var peakDb=20*Math.log10(peak);
+    var targetDb=parseFloat($('target').value);
+    var gainDb=targetDb-peakDb;
+    /* never boost beyond +60 dB; never attenuate more than -96 dB */
+    gainDb=Math.max(-96,Math.min(60,gainDb));
+    var gain=Math.pow(10,gainDb/20);
+    setStatus('Applying '+fmtGainDb(gainDb)+' gain…');
+    var out=actx.createBuffer(buf.numberOfChannels,buf.length,buf.sampleRate);
+    for(var ch=0;ch<buf.numberOfChannels;ch++){
+      var src=buf.getChannelData(ch);
+      var dst=out.getChannelData(ch);
+      for(var i=0;i<src.length;i++){
+        var v=src[i]*gain;
+        dst[i]=v>1?1:(v<-1?-1:v);
+      }
+    }
+    drawWave($('waveBefore'),buf.getChannelData(0));
+    drawWave($('waveAfter'),out.getChannelData(0));
+    $('wavewrap').hidden=false;
+    var wav=bufferToWav(out);
+    try{await actx.close();}catch(e){/* ignore */}
+    var url=URL.createObjectURL(wav);
+    var a=document.createElement('a');
+    a.href=url;a.download='normalized-audio.wav';a.className='dl';
+    a.textContent='Download normalized-audio.wav';
+    var res=$('result');
+    res.hidden=false;res.appendChild(a);
+    setTimeout(function(){a.click();},60);
+    $('mPeak').textContent=fmtDb(peakDb);
+    $('mTarget').textContent=fmtDb(targetDb);
+    $('mGain').textContent=fmtGainDb(gainDb);
+    $('meta').hidden=false;
+    setStatus('Done! Normalized to '+fmtDb(targetDb)+' ('+fmtSize(wav.size)+').','ok');
+  }catch(e){
+    setStatus('Normalization failed: '+(e&&e.message?e.message:e),'err');
+  }finally{setBusy(false);}
+});
+
+})();
+</script>
+</body>
+</html>
