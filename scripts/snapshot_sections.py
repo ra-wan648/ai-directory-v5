@@ -49,9 +49,14 @@ def key_for(q, limit=6):
 
 def fetch(path, tries=4):
     url = WORKER + path
+    # Cloudflare bot protection 403s Python's default urllib UA - use a browser UA
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+        "Accept": "application/json",
+    })
     for i in range(tries):
         try:
-            with urllib.request.urlopen(url, timeout=45) as r:
+            with urllib.request.urlopen(req, timeout=45) as r:
                 return json.loads(r.read())
         except Exception as e:
             print(f"    {path}: {str(e)[:90]}")
