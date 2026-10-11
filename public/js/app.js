@@ -153,7 +153,7 @@ const priceOf = (t) => {
   const p = String(t.pricing || '').toLowerCase();
   return p === 'free' ? 'Free' : p === 'paid' ? 'Paid' : p === 'freemium' ? 'Freemium' : 'Unknown';
 };
-const descOf = (t) => String(t.short_desc || t.description || '').replace(/\s+/g, ' ').trim();
+const descOf = (t) => String(t.description_full || t.short_desc || t.description || '').replace(/\s+/g, ' ').trim();
 const domainOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
 
 function sourceOf(t) {
@@ -397,7 +397,8 @@ async function fillSection(cfg, i, el) {
     const c = $('#cnt' + i);
     if (c) c.textContent = '· ' + num(total) + ' ' + (cfg.unit || 'tools');
     if (!tools.length) {
-      grid.innerHTML = '<div class="colcard" style="grid-column:1/-1;text-align:center;padding:32px"><p style="color:var(--muted);font-size:13px">Nothing in this section yet.</p></div>';
+      const sec = grid.closest('section');
+      if (sec) sec.style.display = 'none';
       return;
     }
     grid.innerHTML = tools.map((t) => cardHTML(t, cfg.badge)).join('') + (stale
