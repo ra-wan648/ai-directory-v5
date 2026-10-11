@@ -58,15 +58,15 @@ def get_og_image(url):
 
 def main():
     # Add thumbnail_url columns if not exist
-    for table in ['blogs', 'news', 'prompts']:
+    for table in ['blogs', 'prompts']:
         try:
             run_sql(f"ALTER TABLE {table} ADD COLUMN thumbnail_url TEXT")
             print(f"Added thumbnail_url to {table}")
         except:
             pass  # Column exists
     
-    # Process blogs/news
-    for table in ['blogs', 'news']:
+    # Process blogs (news lives in blogs table with category='news')
+    for table in ['blogs']:
         items = run_sql(
             f"SELECT id, url FROM {table} WHERE (thumbnail_url IS NULL OR thumbnail_url='') "
             f"AND url IS NOT NULL AND url != '' LIMIT 100"

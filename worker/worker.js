@@ -1151,7 +1151,7 @@ const handler = {
     const limit = Math.min(24, Math.max(1, parseInt(url.searchParams.get('limit') || '8', 10)));
     return cacheFetch(null, env, 'api-news-v1?limit=' + limit, 1800, async () => {
       const result = await env.DB.prepare(
-        `SELECT id, title, slug, meta_description, category, published_at, created_at
+        `SELECT id, title, slug, meta_description, category, published_at, created_at, thumbnail_url
          FROM blogs
          WHERE status = 'published' AND LOWER(category) = 'news'
          ORDER BY COALESCE(published_at, created_at) DESC LIMIT ?`
