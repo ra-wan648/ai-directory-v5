@@ -142,7 +142,7 @@ body.hero-gone .nsearch{width:210px;opacity:1;padding:0 11px;border-width:1px;po
 .side-filter{margin-bottom:8px}
 .side-filter input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:8px 11px;font-size:12.5px;background:var(--card);color:var(--ink);outline:0;transition:.15s}
 .side-filter input:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(232,148,12,.1)}
-.mt-list{max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--sh-sm)}
+.mt-list{border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--sh-sm)}
 .mt-group{border-bottom:1px solid var(--line)}
 .mt-group:last-child{border-bottom:0}
 .mt-group summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:12.5px;font-weight:600}
@@ -239,7 +239,7 @@ body.hero-gone .nsearch{width:210px;opacity:1;padding:0 11px;border-width:1px;po
 .tag.freemium{background:var(--new-soft);color:var(--new)}
 .tag.paid{background:var(--paid-soft);color:var(--paid)}
 .tag.new{background:var(--new-soft);color:var(--new);font-weight:700}
-.pickbadge{position:absolute;top:-9px;right:10px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 10px}
+.pickbadge{position:absolute;top:8px;right:10px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 10px}
 .card{position:relative}
 /* hero pricing quick-pills */
 .ppills{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:12px}
