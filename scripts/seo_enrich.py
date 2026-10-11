@@ -17,19 +17,23 @@ def get_key_from_d1():
     """Fallback: read Manifest key from D1 manifest_endpoints (dashboard-managed)."""
     global MANIFEST_KEY, MANIFEST_URL
     if MANIFEST_KEY:
+        print("  Using MANIFEST_API_KEY from env")
         return True
+    print("  Env key empty, trying D1 manifest_endpoints...")
     try:
         rows = run_sql(
-            "SELECT api_key, base_url FROM manifest_endpoints "
-            "WHERE enabled=1 AND (used_this_month IS NULL OR used_this_month < monthly_limit) "
-            "ORDER BY id LIMIT 1"
+            "SELECT api_key, base_url, enabled, used_this_month, monthly_limit FROM manifest_endpoints ORDER BY id LIMIT 5"
         )
-        if rows:
-            MANIFEST_KEY = rows[0].get("api_key", "")
-            if rows[0].get("base_url"):
-                MANIFEST_URL = rows[0]["base_url"].rstrip("/") + "/responses"
-            print(f"  Using D1 dashboard key (base: {MANIFEST_URL[:40]}...)")
-            return bool(MANIFEST_KEY)
+        print(f"  D1 query returned {len(rows)} row(s)")
+        for r in rows:
+            print(f"    id row: enabled={r.get('enabled')}, used={r.get('used_this_month')}/{r.get('monthly_limit')}, key_len={len(r.get('api_key') or '')}")
+            if r.get('enabled') == 1 and (r.get('used_this_month') or 0) < (r.get('monthly_limit') or 10000):
+                MANIFEST_KEY = r.get("api_key", "")
+                if r.get("base_url"):
+                    MANIFEST_URL = r["base_url"].rstrip("/") + "/responses"
+                print(f"  Using D1 dashboard key (base: {MANIFEST_URL[:50]}...)")
+                return bool(MANIFEST_KEY)
+        print("  No usable D1 key found")
     except Exception as e:
         print(f"  D1 key lookup failed: {e}")
     return False
