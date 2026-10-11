@@ -223,6 +223,12 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
           ADMIN_TELEGRAM_ID: ${{secrets.ADMIN_TELEGRAM_ID}}
+      - name: Blog/Prompt ingest (AI-rewritten)
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: cd scripts && python blog_prompt_ingest.py --blogs 3 --prompts 3 || echo "ingest skipped"
+
       # always() so a failure in the step above still sends the run summary.
       - name: Telegram stats
         if: always()
