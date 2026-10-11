@@ -18,5 +18,5 @@ CF_ACCOUNT_ID = "2acb9835655d0f4183eb7f899580f6ab"
 
 # Cron: dispatch the GitHub pipeline at 6am + 6pm Bangladesh time (00:00/12:00 UTC).
 [triggers]
-crons = ["0 0,12 * * *", "*/30 * * * *"]
+crons = ["0 0,12 * * *", "*/10 * * * *"]
 

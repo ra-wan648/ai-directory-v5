@@ -378,7 +378,7 @@ async function seoEnrichCron(env) {
     if (!ep || !ep.api_key) return;
     const baseUrl = (ep.base_url || 'https://app.manifest.build/v1').replace(/\/$/, '') + '/responses';
     const tools = await env.DB.prepare(
-      `SELECT id, name, url, category, pricing FROM tools WHERE status='published' AND ((faq IS NULL OR faq='') OR (seo_title IS NULL OR seo_title='')) ORDER BY id LIMIT 8`
+      `SELECT id, name, url, category, pricing FROM tools WHERE status='published' AND ((faq IS NULL OR faq='') OR (seo_title IS NULL OR seo_title='')) ORDER BY id LIMIT 10`
     ).all().then(r => r.results || []).catch(() => []);
     for (const t of tools) {
       try {
@@ -1949,7 +1949,7 @@ export default {
     return handler.fetch(request, env, ctx);
   },
   async scheduled(event, env, ctx) {
-    if (event.cron === '*/30 * * * *') {
+    if (event.cron === '*/10 * * * *') {
       ctx.waitUntil(seoEnrichCron(env));
     } else {
       ctx.waitUntil(handleCronTrigger(env));
