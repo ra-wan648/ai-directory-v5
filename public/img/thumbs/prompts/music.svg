@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F0FDF4"/><stop offset="1" stop-color="#16A34A" stop-opacity="0.3"/>
+  </linearGradient></defs>
+  <rect width="400" height="180" fill="url(#g)"/>
+  <circle cx="200" cy="90" r="42" fill="#16A34A" opacity="0.18"/>
+  <text x="200" y="108" font-size="44" text-anchor="middle">🎵</text>
+  <text x="200" y="160" font-size="13" text-anchor="middle" fill="#16A34A" font-weight="600" font-family="system-ui">Music</text>
+</svg>

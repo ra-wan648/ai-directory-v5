@@ -491,7 +491,7 @@ async function loadExtras() {
           if (!t) return '';
           const sl = encodeURIComponent(x.slug || '');
           return '<div class="colcard" data-blog="' + esc(x.slug) + '" style="min-width:260px">'
-            + '<div class="news-thumb" style="padding:0"><img src="/img/thumbs/news.svg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0"></div><div class="nbody"><span class="k">News</span>'
+            + '<div class="news-thumb" style="padding:0;overflow:hidden">' + thumbHTML(x.thumbnail_url, '/img/thumbs/news.svg') + '</div><div class="nbody"><span class="k">News</span>'
             + '<h5><a href="/post/' + sl + '">' + esc(t) + '</a></h5>'
             + '<time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>';
         }).join('')) + (news.map((x) => {
@@ -499,16 +499,16 @@ async function loadExtras() {
           if (!t) return '';
           const sl = encodeURIComponent(x.slug || '');
           return '<div class="colcard" data-blog="' + esc(x.slug) + '" style="min-width:260px">'
-            + '<div class="news-thumb" style="padding:0"><img src="/img/thumbs/news.svg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0"></div><div class="nbody"><span class="k">News</span>'
+            + '<div class="news-thumb" style="padding:0;overflow:hidden">' + thumbHTML(x.thumbnail_url, '/img/thumbs/news.svg') + '</div><div class="nbody"><span class="k">News</span>'
             + '<h5><a href="/post/' + sl + '">' + esc(t) + '</a></h5>'
             + '<time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>';
         }).join('')) + '</div></div></section>' : '')
     + (prompts.length ? '<section class="sec alt" id="prompts"><div class="sechead"><span class="ic">💬</span><span class="t">Prompts</span>'
       + '<span class="c">· ' + num(STATS ? STATS.total_prompts : prompts.length) + ' saved</span></div>'
       + '<div class="marquee-rtl"><div class="mtrack">' + (prompts.map((x) => '<div class="pcard" data-prompt-id="' + esc(x.id) + '" style="min-width:260px">'
-        + '<div class="prompt-thumb" style="padding:0"><img src="/img/thumbs/prompts.svg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0"></div><h5>' + esc(x.title) + '</h5>'
+        + '<div class="prompt-thumb" style="padding:0;overflow:hidden"><img src="' + promptThumb(x.title) + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover"></div><h5>' + esc(x.title) + '</h5>'
         + '<div class="q">' + esc(String(x.prompt_text || '').slice(0, 120)) + '</div><div class="copy">⧉ Copy prompt</div></div>').join('')) + (prompts.map((x) => '<div class="pcard" data-prompt-id="' + esc(x.id) + '" style="min-width:260px">'
-        + '<div class="prompt-thumb" style="padding:0"><img src="/img/thumbs/prompts.svg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0"></div><h5>' + esc(x.title) + '</h5>'
+        + '<div class="prompt-thumb" style="padding:0;overflow:hidden"><img src="' + promptThumb(x.title) + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover"></div><h5>' + esc(x.title) + '</h5>'
         + '<div class="q">' + esc(String(x.prompt_text || '').slice(0, 120)) + '</div><div class="copy">⧉ Copy prompt</div></div>').join('')) + '</div></div></section>' : '')
     + (blogs.length ? '<section class="sec" id="blog"><div class="sechead"><span class="ic">📝</span><span class="t">From the Blog</span>'
       + '<span class="c">· ' + num(STATS ? STATS.total_blogs : blogs.length) + ' posts</span></div>'
