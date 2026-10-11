@@ -416,6 +416,45 @@ async function seoEnrichCron(env) {
         await env.DB.prepare(`UPDATE manifest_endpoints SET used_this_month = used_this_month + 1 WHERE api_key = ?`).bind(ep.api_key).run().catch(() => {});
       } catch (e) { /* skip */ }
     }
+
+    // If no tools left, enrich blogs (5 per run)
+    if (tools.length === 0) {
+      const blogs = await env.DB.prepare(
+        `SELECT id, title, excerpt FROM blogs WHERE (seo_title IS NULL OR seo_title='') ORDER BY id LIMIT 5`
+      ).all().then(r => r.results || []).catch(() => []);
+      for (const b of blogs) {
+        try {
+          const prompt = `You are an SEO copywriter. Write SEO content for this blog post.\n\nTitle: ${b.title}\nExcerpt: ${(b.excerpt || '').slice(0, 300)}\n\nReturn ONLY valid JSON: {"seo_title": "SEO title under 60 chars", "meta_description": "150-155 chars", "excerpt": "2-sentence engaging excerpt"}`;
+          const lr = await fetch(baseUrl, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + ep.api_key, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: 'auto', input: prompt, store: false }),
+          });
+          if (!lr.ok) continue;
+          const ld = await lr.json();
+          let text = '';
+          const out = ld.output;
+          if (Array.isArray(out)) {
+            for (const item of out) {
+              if (item && item.type === 'message') {
+                for (const c of (item.content || [])) {
+                  if (c && c.type === 'output_text') text += c.text || '';
+                }
+              }
+            }
+          }
+          text = text.trim().replace(/^```\w*\n?/, '').replace(/\n?```$/, '');
+          const rj = JSON.parse(text);
+          await env.DB.prepare(`UPDATE blogs SET seo_title=?, meta_description=?, excerpt=? WHERE id=?`).bind(
+            String(rj.seo_title || '').slice(0, 70),
+            String(rj.meta_description || '').slice(0, 160),
+            String(rj.excerpt || '').slice(0, 500),
+            b.id
+          ).run();
+          await env.DB.prepare(`UPDATE manifest_endpoints SET used_this_month = used_this_month + 1 WHERE api_key = ?`).bind(ep.api_key).run().catch(() => {});
+        } catch (e) { /* skip */ }
+      }
+    }
   } catch (e) { /* silent */ }
 }
 
