@@ -25,11 +25,6 @@ jobs:
         run: pip install requests
       - name: Install wrangler
         run: npm install -g wrangler
-      - name: Debug secret
-        run: |
-          if [ -z "$MANIFEST_API_KEY" ]; then echo "SECRET EMPTY"; else echo "SECRET SET, len=${#MANIFEST_API_KEY}"; fi
-        env:
-          MANIFEST_API_KEY: ${{ secrets.MANIFEST_API_KEY }}
       - name: Run SEO enrichment
         env:
           MANIFEST_API_KEY: ${{ secrets.MANIFEST_API_KEY }}

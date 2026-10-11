@@ -12,6 +12,27 @@ import os, requests, json, time, subprocess, sys
 
 MANIFEST_URL = os.environ.get("MANIFEST_BASE_URL", "https://app.manifest.build/v1/responses")
 MANIFEST_KEY = os.environ.get("MANIFEST_API_KEY", "")
+
+def get_key_from_d1():
+    """Fallback: read Manifest key from D1 manifest_endpoints (dashboard-managed)."""
+    global MANIFEST_KEY, MANIFEST_URL
+    if MANIFEST_KEY:
+        return True
+    try:
+        rows = run_sql(
+            "SELECT api_key, base_url FROM manifest_endpoints "
+            "WHERE enabled=1 AND (used_this_month IS NULL OR used_this_month < monthly_limit) "
+            "ORDER BY id LIMIT 1"
+        )
+        if rows:
+            MANIFEST_KEY = rows[0].get("api_key", "")
+            if rows[0].get("base_url"):
+                MANIFEST_URL = rows[0]["base_url"].rstrip("/") + "/responses"
+            print(f"  Using D1 dashboard key (base: {MANIFEST_URL[:40]}...)")
+            return bool(MANIFEST_KEY)
+    except Exception as e:
+        print(f"  D1 key lookup failed: {e}")
+    return False
 DB = "ai-directory-db"
 BATCH_SIZE = int(os.environ.get("SEO_BATCH", "50"))
 MAX_TOOLS = int(os.environ.get("SEO_MAX", "0"))  # 0 = all
@@ -132,8 +153,8 @@ def call_llm(prompt):
 import re
 
 def main():
-    if not MANIFEST_KEY:
-        print("MANIFEST_API_KEY not set, skipping")
+    if not MANIFEST_KEY and not get_key_from_d1():
+        print("MANIFEST_API_KEY not set and no D1 key found, skipping")
         sys.exit(0)
     ensure_columns()
     # Get tools missing SEO content

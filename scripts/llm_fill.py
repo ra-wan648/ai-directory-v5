@@ -228,7 +228,20 @@ WORKERS = int(os.environ.get("LLM_FILL_WORKERS", "4"))
 WRITE_BATCH = int(os.environ.get("LLM_FILL_WRITE_BATCH", "40"))
 
 if not MANIFEST_KEY:
-    print("MANIFEST_API_KEY is not set - skipping LLM enrichment (this is optional).")
+    # Fallback: read from D1 dashboard-managed keys
+    try:
+        _rows = run_sql(
+            "SELECT api_key FROM manifest_endpoints "
+            "WHERE enabled=1 AND (used_this_month IS NULL OR used_this_month < monthly_limit) "
+            "ORDER BY id LIMIT 1"
+        )
+        if _rows and _rows[0].get("api_key"):
+            MANIFEST_KEY = _rows[0]["api_key"]
+            print("  Using D1 dashboard Manifest key")
+    except Exception as e:
+        print(f"  D1 key lookup failed: {e}")
+if not MANIFEST_KEY:
+    print("MANIFEST_API_KEY is not set and no D1 key found - skipping LLM enrichment.")
     raise SystemExit(0)
 
 tools = get_unfilled(MAX_TOOLS)
