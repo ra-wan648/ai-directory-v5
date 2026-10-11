@@ -1,7 +1,6 @@
 name: AI Directory Pipeline
 on:
-  schedule:
-    - cron: '0 0,12 * * *'
+  # Schedule removed: worker cron (wrangler.toml) dispatches via API to avoid duplicate runs
   workflow_dispatch:
 # Needed only for the heartbeat commit at the end of the job.
 permissions:
