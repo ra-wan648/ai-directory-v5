@@ -123,3 +123,67 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def enrich_blogs():
+    blogs = run_sql(
+        "SELECT id, title FROM blogs WHERE (meta_description IS NULL OR meta_description='') ORDER BY id"
+    )
+    print(f"Found {len(blogs)} blogs needing enrichment")
+    done = 0
+    batch = []
+    for b in blogs:
+        title = (b.get("title") or "Blog Post")[:60]
+        meta = f"{title} - Read the full article on AI Directory. AI tools news, guides & insights."[:155]
+        batch.append(
+            f"UPDATE blogs SET meta_description='{esc(meta)}' WHERE id={b['id']};"
+        )
+        if len(batch) >= 50:
+            run_sql(" ".join(batch))
+            done += len(batch)
+            batch = []
+    if batch:
+        run_sql(" ".join(batch))
+        done += len(batch)
+    print(f"Blogs: {done} enriched")
+    return done
+
+def enrich_prompts():
+    prompts = run_sql(
+        "SELECT id, title, description FROM prompts WHERE (description IS NULL OR description='') ORDER BY id"
+    )
+    print(f"Found {len(prompts)} prompts needing enrichment")
+    done = 0
+    batch = []
+    for p in prompts:
+        title = (p.get("title") or "AI Prompt")[:60]
+        desc = f"{title} - Copy-paste AI prompt for ChatGPT & Claude. Free on AI Directory."[:500]
+        batch.append(
+            f"UPDATE prompts SET description='{esc(desc)}' WHERE id={p['id']};"
+        )
+        if len(batch) >= 50:
+            run_sql(" ".join(batch))
+            done += len(batch)
+            batch = []
+    if batch:
+        run_sql(" ".join(batch))
+        done += len(batch)
+    print(f"Prompts: {done} enriched")
+    return done
+
+# Extend main to include blogs/prompts
+import sys
+_orig_main = main
+def main():
+    _orig_main()
+    try:
+        enrich_blogs()
+    except Exception as e:
+        print(f"Blog enrich failed: {e}")
+    try:
+        enrich_prompts()
+    except Exception as e:
+        print(f"Prompt enrich failed: {e}")
+
+if __name__ == "__main__":
+    # Re-run with blogs/prompts (tools already done, will skip)
+    main()

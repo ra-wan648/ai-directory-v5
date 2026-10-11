@@ -42,7 +42,7 @@ function card(t) {
   const slug = encodeURIComponent(t.slug || '');
   return `<article class="card" data-slug="${esc(t.slug || '')}">
     <div class="card-top">
-      <img class="card-logo" src="${esc(t.logo_url || favicon(t))}" alt="" loading="lazy" width="28" height="28"
+      <img class="card-logo" src="${esc(t.logo_url || favicon(t))}" alt="" loading="lazy" width="28" height="28" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 28 28%22><rect width=%2228%22 height=%2228%22 rx=%226%22 fill=%22%23E8940C%22/><text x=%2214%22 y=%2219%22 font-size=%2214%22 text-anchor=%22middle%22 fill=%22white%22>AI</text></svg>'"
            onerror="this.style.visibility='hidden'">
       <div>
         <h3><a href="/tool/${slug}">${esc(t.name)}</a></h3>
