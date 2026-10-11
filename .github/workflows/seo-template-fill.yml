@@ -1,0 +1,27 @@
+name: SEO Template Fill (no LLM)
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_tools:
+        description: 'Max tools (0 = all)'
+        required: false
+        default: '0'
+
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install wrangler
+        run: npm install -g wrangler
+      - name: Template SEO fill
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          SEO_MAX: ${{ inputs.max_tools }}
+        run: python scripts/seo_template_fill.py
