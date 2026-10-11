@@ -287,7 +287,7 @@ async function boot() {
 function paintStatic() {
   $('#year').textContent = String(new Date().getFullYear());
   $('#minitools').innerHTML = MINI_GROUPS.map((g, i) =>
-    '<details class="mt-group" open>'<summary><span>' + g.icon + ' ' + esc(g.label)
+    '<details class="mt-group" open><summary><span>' + g.icon + ' ' + esc(g.label)
     + '</span><span class="mt-count">' + g.tools.length + '</span></summary><div class="mt-links">'
     + g.tools.map((t) => '<a href="/toolhub/tools/' + t[1] + '" data-name="' + esc(t[0].toLowerCase()) + '">🔧 ' + esc(t[0]) + '</a>').join('')
     + '</div></details>').join('');
