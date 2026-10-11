@@ -631,6 +631,64 @@ async function adminApi(request, env, url, pathname, method) {
         sizes[t] = r ? r.c : 0;
       } catch (e) { sizes[t] = -1; }
     }
+  if (sub === 'seo-enrich' && method === 'POST') {
+    // SEO enrichment using dashboard-managed Manifest key from D1
+    const limit = Math.min(10, Math.max(1, parseInt((body.limit || 5))));
+    // Get Manifest key from D1
+    const ep = await env.DB.prepare(
+      `SELECT api_key, base_url FROM manifest_endpoints WHERE enabled=1 AND (used_this_month IS NULL OR used_this_month < monthly_limit) ORDER BY id LIMIT 1`
+    ).first().catch(() => null);
+    if (!ep || !ep.api_key) return json({ ok: false, error: 'No active Manifest key in dashboard' }, 400);
+    const baseUrl = (ep.base_url || 'https://app.manifest.build/v1').replace(/\/$/, '') + '/responses';
+    // Get tools needing enrichment
+    const tools = await env.DB.prepare(
+      `SELECT id, name, slug, url, category, pricing FROM tools WHERE status='published' AND ((faq IS NULL OR faq='') OR (seo_title IS NULL OR seo_title='') OR (description_full IS NULL OR description_full='')) ORDER BY id LIMIT ?`
+    ).bind(limit).all().then(r => r.results || []).catch(() => []);
+    if (!tools.length) return json({ ok: true, done: 0, remaining: 0 });
+    let enriched = 0;
+    for (const t of tools) {
+      try {
+        const prompt = `You are an SEO copywriter for an AI tools directory. Write SEO-friendly content for this AI tool.\n\nTool: ${t.name}\nURL: ${t.url || ''}\nCategory: ${t.category || 'AI tool'}\nPricing: ${t.pricing || 'unknown'}\n\nReturn ONLY valid JSON, no markdown:\n{\n  "seo_title": "SEO title under 60 chars",\n  "meta_description": "Compelling meta description, 150-155 chars",\n  "description_full": "2-3 sentences describing the tool",\n  "faq": [{"q": "What is ${t.name}?", "a": "answer"}, {"q": "Is ${t.name} free?", "a": "answer"}, {"q": "Who should use ${t.name}?", "a": "answer"}, {"q": "How to get started?", "a": "answer"}]\n}`;
+        const lr = await fetch(baseUrl, {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + ep.api_key, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: 'auto', input: prompt, store: false }),
+        });
+        if (!lr.ok) continue;
+        const ld = await lr.json();
+        let text = '';
+        const out = ld.output;
+        if (Array.isArray(out)) {
+          for (const item of out) {
+            if (item && item.type === 'message') {
+              for (const c of (item.content || [])) {
+                if (c && c.type === 'output_text') text += c.text || '';
+              }
+            }
+          }
+        }
+        text = text.trim().replace(/^```\w*\n?/, '').replace(/\n?```$/, '');
+        const rj = JSON.parse(text);
+        const esc1 = (x) => String(x || '').replace(/'/g, "''");
+        await env.DB.prepare(
+          `UPDATE tools SET seo_title=?, description=?, description_full=?, faq=?, llm_filled=1 WHERE id=?`
+        ).bind(
+          esc1(rj.seo_title).slice(0, 70),
+          esc1(rj.meta_description).slice(0, 160),
+          esc1(rj.description_full).slice(0, 2000),
+          esc1(JSON.stringify(rj.faq || [])).slice(0, 8000),
+          t.id
+        ).run();
+        enriched++;
+      } catch (e) { /* skip failed */ }
+    }
+    // Count remaining
+    const rem = await env.DB.prepare(
+      `SELECT COUNT(*) AS c FROM tools WHERE status='published' AND ((faq IS NULL OR faq='') OR (seo_title IS NULL OR seo_title=''))`
+    ).first().then(r => r.c || 0).catch(() => 0);
+    return json({ ok: true, done: enriched, remaining: rem });
+  }
+
     // Free tier limits: 100K reads/day, 100K writes/day, 5GB storage
     return json({
       tables: sizes,
