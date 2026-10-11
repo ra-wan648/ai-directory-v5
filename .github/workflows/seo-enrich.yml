@@ -32,4 +32,4 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           SEO_MAX: ${{ inputs.max_tools }}
-        run: cd scripts && python seo_enrich.py
+        run: python scripts/seo_enrich.py
