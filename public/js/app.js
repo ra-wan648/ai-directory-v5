@@ -144,11 +144,11 @@ const num = (n) => Number(n || 0).toLocaleString('en-US');
 const ICON = {
   image: '🎨', video: '🎬', coding: '💻', chat: '💬', writing: '✍️', audio: '🎵',
   research: '🔬', marketing: '📈', automation: '🤖', analytics: '📊', business: '💼',
-  'open source': '🧩', 'ai assistant': '🪄', 'ai tools': '🧠', education: '🎓',
+  'open source': '🧩', 'ai assistant': '🪄', 'ai tools': '🔧', education: '🎓',
   finance: '💰', design: '🖌️', productivity: '⚡', '3d': '🧊', agents: '🤖',
 };
 
-const iconOf = (t) => ICON[String(t.category || '').toLowerCase()] || '🧠';
+const iconOf = (t) => ICON[String(t.category || '').toLowerCase()] || '🔧';
 const priceOf = (t) => {
   const p = String(t.pricing || '').toLowerCase();
   return p === 'free' ? 'Free' : p === 'paid' ? 'Paid' : p === 'freemium' ? 'Freemium' : 'Unknown';
@@ -351,11 +351,11 @@ async function loadCategories() {
       .filter((c) => c.name && c.name !== 'AI Tools');
   } catch (e) { CATS = []; }
 
-  $('#pills').innerHTML = CATS.slice(0, 6).map((c) => '<button data-pill="' + esc(c.name) + '">' + (ICON[String(c.name).toLowerCase()] || '🧠') + ' ' + esc(c.name) + '</button>').join('');
+  $('#pills').innerHTML = CATS.slice(0, 6).map((c) => '<button data-pill="' + esc(c.name) + '">' + (ICON[String(c.name).toLowerCase()] || '🔧') + ' ' + esc(c.name) + '</button>').join('');
   $('#fcat').innerHTML = CATS.slice(0, 6).map((c) => '<a href="#sections" data-pill="' + esc(c.name) + '">' + esc(c.name) + ' AI Tools</a>').join('');
   $('#hiddencats') && ($('#hiddencats').textContent = '');
   $('#catmenu').innerHTML = '<button class="full" data-c="all" role="menuitem">All categories</button>'
-    + CATS.map((c) => '<button data-c="' + esc(c.name) + '" role="menuitem">' + (ICON[String(c.name).toLowerCase()] || '🧠') + ' ' + esc(c.name) + '</button>').join('');
+    + CATS.map((c) => '<button data-c="' + esc(c.name) + '" role="menuitem">' + (ICON[String(c.name).toLowerCase()] || '🔧') + ' ' + esc(c.name) + '</button>').join('');
   paintFilters();
 }
 
@@ -474,7 +474,7 @@ async function loadExtras() {
       + '<div class="catgrid">' + catCols.map((c) => {
           const nm = c.category || c.name || '';
           return '<a class="catlink" href="/tools?category=' + encodeURIComponent(nm) + '">'
-            + '<span class="ci">' + (ICON[String(nm).toLowerCase()] || '🧠') + '</span>'
+            + '<span class="ci">' + (ICON[String(nm).toLowerCase()] || '🔧') + '</span>'
             + '<span class="cn">' + esc(nm) + '</span>'
             + '<span class="cc">' + num(c.tool_count || 0) + '</span></a>';
         }).join('') + '</div>'
@@ -485,33 +485,44 @@ async function loadExtras() {
       // label, which is what the homepage was showing. Fall back to the meta
       // description, drop anything still empty, and link the heading so the
       // article is reachable without JavaScript.
-      + '<div class="cols4 news">' + news.map((x) => {
+      + '<div class="marquee-ltr"><div class="mtrack">' + (news.map((x) => {
           const t = x.title || String(x.meta_description || '').replace(/\s+/g, ' ').slice(0, 70);
           if (!t) return '';
           const sl = encodeURIComponent(x.slug || '');
-          return '<div class="colcard" data-blog="' + esc(x.slug) + '">'
-            + '<div class="thumb" style="background:var(--amber-soft)">📰</div><div class="nbody"><span class="k">News</span>'
+          return '<div class="colcard" data-blog="' + esc(x.slug) + '" style="min-width:260px">'
+            + '<div class="news-thumb">📰</div><div class="nbody"><span class="k">News</span>'
             + '<h5><a href="/post/' + sl + '">' + esc(t) + '</a></h5>'
             + '<time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>';
-        }).join('') + '</div></section>' : '')
+        }).join('')) + (news.map((x) => {
+          const t = x.title || String(x.meta_description || '').replace(/\s+/g, ' ').slice(0, 70);
+          if (!t) return '';
+          const sl = encodeURIComponent(x.slug || '');
+          return '<div class="colcard" data-blog="' + esc(x.slug) + '" style="min-width:260px">'
+            + '<div class="news-thumb">📰</div><div class="nbody"><span class="k">News</span>'
+            + '<h5><a href="/post/' + sl + '">' + esc(t) + '</a></h5>'
+            + '<time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>';
+        }).join('')) + '</div></div></section>' : '')
     + (prompts.length ? '<section class="sec alt" id="prompts"><div class="sechead"><span class="ic">💬</span><span class="t">Prompts</span>'
       + '<span class="c">· ' + num(STATS ? STATS.total_prompts : prompts.length) + ' saved</span></div>'
-      + '<div class="cols4">' + prompts.map((x) => '<div class="pcard" data-prompt-id="' + esc(x.id) + '"><h5>' + esc(x.title) + '</h5>'
-        + '<div class="q">' + esc(String(x.prompt_text || '').slice(0, 220)) + '</div><div class="copy">⧉ Copy prompt</div></div>').join('') + '</div></section>' : '')
+      + '<div class="marquee-rtl"><div class="mtrack">' + (prompts.map((x) => '<div class="pcard" data-prompt-id="' + esc(x.id) + '" style="min-width:260px">'
+        + '<div class="prompt-thumb">💡</div><h5>' + esc(x.title) + '</h5>'
+        + '<div class="q">' + esc(String(x.prompt_text || '').slice(0, 120)) + '</div><div class="copy">⧉ Copy prompt</div></div>').join('')) + (prompts.map((x) => '<div class="pcard" data-prompt-id="' + esc(x.id) + '" style="min-width:260px">'
+        + '<div class="prompt-thumb">💡</div><h5>' + esc(x.title) + '</h5>'
+        + '<div class="q">' + esc(String(x.prompt_text || '').slice(0, 120)) + '</div><div class="copy">⧉ Copy prompt</div></div>').join('')) + '</div></div></section>' : '')
     + (blogs.length ? '<section class="sec" id="blog"><div class="sechead"><span class="ic">📝</span><span class="t">From the Blog</span>'
       + '<span class="c">· ' + num(STATS ? STATS.total_blogs : blogs.length) + ' posts</span></div>'
       + '<div class="cols4 news">' + blogs.map((x) => '<div class="colcard" data-blog="' + esc(x.slug) + '">'
-        + '<div class="thumb" style="background:var(--amber-soft)">📝</div><div class="nbody"><span class="k">' + esc(x.category || 'post') + '</span>'
+        + '<div class="news-thumb">📝</div><div class="nbody"><span class="k">' + esc(x.category || 'post') + '</span>'
         + '<h5>' + esc(x.title) + '</h5><time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>').join('')
       + '<a class="colcard promo" href="/toolhub/"><div class="thumb" style="background:var(--ok-soft)">⚡</div><div class="nbody"><span class="k">Free mini tools</span>'
       + '<h5>Do it yourself: 221 free browser tools</h5><time>No signup · runs on your device</time></div></a></div></section>' : '')
+    + '<section class="sec alt" id="explore"><div class="sechead"><span class="ic">🧭</span><span class="t">Explore More</span></div>'
+      + '<div class="expl">' + EXP.map(([e, n2, f]) => '<a href="#sections" data-quick="' + esc(f) + '"><span class="e">' + e + '</span>' + esc(n2) + '</a>').join('') + '</div></section>'
+
     + '<section class="sec nl"><div class="nl-in"><div><span class="ic">✉️</span><span class="t">Get the best new AI tools weekly</span>'
       + '<p>One short email. No spam, unsubscribe anytime.</p></div>'
       + '<form id="nlform"><input id="nlemail" type="email" placeholder="you@example.com" aria-label="Email address" required>'
-      + '<button type="submit">Subscribe</button></form><div class="nlmsg" id="nlmsg"></div></div></section>'
-    + '<div class="marquee"><div class="mlbl">Sources we index from</div><div class="mtrack" id="mtrack"></div></div>'
-    + '<section class="sec alt" id="news"><div class="sechead"><span class="ic">🧭</span><span class="t">Explore More</span></div>'
-      + '<div class="expl">' + EXP.map(([e, n2, f]) => '<a href="#sections" data-quick="' + esc(f) + '"><span class="e">' + e + '</span>' + esc(n2) + '</a>').join('') + '</div></section>';
+      + '<button type="submit">Subscribe</button></form><div class="nlmsg" id="nlmsg"></div></div></section>';
 
   const mt = $('#mtrack');
   if (mt) mt.innerHTML = [...SOURCES, ...SOURCES].map((s) => '<span>' + esc(s) + '</span>').join('');
@@ -576,7 +587,7 @@ function paintFilters() {
   document.querySelectorAll('[data-s]').forEach((b) => b.classList.toggle('on', b.dataset.s === FILTER.status));
   document.querySelectorAll('[data-c]').forEach((b) => b.classList.toggle('on', b.dataset.c === FILTER.cat));
   const lbl = $('#catlabel');
-  if (lbl) lbl.textContent = FILTER.cat === 'all' ? 'All categories' : (ICON[String(FILTER.cat).toLowerCase()] || '🧠') + ' ' + FILTER.cat;
+  if (lbl) lbl.textContent = FILTER.cat === 'all' ? 'All categories' : (ICON[String(FILTER.cat).toLowerCase()] || '🔧') + ' ' + FILTER.cat;
   const cb = $('#catbtn');
   if (cb) cb.classList.toggle('on', FILTER.cat !== 'all');
 }

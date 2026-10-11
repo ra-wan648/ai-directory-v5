@@ -123,7 +123,7 @@ body.hero-gone .nsearch{width:210px;opacity:1;padding:0 11px;border-width:1px;po
 .rchip button{width:18px;height:18px;border-radius:50%;background:var(--line2);display:grid;place-items:center;font-size:10px}
 
 /* ===== 5. LAYOUT / SIDEBAR ===== */
-.layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:26px;padding:22px 0 40px;align-items:start}
+.layout{display:grid;grid-template-columns:215px minmax(0,1fr);gap:26px;padding:22px 0 40px;align-items:start}
 .layout>*{min-width:0}
 .side{position:sticky;top:calc(var(--nav-h) + var(--bar-h) + 14px)}
 .side h4{font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--soft);margin:0 0 10px}
@@ -438,3 +438,13 @@ table.cmpt tr:last-child td,table.cmpt tr:last-child th{border-bottom:0}
 .logo img{display:block;border-radius:5px}
 .logo .lemoji{position:absolute;font-size:15px;line-height:1}
 .nbody h5 a{color:inherit;text-decoration:none}
+
+/* Marquee animations for News and Prompts */
+.marquee-ltr,.marquee-rtl{overflow:hidden;white-space:nowrap;position:relative}
+.marquee-ltr>.mtrack,.marquee-rtl>.mtrack{display:inline-flex;gap:12px;animation:marq-ltr 40s linear infinite}
+.marquee-rtl>.mtrack{animation-name:marq-rtl}
+@keyframes marq-ltr{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes marq-rtl{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.marquee-ltr:hover>.mtrack,.marquee-rtl:hover>.mtrack{animation-play-state:paused}
+.news-thumb{width:100%;height:120px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:42px;background:linear-gradient(135deg,var(--amber-soft),var(--bg2))}
+.prompt-thumb{width:100%;height:80px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,#EDE9FE,#FDF4FF)}
