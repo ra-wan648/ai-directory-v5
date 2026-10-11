@@ -513,7 +513,7 @@ async function loadExtras() {
     + (blogs.length ? '<section class="sec" id="blog"><div class="sechead"><span class="ic">📝</span><span class="t">From the Blog</span>'
       + '<span class="c">· ' + num(STATS ? STATS.total_blogs : blogs.length) + ' posts</span></div>'
       + '<div class="cols4 news">' + blogs.map((x) => '<div class="colcard" data-blog="' + esc(x.slug) + '">'
-        + '<div class="news-thumb" style="padding:0"><img src="/img/thumbs/blog.svg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0"></div><div class="nbody"><span class="k">' + esc(x.category || 'post') + '</span>'
+        + '<div class="news-thumb" style="padding:0;overflow:hidden">' + thumbHTML(x.thumbnail_url, blogThumb(x.title, x.category)) + '</div><div class="nbody"><span class="k">' + esc(x.category || 'post') + '</span>'
         + '<h5>' + esc(x.title) + '</h5><time>' + esc(day(x.published_at || x.created_at)) + '</time></div></div>').join('')
       + '<a class="colcard promo" href="/toolhub/"><div class="thumb" style="background:var(--ok-soft)">⚡</div><div class="nbody"><span class="k">Free mini tools</span>'
       + '<h5>Do it yourself: 221 free browser tools</h5><time>No signup · runs on your device</time></div></a></div></section>' : '')
