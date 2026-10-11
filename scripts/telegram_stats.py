@@ -74,6 +74,12 @@ def get_source_health():
 
 def get_stats():
     total = query_rows("SELECT COUNT(*) as c FROM tools WHERE status='published'")
+    # Daily additions (last 24h)
+    daily = query_rows(
+        "SELECT 'tools' AS kind, COUNT(*) AS c FROM tools WHERE status='published' AND created_at > datetime('now', '-1 day') "
+        "UNION ALL SELECT 'blogs', COUNT(*) FROM blogs WHERE created_at > datetime('now', '-1 day') "
+        "UNION ALL SELECT 'prompts', COUNT(*) FROM prompts WHERE created_at > datetime('now', '-1 day')"
+    )
     # Distinguish "the table is empty" from "the read failed". Reporting 0 when
     # D1's daily row-read quota is exhausted looked exactly like the directory
     # had been wiped - the Telegram summary said "Published: 0" while the table
@@ -93,7 +99,7 @@ def get_stats():
         "SELECT name, category, created_at FROM tools WHERE status='published' "
         "ORDER BY created_at DESC LIMIT 8"
     )
-    return total_count, by_tag, by_category, recent
+    return total_count, by_tag, by_category, recent, daily
 
 
 def send_telegram(text):
@@ -120,7 +126,7 @@ def main():
     log("Telegram Pipeline Stats")
     log("=" * 50)
 
-    total, by_tag, by_category, recent = get_stats()
+    total, by_tag, by_category, recent, daily = get_stats()
     pending = query_rows(
         "SELECT 'blogs' AS kind, COUNT(*) AS c FROM blogs WHERE status='pending' "
         "UNION ALL SELECT 'submitted_tools', COUNT(*) FROM submitted_tools WHERE status='pending'"
@@ -132,7 +138,15 @@ def main():
         "",
         f"Published tools: <b>{'unreadable — D1 read quota exhausted, not zero' if total is None else total}</b>",
         "",
+        "📊 <b>Added in last 24h:</b>",
     ]
+    if daily:
+        for row in daily:
+            kind = row.get('kind', '?')
+            c = row.get('c', 0)
+            emoji = {'tools': '🔧', 'blogs': '📝', 'prompts': '💡'}.get(kind, '•')
+            lines.append(f"  {emoji} {kind}: <b>{c}</b>")
+    lines.append("")
     if by_tag:
         lines.append("Top sources:")
         for row in by_tag[:8]:
